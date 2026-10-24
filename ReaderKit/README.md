@@ -38,7 +38,7 @@ Most tests are unhosted Swift Testing code tests under `Reader/ReaderTests/`. Fu
 
 Use Xcode MCP for interactive builds and tests. The shared Reader scheme includes both native test targets using Apple's automatic test plan. ReaderKit no longer declares separate SwiftPM test targets, so `swift test --package-path ReaderKit` is not the test entry point.
 
-CI uses the committed native project through `scripts/test-reader.sh`. It does not generate Xcode files. The `all` mode collects all platform outcomes and returns a failure if any platform fails; a failed build never runs stale test products. Runner contracts can be verified without starting Xcode:
+CI uses the committed native project through `scripts/test-reader.sh`. It does not generate Xcode files. The runner executes test targets without parallel Simulator clones after repeated hosted service-hub startup failures; every test remains included. The `all` mode collects all platform outcomes and returns a failure if any platform fails; a failed build never runs stale test products. Runner contracts can be verified without starting Xcode:
 
 ```sh
 python3 -m unittest discover -s scripts/tests -v

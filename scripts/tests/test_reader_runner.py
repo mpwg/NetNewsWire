@@ -39,6 +39,8 @@ fi
         self.assertIn("ipad-test", calls)
         self.assertEqual(calls.count("-project Reader/Reader.xcodeproj"), 6)
         self.assertNotIn("-testPlan", calls)
+        self.assertTrue(all("-parallel-testing-enabled NO" in line
+                            for line in calls.splitlines() if "test-without-building" in line))
         self.assertIn("Reader checks passed: all", result.stdout)
 
     def test_failures_preserve_other_platform_results_and_have_no_overall_success(self):

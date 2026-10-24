@@ -39,6 +39,7 @@ reader_run() {
     fi
     "$reader_xcodebuild" -project Reader/Reader.xcodeproj -scheme Reader \
         -destination "$reader_dest" -derivedDataPath "$reader_derived" \
+        -parallel-testing-enabled NO \
         -resultBundlePath "$reader_results/$reader_kind.xcresult" \
         "${reader_signing[@]}" test-without-building
 }
