@@ -93,10 +93,11 @@ struct OPMLImportServiceTests {
         let before = Data("<opml><body><outline text='A'><outline xmlUrl='https://source.test/feed'/></outline></body></opml>".utf8)
         let after = Data("<opml><body><outline text='B'><outline xmlUrl='https://source.test/feed'/></outline></body></opml>".utf8)
         _ = try await fixture.importer.importDocument(before, account: fixture.account)
-        let gate = ImportRequestGate()
+        let gate = RequestGate()
+        defer { Task { await gate.open() } }
         await fixture.server.setMoveGate(gate)
         let importing = Task { try await fixture.importer.importDocument(after, account: fixture.account) }
-        await gate.waitUntilEntered()
+        try await gate.waitUntilEntered()
         var settings = try #require(try await fixture.repository.preferences().first)
         settings.mode = .digest
         settings.cloudAllowed = true
@@ -156,12 +157,12 @@ private actor OPMLTestServer {
     }
     private var feeds: [RemoteFeed] = []
     private var reject = false
-    private var moveGate: ImportRequestGate?
+    private var moveGate: RequestGate?
     var requestCount = 0
     var quickAdds = 0
     var moves = 0
     func rejectMutations() { reject = true }
-    func setMoveGate(_ gate: ImportRequestGate) { moveGate = gate }
+    func setMoveGate(_ gate: RequestGate) { moveGate = gate }
     func respond(_ request: URLRequest) async throws -> (Int, Data) {
         requestCount += 1
         let path = try #require(request.url?.path)
@@ -184,7 +185,7 @@ private actor OPMLTestServer {
             if reject { return (500, Data()) }
             let id = try #require(fields["s"])
             let index = try #require(feeds.firstIndex { $0.id == id })
-            if fields["r"] != nil, let moveGate { await moveGate.pause() }
+            if fields["r"] != nil, let moveGate { try await moveGate.pause() }
             if let title = fields["t"] { feeds[index].title = title }
             if let old = fields["r"] { feeds[index].folders.removeAll { $0 == old }; moves += 1 }
             if let folder = fields["a"] { feeds[index].folders.append(folder) }
@@ -202,21 +203,4 @@ private actor OPMLTestServer {
     }
 
     private func json(_ value: [String: Any]) throws -> (Int, Data) { (200, try JSONSerialization.data(withJSONObject: value)) }
-}
-
-private actor ImportRequestGate {
-    private var entered = false
-    private var observers: [CheckedContinuation<Void, Never>] = []
-    private var blocked: CheckedContinuation<Void, Never>?
-    func pause() async {
-        entered = true
-        observers.forEach { $0.resume() }
-        observers.removeAll()
-        await withCheckedContinuation { blocked = $0 }
-    }
-    func waitUntilEntered() async {
-        if entered { return }
-        await withCheckedContinuation { observers.append($0) }
-    }
-    func open() { blocked?.resume(); blocked = nil }
 }

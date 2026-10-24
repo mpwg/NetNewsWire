@@ -103,17 +103,18 @@ struct ReaderSessionTests {
     @Test("Late responses from A and B do not overwrite C") func lateResponsesFromAAndBDoNotOverwriteC() async throws {
         let (store, _, feed, _) = try await fixture()
         let gate = QueryGate(accountID: feed.id.accountID)
-        let repository = ScriptedRepository(base: store) { query in await gate.response(query.search) }
+        defer { Task { for search in ["A", "B", "C"] { await gate.release(search) } } }
+        let repository = ScriptedRepository(base: store) { query in try await gate.response(query.search) }
         let session = ReaderSession(services: ReaderServices(repository: repository))
         session.search = "A"
         let a = Task { await session.reload() }
-        await gate.waitUntilStarted("A")
+        try await gate.waitUntilStarted("A")
         session.search = "B"
         let b = Task { await session.reload() }
-        await gate.waitUntilStarted("B")
+        try await gate.waitUntilStarted("B")
         session.search = "C"
         let c = Task { await session.reload() }
-        await gate.waitUntilStarted("C")
+        try await gate.waitUntilStarted("C")
         await gate.release("C")
         await c.value
         #expect(session.articles.first?.title == "C")
@@ -178,25 +179,27 @@ struct ReaderSessionTests {
 
 private actor QueryGate {
     let accountID: UUID
-    var started: Set<String> = []
-    var waiters: [String: CheckedContinuation<Void, Never>] = [:]
-    var responses: [String: CheckedContinuation<[ArticleSnapshot], Never>] = [:]
+    private var gates: [String: RequestGate] = [:]
 
     init(accountID: UUID) { self.accountID = accountID }
 
-    func response(_ search: String) async -> [ArticleSnapshot] {
-        started.insert(search)
-        waiters.removeValue(forKey: search)?.resume()
-        return await withCheckedContinuation { responses[search] = $0 }
+    func response(_ search: String) async throws -> [ArticleSnapshot] {
+        try await gate(for: search).pause()
+        return [ArticleSnapshot(id: ArticleKey(accountID: accountID, remoteID: search),
+                                feedID: "feed/1", title: search)]
     }
 
-    func waitUntilStarted(_ search: String) async {
-        if started.contains(search) { return }
-        await withCheckedContinuation { waiters[search] = $0 }
+    func waitUntilStarted(_ search: String) async throws {
+        try await gate(for: search).waitUntilEntered()
     }
 
-    func release(_ search: String) {
-        responses.removeValue(forKey: search)?.resume(returning: [ArticleSnapshot(id: ArticleKey(accountID: accountID, remoteID: search), feedID: "feed/1", title: search)])
+    func release(_ search: String) async { await gate(for: search).open() }
+
+    private func gate(for search: String) -> RequestGate {
+        if let gate = gates[search] { return gate }
+        let gate = RequestGate()
+        gates[search] = gate
+        return gate
     }
 }
 

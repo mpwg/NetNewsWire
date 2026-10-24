@@ -15,14 +15,8 @@ private struct FixtureGenerator: SummaryGenerator {
     }
 }
 
-private enum GeneratorGateError: Error {
-    case didNotStart
-    case wasNotReleased
-}
-
 private actor ControlledGenerator: SummaryGenerator {
-    private var started = false
-    private var released = false
+    private let gate = RequestGate()
     private(set) var observedCloudPermission: Bool?
 
     func summarize(_ articles: [ArticleSnapshot], cloudAllowed: Bool) async throws -> [DigestSection] {
@@ -30,34 +24,23 @@ private actor ControlledGenerator: SummaryGenerator {
     }
 
     func summarize(_ articles: [ArticleSnapshot], cloudPermission: @escaping @Sendable () async throws -> Bool) async throws -> [DigestSection] {
-        started = true
-        let deadline = ContinuousClock.now.advanced(by: .seconds(5))
-        while !released {
-            try Task.checkCancellation()
-            guard ContinuousClock.now < deadline else { throw GeneratorGateError.wasNotReleased }
-            try await Task.sleep(for: .milliseconds(10))
-        }
+        try await gate.pause()
         observedCloudPermission = try await cloudPermission()
         return [DigestSection(title: "Digest", text: "Sourced", sources: articles.map(\.id))]
     }
 
-    func waitUntilStarted(timeout: Duration = .seconds(5)) async throws {
-        let deadline = ContinuousClock.now.advanced(by: timeout)
-        while !started {
-            try Task.checkCancellation()
-            guard ContinuousClock.now < deadline else { throw GeneratorGateError.didNotStart }
-            try await Task.sleep(for: .milliseconds(10))
-        }
+    func waitUntilStarted(timeout: Duration = .seconds(15)) async throws {
+        try await gate.waitUntilEntered(timeout: timeout)
     }
 
-    func release() { released = true }
+    func release() async { await gate.open() }
 }
 
 struct DigestTests {
     @Test("A generator gate fails promptly when generation never starts")
     func generatorGateFailsWhenGenerationNeverStarts() async {
         let model = ControlledGenerator()
-        await #expect(throws: GeneratorGateError.didNotStart) {
+        await #expect(throws: RequestGate.Failure.didNotEnter) {
             try await model.waitUntilStarted(timeout: .milliseconds(20))
         }
     }

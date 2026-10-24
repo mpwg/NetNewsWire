@@ -46,10 +46,11 @@ struct IconServiceTests {
 
     @Test("Cancelling the final consumer prevents the fallback request", .timeLimit(.minutes(1))) func cancellingTheFinalConsumerPreventsTheFallbackRequest() async throws {
         let fixture = try IconFixture()
-        let gate = IconRequestGate()
+        let gate = RequestGate()
+        defer { Task { await gate.open() } }
         await fixture.server.setGate(gate)
         let request = Task { try await fixture.service.icon(for: fixture.url("/home")) }
-        await gate.waitUntilEntered()
+        try await gate.waitUntilEntered()
         request.cancel()
         await gate.open()
         await #expect(throws: (any Error).self) { try await request.value }
@@ -58,10 +59,11 @@ struct IconServiceTests {
 
     @Test("A single network slot serializes complete icon jobs", .timeLimit(.minutes(1))) func aSingleNetworkSlotSerializesCompleteIconJobs() async throws {
         let fixture = try IconFixture(maximumConcurrentRequests: 1)
-        let gate = IconRequestGate()
+        let gate = RequestGate()
+        defer { Task { await gate.open() } }
         await fixture.server.setGate(gate)
         let first = Task { try await fixture.service.icon(for: fixture.url("/home")) }
-        await gate.waitUntilEntered()
+        try await gate.waitUntilEntered()
         let second = Task { try await fixture.service.icon(for: fixture.url("/a")) }
         await gate.open()
         _ = try await first.value
@@ -88,23 +90,6 @@ private final class IconFixture: @unchecked Sendable {
     deinit { session.invalidateAndCancel(); IconURLProtocol.unregister(host: host) }
 }
 
-private actor IconRequestGate {
-    private var entered = false
-    private var observers: [CheckedContinuation<Void, Never>] = []
-    private var blocked: CheckedContinuation<Void, Never>?
-    func pause() async {
-        entered = true
-        observers.forEach { $0.resume() }
-        observers.removeAll()
-        await withCheckedContinuation { blocked = $0 }
-    }
-    func waitUntilEntered() async {
-        if entered { return }
-        await withCheckedContinuation { observers.append($0) }
-    }
-    func open() { blocked?.resume(); blocked = nil }
-}
-
 private struct IconResponse: Sendable {
     let status: Int
     let mime: String
@@ -114,15 +99,15 @@ private struct IconResponse: Sendable {
 private actor IconTestServer {
     enum Mode { case normal, homepageFailure, transientA, wrongType, oversized }
     private var mode: Mode = .normal
-    private var gate: IconRequestGate?
+    private var gate: RequestGate?
     var paths: [String] = []
     func setMode(_ mode: Mode) { self.mode = mode }
-    func setGate(_ gate: IconRequestGate) { self.gate = gate }
+    func setGate(_ gate: RequestGate) { self.gate = gate }
     func respond(_ request: URLRequest) async throws -> IconResponse {
         let path = try #require(request.url?.path)
         paths.append(path)
         if path == "/home" {
-            if let gate { await gate.pause() }
+            if let gate { try await gate.pause() }
             return IconResponse(status: 403, mime: "text/html", data: Data())
         }
         if path == "/a" || path == "/b" {

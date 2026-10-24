@@ -97,9 +97,10 @@ struct FreshRSSClientTests {
         let newer = PendingChange(article: key, field: .read, value: false)
         await fixture.repository.replacePending(old)
         let gate = RequestGate()
+        defer { Task { await gate.open() } }
         await fixture.server.setWriteGate(gate)
         let first = Task { try await fixture.client.flush(account: fixture.account) }
-        await gate.waitUntilEntered()
+        try await gate.waitUntilEntered()
         await fixture.repository.replacePending(newer)
         await fixture.server.setFailure(.secondWrite)
         let second = Task { try await fixture.client.flush(account: fixture.account) }
@@ -184,21 +185,49 @@ private struct RequestCall: Sendable {
     let auth: String?
 }
 
-private actor RequestGate {
+// Shared test synchronization: bounded waits and cancellation leave no continuations behind.
+actor RequestGate {
+    enum Failure: Error { case didNotEnter, notOpened }
     private var entered = false
-    private var observers: [CheckedContinuation<Void, Never>] = []
-    private var blocked: CheckedContinuation<Void, Never>?
-    func pause() async {
+    private var opened = false
+
+    func pause(timeout: Duration = .seconds(15)) async throws {
         entered = true
-        observers.forEach { $0.resume() }
-        observers.removeAll()
-        await withCheckedContinuation { blocked = $0 }
+        let deadline = ContinuousClock.now.advanced(by: timeout)
+        while !opened {
+            try Task.checkCancellation()
+            guard ContinuousClock.now < deadline else { throw Failure.notOpened }
+            try await Task.sleep(for: .milliseconds(10))
+        }
     }
-    func waitUntilEntered() async {
-        if entered { return }
-        await withCheckedContinuation { observers.append($0) }
+
+    func waitUntilEntered(timeout: Duration = .seconds(15)) async throws {
+        let deadline = ContinuousClock.now.advanced(by: timeout)
+        while !entered {
+            try Task.checkCancellation()
+            guard ContinuousClock.now < deadline else { throw Failure.didNotEnter }
+            try await Task.sleep(for: .milliseconds(10))
+        }
     }
-    func open() { blocked?.resume(); blocked = nil }
+
+    func open() { opened = true }
+}
+
+struct RequestGateTests {
+    @Test("Opening a request gate before entry preserves the release signal")
+    func openingGateBeforeEntryPreservesRelease() async throws {
+        let gate = RequestGate()
+        await gate.open()
+        try await gate.pause(timeout: .milliseconds(20))
+    }
+
+    @Test("An unreleased request gate fails within its deadline")
+    func unreleasedGateFailsWithinDeadline() async {
+        let gate = RequestGate()
+        await #expect(throws: RequestGate.Failure.notOpened) {
+            try await gate.pause(timeout: .milliseconds(20))
+        }
+    }
 }
 
 private actor TestServer {
@@ -250,7 +279,7 @@ private actor TestServer {
         if path.hasSuffix("/edit-tag") {
             writes += 1
             let current = writes
-            if current == 1, let gate { await gate.pause() }
+            if current == 1, let gate { try await gate.pause() }
             if failure == .secondWrite, current == 2 { return data("failure", status: 500) }
             if failure == .writeBody { return data("Error=notApplied") }
             if failure == .expiredWriteToken, fields["T"] == ["write-1"] { return data("expired", status: 403) }
