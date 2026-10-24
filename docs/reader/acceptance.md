@@ -16,6 +16,19 @@ Der Compilerfehler aus [Lauf 40115342568](https://github.com/mpwg/NetNewsWire/ac
 | README | erfüllt | Reader-README und Repository-Einstieg beschreiben Korrekturstand, Prüfprotokoll und die noch offenen Nachweise. |
 | SwiftLint | erfüllt | SwiftLint 0.65.1 auf gesamtem Repository strikt erfolgreich. Generierte SwiftPM-Dateien unter `ReaderKit/.build/` jetzt ausdrücklich ausgeschlossen; keine Produkt-/Testquelle ausgeschlossen. |
 
+## Fortsetzung: B / #47
+
+Projektgrundlage A ist implementiert und lokal gebaut; ihre vollständige CI-/UI-Abnahme bleibt offen. B ergänzt die vorhandene Implementierung ausschließlich um Nachweise: einen Swift-Testing-Fall für reine Löschungen und ein separates natives Prozesswerkzeug, das denselben `ReaderStore` verwendet. Keine Neuimplementierung oder Änderung am Persistenzkern. [Prüfprotokoll B](evidence/b-2026-10-24.md), [Rohbericht](evidence/b-recovery-2026-10-24.json).
+
+| B-Kriterium | Status | Aktueller Beleg |
+|---|---|---|
+| Neustart mit dauerhaftem Store erhält lokale Änderungen | erfüllt | Schreibprozess nach Commitmarker mit SIGKILL beendet (WAL: 271.952 Byte); zwei neue native Prozesse prüfen 10.000 Artikel, exakte Outbox-UUIDs, Rollback, Einstellungen und Digestrevision. Dies ist ein SwiftData-Kernnachweis auf Mac, keine vollständige App-UI-/Geräteabnahme. |
+| Kanonische vollständige Artikelversion | erfüllt | Recovery prüft die vollständige gespeicherte Fassung einschließlich Titel, HTML/Text, Original-URL, Veröffentlichungsdatum und stabiler Eingangszeit. Zugehöriger Swift-Testing-Vertrag auf allen drei Plattformen grün. |
+| Reine Löschungen aktualisieren Abfragen/Zähler, Sterne bleiben erreichbar | erfüllt | Neuer Swift-Testing-Fall prüft Änderungsrevision, neue Abfragen, Ungelesen-/Sternanzahl und entfernte Identität. Recovery behält nach Abbestellen zwei Originale für Stern/Pending und Digest; weiterer Prozessneustart bestätigt sie. |
+| README | erfüllt | Modul- und Reader-README sowie Repository-Einstieg dokumentieren die Probe und ihre Grenzen. |
+
+Aktuelle native Läufe für B: Mac ausschließlich `ReaderContractTests`: 79 Fachtests / 85 Ausführungen; iPhone und iPad jeweils 80 Tests / 86 Ausführungen einschließlich UI-Smoke; keine Fehler oder Skips. Alle 25 Persistenztests auch im Paket erfolgreich. SwiftLint strikt erfolgreich. Der Mac-CI-Job ist um dieselbe Prozessprobe und Bericht-/Log-Artefakte ergänzt; Workflow mit Actionlint geprüft (bekannte veraltete Labelliste für `xcode-27` ausgenommen). B bleibt formal offen, solange Abhängigkeit A und der aktuelle gehostete Stand noch nicht abgenommen sind.
+
 Die folgenden Nachweise stammen vom gesicherten Handoff-Stand und werden nicht pauschal als Abnahme des aktuellen Commits verwendet.
 
 ## Aktuelle automatisierte Nachweise
@@ -42,7 +55,7 @@ Temporäre Logs/Resultbundles sind lokale Belege und können durch Betriebssyste
 | Paket | Erfüllt | Offen / nicht prüfbar |
 |---|---|---|
 | A / #46 | Eigenständige OS-27-App, Namespace, eigener Store, gemeinsame Tests, sichere lokale Testsignierung, Fehlerweitergabe | Erfolgreichen gehosteten CI-Lauf und reguläre Geräteprovisionierung separat prüfen. |
-| B / #47 | 24 Persistenztests: Wiederöffnen eines dauerhaften Stores, kanonische Artikelversion, versionierte Outbox, Rollback, Pending-Schutz, Sterne, Ordner-/Kontoabgrenzung, Änderungsstream, atomare Quellen-/Importprüfung | App-Neustart/Recovery mit produktionsnaher Datenmenge zusätzlich prüfen; keine alten Datenbanken importieren. |
+| B / #47 | 25 Persistenztests plus native SIGKILL-/Recovery-Probe mit 10.000 Artikeln: Wiederöffnen eines dauerhaften Stores, kanonische Artikelversion, versionierte Outbox, Rollback, Pending-Schutz, Sterne, Ordner-/Kontoabgrenzung, Änderungsstream, atomare Quellen-/Importprüfung | SwiftData-Prozessneustart auf Mac belegt; vollständige App-UI mit persistentem Store, reale Geräte und FreshRSS-Integration separat offen. Keine alten Datenbanken importieren. |
 | C / #48 | FreshRSS-HTTP-/Store-Verträge: vollständige Pagination, alte Veröffentlichungen, exakte Bestätigungen, Fehlerweitergabe, leere Ordner, Inhaltvollständigkeit | Echter FreshRSS-Server, echte API-Anmeldung, Mehrgeräteabgleich und Offline-Wiederanlauf wurden nicht mit persönlichen Konten ausgeführt. |
 | D / #49 | Gemeinsame Views, asynchrone Suche/Pagination, Generationenprüfung, Quellzugriff, unverdrängte normale Artikel, eingefrorene Digestrevision | Vollständige native Bedienung mit echten Feedinhalten und Tastatur prüfen. |
 | E / #50 | Szenenbezogener Zustand, gemeinsam besessene/debouncte Aktualisierung, keine globalen Screen-/Szenenadapter im neuen Pfad | Mac-AX-Freigabe; native Mehrfenster-, Größen-, RTL-, Tastatur-, VoiceOver- und Dynamic-Type-Abnahme. |

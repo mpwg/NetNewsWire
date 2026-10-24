@@ -30,11 +30,14 @@ Import und Export erfolgen über das Reader-Menü. FreshRSS besitzt flache Kateg
 
 `ReaderDomain` enthält Sendable-Snapshots und Schnittstellen. `ReaderPersistence` besitzt SwiftData-Kontexte und atomare Schreibverträge. `ReaderSync` besitzt FreshRSS, Keychain, OPML-Import und den begrenzten Icon-Dienst. `ReaderContent` verarbeitet HTML/OPML; `ReaderIntelligence` besitzt Modell- und Digestaufträge. `ReaderUI` enthält gemeinsame Views und szenenbezogenen Zustand. Die Oberfläche verwendet zunächst Systemsymbole für Feeds.
 
+Die SwiftData-Recovery-Probe prüft den vorhandenen Kern zusätzlich nach SIGKILL mit 10.000 synthetischen Artikeln und zwei neuen nativen Prozessen ([B-Prüfprotokoll](../docs/reader/evidence/b-2026-10-24.md)). Das ist ein Prozessnachweis des Kerns; die vollständige App-Bedienung wird separat abgenommen.
+
 Fachtests verwenden Swift Testing mit isolierten Stores und Netzwerkskripten; UI-Tests bleiben XCTest/XCUIAutomation. Tests benötigen keine persönlichen Zugangsdaten und starten keine KI-Anfragen.
 
 ```sh
 swift test --package-path ReaderKit
 python3 -m unittest discover -s scripts/tests -v
+python3 scripts/verify-reader-store.py
 bash scripts/test-reader.sh all
 ```
 

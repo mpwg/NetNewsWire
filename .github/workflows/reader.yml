@@ -1,10 +1,10 @@
 name: Reader OS 27
 on:
   pull_request:
-    paths: ['ReaderKit/**', 'ReaderApp/**', 'Reader.xcodeproj/**', 'scripts/test-reader.sh', '.github/workflows/reader.yml']
+    paths: ['ReaderKit/**', 'ReaderApp/**', 'Reader.xcodeproj/**', 'scripts/test-reader.sh', 'scripts/verify-reader-store.py', 'scripts/tests/**', '.github/workflows/reader.yml']
   push:
     branches: [main, 'codex/intelligence-reader']
-    paths: ['ReaderKit/**', 'ReaderApp/**', 'Reader.xcodeproj/**', 'scripts/test-reader.sh', '.github/workflows/reader.yml']
+    paths: ['ReaderKit/**', 'ReaderApp/**', 'Reader.xcodeproj/**', 'scripts/test-reader.sh', 'scripts/verify-reader-store.py', 'scripts/tests/**', '.github/workflows/reader.yml']
 permissions:
   contents: read
 concurrency:
@@ -24,11 +24,17 @@ jobs:
       - uses: actions/checkout@v5
       - name: Verify aggregate failure propagation
         run: python3 -m unittest discover -s scripts/tests -v
+      - name: Verify SwiftData process recovery
+        if: matrix.platform == 'macos'
+        run: python3 scripts/verify-reader-store.py --results-dir "$RUNNER_TEMP/reader-store-recovery"
       - name: Test Reader
         run: READER_RESULTS_DIR="$RUNNER_TEMP/reader-results" bash scripts/test-reader.sh '${{ matrix.platform }}'
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: reader-${{ matrix.platform }}-results
-          path: ${{ runner.temp }}/reader-results/*.xcresult
+          path: |
+            ${{ runner.temp }}/reader-results/*.xcresult
+            ${{ runner.temp }}/reader-store-recovery/report.json
+            ${{ runner.temp }}/reader-store-recovery/*.log
           if-no-files-found: warn

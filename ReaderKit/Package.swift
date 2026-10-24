@@ -6,8 +6,9 @@ let package = Package(
     platforms: [.macOS("27.0"), .iOS("27.0")],
     products: ["ReaderDomain", "ReaderPersistence", "ReaderSync", "ReaderContent", "ReaderIntelligence", "ReaderUI"].map {
         .library(name: $0, targets: [$0])
-    },
+    } + [.executable(name: "ReaderStoreRecoveryProbe", targets: ["ReaderStoreRecoveryProbe"])],
     targets: [
+        .executableTarget(name: "ReaderStoreRecoveryProbe", dependencies: ["ReaderDomain", "ReaderPersistence"], path: "Probes/ReaderStoreRecoveryProbe"),
         .target(name: "ReaderDomain"),
         .target(name: "ReaderPersistence", dependencies: ["ReaderDomain"], exclude: ["README.md"]),
         .target(name: "ReaderSync", dependencies: ["ReaderDomain", "ReaderContent"], exclude: ["README.md"]),

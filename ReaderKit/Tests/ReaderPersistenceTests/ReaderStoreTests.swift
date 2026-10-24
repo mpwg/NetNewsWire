@@ -190,6 +190,24 @@ struct ReaderStoreTests {
         #expect(await second.next() == 1)
     }
 
+    @Test(.timeLimit(.minutes(1))) func `Reine Löschungen veröffentlichen neue Abfragen und erhalten erreichbare Sterne`() async throws {
+        let store = try ReaderStore(inMemory: true)
+        try await store.applyRefresh(refresh(articles: [article("1"), article("2")], unread: ["1", "2"], starred: ["1"]))
+        let stream = await store.changes()
+        var revisions = stream.makeAsyncIterator()
+        let before = try #require(await revisions.next())
+        #expect(try await store.articles(ArticleQuery(unreadOnly: true)).count == 2)
+
+        try await store.applyRefresh(refresh(articles: [], feeds: [], unread: ["1"]))
+
+        #expect(await revisions.next() == before + 1)
+        #expect(try await store.feeds().isEmpty)
+        #expect(try await store.articles(ArticleQuery()).map(\.id.remoteID) == ["1"])
+        #expect(try await store.articles(ArticleQuery(unreadOnly: true)).count == 1)
+        #expect(try await store.articles(ArticleQuery(starredOnly: true)).map(\.id.remoteID) == ["1"])
+        #expect(try await store.article(article("2").id) == nil)
+    }
+
     @Test func `Änderungsstream hält den Store nicht im Besitzkreis`() async throws {
         var store: ReaderStore? = try ReaderStore(inMemory: true)
         weak let weakStore = store
