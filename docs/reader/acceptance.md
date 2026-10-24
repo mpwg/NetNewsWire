@@ -1,6 +1,21 @@
 # Reader: Abnahmestand 24.10.2026
 
-Der Umbau ist **implementiert, aber nicht vollständig abgenommen**. Die laufende Arbeit wurde auf Wunsch des Auftraggebers geordnet beendet. Verbindliche Planung: [#45](https://github.com/mpwg/NetNewsWire/issues/45), Arbeitspakete #46–#56. Die nachstehenden Nachweise beziehen sich auf den neuen Reader; die ursprünglichen NetNewsWire-Targets wurden in diesem Umsetzungslauf nicht erneut abgenommen.
+Der Umbau ist **implementiert, aber nicht vollständig abgenommen**. Die strukturierte Fortsetzung läuft seit 24.10.2026 im aktiven Goal auf `main`. Verbindliche Planung: [#45](https://github.com/mpwg/NetNewsWire/issues/45), Arbeitspakete #46–#56. Die nachstehenden Nachweise beziehen sich auf den neuen Reader; die ursprünglichen NetNewsWire-Targets wurden in diesem Umsetzungslauf nicht erneut abgenommen.
+
+## Fortsetzung: A / #46
+
+PR [#57](https://github.com/mpwg/NetNewsWire/pull/57) wurde bereits vor Beginn dieser Fortsetzung nach `main` übernommen (Squashcommit `4f9f256e5`). Der Dateistand entspricht vollständig `codex/intelligence-reader` bei `2528bc1b8`; ein erneuter Merge oder Neubau ist nicht nötig. Das Arbeitsverzeichnis einschließlich `iOS/Resources/Info.plist` war sauber; diese Datei wird nicht geändert.
+
+Der Compilerfehler aus [Lauf 40115342568](https://github.com/mpwg/NetNewsWire/actions/runs/40115342568) ist im macOS-Job erneut belegt. Das Icon-URLProtocol-Fixture übergibt jetzt eine explizit `@Sendable` markierte Closure mit unveränderlichen Captures an `Task`. Mutex-/Actor-Schutz und die Abbruchprüfung bleiben erhalten. Lokaler gezielter Nachweis: `swift test --package-path ReaderKit --filter IconServiceTests`, sechs Tests erfolgreich; die beiden Python-Runner-Vertragstests sind ebenfalls erfolgreich.
+
+| A-Kriterium | Status | Aktueller Beleg / nächster Schritt |
+|---|---|---|
+| OS-27-Builds und Bundle-IDs | offen | Frühere Builds unten dokumentiert; aktuellen Korrekturstand nativ erneut prüfen. |
+| Native Testpläne und Fehlerweitergabe | offen | Zwei aktuelle Runner-Vertragstests erfolgreich; native Mac-/iPhone-/iPad-Ausführung und gehostete CI stehen aus. Mac-AX-Voraussetzung getrennt ausweisen. |
+| Debug-/Release-Stores getrennt | offen | Bundle-ID-basierter Bootstrap vorhanden; tatsächliche persistente Stores beider Konfigurationen separat nachweisen. |
+| README | erfüllt | Reader-README beschreibt die Fixturekorrektur und die noch offene gehostete Prüfung. |
+
+Die folgenden Nachweise stammen vom gesicherten Handoff-Stand und werden nicht pauschal als Abnahme des aktuellen Commits verwendet.
 
 ## Aktuelle automatisierte Nachweise
 

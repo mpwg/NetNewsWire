@@ -153,7 +153,7 @@ private final class IconURLProtocol: URLProtocol, @unchecked Sendable {
     override func startLoading() {
         let handler = Self.handlers.withLock { $0[request.url?.host ?? ""] }
         let request = request
-        let task = Task {
+        let task = Task { @Sendable [self, handler, request] in
             do {
                 guard let handler, let url = request.url else { throw ReaderError.invalidResponse }
                 let result = try await handler(request)

@@ -38,7 +38,7 @@ python3 -m unittest discover -s scripts/tests -v
 bash scripts/test-reader.sh all
 ```
 
-Der native Runner baut zuerst mit lokaler Ad-hoc-Signatur und prüft auf dem Mac App und Testrunner vor deren Start. Die Auswahl `macos`, `ios` oder `ipad` prüft eine einzelne Plattform. Ergebnisse liegen in einem neu erzeugten temporären Verzeichnis oder unter `READER_RESULTS_DIR`. Fehler dürfen keine Gesamterfolgsmeldung erzeugen. GitHub verwendet das dokumentierte `xcode-27`-Runnerimage; die tatsächlichen CI-Läufe sind gesondert zu prüfen.
+Der native Runner baut zuerst mit lokaler Ad-hoc-Signatur und prüft auf dem Mac App und Testrunner vor deren Start. Die Auswahl `macos`, `ios` oder `ipad` prüft eine einzelne Plattform. Ergebnisse liegen in einem neu erzeugten temporären Verzeichnis oder unter `READER_RESULTS_DIR`. Fehler dürfen keine Gesamterfolgsmeldung erzeugen. GitHub verwendet das dokumentierte `xcode-27`-Runnerimage. Das Icon-Netzwerkfixture übergibt seinen Task explizit als `@Sendable` mit unveränderlichen Captures, damit die strikte Nebenläufigkeitsprüfung auch im gehosteten nativen Testtarget greift. Der Korrekturstand ist lokal mit allen sechs Iconfällen geprüft; der gehostete Erfolg und die aktuellen nativen Plattformläufe werden in der Abnahmematrix getrennt nachgeführt.
 
 `python3 ReaderApp/generate_project.py` regeneriert deterministisch das Projekt und nimmt alle aktuellen Tests auf. Testplan und Projekt gehören ins Repository. Details zum überprüften Stand und zu offenen Prüfungen stehen in [der Abnahmematrix](../docs/reader/acceptance.md).
 
