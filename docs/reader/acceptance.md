@@ -8,7 +8,7 @@ PR [#57](https://github.com/mpwg/NetNewsWire/pull/57) adopted `codex/intelligenc
 
 Commit `96b05cbbe` fixed the hosted Icon URLProtocol fixture's task capture using explicit `@Sendable` and immutable captures. Hosted [run 40116159532](https://github.com/mpwg/NetNewsWire/actions/runs/40116159532) subsequently compiled on Mac and passed iPhone/iPad jobs; Mac failed in the original UI window setup. It is not a green overall CI run.
 
-At the owner's request, Xcode MCP created `Reader/Reader.xcodeproj` directly from Apple's multiplatform app template. It preserves the existing app and six libraries. ReaderTests now contains the existing code contracts in a native **unhosted Swift Testing** target; ReaderUITests retains native XCTest/XCUIAutomation. The shared scheme uses Apple's automatic test plan. CI references this project and performs no generation. The older root Reader.xcodeproj/ReaderApp infrastructure remains temporarily pending Release/configuration verification and preservation of user edits.
+At the owner's request, Xcode MCP created `Reader/Reader.xcodeproj` directly from Apple's multiplatform app template. It preserves the existing app and six libraries. ReaderTests now contains the existing code contracts in a native **unhosted Swift Testing** target; ReaderUITests retains native XCTest/XCUIAutomation. The shared scheme uses Apple's automatic test plan. CI references this project and performs no generation. The unused Python generator has been removed after native CI success. The older root project/Info.plist remain temporarily while user edits and the shared scheme's saved Debug default are reconciled; Release/namespace verification has passed.
 
 | Criterion | Status | Evidence and remaining work |
 |---|---|---|
