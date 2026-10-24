@@ -2,6 +2,8 @@
 
 The shared SwiftUI/SwiftData app uses FreshRSS and on-device daily digests. Open **`Reader/Reader.xcodeproj`**, created with Apple's native template through Xcode MCP. The [Reader guide](ReaderKit/README.md), [test review](docs/reader/test-review-2026-10-24.md) and [acceptance matrix](docs/reader/acceptance.md) describe setup, current evidence and outstanding checks. All Reader targets enable Approachable Concurrency and compiler warnings as errors. Most coverage uses Swift Testing code tests, with a small native UI suite. The existing implementation was adopted through PR #57; [umbrella #45](https://github.com/mpwg/NetNewsWire/issues/45) tracks the remaining work. [SwiftData recovery with 10,000 synthetic articles and real process restarts](docs/reader/evidence/b-2026-10-24.md) is documented separately from app, device and service acceptance.
 
+Verified code checkpoint [f5f502957](https://github.com/mpwg/NetNewsWire/commit/f5f502957): [Mac, iPhone and iPad CI all pass](https://github.com/mpwg/NetNewsWire/actions/runs/40130440777), including 86 Swift Testing contracts in 12 suites, two Mac / one iOS native UI tests, and the Mac process-recovery probe. Saving the shared scheme's Debug launch default and retiring the superseded Reader project infrastructure remain open; full device, service, accessibility and quality acceptance is separate.
+
 The following guide describes the original NetNewsWire targets, retained during replacement acceptance.
 
 <img src=Technotes/Images/icon_1024.png height=128 width=128 style="display: block; margin: auto;"> 
