@@ -6,14 +6,14 @@ import ReaderDomain
 struct ContentTests {
     @Test("OPML round trips preserve homepages and folders") func opmlRoundTripsPreserveHomepagesAndFolders() throws {
         let account = UUID()
-        let feed = FeedSnapshot(id: FeedKey(accountID: account, remoteID: "feed/1"), title: "Café & Öl",
+        let feed = FeedSnapshot(id: FeedKey(accountID: account, remoteID: "feed/1"), title: "Café & Oil",
             url: try #require(URL(string: "https://example.org/rss")), homePageURL: URL(string: "https://example.org"), folderIDs: ["news"])
-        let folder = FolderSnapshot(accountID: account, remoteID: "news", title: "Österreich")
+        let folder = FolderSnapshot(accountID: account, remoteID: "news", title: "Café")
         let parsed = try OPMLDocument.parse(OPMLDocument.export(feeds: [feed], folders: [folder]))
         #expect(parsed.count == 1)
         #expect(parsed.first?.title == feed.title)
         #expect(parsed.first?.homePageURL == feed.homePageURL)
-        #expect(parsed.first?.folderPath == ["Österreich"])
+        #expect(parsed.first?.folderPath == ["Café"])
     }
     @Test("Invalid OPML is rejected", arguments: ["<opml><body>", "<rss/>", "<opml><body><outline xmlUrl='file:///private'/></body></opml>"])
     func invalidOPMLIsRejected(xml: String) {
@@ -29,10 +29,10 @@ struct ContentTests {
     }
     @Test("Full text is extracted without executing page scripts") func fullTextIsExtractedWithoutExecutingPageScripts() async throws {
         let content = ArticleContentService()
-        let html = "<html><head><title>Offers</title></head><body><article><h1>Café um 2,99 €</h1><p>" + String(repeating: "Frische Café beim Händler. ", count: 80) + "<a href='/angebot'>View offer</a></p><script>throw new Error('page script must not execute')</script></article></body></html>"
+        let html = "<html><head><title>Offers</title></head><body><article><h1>Café for €2.99</h1><p>" + String(repeating: "Fresh coffee from the merchant. ", count: 80) + "<a href='/offer'>View offer</a></p><script>throw new Error('page script must not execute')</script></article></body></html>"
         let result = try await content.extract(html: html, baseURL: #require(URL(string: "https://example.org/deal")))
         #expect(result.text.contains("Café"))
         #expect(!result.text.contains("page script must not execute"))
-        #expect(result.html.contains("https://example.org/angebot"))
+        #expect(result.html.contains("https://example.org/offer"))
     }
 }

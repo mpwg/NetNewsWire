@@ -155,12 +155,12 @@ struct ReaderStoreTests {
         let store = try ReaderStore(inMemory: true)
         let original = article(text: "Kurzer Feedtext")
         try await store.applyRefresh(refresh(articles: [original]))
-        try await store.updateContent(original.id, html: "<p>Langer extrahierter Volltext</p>", text: "Langer extrahierter Volltext")
+        try await store.updateContent(original.id, html: "<p>Long extracted full text</p>", text: "Long extracted full text")
         try await store.applyRefresh(refresh(articles: [original]))
-        #expect(try await store.articles(ArticleQuery()).first?.text == "Langer extrahierter Volltext")
-        #expect(try await store.articles(ArticleQuery(search: "extrahierter")).count == 1)
-        try await store.applyRefresh(refresh(articles: [article(text: "Inzwischen geänderter Feedtext")]))
-        #expect(try await store.articles(ArticleQuery()).first?.text == "Inzwischen geänderter Feedtext")
+        #expect(try await store.articles(ArticleQuery()).first?.text == "Long extracted full text")
+        #expect(try await store.articles(ArticleQuery(search: "extracted")).count == 1)
+        try await store.applyRefresh(refresh(articles: [article(text: "Updated feed text")]))
+        #expect(try await store.articles(ArticleQuery()).first?.text == "Updated feed text")
     }
 
     @Test("Change streams emit the current revision and committed writes") func changeStreamsEmitTheCurrentRevisionAndCommittedWrites() async throws {
@@ -265,7 +265,7 @@ struct ReaderStoreTests {
         let current = try #require(try await store.article(original.id))
         #expect(current.title == "New title")
         #expect(current.text == "Newer Content")
-        #expect(try await store.updateContent(current, html: "<p>Aktueller Volltext</p>", text: "Aktueller Volltext"))
+        #expect(try await store.updateContent(current, html: "<p>Current full text</p>", text: "Current full text"))
     }
 
     @Test("Status changes do not invalidate matching content extraction") func statusChangesDoNotInvalidateMatchingContentExtraction() async throws {
@@ -274,7 +274,7 @@ struct ReaderStoreTests {
         let original = article()
         try await store.applyRefresh(refresh(articles: [original]))
         try await store.setStatus([original.id], field: .read, value: true)
-        #expect(try await repository.updateContent(original, html: "<p>Volltext</p>", text: "Volltext"))
+        #expect(try await repository.updateContent(original, html: "<p>Full text</p>", text: "Full text"))
         #expect(try await store.article(original.id)?.read == true)
         #expect(try await store.pendingChanges(accountID: accountID).count == 1)
     }
@@ -302,7 +302,7 @@ struct ReaderStoreTests {
                                     sections: [], sources: [original.id])
         try await store.setStatus([original.id], field: .read, value: true)
         #expect(try await store.saveDigest(digest, expectedSources: [original]))
-        try await store.applyRefresh(refresh(articles: [article(text: "Geändert")]))
+        try await store.applyRefresh(refresh(articles: [article(text: "Changed")]))
         #expect(try await store.saveDigest(digest, expectedSources: [original]) == false)
     }
 
@@ -327,7 +327,7 @@ struct ReaderStoreTests {
         var original = article(text: "Kurzer Feedtext")
         original.url = fixtureURL
         try await store.applyRefresh(refresh(articles: [original]))
-        #expect(try await store.updateContent(original, html: "<p>Alter Volltext</p>", text: "Alter Volltext"))
+        #expect(try await store.updateContent(original, html: "<p>Old full text</p>", text: "Old full text"))
         var updated = original
         updated.url = URL(string: "https://example.org/neuer-artikel")
         try await store.applyRefresh(refresh(articles: [updated]))

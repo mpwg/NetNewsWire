@@ -37,7 +37,7 @@ public struct ReaderWindow: View {
         .navigationSplitViewStyle(.balanced)
         .toolbar {
             ToolbarItemGroup {
-                Button("Aktualisieren", systemImage: "arrow.clockwise") { Task { await session.refresh() } }
+                Button(LocalizedStringResource("Refresh", bundle: .atURL(#bundle.bundleURL)), systemImage: "arrow.clockwise") { Task { await session.refresh() } }
                     .disabled(session.syncing || session.accounts.isEmpty)
                     .keyboardShortcut("r", modifiers: .command)
                     .accessibilityIdentifier("refresh")
@@ -46,13 +46,13 @@ public struct ReaderWindow: View {
             .visibilityPriority(.high)
             ToolbarItemGroup {
                 Menu("Reader", systemImage: "ellipsis.circle") {
-                    Button("FreshRSS-Konto verbinden", systemImage: "person.badge.plus") { session.showingAccount = true }
-                    Button("Feed hinzufügen", systemImage: "plus") { addingFeed = true }
+                    Button(LocalizedStringResource("Connect FreshRSS account", bundle: .atURL(#bundle.bundleURL)), systemImage: "person.badge.plus") { session.showingAccount = true }
+                    Button(LocalizedStringResource("Add feed", bundle: .atURL(#bundle.bundleURL)), systemImage: "plus") { addingFeed = true }
                         .disabled(session.accounts.isEmpty)
                     Divider()
-                    Button("OPML importieren", systemImage: "square.and.arrow.down") { importingOPML = true }
+                    Button(LocalizedStringResource("Import OPML", bundle: .atURL(#bundle.bundleURL)), systemImage: "square.and.arrow.down") { importingOPML = true }
                         .disabled(session.accounts.isEmpty)
-                    Button("OPML exportieren", systemImage: "square.and.arrow.up") { exportOPML() }
+                    Button(LocalizedStringResource("Export OPML", bundle: .atURL(#bundle.bundleURL)), systemImage: "square.and.arrow.up") { exportOPML() }
                 }
             }
         }
@@ -65,8 +65,8 @@ public struct ReaderWindow: View {
         .sheet(isPresented: $addingFeed) { FeedCreationView(session: session) }
         .sheet(item: $editedFeed) { feed in FeedSettingsView(session: session, feed: feed) }
         .sheet(item: $editedFolder) { folder in FolderSettingsView(session: session, folder: folder) }
-        .confirmationDialog("Feed abbestellen?", item: $feedToRemove) { feed in
-            Button("Abbestellen", role: .destructive) {
+        .confirmationDialog(Text("Unsubscribe from feed?", bundle: #bundle), item: $feedToRemove) { feed in
+            Button(LocalizedStringResource("Unsubscribe", bundle: .atURL(#bundle.bundleURL)), role: .destructive) {
                 Task {
                     await session.runMutation {
                         guard let account = session.accounts.first(where: { $0.id == feed.id.accountID }),
@@ -76,10 +76,10 @@ public struct ReaderWindow: View {
                     }
                 }
             }
-            Button("Abbrechen", role: .cancel) { }
-        } message: { feed in Text("\(feed.title) wird in FreshRSS abbestellt. Bereits gespeicherte Sterne bleiben erhalten.") }
-        .confirmationDialog("Ordner entfernen?", item: $folderToRemove) { folder in
-            Button("Ordner entfernen", role: .destructive) {
+            Button(LocalizedStringResource("Cancel", bundle: .atURL(#bundle.bundleURL)), role: .cancel) { }
+        } message: { feed in Text("Unsubscribe from \(feed.title) in FreshRSS. Saved starred articles will be retained.", bundle: #bundle) }
+        .confirmationDialog(Text("Remove this folder?", bundle: #bundle), item: $folderToRemove) { folder in
+            Button(LocalizedStringResource("Remove folder", bundle: .atURL(#bundle.bundleURL)), role: .destructive) {
                 Task {
                     await session.runMutation {
                         guard let account = session.accounts.first(where: { $0.id == folder.accountID }),
@@ -89,8 +89,8 @@ public struct ReaderWindow: View {
                     }
                 }
             }
-            Button("Abbrechen", role: .cancel) { }
-        } message: { folder in Text("Die Ordnerzuordnung „\(folder.title)“ wird in FreshRSS entfernt.") }
+            Button(LocalizedStringResource("Cancel", bundle: .atURL(#bundle.bundleURL)), role: .cancel) { }
+        } message: { folder in Text("The folder assignment “\(folder.title)” will be removed in FreshRSS.", bundle: #bundle) }
         .alert("Reader", item: $session.errorMessage) { _ in Button("OK", role: .cancel) { } } message: { Text($0) }
         .fileImporter(isPresented: $importingOPML, allowedContentTypes: [.xml, .data]) { result in
             switch result {
@@ -130,10 +130,10 @@ private struct ReaderSidebar: View {
 
     var body: some View {
         List(selection: $session.sidebarSelection) {
-            Section("Bibliothek") {
-                NavigationLink("Ungelesen", value: "unread").tag("unread")
-                NavigationLink("Alle Artikel", value: "all").tag("all")
-                NavigationLink("Markiert", value: "starred").tag("starred")
+            Section(LocalizedStringResource("Library", bundle: .atURL(#bundle.bundleURL))) {
+                NavigationLink(LocalizedStringResource("Unread", bundle: .atURL(#bundle.bundleURL)), value: "unread").tag("unread")
+                NavigationLink(LocalizedStringResource("All articles", bundle: .atURL(#bundle.bundleURL)), value: "all").tag("all")
+                NavigationLink(LocalizedStringResource("Starred", bundle: .atURL(#bundle.bundleURL)), value: "starred").tag("starred")
             }
             ForEach(session.accounts) { account in
                 Section(account.name + " · " + account.username) {
@@ -150,8 +150,8 @@ private struct ReaderSidebar: View {
                         }
                         .tag(folder.id)
                         .contextMenu {
-                            Button("Ordner umbenennen", systemImage: "pencil") { editFolder(folder) }
-                            Button("Ordner entfernen", systemImage: "folder.badge.minus", role: .destructive) { removeFolder(folder) }
+                            Button(LocalizedStringResource("Rename folder", bundle: .atURL(#bundle.bundleURL)), systemImage: "pencil") { editFolder(folder) }
+                            Button(LocalizedStringResource("Remove folder", bundle: .atURL(#bundle.bundleURL)), systemImage: "folder.badge.minus", role: .destructive) { removeFolder(folder) }
                         }
                     }
                 }
@@ -161,11 +161,11 @@ private struct ReaderSidebar: View {
         .overlay {
             if session.accounts.isEmpty && !session.loading {
                 ContentUnavailableView {
-                    Label("Deine Feeds", systemImage: "dot.radiowaves.up.forward")
+                    Label(LocalizedStringResource("Your feeds", bundle: .atURL(#bundle.bundleURL)), systemImage: "dot.radiowaves.up.forward")
                 } description: {
-                    Text("Verbinde FreshRSS, um deine Feeds auf diesem Gerät zu lesen.")
+                    Text("Connect FreshRSS to read your feeds on this device.", bundle: #bundle)
                 } actions: {
-                    Button("FreshRSS verbinden") { session.showingAccount = true }
+                    Button(LocalizedStringResource("Connect FreshRSS", bundle: .atURL(#bundle.bundleURL))) { session.showingAccount = true }
                         .buttonStyle(.borderedProminent)
                         .accessibilityIdentifier("connectFreshRSS")
                 }
@@ -179,8 +179,8 @@ private struct ReaderSidebar: View {
         }
             .tag(feed.id.id)
             .contextMenu {
-                Button("Feed-Einstellungen", systemImage: "slider.horizontal.3") { edit(feed) }
-                Button("Abbestellen", systemImage: "minus.circle", role: .destructive) { remove(feed) }
+                Button(LocalizedStringResource("Feed settings", bundle: .atURL(#bundle.bundleURL)), systemImage: "slider.horizontal.3") { edit(feed) }
+                Button(LocalizedStringResource("Unsubscribe", bundle: .atURL(#bundle.bundleURL)), systemImage: "minus.circle", role: .destructive) { remove(feed) }
             }
     }
 }
@@ -198,15 +198,15 @@ private struct ReaderTimeline: View {
                     .tag(row.id)
             }
             if session.canLoadMore {
-                Button("Weitere Artikel laden") { Task { await session.loadMore() } }
+                Button(LocalizedStringResource("Load more articles", bundle: .atURL(#bundle.bundleURL))) { Task { await session.loadMore() } }
                     .disabled(session.loading)
             }
         }
         .navigationTitle(session.title)
-        .searchable(text: $session.search, prompt: "Titel und Artikeltext suchen")
+        .searchable(text: $session.search, prompt: Text("Search titles and article text", bundle: #bundle))
         .safeAreaInset(edge: .bottom) {
             HStack {
-                Text("\(session.rows.count) Einträge · \(session.articles.count) geladene Originale")
+                Text("Entries: \(session.rows.count) · Loaded originals: \(session.articles.count)", bundle: #bundle)
                     .font(.caption).foregroundStyle(.secondary)
                 Spacer()
                 if session.loading { ProgressView().controlSize(.small) }
@@ -216,7 +216,7 @@ private struct ReaderTimeline: View {
         }
         .overlay {
             if session.rows.isEmpty && !session.loading {
-                ContentUnavailableView(session.search.isEmpty ? "Keine Einträge" : "Keine Treffer",
+                ContentUnavailableView(session.search.isEmpty ? LocalizedStringResource("No entries", bundle: .atURL(#bundle.bundleURL)) : LocalizedStringResource("No results", bundle: .atURL(#bundle.bundleURL)),
                                        systemImage: session.search.isEmpty ? "tray" : "magnifyingglass")
             }
         }
@@ -234,10 +234,10 @@ private struct TimelineRowView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
             HStack(alignment: .firstTextBaseline) {
-                if unread { Image(systemName: "circle.fill").font(.system(size: 7)).foregroundStyle(.tint).accessibilityLabel("Ungelesen") }
+                if unread { Image(systemName: "circle.fill").font(.system(size: 7)).foregroundStyle(.tint).accessibilityLabel(Text("Unread", bundle: #bundle)) }
                 if isDigest { Image(systemName: "sparkles").foregroundStyle(.tint) }
                 Text(title).font(.headline).lineLimit(3)
-                if starred { Image(systemName: "star.fill").foregroundStyle(.yellow).accessibilityLabel("Markiert") }
+                if starred { Image(systemName: "star.fill").foregroundStyle(.yellow).accessibilityLabel(Text("Starred", bundle: #bundle)) }
             }
             Text(subtitle).font(.subheadline).foregroundStyle(.secondary).lineLimit(2)
             Text(date, format: .dateTime.day().month().hour().minute()).font(.caption).foregroundStyle(.tertiary)

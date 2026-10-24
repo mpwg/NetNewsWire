@@ -1,0 +1,40 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "The local full-text parser is missing.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The local full-text parser is missing."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der lokale Volltextparser fehlt."
+          }
+        }
+      }
+    },
+    "No article text was found on this page.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No article text was found on this page."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auf dieser Seite wurde kein Artikeltext gefunden."
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

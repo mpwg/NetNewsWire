@@ -14,6 +14,7 @@ jobs:
   tests:
     # https://github.com/actions/runner-images/blob/main/images/macos/xcode-27-arm64-Readme.md
     runs-on: xcode-27
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:

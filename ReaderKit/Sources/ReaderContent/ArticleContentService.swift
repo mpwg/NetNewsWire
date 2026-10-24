@@ -44,7 +44,7 @@ public actor ArticleContentService {
         context.evaluateScript("class URL { constructor(raw, base) { this.href = readerResolveURL(String(raw), base ? String(base) : ''); if (!this.href) throw new Error('Invalid URL'); } }")
         for name in ["JSDOMParser", "Readability"] {
             guard let path = Bundle.module.url(forResource: name, withExtension: "js") else {
-                throw ReaderError.unavailable("Der lokale Volltextparser fehlt.")
+                throw ReaderError.unavailable(String(localized: "The local full-text parser is missing.", bundle: #bundle))
             }
             context.evaluateScript(try String(contentsOf: path, encoding: .utf8))
             guard context.exception == nil else { throw ReaderError.invalidResponse }
@@ -64,7 +64,7 @@ public actor ArticleContentService {
         struct Result: Decodable { var html: String; var text: String }
         let result = try JSONDecoder().decode(Result.self, from: data)
         let text = result.text.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !text.isEmpty else { throw ReaderError.unavailable("Auf dieser Seite wurde kein Artikeltext gefunden.") }
+        guard !text.isEmpty else { throw ReaderError.unavailable(String(localized: "No article text was found on this page.", bundle: #bundle)) }
         try Task.checkCancellation()
         return ExtractedContent(html: result.html, text: text)
     }

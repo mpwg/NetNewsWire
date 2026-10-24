@@ -1,0 +1,125 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "Invalid server URL.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invalid server URL."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ungültige Serveradresse."
+          }
+        }
+      }
+    },
+    "The response could not be processed.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The response could not be processed."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Antwort konnte nicht verarbeitet werden."
+          }
+        }
+      }
+    },
+    "Sign-in failed. Check the API password.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign-in failed. Check the API password."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anmeldung fehlgeschlagen. Bitte API-Passwort prüfen."
+          }
+        }
+      }
+    },
+    "Server error (HTTP %lld).": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Server error (HTTP %lld)."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Serverfehler (HTTP %lld)."
+          }
+        }
+      }
+    },
+    "This operation was superseded by a newer one.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This operation was superseded by a newer one."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Auftrag wurde durch einen neueren ersetzt."
+          }
+        }
+      }
+    },
+    "This store does not support atomic metadata import.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This store does not support atomic metadata import."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieser Speicher unterstützt keinen atomaren Metadatenimport."
+          }
+        }
+      }
+    },
+    "This store does not support atomic source validation.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This store does not support atomic source validation."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieser Speicher unterstützt keine atomare Quellenprüfung."
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

@@ -10,7 +10,7 @@ final class ReaderSmokeTests: XCTestCase {
         let app = launchReader()
         let connect = app.buttons["connectFreshRSS"]
         XCTAssertTrue(connect.waitForExistence(timeout: 15))
-        XCTAssertTrue(connect.isHittable)
+        XCTAssertTrue(connect.wait(for: \.isHittable, toEqual: true, timeout: 5))
         connect.clickOrTap()
         XCTAssertTrue(app.textFields["serverURL"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.textFields["username"].exists)
@@ -39,8 +39,11 @@ final class ReaderSmokeTests: XCTestCase {
         secondUsername.click()
         secondUsername.typeText("Window B")
 
-        first.click()
-        first.buttons["connectFreshRSS"].click()
+        // Window cycling works even when a small display leaves both windows fully overlapping.
+        app.typeKey("`", modifierFlags: .command)
+        let firstConnect = first.buttons["connectFreshRSS"]
+        XCTAssertTrue(firstConnect.wait(for: \.isHittable, toEqual: true, timeout: 5))
+        firstConnect.click()
         let firstSheet = first.sheets.firstMatch
         XCTAssertTrue(firstSheet.textFields["username"].waitForExistence(timeout: 5))
         XCTAssertEqual(firstSheet.textFields["username"].value as? String, "")

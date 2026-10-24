@@ -14,30 +14,30 @@ struct AccountConnectionView: View {
         NavigationStack {
             Form {
                 Section("FreshRSS") {
-                    TextField("API-Adresse (https://…/api/greader.php)", text: $server)
+                    TextField(LocalizedStringResource("API URL (https://…/api/greader.php)", bundle: .atURL(#bundle.bundleURL)), text: $server)
                         .textContentType(.URL)
                         .autocorrectionDisabled()
                         .accessibilityIdentifier("serverURL")
-                    TextField("Benutzername", text: $username)
+                    TextField(LocalizedStringResource("Username", bundle: .atURL(#bundle.bundleURL)), text: $username)
                         .textContentType(.username).autocorrectionDisabled()
                         .accessibilityIdentifier("username")
-                    SecureField("API-Passwort", text: $password)
+                    SecureField(LocalizedStringResource("API password", bundle: .atURL(#bundle.bundleURL)), text: $password)
                         .textContentType(.password)
                         .accessibilityIdentifier("apiPassword")
                 }
                 Section {
-                    Text("Aktiviere den API-Zugriff in FreshRSS und verwende das separate API-Passwort. Die Zugangsdaten werden in der Schlüsselbundverwaltung dieses Geräts gespeichert.")
+                    Text("Enable API access in FreshRSS and use its separate API password. Credentials are stored in this device’s Keychain.", bundle: #bundle)
                         .font(.callout).foregroundStyle(.secondary)
                 }
                 if let error { Text(error).foregroundStyle(.red) }
-                if working { ProgressView("Verbindung wird hergestellt") }
+                if working { ProgressView(LocalizedStringResource("Connecting", bundle: .atURL(#bundle.bundleURL))) }
             }
             .formStyle(.grouped)
-            .navigationTitle("FreshRSS verbinden")
+            .navigationTitle(Text("Connect FreshRSS", bundle: #bundle))
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) { Button("Abbrechen") { dismiss() }.disabled(working).accessibilityIdentifier("cancelConnection") }
+                ToolbarItem(placement: .cancellationAction) { Button(LocalizedStringResource("Cancel", bundle: .atURL(#bundle.bundleURL))) { dismiss() }.disabled(working).accessibilityIdentifier("cancelConnection") }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Verbinden") {
+                    Button(LocalizedStringResource("Connect", bundle: .atURL(#bundle.bundleURL))) {
                         Task {
                             working = true
                             defer { working = false }
@@ -71,21 +71,21 @@ struct FeedCreationView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Picker("Konto", selection: $accountID) {
+                Picker(LocalizedStringResource("Account", bundle: .atURL(#bundle.bundleURL)), selection: $accountID) {
                     ForEach(session.accounts) { account in Text(account.username).tag(Optional(account.id)) }
                 }
-                TextField("Feed-Adresse", text: $url).textContentType(.URL).autocorrectionDisabled()
-                TextField("Name (optional)", text: $title)
-                TextField("Ordnername (optional)", text: $folderID)
+                TextField(LocalizedStringResource("Feed URL", bundle: .atURL(#bundle.bundleURL)), text: $url).textContentType(.URL).autocorrectionDisabled()
+                TextField(LocalizedStringResource("Name (optional)", bundle: .atURL(#bundle.bundleURL)), text: $title)
+                TextField(LocalizedStringResource("Folder name (optional)", bundle: .atURL(#bundle.bundleURL)), text: $folderID)
                 if let error { Text(error).foregroundStyle(.red) }
                 if working { ProgressView() }
             }
             .formStyle(.grouped)
-            .navigationTitle("Feed hinzufügen")
+            .navigationTitle(Text("Add feed", bundle: #bundle))
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) { Button("Abbrechen") { dismiss() } }
+                ToolbarItem(placement: .cancellationAction) { Button(LocalizedStringResource("Cancel", bundle: .atURL(#bundle.bundleURL))) { dismiss() } }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Hinzufügen") { Task { await add() } }.disabled(url.isEmpty || working)
+                    Button(LocalizedStringResource("Add", bundle: .atURL(#bundle.bundleURL))) { Task { await add() } }.disabled(url.isEmpty || working)
                 }
             }
         }
@@ -96,7 +96,7 @@ struct FeedCreationView: View {
     private func add() async {
         guard let feedURL = URL(string: url), ["https", "http"].contains(feedURL.scheme), feedURL.host != nil,
               let account = session.accounts.first(where: { $0.id == accountID }), let client = session.services.client else {
-            error = "Bitte eine gültige Feed-Adresse und ein Konto auswählen."
+            error = String(localized: "Choose a valid feed URL and an account.", bundle: #bundle)
             return
         }
         working = true
@@ -138,38 +138,38 @@ struct FeedSettingsView: View {
             Form {
                 Section("Feed") {
                     TextField("Name", text: $title)
-                    Picker("Ordner", selection: $folderID) {
-                        Text("Ohne Ordner").tag("")
+                    Picker(LocalizedStringResource("Folder", bundle: .atURL(#bundle.bundleURL)), selection: $folderID) {
+                        Text("No folder", bundle: #bundle).tag("")
                         ForEach(session.folders.filter { $0.accountID == feed.id.accountID }) { folder in
                             Text(folder.title).tag(folder.remoteID)
                         }
                     }
-                    if let url = feed.homePageURL { Link("Website öffnen", destination: url) }
+                    if let url = feed.homePageURL { Link(LocalizedStringResource("Open website", bundle: .atURL(#bundle.bundleURL)), destination: url) }
                 }
-                Section("Darstellung auf diesem Gerät") {
-                    Picker("Modus", selection: $mode) {
+                Section(LocalizedStringResource("Display on this device", bundle: .atURL(#bundle.bundleURL))) {
+                    Picker(LocalizedStringResource("Mode", bundle: .atURL(#bundle.bundleURL)), selection: $mode) {
                         Text("Normal").tag(FeedMode.normal)
-                        Text("Tagesübersicht").tag(FeedMode.digest)
+                        Text("Daily digest", bundle: #bundle).tag(FeedMode.digest)
                     }
-                    Text("Eine Tagesübersicht bündelt Beiträge. Alle Originale bleiben im Feed, in der Suche und über die Quellen erreichbar.")
+                    Text("A daily digest groups articles. All originals remain accessible in the feed, search and source links.", bundle: #bundle)
                         .font(.caption).foregroundStyle(.secondary)
-                    Toggle("Apple Private Cloud Compute erlauben", isOn: $cloudAllowed)
+                    Toggle(LocalizedStringResource("Allow Apple Private Cloud Compute", bundle: .atURL(#bundle.bundleURL)), isOn: $cloudAllowed)
                         .disabled(!session.services.privateCloudComputeConfigured)
                     if !session.services.privateCloudComputeConfigured {
-                        Text("Dieser Build ist für lokale KI konfiguriert. PCC benötigt eine gesonderte Apple-Freigabe und ein passendes signiertes Berechtigungsprofil.")
+                        Text("This build uses on-device AI. PCC requires separate Apple authorization and matching signed provisioning.", bundle: #bundle)
                             .font(.caption).foregroundStyle(.secondary)
                     }
-                    Text("Ohne diese Freigabe verarbeitet nur das lokale Apple-Modell die Texte. PCC benötigt eine verfügbare Apple-Berechtigung und ein Kontingent; eine Aktivierung garantiert keine Verfügbarkeit.")
+                    Text("Without this permission, only the on-device Apple model processes text. PCC requires Apple authorization and available quota; enabling it does not guarantee availability.", bundle: #bundle)
                         .font(.caption).foregroundStyle(.secondary)
                 }
                 if let error { Text(error).foregroundStyle(.red) }
                 if working { ProgressView() }
             }
             .formStyle(.grouped)
-            .navigationTitle("Feed-Einstellungen")
+            .navigationTitle(Text("Feed settings", bundle: #bundle))
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) { Button("Abbrechen") { dismiss() }.disabled(working) }
-                ToolbarItem(placement: .confirmationAction) { Button("Sichern") { Task { await save() } }.disabled(working || title.isEmpty) }
+                ToolbarItem(placement: .cancellationAction) { Button(LocalizedStringResource("Cancel", bundle: .atURL(#bundle.bundleURL))) { dismiss() }.disabled(working) }
+                ToolbarItem(placement: .confirmationAction) { Button(LocalizedStringResource("Save", bundle: .atURL(#bundle.bundleURL))) { Task { await save() } }.disabled(working || title.isEmpty) }
             }
         }
         .frame(idealWidth: 500, idealHeight: 540)
@@ -213,16 +213,16 @@ struct FolderSettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
-                TextField("Ordnername", text: $title)
+                TextField(LocalizedStringResource("Folder name", bundle: .atURL(#bundle.bundleURL)), text: $title)
                 if let error { Text(error).foregroundStyle(.red) }
                 if working { ProgressView() }
             }
             .formStyle(.grouped)
-            .navigationTitle("Ordner umbenennen")
+            .navigationTitle(Text("Rename folder", bundle: #bundle))
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) { Button("Abbrechen") { dismiss() }.disabled(working) }
+                ToolbarItem(placement: .cancellationAction) { Button(LocalizedStringResource("Cancel", bundle: .atURL(#bundle.bundleURL))) { dismiss() }.disabled(working) }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Sichern") {
+                    Button(LocalizedStringResource("Save", bundle: .atURL(#bundle.bundleURL))) {
                         Task {
                             working = true
                             defer { working = false }

@@ -150,12 +150,12 @@ public enum ReaderError: Error, LocalizedError, Equatable, Sendable {
     case invalidURL, invalidResponse, unauthorized, unavailable(String), server(Int), staleResult
     public var errorDescription: String? {
         switch self {
-        case .invalidURL: "Ungültige Serveradresse."
-        case .invalidResponse: "Die Antwort konnte nicht verarbeitet werden."
-        case .unauthorized: "Anmeldung fehlgeschlagen. Bitte API-Passwort prüfen."
+        case .invalidURL: String(localized: "Invalid server URL.", bundle: #bundle)
+        case .invalidResponse: String(localized: "The response could not be processed.", bundle: #bundle)
+        case .unauthorized: String(localized: "Sign-in failed. Check the API password.", bundle: #bundle)
         case .unavailable(let reason): reason
-        case .server(let status): "Serverfehler (HTTP \(status))."
-        case .staleResult: "Der Auftrag wurde durch einen neueren ersetzt."
+        case .server(let status): String(localized: "Server error (HTTP \(status)).", bundle: #bundle)
+        case .staleResult: String(localized: "This operation was superseded by a newer one.", bundle: #bundle)
         }
     }
 }

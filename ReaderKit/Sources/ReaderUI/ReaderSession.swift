@@ -51,7 +51,7 @@ public final class ReaderSession {
     public var title: String {
         if let selectedFeed { return selectedFeed.title }
         if let selectedFolder { return selectedFolder.title }
-        return sidebarSelection == "starred" ? "Markiert" : sidebarSelection == "unread" ? "Ungelesen" : "Alle Artikel"
+        return sidebarSelection == "starred" ? String(localized: "Starred", bundle: #bundle) : sidebarSelection == "unread" ? String(localized: "Unread", bundle: #bundle) : String(localized: "All articles", bundle: #bundle)
     }
 
     public func reload(resetLimit: Bool = false) async {
@@ -139,8 +139,8 @@ public final class ReaderSession {
                 let unread = digestUnread[digest.id] == true
                 if sidebarSelection == "unread" && !unread { continue }
                 let feedTitle = feeds.first { $0.id == digest.feed }?.title ?? "Feed"
-                nextRows.append(TimelineRow(id: .digest(digest.id), title: feedTitle + " · Tagesübersicht",
-                                           subtitle: "\(digest.sources.count) Originalbeiträge", date: digest.day,
+                nextRows.append(TimelineRow(id: .digest(digest.id), title: String(localized: "\(feedTitle) · Daily digest", bundle: #bundle),
+                                           subtitle: String(localized: "\(digest.sources.count) original articles", bundle: #bundle), date: digest.day,
                                            unread: unread, starred: false, isDigest: true))
             }
         }

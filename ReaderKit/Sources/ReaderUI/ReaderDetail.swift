@@ -14,8 +14,8 @@ struct ReaderDetail: View {
                 DigestDetailView(session: session, digest: digest)
                     .id(digest.revision)
             } else {
-                ContentUnavailableView("Artikel auswählen", systemImage: "newspaper",
-                                       description: Text("Normale Artikel und Tagesübersichten bleiben gemeinsam erreichbar."))
+                ContentUnavailableView(LocalizedStringResource("Select an article", bundle: .atURL(#bundle.bundleURL)), systemImage: "newspaper",
+                                       description: Text("Articles and daily digests remain accessible together.", bundle: #bundle))
             }
         }
         .task(id: session.selection) { await session.loadSelectedArticle() }
@@ -33,15 +33,15 @@ private struct ArticleDetailView: View {
             VStack(alignment: .leading, spacing: 10) {
                 Text(article.title).font(.title2.bold()).textSelection(.enabled)
                 HStack {
-                    Button(article.read ? "Als ungelesen" : "Als gelesen", systemImage: article.read ? "envelope.badge" : "checkmark.circle") {
+                    Button(article.read ? LocalizedStringResource("Mark unread", bundle: .atURL(#bundle.bundleURL)) : LocalizedStringResource("Mark read", bundle: .atURL(#bundle.bundleURL)), systemImage: article.read ? "envelope.badge" : "checkmark.circle") {
                         Task { await session.setStatus([article.id], field: .read, value: !article.read) }
                     }
-                    Button(article.starred ? "Stern entfernen" : "Markieren", systemImage: article.starred ? "star.fill" : "star") {
+                    Button(article.starred ? LocalizedStringResource("Remove star", bundle: .atURL(#bundle.bundleURL)) : LocalizedStringResource("Star", bundle: .atURL(#bundle.bundleURL)), systemImage: article.starred ? "star.fill" : "star") {
                         Task { await session.setStatus([article.id], field: .starred, value: !article.starred) }
                     }
                     if let url = article.url { Link("Original", destination: url) }
-                    Menu("Artikel", systemImage: "ellipsis") {
-                        Button("Volltext laden", systemImage: "doc.text.magnifyingglass") {
+                    Menu(LocalizedStringResource("Article", bundle: .atURL(#bundle.bundleURL)), systemImage: "ellipsis") {
+                        Button(LocalizedStringResource("Load full text", bundle: .atURL(#bundle.bundleURL)), systemImage: "doc.text.magnifyingglass") {
                             Task {
                                 extracting = true
                                 defer { extracting = false }
@@ -95,21 +95,21 @@ private struct DigestDetailView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                Label("Tagesübersicht", systemImage: "sparkles").font(.largeTitle.bold())
+                Label(LocalizedStringResource("Daily digest", bundle: .atURL(#bundle.bundleURL)), systemImage: "sparkles").font(.largeTitle.bold())
                 Text(digest.day, format: .dateTime.weekday().day().month().year()).foregroundStyle(.secondary)
-                Text("KI-Zusammenfassung · \(digest.sources.count) Originalbeiträge")
+                Text("AI digest · \(digest.sources.count) original articles", bundle: #bundle)
                     .font(.callout).foregroundStyle(.secondary)
                 if let newest = session.digests.first(where: { $0.id == digest.id }), newest.revision != digest.revision {
-                    Button("Aktualisierte Übersicht öffnen", systemImage: "arrow.clockwise") { session.openLatestDigest() }
+                    Button(LocalizedStringResource("Open updated digest", bundle: .atURL(#bundle.bundleURL)), systemImage: "arrow.clockwise") { session.openLatestDigest() }
                 }
                 if let warning = digest.warning {
                     Label(warning, systemImage: "exclamationmark.triangle").foregroundStyle(.orange)
                 }
-                Button("Übersicht gelesen", systemImage: "checkmark.circle") {
+                Button(LocalizedStringResource("Mark digest read", bundle: .atURL(#bundle.bundleURL)), systemImage: "checkmark.circle") {
                     Task { await session.setStatus(digest.sources, field: .read, value: true) }
                 }
                 .buttonStyle(.borderedProminent)
-                Text("Markiert nur die Originale dieser Version. Neue Beiträge bleiben ungelesen.")
+                Text("Marks only the originals in this revision. New articles remain unread.", bundle: #bundle)
                     .font(.caption).foregroundStyle(.secondary)
                 ForEach(Array(digest.sections.enumerated()), id: \.offset) { _, section in
                     VStack(alignment: .leading, spacing: 8) {
@@ -123,11 +123,11 @@ private struct DigestDetailView: View {
                     }
                 }
                 Divider()
-                Text("Alle Originalbeiträge").font(.title3.bold())
-                if session.loadingSources { ProgressView("Quellen werden geladen") }
+                Text("All original articles", bundle: #bundle).font(.title3.bold())
+                if session.loadingSources { ProgressView(LocalizedStringResource("Loading sources", bundle: .atURL(#bundle.bundleURL))) }
                 ForEach(session.sourceArticles) { article in sourceButton(article) }
                 if !session.loadingSources && session.sourceArticles.count < digest.sources.count {
-                    Label("Einige Originale sind lokal nicht mehr verfügbar.", systemImage: "exclamationmark.triangle")
+                    Label(LocalizedStringResource("Some original articles are no longer available locally.", bundle: .atURL(#bundle.bundleURL)), systemImage: "exclamationmark.triangle")
                 }
             }
             .padding()

@@ -1,0 +1,217 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "Apple Intelligence is not available on this device yet. Original articles remain accessible.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Intelligence is not available on this device yet. Original articles remain accessible."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Intelligence ist auf diesem Gerät noch nicht verfügbar. Die Originale bleiben erreichbar."
+          }
+        }
+      }
+    },
+    "Apple cloud inference is not configured for this app. Use on-device summaries.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple cloud inference is not configured for this app. Use on-device summaries."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple-Cloud ist für diese App noch nicht verfügbar. Bitte die lokale Zusammenfassung verwenden."
+          }
+        }
+      }
+    },
+    "Apple cloud inference was disabled for this feed.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple cloud inference was disabled for this feed."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple-Cloud wurde für diesen Feed deaktiviert."
+          }
+        }
+      }
+    },
+    "Apple Private Cloud Compute is unavailable or not authorized for this app.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Private Cloud Compute is unavailable or not authorized for this app."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apples Private Cloud Compute ist nicht verfügbar oder für diese App nicht freigegeben."
+          }
+        }
+      }
+    },
+    "The available model context budget is too small.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The available model context budget is too small."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Das verfügbare Modellkontextbudget ist zu klein."
+          }
+        }
+      }
+    },
+    "The model returned invalid sources. Use the original articles.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The model returned invalid sources. Use the original articles."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die KI hat ungültige Quellen geliefert. Bitte die Originalbeiträge verwenden."
+          }
+        }
+      }
+    },
+    "The summary contains unsupported numbers or links. Original articles remain available.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The summary contains unsupported numbers or links. Original articles remain available."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Zusammenfassung enthält nicht belegte Zahlen oder Links. Originale bleiben verfügbar."
+          }
+        }
+      }
+    },
+    "Full text is unavailable for “%@”.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Full text is unavailable for “%@”."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volltext für „%@“ nicht verfügbar."
+          }
+        }
+      }
+    },
+    "Only the title is available for “%@”.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Only the title is available for “%@”."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nur Titel für „%@“ verfügbar."
+          }
+        }
+      }
+    },
+    "%lld articles have no AI summary and remain accessible as originals.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld article has no AI summary and remains accessible as an original."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld articles have no AI summary and remain accessible as originals."
+                }
+              }
+            }
+          }
+        },
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Beitrag ist nicht durch KI zusammengefasst und bleibt als Original erreichbar."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Beiträge sind nicht durch KI zusammengefasst und bleiben als Originale erreichbar."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Other original articles": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other original articles"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weitere Originalbeiträge"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

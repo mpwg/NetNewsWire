@@ -69,9 +69,9 @@ public actor DigestCoordinator {
                             throw ReaderError.staleResult
                         }
                         sources[index].html = full.html; sources[index].text = full.text
-                    } catch is CancellationError { throw CancellationError() } catch ReaderError.staleResult { throw ReaderError.staleResult } catch { warnings.append("Volltext für „\(sources[index].title)“ nicht verfügbar.") }
+                    } catch is CancellationError { throw CancellationError() } catch ReaderError.staleResult { throw ReaderError.staleResult } catch { warnings.append(String(localized: "Full text is unavailable for “\(sources[index].title)”.", bundle: #bundle)) }
                 }
-                if sources[index].text.isEmpty { warnings.append("Nur Titel für „\(sources[index].title)“ verfügbar.") }
+                if sources[index].text.isEmpty { warnings.append(String(localized: "Only the title is available for “\(sources[index].title)”.", bundle: #bundle)) }
             }
             var sections: [DigestSection]
             let repository = repository
@@ -87,8 +87,8 @@ public actor DigestCoordinator {
             let covered = Set(sections.flatMap(\.sources))
             let missing = sources.filter { !covered.contains($0.id) }
             if !missing.isEmpty {
-                warnings.append("\(missing.count) Beiträge sind nicht durch KI zusammengefasst und bleiben als Originale erreichbar.")
-                sections.append(DigestSection(title: "Weitere Originalbeiträge", text: "",
+                warnings.append(String(localized: "\(missing.count) articles have no AI summary and remain accessible as originals.", bundle: #bundle))
+                sections.append(DigestSection(title: String(localized: "Other original articles", bundle: #bundle), text: "",
                                                sources: missing.map(\.id)))
             }
             let digest = DigestSnapshot(id: identifier, feed: feed.id, day: day, timeZoneID: preferences.timeZoneID,

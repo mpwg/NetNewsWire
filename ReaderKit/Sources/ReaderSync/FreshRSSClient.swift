@@ -45,7 +45,7 @@ public actor FreshRSSClient {
         let data = try await write(account, path: "subscription/quickadd", fields: [("quickadd", url.absoluteString), ("output", "json")])
         let result = try JSONDecoder().decode(QuickAdd.self, from: data)
         guard result.numResults > 0, let streamID = result.streamId else {
-            throw ReaderError.unavailable("Unter dieser Adresse wurde kein Feed gefunden.")
+            throw ReaderError.unavailable(String(localized: "No feed was found at this URL.", bundle: #bundle))
         }
         var fields = [("ac", "edit"), ("s", streamID)]
         if let title, !title.isEmpty { fields.append(("t", title)) }
@@ -147,7 +147,7 @@ public actor FreshRSSClient {
             let contents = try JSONDecoder().decode(Contents.self, from: data)
             let converted = try contents.items.map { try $0.snapshot(accountID: account.id) }
             guard Set(batch).isSubset(of: Set(converted.map { $0.id.remoteID })) else {
-                throw ReaderError.unavailable("FreshRSS hat nicht alle angeforderten Artikel geliefert. Bitte erneut aktualisieren.")
+                throw ReaderError.unavailable(String(localized: "FreshRSS did not return every requested article. Refresh again.", bundle: #bundle))
             }
             articles.append(contentsOf: converted)
         }

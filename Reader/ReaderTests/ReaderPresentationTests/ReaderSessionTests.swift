@@ -13,7 +13,7 @@ struct ReaderSessionTests {
         let feed = FeedSnapshot(id: FeedKey(accountID: account.id, remoteID: "feed/1"), title: "Testfeed", url: account.serverURL)
         let articles = (0..<count).map { index in
             ArticleSnapshot(id: ArticleKey(accountID: account.id, remoteID: "\(index)"), feedID: feed.id.remoteID,
-                            title: "Artikel \(index)", text: "Content \(index)", dateArrived: Date(timeIntervalSince1970: Double(index)))
+                            title: "Article \(index)", text: "Content \(index)", dateArrived: Date(timeIntervalSince1970: Double(index)))
         }
         try await store.applyRefresh(RefreshSnapshot(accountID: account.id, feeds: [feed], folders: [], articles: articles,
                                                     unreadIDs: Set(articles.map(\.id.remoteID)), starredIDs: []))
@@ -25,7 +25,7 @@ struct ReaderSessionTests {
         let a = ReaderSession(services: services)
         let b = ReaderSession(services: services)
         a.sidebarSelection = feed.id.id
-        a.search = "Artikel 1"
+        a.search = "Article 1"
         b.sidebarSelection = "all"
         await a.reload()
         await b.reload()

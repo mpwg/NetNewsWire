@@ -140,11 +140,11 @@ public actor IconService {
         guard let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode) else { throw ReaderError.invalidResponse }
         let mime = http.mimeType?.lowercased() ?? ""
         guard image ? mime.hasPrefix("image/") : ["text/html", "application/xhtml+xml"].contains(mime) else { throw ReaderError.invalidResponse }
-        guard http.expectedContentLength <= maximumBytes else { throw ReaderError.unavailable("Das Icon ist zu groß.") }
+        guard http.expectedContentLength <= maximumBytes else { throw ReaderError.unavailable(String(localized: "The icon is too large.", bundle: #bundle)) }
         var data = Data()
         for try await byte in bytes {
             try Task.checkCancellation()
-            guard data.count < maximumBytes else { throw ReaderError.unavailable("Das Icon ist zu groß.") }
+            guard data.count < maximumBytes else { throw ReaderError.unavailable(String(localized: "The icon is too large.", bundle: #bundle)) }
             data.append(byte)
         }
         return (data, http)

@@ -24,13 +24,13 @@ public protocol ReaderRepository: Sendable {
 
 public extension ReaderRepository {
     func mergeImportMetadata(feed: FeedKey, homePageURL: URL?, folderPath: [String], feedURL: URL) async throws {
-        throw ReaderError.unavailable("Dieser Speicher unterstützt keinen atomaren Metadatenimport.")
+        throw ReaderError.unavailable(String(localized: "This store does not support atomic metadata import.", bundle: #bundle))
     }
     func saveDigest(_ digest: DigestSnapshot, expectedSources: [ArticleSnapshot]) async throws -> Bool {
-        throw ReaderError.unavailable("Dieser Speicher unterstützt keine atomare Quellenprüfung.")
+        throw ReaderError.unavailable(String(localized: "This store does not support atomic source validation.", bundle: #bundle))
     }
     func updateContent(_ source: ArticleSnapshot, html: String, text: String) async throws -> Bool {
-        throw ReaderError.unavailable("Dieser Speicher unterstützt keine atomare Quellenprüfung.")
+        throw ReaderError.unavailable(String(localized: "This store does not support atomic source validation.", bundle: #bundle))
     }
     func changes() async -> AsyncStream<UInt64> { AsyncStream { $0.finish() } }
     func article(_ key: ArticleKey) async throws -> ArticleSnapshot? {

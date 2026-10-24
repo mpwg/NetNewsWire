@@ -1,0 +1,125 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "The icon is too large.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The icon is too large."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Das Icon ist zu groß."
+          }
+        }
+      }
+    },
+    "The OPML import contains an unnamed folder.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The OPML import contains an unnamed folder."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der OPML-Import enthält einen Ordner ohne Namen."
+          }
+        }
+      }
+    },
+    "The OPML import contains an invalid homepage URL.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The OPML import contains an invalid homepage URL."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der OPML-Import enthält eine ungültige Homepageadresse."
+          }
+        }
+      }
+    },
+    "A feed is assigned to conflicting OPML folder paths. FreshRSS supports one category per feed. Resolve the conflict before importing.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A feed is assigned to conflicting OPML folder paths. FreshRSS supports one category per feed. Resolve the conflict before importing."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein Feed ist im OPML mehreren unterschiedlichen Ordnerpfaden zugeordnet. FreshRSS unterstützt pro Feed nur eine Kategorie. Bitte die Zuordnung vor dem Import bereinigen."
+          }
+        }
+      }
+    },
+    "Keychain access failed (%d).": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keychain access failed (%d)."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zugriff auf den Schlüsselbund fehlgeschlagen (%d)."
+          }
+        }
+      }
+    },
+    "No feed was found at this URL.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No feed was found at this URL."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unter dieser Adresse wurde kein Feed gefunden."
+          }
+        }
+      }
+    },
+    "FreshRSS did not return every requested article. Refresh again.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FreshRSS did not return every requested article. Refresh again."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FreshRSS hat nicht alle angeforderten Artikel geliefert. Bitte erneut aktualisieren."
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

@@ -2,7 +2,7 @@
 
 Reader is a standalone FreshRSS client for macOS, iOS and iPadOS **27 or later**, with a shared SwiftUI application and SwiftData store. Open **`Reader/Reader.xcodeproj`** in Xcode 27 and select the **Reader** scheme. The native project was created with Apple's multiplatform app template through Xcode MCP; it reuses the existing ReaderKit implementation.
 
-The older root `Reader.xcodeproj` and `ReaderApp/` are superseded migration artifacts. Do not run their generator. They remain temporarily until the replacement's remaining configuration checks are complete. The original NetNewsWire targets remain pending acceptance of their replacements.
+The older root `Reader.xcodeproj` and `ReaderApp/` are superseded migration artifacts. Do not run their generator. They remain temporarily pending the replacement's hosted CI acceptance and preservation of user edits. The original NetNewsWire targets remain pending acceptance of their replacements.
 
 ## Accounts and storage
 
@@ -46,7 +46,7 @@ python3 -m unittest discover -s scripts/tests -v
 
 The SwiftData recovery probe separately exercises 10,000 synthetic articles across three real processes including SIGKILL. See [recovery evidence](../docs/reader/evidence/b-2026-10-24.md). This establishes core recovery, not complete app UI recovery or real FreshRSS behavior.
 
-Current native Debug tests pass on Mac, iPhone Simulator and iPad Simulator with the requested compiler settings. See the [test review](../docs/reader/test-review-2026-10-24.md) and [acceptance matrix](../docs/reader/acceptance.md) for exact counts, artifacts and remaining Release/CI/device/service checks. Successful builds and fixture tests do not establish full product acceptance.
+Current native tests pass on Mac (99 executions), iPhone Simulator and iPad Simulator (98 each), with the requested compiler settings. Native Release builds pass on Mac/iOS Simulator, and actual Mac launches prove separate Debug/Release stores. English UI/error source strings use explicit package bundles; German translations and plural forms live in String Catalogs. Ten code-test cases verify compiled language, HTTP-formatting and plural behavior. See the [test review](../docs/reader/test-review-2026-10-24.md), [native evidence](../docs/reader/evidence/native-2026-10-24.md) and [acceptance matrix](../docs/reader/acceptance.md) for remaining hosted CI/device/service checks. Successful builds and fixture tests do not establish full product acceptance.
 
 ## Attribution
 

@@ -56,17 +56,17 @@ public actor OPMLImportService {
                 throw ReaderError.invalidURL
             }
             guard subscription.folderPath.allSatisfy({ !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }) else {
-                throw ReaderError.unavailable("Der OPML-Import enthält einen Ordner ohne Namen.")
+                throw ReaderError.unavailable(String(localized: "The OPML import contains an unnamed folder.", bundle: #bundle))
             }
             if let home = subscription.homePageURL {
                 guard ["https", "http"].contains(home.scheme?.lowercased()), home.host != nil else {
-                    throw ReaderError.unavailable("Der OPML-Import enthält eine ungültige Homepageadresse.")
+                    throw ReaderError.unavailable(String(localized: "The OPML import contains an invalid homepage URL.", bundle: #bundle))
                 }
             }
             let key = normalizedURL(subscription.url)
             if var prior = unique[key] {
                 guard prior.folderPath == subscription.folderPath else {
-                    throw ReaderError.unavailable("Ein Feed ist im OPML mehreren unterschiedlichen Ordnerpfaden zugeordnet. FreshRSS unterstützt pro Feed nur eine Kategorie. Bitte die Zuordnung vor dem Import bereinigen.")
+                    throw ReaderError.unavailable(String(localized: "A feed is assigned to conflicting OPML folder paths. FreshRSS supports one category per feed. Resolve the conflict before importing.", bundle: #bundle))
                 }
                 if prior.homePageURL == nil { prior.homePageURL = subscription.homePageURL }
                 unique[key] = prior

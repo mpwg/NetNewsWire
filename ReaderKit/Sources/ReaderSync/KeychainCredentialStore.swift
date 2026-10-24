@@ -46,7 +46,7 @@ public actor KeychainCredentialStore: CredentialStore {
 
     private func check(_ status: OSStatus) throws {
         guard status == errSecSuccess else {
-            throw ReaderError.unavailable("Zugriff auf den Schlüsselbund fehlgeschlagen (\(status)).")
+            throw ReaderError.unavailable(String(localized: "Keychain access failed (\(status)).", bundle: #bundle))
         }
     }
 }

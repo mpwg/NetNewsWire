@@ -11,6 +11,7 @@ let readerSwiftSettings: [SwiftSetting] = [
 
 let package = Package(
     name: "ReaderKit",
+    defaultLocalization: "en",
     platforms: [.macOS("27.0"), .iOS("27.0")],
     products: ["ReaderDomain", "ReaderPersistence", "ReaderSync", "ReaderContent", "ReaderIntelligence", "ReaderUI"].map {
         .library(name: $0, targets: [$0])
@@ -22,14 +23,14 @@ let package = Package(
             path: "Probes/ReaderStoreRecoveryProbe",
             swiftSettings: readerSwiftSettings
         ),
-        .target(name: "ReaderDomain", swiftSettings: readerSwiftSettings),
+        .target(name: "ReaderDomain", resources: [.process("Resources")], swiftSettings: readerSwiftSettings),
         .target(
             name: "ReaderPersistence", dependencies: ["ReaderDomain"],
             exclude: ["README.md"], swiftSettings: readerSwiftSettings
         ),
         .target(
             name: "ReaderSync", dependencies: ["ReaderDomain", "ReaderContent"],
-            exclude: ["README.md"], swiftSettings: readerSwiftSettings
+            exclude: ["README.md"], resources: [.process("Resources")], swiftSettings: readerSwiftSettings
         ),
         .target(
             name: "ReaderContent", dependencies: ["ReaderDomain"],
@@ -37,12 +38,12 @@ let package = Package(
         ),
         .target(
             name: "ReaderIntelligence", dependencies: ["ReaderDomain", "ReaderContent"],
-            swiftSettings: readerSwiftSettings
+            resources: [.process("Resources")], swiftSettings: readerSwiftSettings
         ),
         .target(
             name: "ReaderUI",
             dependencies: ["ReaderDomain", "ReaderPersistence", "ReaderSync", "ReaderContent", "ReaderIntelligence"],
-            exclude: ["README.md"], swiftSettings: readerSwiftSettings
+            exclude: ["README.md"], resources: [.process("Resources")], swiftSettings: readerSwiftSettings
         )
     ]
 )

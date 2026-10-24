@@ -12,11 +12,11 @@ At the owner's request, Xcode MCP created `Reader/Reader.xcodeproj` directly fro
 
 | Criterion | Status | Evidence and remaining work |
 |---|---|---|
-| OS 27 builds and correct bundle IDs | Partial for native replacement | Native Debug build-for-testing succeeds on Mac and iPhone/iPad Simulator. Earlier root-project Debug/Release builds proved minimum 27.0 and `eu.mpwg.reader.debug` / `eu.mpwg.reader`. Repeat Release/configuration verification on the native replacement before removing old infrastructure. |
-| Real native tests and failure propagation | Local evidence passed; hosted acceptance open | Current native Mac: 81 distinct code tests plus two UI tests, 89 executions. iPhone/iPad: 81 code tests plus one UI test, 88 executions each. No failures or skips. Three runner contracts prove all-platform collection, failure propagation and refusal to test stale products after a failed build. Await current hosted workflow evidence. |
-| Approachable Concurrency and warnings as errors | Enabled and Debug-verified | All three native targets enable `SWIFT_APPROACHABLE_CONCURRENCY`, `SWIFT_TREAT_WARNINGS_AS_ERRORS` and `GCC_TREAT_WARNINGS_AS_ERRORS`. All seven package targets share both remaining Swift 6 upcoming features and `.treatAllWarnings(as: .error)` without configuration restrictions. Six library targets are exercised by native builds; a fresh standalone recovery-probe build remains to verify. |
-| Separate persistent Debug/Release stores | Earlier implementation evidence passed | Actual Mac launches without UI-test mode opened separate SQLite/WAL/SHM files under each bundle's sandbox. See [A evidence](evidence/a-2026-10-24.md). Repeat on native replacement if configuration verification changes startup settings. |
-| README and test review | Updated | Native project, code-test emphasis, compiler policy, evidence and remaining checks documented. English source/localization conversion is still in progress. |
+| OS 27 builds and correct bundle IDs | Passed on native replacement | Native Debug builds/tests pass on Mac and iPhone/iPad Simulator; native Release builds pass on Mac and iOS Simulator. Expanded app Plists confirm minimum 27.0 and `eu.mpwg.reader.debug` / `eu.mpwg.reader`. The scheme is restored to Debug. |
+| Real native tests and failure propagation | Local evidence passed; hosted acceptance open | Current native Mac: 84 distinct code tests plus two UI tests, 99 executions. iPhone/iPad: 84 code tests plus one UI test, 98 executions each. No failures or skips. Three runner contracts prove all-platform collection, failure propagation and refusal to test stale products after a failed build. Await current hosted workflow evidence. |
+| Approachable Concurrency and warnings as errors | Enabled and verified | All three native targets enable `SWIFT_APPROACHABLE_CONCURRENCY`, `SWIFT_TREAT_WARNINGS_AS_ERRORS` and `GCC_TREAT_WARNINGS_AS_ERRORS`. All seven package targets share both remaining Swift 6 upcoming features and `.treatAllWarnings(as: .error)` without configuration restrictions. Native Debug/Release builds exercise the six libraries; the standalone probe also builds through Xcode MCP and passes fresh process recovery. |
+| Separate persistent Debug/Release stores | Passed on native replacement | Actual native Mac launches without UI-test mode: Release PID 96200 and Debug PID 97086 opened SQLite/WAL/SHM files in their respective bundle-ID containers. See [native evidence](evidence/native-2026-10-24.md). |
+| README and test review | Updated | Canonical Reader source and guides are English; German UI/error translations live in String Catalogs with tested plural forms. Native project, code-test emphasis, compiler policy and evidence are documented. Superseded root-project cleanup remains pending hosted acceptance. |
 | SwiftLint and runner checks | Passed | Whole repository passes SwiftLint 0.65.1 `--strict`. Three Python runner contracts pass. Shell syntax and Actionlint pass, excluding only Actionlint's outdated known-label list for `xcode-27`. |
 
 ## Native test evidence with requested compiler settings
@@ -25,13 +25,13 @@ Environment: MacBook Pro arm64, macOS 27.0.1 (26A434), Xcode 27.1, Swift 6.4. In
 
 | Destination | Distinct tests / executions | Result bundle suffix under `ActionArtifacts/default/RunAllTests/` |
 |---|---|---|
-| My Mac, macOS 27.0.1 | 83 / 89 | `Test-Reader-2026.10.24_20-56-35-+0200.xcresult` |
-| iPhone Duo, iOS 27.1 Simulator | 82 / 88 | `Test-Reader-2026.10.24_20-57-27-+0200.xcresult` |
-| iPad Pro 13-inch (M5), iOS 27.0 Simulator | 82 / 88 | `Test-Reader-2026.10.24_20-59-00-+0200.xcresult` |
+| My Mac, macOS 27.0.1 | 86 / 99 | `Test-Reader-2026.10.24_21-17-27-+0200.xcresult` |
+| iPhone Duo, iOS 27.1 Simulator | 85 / 98 | `Test-Reader-2026.10.24_21-22-12-+0200.xcresult` |
+| iPad Pro 13-inch (M5), iOS 27.0 Simulator | 85 / 98 | `Test-Reader-2026.10.24_21-22-56-+0200.xcresult` |
 
 Counts come from each xcresult bundle's summary and device execution count. The MCP's inline iOS count incorrectly includes the Mac-only second-window test. No nonexistent iOS test is counted as acceptance.
 
-The first Mac window appears automatically without Command-N. The second-window test keeps both connection sheets open and verifies independent drafts and cancellation. The former direct-AX diagnosis was invalid: a sandboxed runner's `AXIsProcessTrusted=false` does not establish XCTest automation-service permissions. Removing the `-ApplePersistenceIgnoreState YES` launch argument fixed the suppressed initial window. The owner enabled Xcode Helper, but this alone is not claimed as the fix. VoiceOver and broad accessibility acceptance remain separate.
+The first Mac window appears automatically without Command-N. The second-window test keeps both connection sheets open and verifies independent drafts and cancellation. A hosted Mac failure showed completely overlapping windows on its small display; native Command-backtick cycling now replaces the obscured-window click, with a bounded hittability wait. Hosted revalidation remains open. The former direct-AX diagnosis was invalid: a sandboxed runner's `AXIsProcessTrusted=false` does not establish XCTest automation-service permissions. Removing the `-ApplePersistenceIgnoreState YES` launch argument fixed the suppressed initial window. The owner enabled Xcode Helper, but this alone is not claimed as the fix. VoiceOver and broad accessibility acceptance remain separate.
 
 Approachable Concurrency initially exposed mixed cached module signatures and a further FreshRSS fixture task capture. After consistent package settings and full code-target recompilation, normal incremental builds and the full test plan pass. Temporary recompilation settings were removed. Compiler warning promotion remains enabled; Apple's build tool can still report skipped App Intents metadata extraction when the app has no AppIntents dependency.
 
@@ -46,13 +46,13 @@ The existing ReaderStore implementation is unchanged. Commit `929b7b830` added a
 | Deletion-only queries/counts and retained originals | Passed | Code test checks committed revision, removed identities and unread/star counts. Recovery retains the two originals protected by pending/star/digest references after unsubscribing, then verifies another process restart. |
 | README | Updated | [B evidence](evidence/b-2026-10-24.md), [raw report](evidence/b-recovery-2026-10-24.json), module and Reader guides. |
 
-B remains formally open while dependency A and current hosted evidence remain open. The process probe is core recovery evidence, not full application UI recovery, physical-device behavior or real FreshRSS synchronization.
+B remains formally open while dependency A and current hosted evidence remain open. A fresh Xcode-MCP-built probe passed after localization/compiler changes: seed PID 96660, SIGKILL, recovery/reopen PIDs 96690/96692, 10,000 articles and exact retained revisions. [Current raw report](evidence/b-native-recovery-2026-10-24.json). The process probe is core recovery evidence, not full application UI recovery, physical-device behavior or real FreshRSS synchronization.
 
 ## Work-package matrix
 
 | Package | Implemented or exercised evidence | Still open |
 |---|---|---|
-| A / #46 | Standalone OS-27 Reader, native Apple-template app/test targets, shared libraries, local native tests, compiler policy and runner failure contracts | Native replacement Release/configuration checks, current hosted CI success and regular physical-device provisioning. |
+| A / #46 | Standalone OS-27 Reader, native Apple-template app/test targets, Debug/Release namespaces, local native tests, compiler policy and runner failure contracts | Current hosted CI success and safe retirement of superseded Reader project infrastructure; physical-device provisioning remains separate. |
 | B / #47 | 25 persistence contracts and native SIGKILL recovery with 10,000 articles, exact outbox acknowledgements, rollback, retention, streams and atomic source/import validation | Dependency A; complete persistent-app UI restart, device and real service evidence remain separate. |
 | C / #48 | FreshRSS HTTP/store contracts: complete pagination, old publication dates, exact acknowledgements, errors, empty folders and complete content | Real FreshRSS API login, multiple devices and offline recovery against an authorized test account. |
 | D / #49 | Shared views, async search/pagination, generation checks, source access and frozen displayed revisions | Representative real feed content and full native keyboard/navigation acceptance. |

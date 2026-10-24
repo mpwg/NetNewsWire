@@ -37,7 +37,7 @@ struct ContentNetworkingTests {
         let fixture = try ContentNetworkFixture()
         await fixture.server.setResponse(status: 200, data: Self.article(marker: "Austrian offers"))
         let result = try await fixture.service.extract(url: fixture.url)
-        let expectedLink = try #require(URL(string: "/angebote/reader", relativeTo: fixture.url)?.absoluteURL.absoluteString)
+        let expectedLink = try #require(URL(string: "/offers/reader", relativeTo: fixture.url)?.absoluteURL.absoluteString)
         #expect(result.html.contains(expectedLink))
         #expect(result.text.contains("View offer"))
     }
@@ -51,7 +51,7 @@ struct ContentNetworkingTests {
 
     private static func article(marker: String) -> Data {
         let text = String(repeating: "\(marker): Fresh apples cost EUR 2.99 at the retailer today. ", count: 50)
-        return Data("<html><head><title>\(marker)</title></head><body><article><h1>\(marker)</h1><p>\(text)</p><p><a href='/angebote/reader'>View offer</a></p></article></body></html>".utf8)
+        return Data("<html><head><title>\(marker)</title></head><body><article><h1>\(marker)</h1><p>\(text)</p><p><a href='/offers/reader'>View offer</a></p></article></body></html>".utf8)
     }
 }
 
