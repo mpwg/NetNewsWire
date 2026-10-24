@@ -37,6 +37,7 @@ excluded:
   - ".build"
   - ".git"
   - ".swiftpm"
+  - ReaderKit/.build/
   - ".claude"
   - Modules/*/.build/
   - Modules/Secrets/Sources/Secrets/SecretKey.swift

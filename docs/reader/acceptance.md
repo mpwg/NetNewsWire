@@ -6,14 +6,15 @@ Der Umbau ist **implementiert, aber nicht vollständig abgenommen**. Die struktu
 
 PR [#57](https://github.com/mpwg/NetNewsWire/pull/57) wurde bereits vor Beginn dieser Fortsetzung nach `main` übernommen (Squashcommit `4f9f256e5`). Der Dateistand entspricht vollständig `codex/intelligence-reader` bei `2528bc1b8`; ein erneuter Merge oder Neubau ist nicht nötig. Das Arbeitsverzeichnis einschließlich `iOS/Resources/Info.plist` war sauber; diese Datei wird nicht geändert.
 
-Der Compilerfehler aus [Lauf 40115342568](https://github.com/mpwg/NetNewsWire/actions/runs/40115342568) ist im macOS-Job erneut belegt. Das Icon-URLProtocol-Fixture übergibt jetzt eine explizit `@Sendable` markierte Closure mit unveränderlichen Captures an `Task`. Mutex-/Actor-Schutz und die Abbruchprüfung bleiben erhalten. Lokaler gezielter Nachweis: `swift test --package-path ReaderKit --filter IconServiceTests`, sechs Tests erfolgreich; die beiden Python-Runner-Vertragstests sind ebenfalls erfolgreich.
+Der Compilerfehler aus [Lauf 40115342568](https://github.com/mpwg/NetNewsWire/actions/runs/40115342568) ist im macOS-Job erneut belegt. Das Icon-URLProtocol-Fixture übergibt jetzt eine explizit `@Sendable` markierte Closure mit unveränderlichen Captures an `Task`. Mutex-/Actor-Schutz und die Abbruchprüfung bleiben erhalten. Korrekturcommit: `96b05cbbe`. Lokaler gezielter Nachweis: `swift test --package-path ReaderKit --filter IconServiceTests`, sechs Tests erfolgreich; die beiden Python-Runner-Vertragstests sind ebenfalls erfolgreich. Aktuelle native Nachweise und Befehle: [A-Prüfprotokoll](evidence/a-2026-10-24.md).
 
 | A-Kriterium | Status | Aktueller Beleg / nächster Schritt |
 |---|---|---|
-| OS-27-Builds und Bundle-IDs | offen | Frühere Builds unten dokumentiert; aktuellen Korrekturstand nativ erneut prüfen. |
-| Native Testpläne und Fehlerweitergabe | offen | Zwei aktuelle Runner-Vertragstests erfolgreich; native Mac-/iPhone-/iPad-Ausführung und gehostete CI stehen aus. Mac-AX-Voraussetzung getrennt ausweisen. |
-| Debug-/Release-Stores getrennt | offen | Bundle-ID-basierter Bootstrap vorhanden; tatsächliche persistente Stores beider Konfigurationen separat nachweisen. |
-| README | erfüllt | Reader-README beschreibt die Fixturekorrektur und die noch offene gehostete Prüfung. |
+| OS-27-Builds und Bundle-IDs | erfüllt | Aktuelle Debug-/Releasebuilds auf Mac und iOS-Simulator; expandierte IDs `eu.mpwg.reader.debug` / `eu.mpwg.reader`, Mindestversion jeweils 27.0. Native Signaturprüfung auf Mac erfolgreich. |
+| Native Testpläne und Fehlerweitergabe | offen | Mac: 78 Fachtests erfolgreich, zwei UI-Tests durch bestätigte AX-Sperre fehlgeschlagen. iPhone/iPad jeweils 78 Fachtests plus ein UI-Test erfolgreich (85 Ausführungen, keine Skips). Beide Runner-Vertragstests erfolgreich. [Gehosteter Korrekturlauf](https://github.com/mpwg/NetNewsWire/actions/runs/40115851871) läuft noch. Lokale Mac-UI-Abnahme bleibt auf Nutzerwunsch vorerst offen. |
+| Debug-/Release-Stores getrennt | erfüllt | Beide aktuellen Mac-Apps tatsächlich ohne `--ui-testing` gestartet: `lsof` belegt getrennte SQLite-/WAL-/SHM-Dateien in `~/Library/Containers/eu.mpwg.reader.debug/…/eu.mpwg.reader.debug/Reader.store` und `~/Library/Containers/eu.mpwg.reader/…/eu.mpwg.reader/Reader.store`. Kein Legacy-Store geöffnet. |
+| README | erfüllt | Reader-README und Repository-Einstieg beschreiben Korrekturstand, Prüfprotokoll und die noch offenen Nachweise. |
+| SwiftLint | erfüllt | SwiftLint 0.65.1 auf gesamtem Repository strikt erfolgreich. Generierte SwiftPM-Dateien unter `ReaderKit/.build/` jetzt ausdrücklich ausgeschlossen; keine Produkt-/Testquelle ausgeschlossen. |
 
 Die folgenden Nachweise stammen vom gesicherten Handoff-Stand und werden nicht pauschal als Abnahme des aktuellen Commits verwendet.
 

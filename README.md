@@ -1,6 +1,6 @@
 ## Reader-Fork ab OS 27
 
-Die neue gemeinsame SwiftUI-/SwiftData-App mit FreshRSS und lokalen KI-Tagesübersichten liegt in **`Reader.xcodeproj`**. Einrichtung, Testbefehle und aktuelle Einschränkungen beschreibt die [Reader-Anleitung](ReaderKit/README.md). Die [Abnahmematrix](docs/reader/acceptance.md) trennt umgesetzte Funktionen von ausstehenden Geräte- und Dienstnachweisen. [GitHub-Arbeitsplan: #45](https://github.com/mpwg/NetNewsWire/issues/45).
+Die neue gemeinsame SwiftUI-/SwiftData-App mit FreshRSS und lokalen KI-Tagesübersichten liegt in **`Reader.xcodeproj`**. Einrichtung, Testbefehle und aktuelle Einschränkungen beschreibt die [Reader-Anleitung](ReaderKit/README.md). Die [Abnahmematrix](docs/reader/acceptance.md) trennt umgesetzte Funktionen von ausstehenden Geräte- und Dienstnachweisen. [GitHub-Arbeitsplan: #45](https://github.com/mpwg/NetNewsWire/issues/45). Der bestehende Reader ist über PR #57 auf `main` übernommen. Die aktuelle Fortsetzung beginnt mit [Paket A und seinen Prüfbelegen](docs/reader/evidence/a-2026-10-24.md); die lokale Mac-UI-, Geräte- und Dienstabnahme bleibt ausdrücklich offen.
 
 Die nachfolgende Anleitung beschreibt die ursprünglichen NetNewsWire-Targets, die während des Umbaus erhalten bleiben.
 
