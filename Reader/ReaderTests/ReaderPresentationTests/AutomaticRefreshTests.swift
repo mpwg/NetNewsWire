@@ -7,7 +7,7 @@ import ReaderSync
 
 @MainActor
 struct AutomaticRefreshTests {
-    @Test func `Fenster teilen Aktualisierung und respektieren das Zeitfenster`() async throws {
+    @Test("Sessions share refresh jobs and respect the refresh interval") func sessionsShareRefreshJobsAndRespectTheRefreshInterval() async throws {
         let store = try ReaderStore(inMemory: true)
         let account = ReaderAccount(serverURL: try #require(URL(string: "https://refresh.test/api/greader.php")), username: "test")
         try await store.saveAccount(account)

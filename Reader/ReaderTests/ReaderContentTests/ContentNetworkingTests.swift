@@ -5,14 +5,14 @@ import ReaderContent
 import ReaderDomain
 
 struct ContentNetworkingTests {
-    @Test func `HTTP 403 bleibt ein sichtbarer Volltextfehler`() async throws {
+    @Test("HTTP 403 remains an explicit full-text error") func http403RemainsAnExplicitFullTextError() async throws {
         let fixture = try ContentNetworkFixture()
-        await fixture.server.setResponse(status: 403, data: Data("Zugriff verweigert".utf8))
+        await fixture.server.setResponse(status: 403, data: Data("Access denied".utf8))
         await #expect(throws: ReaderError.server(403)) { try await fixture.service.extract(url: fixture.url) }
         #expect(await fixture.server.requestCount == 1)
     }
 
-    @Test func `Netzwerktimeout wird an den Aufrufer weitergegeben`() async throws {
+    @Test("Network timeouts propagate to the caller") func networkTimeoutsPropagateToTheCaller() async throws {
         let fixture = try ContentNetworkFixture()
         await fixture.server.setTimeout()
         let error = await #expect(throws: URLError.self) { try await fixture.service.extract(url: fixture.url) }
@@ -20,29 +20,29 @@ struct ContentNetworkingTests {
         #expect(await fixture.server.requestCount == 1)
     }
 
-    @Test func `Dieselbe URL liefert nach Inhaltsänderung die neue Version`() async throws {
+    @Test("The same URL returns updated content after a source change") func theSameURLReturnsUpdatedContentAfterASourceChange() async throws {
         let fixture = try ContentNetworkFixture()
-        await fixture.server.setResponse(status: 200, data: Self.article(marker: "Erste Angebotsversion"))
+        await fixture.server.setResponse(status: 200, data: Self.article(marker: "Initial offer version"))
         let first = try await fixture.service.extract(url: fixture.url)
-        await fixture.server.setResponse(status: 200, data: Self.article(marker: "Aktualisierte Angebotsversion"))
+        await fixture.server.setResponse(status: 200, data: Self.article(marker: "Updated offer version"))
         let second = try await fixture.service.extract(url: fixture.url)
-        #expect(first.text.contains("Erste Angebotsversion"))
-        #expect(second.text.contains("Aktualisierte Angebotsversion"))
-        #expect(!second.text.contains("Erste Angebotsversion"))
+        #expect(first.text.contains("Initial offer version"))
+        #expect(second.text.contains("Updated offer version"))
+        #expect(!second.text.contains("Initial offer version"))
         #expect(first != second)
         #expect(await fixture.server.requestCount == 2)
     }
 
-    @Test func `Nachgeladener Volltext löst relative Links gegen die Dokumentadresse auf`() async throws {
+    @Test("Extracted full text resolves relative links against the document URL") func extractedFullTextResolvesRelativeLinksAgainstTheDocumentURL() async throws {
         let fixture = try ContentNetworkFixture()
-        await fixture.server.setResponse(status: 200, data: Self.article(marker: "Österreichische Angebote"))
+        await fixture.server.setResponse(status: 200, data: Self.article(marker: "Austrian offers"))
         let result = try await fixture.service.extract(url: fixture.url)
         let expectedLink = try #require(URL(string: "/angebote/reader", relativeTo: fixture.url)?.absoluteURL.absoluteString)
         #expect(result.html.contains(expectedLink))
-        #expect(result.text.contains("Zum Angebot"))
+        #expect(result.text.contains("View offer"))
     }
 
-    @Test func `Übergroße HTML-Antwort wird vor der Extraktion abgelehnt`() async throws {
+    @Test("Oversized HTML responses are rejected before extraction") func oversizedHTMLResponsesAreRejectedBeforeExtraction() async throws {
         let fixture = try ContentNetworkFixture()
         await fixture.server.setResponse(status: 200, data: Data(repeating: 120, count: 4_000_001))
         await #expect(throws: ReaderError.invalidResponse) { try await fixture.service.extract(url: fixture.url) }
@@ -50,8 +50,8 @@ struct ContentNetworkingTests {
     }
 
     private static func article(marker: String) -> Data {
-        let text = String(repeating: "\(marker): Frische Äpfel beim Händler kosten heute 2,99 €. ", count: 50)
-        return Data("<html><head><title>\(marker)</title></head><body><article><h1>\(marker)</h1><p>\(text)</p><p><a href='/angebote/reader'>Zum Angebot</a></p></article></body></html>".utf8)
+        let text = String(repeating: "\(marker): Fresh apples cost EUR 2.99 at the retailer today. ", count: 50)
+        return Data("<html><head><title>\(marker)</title></head><body><article><h1>\(marker)</h1><p>\(text)</p><p><a href='/angebote/reader'>View offer</a></p></article></body></html>".utf8)
     }
 }
 

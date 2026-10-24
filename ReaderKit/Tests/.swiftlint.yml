@@ -1,3 +1,0 @@
-# Swift Testing uses sentence-case raw identifiers, as required by modernize-tests.
-disabled_rules:
-  - identifier_name

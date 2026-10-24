@@ -12,11 +12,11 @@ struct ReaderStoreTests {
     }
 
     private var feed: FeedSnapshot {
-        FeedSnapshot(id: FeedKey(accountID: accountID, remoteID: "feed/1"), title: "Nachrichten",
+        FeedSnapshot(id: FeedKey(accountID: accountID, remoteID: "feed/1"), title: "News",
                      url: fixtureURL)
     }
 
-    private func article(_ id: String = "1", title: String = "Titel", text: String = "Text",
+    private func article(_ id: String = "1", title: String = "Title", text: String = "Text",
                          read: Bool = false, starred: Bool = false, arrived: Date = Date(timeIntervalSince1970: 100)) -> ArticleSnapshot {
         ArticleSnapshot(id: ArticleKey(accountID: accountID, remoteID: id), feedID: feed.id.remoteID,
                         title: title, text: text, dateArrived: arrived, read: read, starred: starred)
@@ -29,7 +29,7 @@ struct ReaderStoreTests {
                         articles: articles, unreadIDs: unread, starredIDs: starred)
     }
 
-    @Test func `Alte Bestätigung lässt neuere Änderung ausstehend`() async throws {
+    @Test("Old acknowledgements leave newer changes pending") func oldAcknowledgementsLeaveNewerChangesPending() async throws {
         let store = try ReaderStore(inMemory: true)
         let original = article()
         try await store.applyRefresh(refresh(articles: [original]))
@@ -43,7 +43,7 @@ struct ReaderStoreTests {
         #expect(pending.first?.id != old.first?.id)
     }
 
-    @Test func `Remoteabgleich schützt beide ausstehenden Statusrichtungen`() async throws {
+    @Test("Remote refresh protects pending changes in both status directions") func remoteRefreshProtectsPendingChangesInBothStatusDirections() async throws {
         let store = try ReaderStore(inMemory: true)
         let original = article()
         try await store.applyRefresh(refresh(articles: [original]))
@@ -56,7 +56,7 @@ struct ReaderStoreTests {
         #expect(try await store.pendingChanges(accountID: accountID).count == 2)
     }
 
-    @Test func `Doppelte Identitäten wählen eine vollständige Version und behalten Eingangstag`() async throws {
+    @Test("Duplicate identities select one complete version and retain the arrival date") func duplicateIdentitiesSelectOneCompleteVersionAndRetainTheArrivalDate() async throws {
         let store = try ReaderStore(inMemory: true)
         try await store.applyRefresh(refresh(articles: [article(title: "A", text: "A")]))
         try await store.applyRefresh(refresh(articles: [
@@ -70,9 +70,9 @@ struct ReaderStoreTests {
         #expect(records.first?.dateArrived == Date(timeIntervalSince1970: 100))
     }
 
-    @Test func `Leere autoritative Ordnerliste entfernt alte Zuordnungen`() async throws {
+    @Test("Empty authoritative folder lists remove old assignments") func emptyAuthoritativeFolderListsRemoveOldAssignments() async throws {
         let store = try ReaderStore(inMemory: true)
-        let folder = FolderSnapshot(accountID: accountID, remoteID: "folder/1", title: "Ordner")
+        let folder = FolderSnapshot(accountID: accountID, remoteID: "folder/1", title: "Folder")
         var categorized = feed
         categorized.folderIDs = [folder.remoteID]
         try await store.applyRefresh(refresh(articles: [], feeds: [categorized], folders: [folder]))
@@ -81,7 +81,7 @@ struct ReaderStoreTests {
         #expect(try await store.feeds().first?.folderIDs.isEmpty == true)
     }
 
-    @Test func `Abbestellen behält Sterne und entfernt unmarkierte Artikel`() async throws {
+    @Test("Unsubscribing retains stars and removes unprotected articles") func unsubscribingRetainsStarsAndRemovesUnprotectedArticles() async throws {
         let store = try ReaderStore(inMemory: true)
         try await store.applyRefresh(refresh(articles: [article("1"), article("2")], unread: ["1", "2"], starred: ["1"]))
         try await store.applyRefresh(refresh(articles: [], feeds: [], unread: [], starred: []))
@@ -91,7 +91,7 @@ struct ReaderStoreTests {
         #expect(try await store.feeds().isEmpty)
     }
 
-    @Test func `Tagesübersicht hält ihre Originale nach Abbestellen erreichbar`() async throws {
+    @Test("Digests retain their original articles after unsubscribing") func digestsRetainTheirOriginalArticlesAfterUnsubscribing() async throws {
         let store = try ReaderStore(inMemory: true)
         let original = article()
         try await store.applyRefresh(refresh(articles: [original]))
@@ -102,11 +102,11 @@ struct ReaderStoreTests {
         #expect(try await store.articles(ArticleQuery()).map(\.id) == [original.id])
     }
 
-    @Test func `Fehlgeschlagene Sammeländerung rollt Status und Queue zurück`() async throws {
+    @Test("Failed batch changes roll back status and outbox together") func failedBatchChangesRollBackStatusAndOutboxTogether() async throws {
         let store = try ReaderStore(inMemory: true)
         let original = article()
         try await store.applyRefresh(refresh(articles: [original]))
-        let absent = ArticleKey(accountID: accountID, remoteID: "nicht-vorhanden")
+        let absent = ArticleKey(accountID: accountID, remoteID: "missing")
         await #expect(throws: ReaderError.invalidResponse) {
             try await store.setStatus([original.id, absent], field: .read, value: true)
         }
@@ -114,15 +114,15 @@ struct ReaderStoreTests {
         #expect(try await store.pendingChanges(accountID: accountID).isEmpty)
     }
 
-    @Test func `Suche und Pagination arbeiten mit normalisierten Texten`() async throws {
+    @Test("Search and pagination use normalized text") func searchAndPaginationUseNormalizedText() async throws {
         let store = try ReaderStore(inMemory: true)
-        try await store.applyRefresh(refresh(articles: [article("1", title: "Äpfel"), article("2", title: "Birnen")]))
-        #expect(try await store.articles(ArticleQuery(search: "APFEL")).map(\.id.remoteID) == ["1"])
+        try await store.applyRefresh(refresh(articles: [article("1", title: "Café"), article("2", title: "Pears")]))
+        #expect(try await store.articles(ArticleQuery(search: "CAFE")).map(\.id.remoteID) == ["1"])
         #expect(try await store.articles(ArticleQuery(offset: 1, limit: 1)).map(\.id.remoteID) == ["2"])
         #expect(try await store.articles(ArticleQuery(limit: 0)).isEmpty)
     }
 
-    @Test func `Konto Artikel Einstellungen und Pendingänderung überleben erneutes Öffnen`() async throws {
+    @Test("Accounts articles preferences and pending changes survive reopening") func accountsArticlesPreferencesAndPendingChangesSurviveReopening() async throws {
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         defer { try? FileManager.default.removeItem(at: directory) }
         let url = directory.appendingPathComponent("Reader.store")
@@ -140,7 +140,7 @@ struct ReaderStoreTests {
         #expect(try await reopened.pendingChanges(accountID: accountID).count == 1)
     }
 
-    @Test func `Kontofremde Refreshdaten werden vor jeder Mutation abgelehnt`() async throws {
+    @Test("Cross-account refresh data is rejected before any mutation") func crossAccountRefreshDataIsRejectedBeforeAnyMutation() async throws {
         let store = try ReaderStore(inMemory: true)
         var foreign = article()
         foreign.id.accountID = UUID()
@@ -151,7 +151,7 @@ struct ReaderStoreTests {
         #expect(try await store.articles(ArticleQuery()).isEmpty)
     }
 
-    @Test func `Volltextcache bleibt bei unverändertem Feed erhalten und wird bei Inhaltsänderung ungültig`() async throws {
+    @Test("Full-text caches survive unchanged feeds and expire after content changes") func fullTextCachesSurviveUnchangedFeedsAndExpireAfterContentChanges() async throws {
         let store = try ReaderStore(inMemory: true)
         let original = article(text: "Kurzer Feedtext")
         try await store.applyRefresh(refresh(articles: [original]))
@@ -163,7 +163,7 @@ struct ReaderStoreTests {
         #expect(try await store.articles(ArticleQuery()).first?.text == "Inzwischen geänderter Feedtext")
     }
 
-    @Test func `Änderungsstream liefert Startrevision und bestätigte Schreibvorgänge`() async throws {
+    @Test("Change streams emit the current revision and committed writes") func changeStreamsEmitTheCurrentRevisionAndCommittedWrites() async throws {
         let store = try ReaderStore(inMemory: true)
         let changes = await store.changes()
         var iterator = changes.makeAsyncIterator()
@@ -171,13 +171,13 @@ struct ReaderStoreTests {
         try await store.applyRefresh(refresh(articles: [article()]))
         #expect(await iterator.next() == 1)
         await #expect(throws: ReaderError.invalidResponse) {
-            try await store.setStatus([ArticleKey(accountID: accountID, remoteID: "fehlend")], field: .read, value: true)
+            try await store.setStatus([ArticleKey(accountID: accountID, remoteID: "missing")], field: .read, value: true)
         }
         try await store.setStatus([article().id], field: .read, value: true)
         #expect(await iterator.next() == 2)
     }
 
-    @Test func `Mehrere Beobachter erhalten dieselbe bestätigte Änderung`() async throws {
+    @Test("Multiple observers receive the same committed change") func multipleObserversReceiveTheSameCommittedChange() async throws {
         let store = try ReaderStore(inMemory: true)
         let firstStream = await store.changes()
         let secondStream = await store.changes()
@@ -190,7 +190,7 @@ struct ReaderStoreTests {
         #expect(await second.next() == 1)
     }
 
-    @Test(.timeLimit(.minutes(1))) func `Reine Löschungen veröffentlichen neue Abfragen und erhalten erreichbare Sterne`() async throws {
+    @Test("Deletion-only refreshes publish updated queries and retain accessible stars", .timeLimit(.minutes(1))) func deletionOnlyRefreshesPublishUpdatedQueriesAndRetainAccessibleStars() async throws {
         let store = try ReaderStore(inMemory: true)
         try await store.applyRefresh(refresh(articles: [article("1"), article("2")], unread: ["1", "2"], starred: ["1"]))
         let stream = await store.changes()
@@ -208,7 +208,7 @@ struct ReaderStoreTests {
         #expect(try await store.article(article("2").id) == nil)
     }
 
-    @Test func `Änderungsstream hält den Store nicht im Besitzkreis`() async throws {
+    @Test("Change streams do not retain the store in an ownership cycle") func changeStreamsDoNotRetainTheStoreInAnOwnershipCycle() async throws {
         var store: ReaderStore? = try ReaderStore(inMemory: true)
         weak let weakStore = store
         let changes = await store?.changes()
@@ -219,7 +219,7 @@ struct ReaderStoreTests {
         #expect(await iterator?.next() == nil)
     }
 
-    @Test func `Exakte Artikelabfrage findet Quellen außerhalb der ersten Seite`() async throws {
+    @Test("Exact article queries find sources outside the first page") func exactArticleQueriesFindSourcesOutsideTheFirstPage() async throws {
         let store = try ReaderStore(inMemory: true)
         let originals = (0..<210).map { article(String($0), arrived: Date(timeIntervalSince1970: Double($0))) }
         try await store.applyRefresh(refresh(articles: originals))
@@ -229,21 +229,21 @@ struct ReaderStoreTests {
         #expect(try await store.article(ArticleKey(accountID: UUID(), remoteID: "0")) == nil)
     }
 
-    @Test func `Ordnerabfragen bleiben auf Mitgliedschaften und Konto begrenzt`() async throws {
+    @Test("Folder queries remain scoped to membership and account") func folderQueriesRemainScopedToMembershipAndAccount() async throws {
         let store = try ReaderStore(inMemory: true)
         var firstFeed = feed
         firstFeed.folderIDs = ["folder/1"]
-        let secondFeed = FeedSnapshot(id: FeedKey(accountID: accountID, remoteID: "feed/2"), title: "Anderer Feed",
+        let secondFeed = FeedSnapshot(id: FeedKey(accountID: accountID, remoteID: "feed/2"), title: "Another feed",
                                       url: fixtureURL, folderIDs: ["folder/2"])
         var secondArticle = article("2")
         secondArticle.feedID = secondFeed.id.remoteID
         let folders = ["folder/1", "folder/2", "empty"].map { FolderSnapshot(accountID: accountID, remoteID: $0, title: $0) }
         try await store.applyRefresh(refresh(articles: [article("1"), secondArticle], feeds: [firstFeed, secondFeed], folders: folders))
         let otherAccount = UUID()
-        let foreignFeed = FeedSnapshot(id: FeedKey(accountID: otherAccount, remoteID: "feed/1"), title: "Anderes Konto",
+        let foreignFeed = FeedSnapshot(id: FeedKey(accountID: otherAccount, remoteID: "feed/1"), title: "Another account",
                                       url: fixtureURL, folderIDs: ["folder/1"])
         let foreignArticle = ArticleSnapshot(id: ArticleKey(accountID: otherAccount, remoteID: "3"),
-                                             feedID: "feed/1", title: "Anderer Artikel")
+                                             feedID: "feed/1", title: "Another article")
         try await store.applyRefresh(RefreshSnapshot(accountID: otherAccount, feeds: [foreignFeed],
             folders: [FolderSnapshot(accountID: otherAccount, remoteID: "folder/1", title: "folder/1")],
             articles: [foreignArticle], unreadIDs: ["3"], starredIDs: []))
@@ -256,19 +256,19 @@ struct ReaderStoreTests {
         }
     }
 
-    @Test func `Verspätete Extraktion überschreibt keine neuere Quellenfassung`() async throws {
+    @Test("Late extraction does not overwrite newer source content") func lateExtractionDoesNotOverwriteNewerSourceContent() async throws {
         let store = try ReaderStore(inMemory: true)
-        let original = article(title: "Alter Titel", text: "Alter Inhalt")
+        let original = article(title: "Old title", text: "Old content")
         try await store.applyRefresh(refresh(articles: [original]))
-        try await store.applyRefresh(refresh(articles: [article(title: "Neuer Titel", text: "Neuer Inhalt")]))
+        try await store.applyRefresh(refresh(articles: [article(title: "New title", text: "Newer Content")]))
         #expect(try await store.updateContent(original, html: "<p>Veraltet</p>", text: "Veraltet") == false)
         let current = try #require(try await store.article(original.id))
-        #expect(current.title == "Neuer Titel")
-        #expect(current.text == "Neuer Inhalt")
+        #expect(current.title == "New title")
+        #expect(current.text == "Newer Content")
         #expect(try await store.updateContent(current, html: "<p>Aktueller Volltext</p>", text: "Aktueller Volltext"))
     }
 
-    @Test func `Statusänderung macht eine inhaltlich passende Extraktion nicht ungültig`() async throws {
+    @Test("Status changes do not invalidate matching content extraction") func statusChangesDoNotInvalidateMatchingContentExtraction() async throws {
         let store = try ReaderStore(inMemory: true)
         let repository: any ReaderRepository = store
         let original = article()
@@ -279,7 +279,7 @@ struct ReaderStoreTests {
         #expect(try await store.pendingChanges(accountID: accountID).count == 1)
     }
 
-    @Test func `Tagesübersicht wird bei neuen Tagesquellen nicht mit altem Stand überschrieben`() async throws {
+    @Test("Digests are not overwritten by stale results after new daily arrivals") func digestsAreNotOverwrittenByStaleResultsAfterNewDailyArrivals() async throws {
         let store = try ReaderStore(inMemory: true)
         let repository: any ReaderRepository = store
         let original = article()
@@ -294,7 +294,7 @@ struct ReaderStoreTests {
         #expect(try await store.digests().first?.revision == digest.revision)
     }
 
-    @Test func `Tagesübersicht akzeptiert Statusänderung und verwirft geänderten Inhalt`() async throws {
+    @Test("Digests accept status changes and reject changed source content") func digestsAcceptStatusChangesAndRejectChangedSourceContent() async throws {
         let store = try ReaderStore(inMemory: true)
         let original = article()
         try await store.applyRefresh(refresh(articles: [original]))
@@ -306,14 +306,14 @@ struct ReaderStoreTests {
         #expect(try await store.saveDigest(digest, expectedSources: [original]) == false)
     }
 
-    @Test func `Importierte Homepage ergänzt fehlende Servermetadaten und bewahrt Servervorrang`() async throws {
+    @Test("Imported homepages fill missing metadata while preserving server precedence") func importedHomepagesFillMissingMetadataWhilePreservingServerPrecedence() async throws {
         let store = try ReaderStore(inMemory: true)
         let imported = try #require(URL(string: "https://imported.example.org/"))
         let remote = try #require(URL(string: "https://server.example.org/"))
         try await store.applyRefresh(refresh(articles: []))
-        try await store.savePreferences(FeedPreferences(id: feed.id, importedHomePageURL: imported, importedFolderPath: ["A", "Nachrichten"]))
+        try await store.savePreferences(FeedPreferences(id: feed.id, importedHomePageURL: imported, importedFolderPath: ["A", "News"]))
         #expect(try await store.feeds().first?.homePageURL == imported)
-        #expect(try await store.preferences().first?.importedFolderPath == ["A", "Nachrichten"])
+        #expect(try await store.preferences().first?.importedFolderPath == ["A", "News"])
         var serverFeed = feed
         serverFeed.homePageURL = remote
         try await store.applyRefresh(refresh(articles: [], feeds: [serverFeed]))
@@ -322,7 +322,7 @@ struct ReaderStoreTests {
         #expect(try await store.feeds().first?.homePageURL == imported)
     }
 
-    @Test func `Neue Originaladresse verwirft Volltext der bisherigen Adresse`() async throws {
+    @Test("New original URLs invalidate full text from the previous URL") func newOriginalURLsInvalidateFullTextFromThePreviousURL() async throws {
         let store = try ReaderStore(inMemory: true)
         var original = article(text: "Kurzer Feedtext")
         original.url = fixtureURL
@@ -335,37 +335,37 @@ struct ReaderStoreTests {
         #expect(try await store.article(original.id)?.url == updated.url)
     }
 
-    @Test func `Importmerge erhält zwischenzeitlich widerrufene Cloudfreigabe und aktuelle Darstellungswahl`() async throws {
+    @Test("Import merges preserve revoked cloud consent and current display preferences") func importMergesPreserveRevokedCloudConsentAndCurrentDisplayPreferences() async throws {
         let store = try ReaderStore(inMemory: true)
         let repository: any ReaderRepository = store
         try await store.savePreferences(FeedPreferences(id: feed.id, mode: .normal, timeZoneID: "Europe/Vienna", cloudAllowed: true))
         // Import preparation may have happened before the user changes these independent fields.
         try await store.savePreferences(FeedPreferences(id: feed.id, mode: .digest, timeZoneID: "UTC", cloudAllowed: false))
         try await repository.mergeImportMetadata(feed: feed.id, homePageURL: fixtureURL,
-                                                 folderPath: ["Import", "Nachrichten"], feedURL: fixtureURL)
+                                                 folderPath: ["Import", "News"], feedURL: fixtureURL)
         let current = try #require(try await store.preferences().first)
         #expect(current.cloudAllowed == false)
         #expect(current.mode == .digest)
         #expect(current.timeZoneID == "UTC")
         #expect(current.importedHomePageURL == fixtureURL)
         #expect(current.importedFeedURL == fixtureURL)
-        #expect(current.importedFolderPath == ["Import", "Nachrichten"])
+        #expect(current.importedFolderPath == ["Import", "News"])
     }
 
-    @Test func `Importmerge behält bekannte URLs und übernimmt nur nichtleere neue Ordnerpfade`() async throws {
+    @Test("Import merges retain known URLs and accept only nonempty new folder paths") func importMergesRetainKnownURLsAndAcceptOnlyNonemptyNewFolderPaths() async throws {
         let store = try ReaderStore(inMemory: true)
         let otherURL = try #require(URL(string: "https://other.example.org/feed"))
         try await store.mergeImportMetadata(feed: feed.id, homePageURL: fixtureURL,
-                                           folderPath: ["A", "Nachrichten"], feedURL: fixtureURL)
+                                           folderPath: ["A", "News"], feedURL: fixtureURL)
         try await store.mergeImportMetadata(feed: feed.id, homePageURL: otherURL, folderPath: [], feedURL: otherURL)
         var current = try #require(try await store.preferences().first)
         #expect(current.importedHomePageURL == fixtureURL)
         #expect(current.importedFeedURL == fixtureURL)
-        #expect(current.importedFolderPath == ["A", "Nachrichten"])
+        #expect(current.importedFolderPath == ["A", "News"])
         try await store.mergeImportMetadata(feed: feed.id, homePageURL: nil,
-                                           folderPath: ["B", "Neu"], feedURL: otherURL)
+                                           folderPath: ["B", "New"], feedURL: otherURL)
         current = try #require(try await store.preferences().first)
-        #expect(current.importedFolderPath == ["B", "Neu"])
+        #expect(current.importedFolderPath == ["B", "New"])
         #expect(current.importedHomePageURL == fixtureURL)
         #expect(current.importedFeedURL == fixtureURL)
     }

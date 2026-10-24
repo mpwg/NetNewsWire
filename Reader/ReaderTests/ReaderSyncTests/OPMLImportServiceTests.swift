@@ -5,7 +5,7 @@ import ReaderPersistence
 @testable import ReaderSync
 
 struct OPMLImportServiceTests {
-    @Test func `Verschachtelte gleichnamige Ordner und Homepage bleiben nach bestätigtem Import erhalten`() async throws {
+    @Test("Confirmed imports preserve nested matching folder names and homepages") func confirmedImportsPreserveNestedMatchingFolderNamesAndHomepages() async throws {
         let fixture = try OPMLFixture()
         try await fixture.repository.saveAccount(fixture.account)
         #expect(try await fixture.importer.importDocument(Self.nested, account: fixture.account) == 2)
@@ -20,7 +20,7 @@ struct OPMLImportServiceTests {
         #expect(await fixture.server.quickAdds == 2)
     }
 
-    @Test func `Wiederholungsimport nutzt bestätigte Redirect-ID und erhält lokale KI-Einstellungen`() async throws {
+    @Test("Repeated imports use confirmed redirect identities and preserve local intelligence preferences") func repeatedImportsUseConfirmedRedirectIdentitiesAndPreserveLocalIntelligencePreferences() async throws {
         let fixture = try OPMLFixture()
         _ = try await fixture.importer.importDocument(Self.nested, account: fixture.account)
         var settings = try #require(try await fixture.repository.preferences().first)
@@ -39,7 +39,7 @@ struct OPMLImportServiceTests {
         #expect(restored.importedFolderPath == settings.importedFolderPath)
     }
 
-    @Test func `Widersprüchliche Duplikate werden vor allen Serverwrites abgelehnt`() async throws {
+    @Test("Conflicting duplicates are rejected before any server writes") func conflictingDuplicatesAreRejectedBeforeAnyServerWrites() async throws {
         let fixture = try OPMLFixture()
         let data = Data("""
         <opml version="2.0"><body><outline xmlUrl="https://source.test/first"/><outline text="A"><outline xmlUrl="https://source.test/conflict"/></outline><outline text="B"><outline xmlUrl="https://source.test/conflict"/></outline></body></opml>
@@ -49,7 +49,7 @@ struct OPMLImportServiceTests {
         #expect(try await fixture.repository.feeds().isEmpty)
     }
 
-    @Test func `Identische Duplikate werden einmal importiert`() async throws {
+    @Test("Identical duplicates are imported once") func identicalDuplicatesAreImportedOnce() async throws {
         let fixture = try OPMLFixture()
         let data = Data("""
         <opml version="2.0"><body><outline text="A"><outline title="Feed" xmlUrl="https://source.test/feed"/><outline title="Feed" xmlUrl="https://source.test/feed" htmlUrl="https://source.test/home"/></outline></body></opml>
@@ -59,14 +59,14 @@ struct OPMLImportServiceTests {
         #expect(try await fixture.repository.feeds().first?.homePageURL?.absoluteString == "https://source.test/home")
     }
 
-    @Test func `Ungültige spätere Feedadresse verhindert auch frühere Serverwrites`() async throws {
+    @Test("An invalid later feed URL prevents all earlier server writes") func anInvalidLaterFeedURLPreventsAllEarlierServerWrites() async throws {
         let fixture = try OPMLFixture()
         let data = Data("<opml><body><outline xmlUrl='https://source.test/valid'/><outline xmlUrl='http:relative'/></body></opml>".utf8)
         await #expect(throws: (any Error).self) { try await fixture.importer.importDocument(data, account: fixture.account) }
         #expect(await fixture.server.requestCount == 0)
     }
 
-    @Test func `Bestehendes Abo wird bestätigt verschoben und nicht nochmals angelegt`() async throws {
+    @Test("Existing subscriptions are moved after confirmation without duplication") func existingSubscriptionsAreMovedAfterConfirmationWithoutDuplication() async throws {
         let fixture = try OPMLFixture()
         let before = Data("<opml><body><outline text='A'><outline text='News'><outline xmlUrl='https://source.test/feed'/></outline></outline></body></opml>".utf8)
         let after = Data("<opml><body><outline text='B'><outline text='News'><outline xmlUrl='https://source.test/feed'/></outline></outline></body></opml>".utf8)
@@ -78,7 +78,7 @@ struct OPMLImportServiceTests {
         #expect(try await fixture.repository.preferences().first?.importedFolderPath == ["B", "News"])
     }
 
-    @Test func `Abgelehnte Ordnerzuordnung speichert keine vermeintlich bestätigten Importmetadaten`() async throws {
+    @Test("Rejected folder assignments do not save unconfirmed import metadata") func rejectedFolderAssignmentsDoNotSaveUnconfirmedImportMetadata() async throws {
         let fixture = try OPMLFixture()
         await fixture.server.rejectMutations()
         await #expect(throws: ReaderError.server(500)) {
@@ -88,7 +88,7 @@ struct OPMLImportServiceTests {
         #expect(try await fixture.repository.feeds().isEmpty)
     }
 
-    @Test(.timeLimit(.minutes(1))) func `Import überschreibt keine während der Serverantwort geänderte KI-Freigabe`() async throws {
+    @Test("Imports preserve intelligence consent changed during the server response", .timeLimit(.minutes(1))) func importsPreserveIntelligenceConsentChangedDuringTheServerResponse() async throws {
         let fixture = try OPMLFixture()
         let before = Data("<opml><body><outline text='A'><outline xmlUrl='https://source.test/feed'/></outline></body></opml>".utf8)
         let after = Data("<opml><body><outline text='B'><outline xmlUrl='https://source.test/feed'/></outline></body></opml>".utf8)

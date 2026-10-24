@@ -5,12 +5,12 @@ import ReaderDomain
 @testable import ReaderSync
 
 struct FreshRSSClientTests {
-    @Test(arguments: ["0", "1", "9223372036854775807", "-9223372036854775808", "-1"])
-    func `Artikel-IDs überstehen die Reader-API-Kodierung`(id: String) throws {
+    @Test("Article identifiers survive Reader API encoding", arguments: ["0", "1", "9223372036854775807", "-9223372036854775808", "-1"])
+    func articleIdentifiersSurviveReaderAPIEncoding(id: String) throws {
         #expect(try ReaderItemID.canonical(ReaderItemID.longForm(id)) == id)
     }
 
-    @Test func `Installationsunterordner und expliziter API-Pfad bleiben erhalten`() throws {
+    @Test("Installation subdirectories and explicit API paths are preserved") func installationSubdirectoriesAndExplicitAPIPathsArePreserved() throws {
         let root = try #require(URL(string: "https://example.test/rss"))
         let api = try #require(URL(string: "https://example.test/rss/api/greader.php"))
         #expect(try FreshRSSClient.endpoint(for: root) == api)
@@ -20,7 +20,7 @@ struct FreshRSSClientTests {
         }
     }
 
-    @Test func `Refresh wartet auf alle Seiten und behält alte Veröffentlichungen`() async throws {
+    @Test("Refresh waits for every page and retains old publication dates") func refreshWaitsForEveryPageAndRetainsOldPublicationDates() async throws {
         let fixture = try Fixture()
         try await fixture.client.refresh(account: fixture.account)
         let snapshots = await fixture.repository.snapshots
@@ -41,14 +41,14 @@ struct FreshRSSClientTests {
         #expect(login.fields["Passwd"] == ["a&b=c"])
     }
 
-    @Test func `Fehlgeschlagener Ungelesenabruf verändert keinen lokalen Snapshot`() async throws {
+    @Test("Failed unread requests leave the local snapshot unchanged") func failedUnreadRequestsLeaveTheLocalSnapshotUnchanged() async throws {
         let fixture = try Fixture()
         await fixture.server.setFailure(.unread)
         await #expect(throws: ReaderError.server(503)) { try await fixture.client.refresh(account: fixture.account) }
         #expect(await fixture.repository.snapshots.isEmpty)
     }
 
-    @Test func `HTTP-Erfolg mit Fehlertext bestätigt keine Statusänderung`() async throws {
+    @Test("HTTP success with an error body does not acknowledge status changes") func httpSuccessWithAnErrorBodyDoesNotAcknowledgeStatusChanges() async throws {
         let fixture = try Fixture()
         let change = PendingChange(article: ArticleKey(accountID: fixture.account.id, remoteID: "1"), field: .read, value: true)
         await fixture.repository.replacePending(change)
@@ -57,30 +57,30 @@ struct FreshRSSClientTests {
         #expect(await fixture.repository.pending == [change])
     }
 
-    @Test func `Abgelehnte Umbenennung wird nicht lokal als Erfolg übernommen`() async throws {
+    @Test("Rejected renames are not committed as local successes") func rejectedRenamesAreNotCommittedAsLocalSuccesses() async throws {
         let fixture = try Fixture()
         await fixture.server.setFailure(.mutation)
         await #expect(throws: ReaderError.server(500)) {
-            try await fixture.client.renameFeed(account: fixture.account, feedID: "feed/1", title: "Neuer Name")
+            try await fixture.client.renameFeed(account: fixture.account, feedID: "feed/1", title: "New name")
         }
         #expect(await fixture.repository.snapshots.isEmpty)
     }
 
-    @Test func `Fehlender Artikelinhalt verhindert einen unvollständigen Commit`() async throws {
+    @Test("Missing article content prevents incomplete commits") func missingArticleContentPreventsIncompleteCommits() async throws {
         let fixture = try Fixture()
         await fixture.server.setFailure(.missingContent)
         await #expect(throws: (any Error).self) { try await fixture.client.refresh(account: fixture.account) }
         #expect(await fixture.repository.snapshots.isEmpty)
     }
 
-    @Test func `Wiederholte Continuation wird als Fehler statt Endlosschleife behandelt`() async throws {
+    @Test("Repeated pagination tokens fail instead of looping forever") func repeatedPaginationTokensFailInsteadOfLoopingForever() async throws {
         let fixture = try Fixture()
         await fixture.server.setFailure(.continuationLoop)
         await #expect(throws: ReaderError.invalidResponse) { try await fixture.client.refresh(account: fixture.account) }
         #expect(await fixture.repository.snapshots.isEmpty)
     }
 
-    @Test func `Veraltetes Schreibtoken wird einmal erneuert`() async throws {
+    @Test("Expired write tokens are renewed once") func expiredWriteTokensAreRenewedOnce() async throws {
         let fixture = try Fixture()
         let change = PendingChange(article: ArticleKey(accountID: fixture.account.id, remoteID: "1"), field: .starred, value: true)
         await fixture.repository.replacePending(change)
@@ -90,7 +90,7 @@ struct FreshRSSClientTests {
         #expect(await fixture.server.tokenRequests == 2)
     }
 
-    @Test(.timeLimit(.minutes(1))) func `Überlappende Sends bestätigen ausschließlich ihre eigenen Revisionen`() async throws {
+    @Test("Overlapping sends acknowledge only their own revisions", .timeLimit(.minutes(1))) func overlappingSendsAcknowledgeOnlyTheirOwnRevisions() async throws {
         let fixture = try Fixture()
         let key = ArticleKey(accountID: fixture.account.id, remoteID: "1")
         let old = PendingChange(article: key, field: .read, value: true)
@@ -113,7 +113,7 @@ struct FreshRSSClientTests {
         #expect(writes[1].fields["r"] == ["user/-/state/com.google/read"])
     }
 
-    @Test func `Leere autoritative Ordnerliste wird weitergegeben`() async throws {
+    @Test("Empty authoritative folder lists are propagated") func emptyAuthoritativeFolderListsArePropagated() async throws {
         let fixture = try Fixture()
         await fixture.server.setFailure(.emptyFolders)
         try await fixture.client.refresh(account: fixture.account)
@@ -244,7 +244,7 @@ private actor TestServer {
         if path.hasSuffix("/stream/items/contents") {
             if failure == .missingContent { return data("{\"items\":[]}") }
             return data("""
-            {"items":[{"id":"tag:google.com,2005:reader/item/0000000000000001","title":"Alter Beitrag","summary":{"content":"<p>Text &amp; Inhalt</p>"},"origin":{"streamId":"feed/1"},"published":946684800,"crawlTimeMsec":"1792830000000"},{"id":"tag:google.com,2005:reader/item/0000000000000002","title":"Zweiter Beitrag","summary":{"content":"Text"},"origin":{"streamId":"feed/1"}}]}
+            {"items":[{"id":"tag:google.com,2005:reader/item/0000000000000001","title":"Alter Beitrag","summary":{"content":"<p>Text &amp; Content</p>"},"origin":{"streamId":"feed/1"},"published":946684800,"crawlTimeMsec":"1792830000000"},{"id":"tag:google.com,2005:reader/item/0000000000000002","title":"Zweiter Beitrag","summary":{"content":"Text"},"origin":{"streamId":"feed/1"}}]}
             """)
         }
         if path.hasSuffix("/edit-tag") {
@@ -287,7 +287,7 @@ final class MockURLProtocol: URLProtocol, @unchecked Sendable {
             request.httpBody = body
         }
         let capturedRequest = request
-        let task = Task {
+        let task = Task { @Sendable [self, handler, capturedRequest] in
             do {
                 guard let handler, let url = capturedRequest.url else { throw ReaderError.invalidResponse }
                 let (status, data) = try await handler(capturedRequest)

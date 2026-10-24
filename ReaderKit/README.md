@@ -1,52 +1,55 @@
 # Reader
 
-Eigenständiger FreshRSS-Reader für macOS, iOS und iPadOS **ab Version 27**. Die gemeinsame SwiftUI-App liegt in `ReaderApp/`, ihr Xcode-Projekt ist `Reader.xcodeproj`. Dieser neue Pfad übernimmt keine alten NetNewsWire-Datenbanken, Controller, Kontoanbieter oder direkten RSS-/Atom-Parser. Die bisherigen Targets bleiben während der Abnahme erhalten.
+Reader is a standalone FreshRSS client for macOS, iOS and iPadOS **27 or later**, with a shared SwiftUI application and SwiftData store. Open **`Reader/Reader.xcodeproj`** in Xcode 27 and select the **Reader** scheme. The native project was created with Apple's multiplatform app template through Xcode MCP; it reuses the existing ReaderKit implementation.
 
-## Starten
+The older root `Reader.xcodeproj` and `ReaderApp/` are superseded migration artifacts. Do not run their generator. They remain temporarily until the replacement's remaining configuration checks are complete. The original NetNewsWire targets remain pending acceptance of their replacements.
 
-`Reader.xcodeproj` in Xcode 27 öffnen und die Scheme **Reader** wählen. Für ein Gerät ist eine eigene Development-Team-Konfiguration nötig. Debug verwendet `eu.mpwg.reader.debug`, Release `eu.mpwg.reader`. Datenspeicher und Keychain-Dienst werden aus der jeweiligen Bundle-ID abgeleitet. Die App benötigt keine privaten NetNewsWire-API-Schlüssel.
+## Accounts and storage
 
-In FreshRSS den API-Zugriff aktivieren und ein **API-Passwort** festlegen. In Reader die FreshRSS-Installationsadresse oder die vollständige Adresse `…/api/greader.php`, den Benutzernamen und das API-Passwort eingeben. Die Anmeldung verwendet die Google-Reader-kompatible API, kein interaktives Browser-/OIDC-Login. Die Kontooberfläche akzeptiert HTTPS.
+Enable API access in FreshRSS and set an **API password**. Enter the HTTPS installation URL or complete `…/api/greader.php` URL, username and API password. Reader uses the Google Reader compatible API, rather than an interactive browser/OIDC login. No private NetNewsWire API keys are required.
 
-Bereits geladene Artikel bleiben ohne Netzwerk lesbar. Lesestatus und Sterne werden zuerst lokal samt versioniertem Sendeauftrag gespeichert und beim nächsten erfolgreichen Sync übertragen. Ein Refresh gilt erst nach vollständigem Abruf und Speicherung als erfolgreich. Beim Aktivieren eines Fensters aktualisiert ein gemeinsam koordinierter Dienst; manuelles Aktualisieren bleibt möglich.
+Debug uses `eu.mpwg.reader.debug`; Release uses `eu.mpwg.reader`. The store location and Keychain service derive from the bundle ID. Reader does not migrate existing NetNewsWire databases. A development team and appropriate provisioning are required for physical devices.
 
-## Tagesübersichten
+Downloaded articles remain available offline. Read/star changes and their versioned pending operations commit locally together and are sent during the next successful synchronization. A refresh succeeds only after all pages have been fetched and saved. Window activation uses a shared refresh coordinator; manual refresh remains available.
 
-Im Kontextmenü eines Feeds **Feed-Einstellungen** öffnen und **Tagesübersicht** wählen. Je Eingangstag entsteht eine Karte mit gespeicherter Zeitzone, thematischen Abschnitten und Originalquellen. Weitere Beiträge aktualisieren diese Karte. Suche, Sterne und die Feedansicht erschließen die einzelnen Artikel. Fehlende Zusammenfassungen verstecken keine unbearbeiteten Originale.
+## Daily digests
 
-Das Öffnen verändert den Lesestatus nicht. **Übersicht gelesen** markiert genau die Quellen der angezeigten Revision; spätere Beiträge bleiben ungelesen. Die Fußzeile unterscheidet sichtbare Einträge und geladene Originale. Bei mehreren Fenstern bleiben Auswahl, Suche und Dialoge unabhängig.
+Each feed can use ordinary articles or daily digests. Digests group articles by arrival day in a stored time zone and retain access to every original source. Search, stars and feed navigation expose individual articles; incomplete model coverage never hides unprocessed originals.
 
-Die lokale Foundation-Models-Inferenz ist der Standard. Bei kurzen Feedtexten lädt die App die Originalseite nach und extrahiert den Volltext **lokal**, ohne den privaten Feedbin-Extraktionsdienst. Websiteabrufe kontaktieren die jeweilige Website. Seitenskripte werden bei der Extraktion nicht ausgeführt. Quelle, Abbruch und Version werden vor dem Speichern geprüft. HTTP-Fehler, fehlendes Modell und nicht zusammengefasste Beiträge werden angezeigt.
+Opening content does not change read status. Marking a digest read affects exactly the sources of its displayed revision; later arrivals remain unread. Selection, search and sheets are independent in each window.
 
-**PCC ist im normalen Build deaktiviert.** Apples API kann trotz positiver Verfügbarkeitsmeldung bei fehlendem `com.apple.developer.private-cloud-compute`-Entitlement den Prozess beenden. Vor Aktivierung sind Apples Freigabe, passende Provisionierung/Signierung und eine getrennte App-Abnahme erforderlich. Erst dann darf die Bootstrap-Konfiguration `AppleSummaryGenerator(privateCloudComputeEnabled: true)` und `ReaderServices(privateCloudComputeConfigured: true)` verwenden. Jede Cloudanfrage prüft zusätzlich die aktuelle Feedfreigabe. Eine bereits laufende Übertragung lässt sich durch nachträglichen Widerruf nicht rückgängig machen. Es gibt keine Drittanbieter-KI-Anbindung.
+On-device Foundation Models inference is the default. Reader retrieves original pages when needed and extracts full text locally with Readability, without executing page scripts or using Feedbin's private extraction service. Website requests contact the corresponding website. Cancellation, source identity and content revision are checked before saving. Network errors, unavailable models and incomplete coverage remain visible.
 
-KI-Ergebnisse und Feedmodus bleiben pro Gerät; nur FreshRSS-Abonnements und Originalstatus synchronisieren geräteübergreifend. Widgets, Erweiterungen, AppleScript, Theme-Import und weitere Anbieter gehören nicht zu dieser Version.
+**PCC is disabled in the normal build.** Apple's entitlement, signing and provisioning must be verified before enabling `AppleSummaryGenerator(privateCloudComputeEnabled: true)` and `ReaderServices(privateCloudComputeConfigured: true)`. Every cloud request also checks current per-feed consent. Revoking consent cannot undo an already transmitted request. No third-party AI provider is integrated.
+
+Intelligence preferences and digests stay on the device. FreshRSS subscriptions and original article status synchronize across devices. Additional providers, direct RSS/Atom ingestion, widgets, extensions, AppleScript and theme import are outside this version.
 
 ## OPML
 
-Import und Export erfolgen über das Reader-Menü. FreshRSS besitzt flache Kategorien: importierte Pfade wie `A/News` und `B/News` werden als unterschiedliche Kategorien angelegt und lokal für einen verschachtelten OPML-Roundtrip erhalten. Homepage-URLs bleiben als lokaler Fallback verfügbar; aktuelle Servermetadaten haben Vorrang. Identische Wiederholungsimporte werden koalesziert. Ein Feed in widersprüchlichen OPML-Pfaden wird vor Serveränderungen abgelehnt, weil FreshRSS pro Feed eine Kategorie unterstützt.
+Import and export are available from Reader's menu. FreshRSS categories are flat: paths such as `A/News` and `B/News` become distinct categories, with hierarchy retained locally for nested OPML round trips. Server metadata takes precedence over local homepage fallbacks. Identical repeated imports are coalesced. Conflicting paths for the same feed are rejected before server writes.
 
-## Architektur und Tests
+## Architecture and testing
 
-`ReaderDomain` enthält Sendable-Snapshots und Schnittstellen. `ReaderPersistence` besitzt SwiftData-Kontexte und atomare Schreibverträge. `ReaderSync` besitzt FreshRSS, Keychain, OPML-Import und den begrenzten Icon-Dienst. `ReaderContent` verarbeitet HTML/OPML; `ReaderIntelligence` besitzt Modell- und Digestaufträge. `ReaderUI` enthält gemeinsame Views und szenenbezogenen Zustand. Die Oberfläche verwendet zunächst Systemsymbole für Feeds.
+ReaderDomain provides Sendable snapshots and protocols. ReaderPersistence owns SwiftData and atomic write contracts. ReaderSync owns FreshRSS, Keychain, OPML import and bounded icon requests. ReaderContent handles HTML and OPML; ReaderIntelligence owns model and digest jobs. ReaderUI provides shared views and scene state.
 
-Die SwiftData-Recovery-Probe prüft den vorhandenen Kern zusätzlich nach SIGKILL mit 10.000 synthetischen Artikeln und zwei neuen nativen Prozessen ([B-Prüfprotokoll](../docs/reader/evidence/b-2026-10-24.md)). Das ist ein Prozessnachweis des Kerns; die vollständige App-Bedienung wird separat abgenommen.
+**Approachable Concurrency and compiler warnings as errors are enabled for every Reader application/test target and all seven ReaderKit targets, in Debug and Release.** Swift 6 already enables three of Approachable Concurrency's five features; Package.swift explicitly enables `InferIsolatedConformances` and `NonisolatedNonsendingByDefault`, together with `.treatAllWarnings(as: .error)`. Library code retains its appropriate actor boundaries.
 
-Fachtests verwenden Swift Testing mit isolierten Stores und Netzwerkskripten; UI-Tests bleiben XCTest/XCUIAutomation. Tests benötigen keine persönlichen Zugangsdaten und starten keine KI-Anfragen.
+Most tests are unhosted Swift Testing code tests under `Reader/ReaderTests/`. Function identifiers use English `lowerCamelCase` without spaces; `@Test("Readable description")` supplies display names. The small native XCTest/XCUIAutomation target checks launch and sheet behavior. Its first Mac window must appear without Command-N; Command-N requests only the second window. Fixtures need no personal credentials or model requests.
+
+Use Xcode MCP for interactive builds and tests. The shared Reader scheme includes both native test targets using Apple's automatic test plan. ReaderKit no longer declares separate SwiftPM test targets, so `swift test --package-path ReaderKit` is not the test entry point.
+
+CI uses the committed native project through `scripts/test-reader.sh`. It does not generate Xcode files. The `all` mode collects all platform outcomes and returns a failure if any platform fails; a failed build never runs stale test products. Runner contracts can be verified without starting Xcode:
 
 ```sh
-swift test --package-path ReaderKit
 python3 -m unittest discover -s scripts/tests -v
-python3 scripts/verify-reader-store.py
-bash scripts/test-reader.sh all
 ```
 
-Der native Runner baut zuerst mit lokaler Ad-hoc-Signatur und prüft auf dem Mac App und Testrunner vor deren Start. Die Auswahl `macos`, `ios` oder `ipad` prüft eine einzelne Plattform. Ergebnisse liegen in einem neu erzeugten temporären Verzeichnis oder unter `READER_RESULTS_DIR`. Fehler dürfen keine Gesamterfolgsmeldung erzeugen. GitHub verwendet das dokumentierte `xcode-27`-Runnerimage. Das Icon-Netzwerkfixture übergibt seinen Task explizit als `@Sendable` mit unveränderlichen Captures, damit die strikte Nebenläufigkeitsprüfung auch im gehosteten nativen Testtarget greift. Korrekturstand `96b05cbbe`: auf Mac alle 78 Fachtests, auf iPhone und iPad jeweils zusätzlich der native UI-Smoke erfolgreich. Aktuelle Debug-/Releasebuilds sind geprüft und getrennte Mac-Stores durch tatsächliche App-Starts belegt. Die lokale Mac-UI-Abnahme bleibt wegen fehlender Bedienungshilfenfreigabe offen; der gehostete Lauf wird getrennt geprüft. Befehle und Grenzen stehen im [A-Prüfprotokoll](../docs/reader/evidence/a-2026-10-24.md). SwiftLint schließt ausschließlich die generierten SwiftPM-Dateien unter `ReaderKit/.build/` zusätzlich aus.
+The SwiftData recovery probe separately exercises 10,000 synthetic articles across three real processes including SIGKILL. See [recovery evidence](../docs/reader/evidence/b-2026-10-24.md). This establishes core recovery, not complete app UI recovery or real FreshRSS behavior.
 
-`python3 ReaderApp/generate_project.py` regeneriert deterministisch das Projekt und nimmt alle aktuellen Tests auf. Testplan und Projekt gehören ins Repository. Details zum überprüften Stand und zu offenen Prüfungen stehen in [der Abnahmematrix](../docs/reader/acceptance.md).
+Current native Debug tests pass on Mac, iPhone Simulator and iPad Simulator with the requested compiler settings. See the [test review](../docs/reader/test-review-2026-10-24.md) and [acceptance matrix](../docs/reader/acceptance.md) for exact counts, artifacts and remaining Release/CI/device/service checks. Successful builds and fixture tests do not establish full product acceptance.
 
-## Herkunft
+## Attribution
 
-Die lokale Volltextextraktion verwendet Mozillas Readability und JSDOMParser, fixiert auf Commit `ab4027a8b37669745016869a37a504727992b2ba`. Die unveränderten Quelldateien und Apache-2.0-Lizenz liegen unter `Sources/ReaderContent/Resources/`; die URL-Auflösung ergänzt die App über Foundation. Die MIT-Lizenz und Copyright-Hinweise von NetNewsWire bleiben erhalten.
+Local extraction uses Mozilla Readability and JSDOMParser pinned to `ab4027a8b37669745016869a37a504727992b2ba`. Unmodified sources and Apache-2.0 license are under `Sources/ReaderContent/Resources/`. Foundation resolves URLs. NetNewsWire's MIT license and copyright notices remain.
 
-Plan und Fortschritt: [Dachissue #45](https://github.com/mpwg/NetNewsWire/issues/45), Arbeitspakete #46–#56. Ein implementierter oder gebauter Pfad ist noch keine vollständige Geräte-, Dienst- oder Qualitätsabnahme.
+Work plan: [umbrella #45](https://github.com/mpwg/NetNewsWire/issues/45), packages #46–#56.

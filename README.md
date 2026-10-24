@@ -1,8 +1,8 @@
-## Reader-Fork ab OS 27
+## Reader fork for OS 27 and later
 
-Die neue gemeinsame SwiftUI-/SwiftData-App mit FreshRSS und lokalen KI-Tagesübersichten liegt in **`Reader.xcodeproj`**. Einrichtung, Testbefehle und aktuelle Einschränkungen beschreibt die [Reader-Anleitung](ReaderKit/README.md). Die [Abnahmematrix](docs/reader/acceptance.md) trennt umgesetzte Funktionen von ausstehenden Geräte- und Dienstnachweisen. [GitHub-Arbeitsplan: #45](https://github.com/mpwg/NetNewsWire/issues/45). Der bestehende Reader ist über PR #57 auf `main` übernommen. Für den SwiftData-Kern liegt ein [Recovery-Nachweis mit 10.000 synthetischen Artikeln und echtem Prozessneustart](docs/reader/evidence/b-2026-10-24.md) vor. Die aktuelle Fortsetzung beginnt mit [Paket A und seinen Prüfbelegen](docs/reader/evidence/a-2026-10-24.md); die lokale Mac-UI-, Geräte- und Dienstabnahme bleibt ausdrücklich offen.
+The shared SwiftUI/SwiftData app uses FreshRSS and on-device daily digests. Open **`Reader/Reader.xcodeproj`**, created with Apple's native template through Xcode MCP. The [Reader guide](ReaderKit/README.md), [test review](docs/reader/test-review-2026-10-24.md) and [acceptance matrix](docs/reader/acceptance.md) describe setup, current evidence and outstanding checks. All Reader targets enable Approachable Concurrency and compiler warnings as errors. Most coverage uses Swift Testing code tests, with a small native UI suite. The existing implementation was adopted through PR #57; [umbrella #45](https://github.com/mpwg/NetNewsWire/issues/45) tracks the remaining work. [SwiftData recovery with 10,000 synthetic articles and real process restarts](docs/reader/evidence/b-2026-10-24.md) is documented separately from app, device and service acceptance.
 
-Die nachfolgende Anleitung beschreibt die ursprünglichen NetNewsWire-Targets, die während des Umbaus erhalten bleiben.
+The following guide describes the original NetNewsWire targets, retained during replacement acceptance.
 
 <img src=Technotes/Images/icon_1024.png height=128 width=128 style="display: block; margin: auto;"> 
 

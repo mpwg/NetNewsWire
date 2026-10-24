@@ -1,81 +1,75 @@
-# Reader: Abnahmestand 24.10.2026
+# Reader acceptance — 2026-10-24
 
-Der Umbau ist **implementiert, aber nicht vollständig abgenommen**. Die strukturierte Fortsetzung läuft seit 24.10.2026 im aktiven Goal auf `main`. Verbindliche Planung: [#45](https://github.com/mpwg/NetNewsWire/issues/45), Arbeitspakete #46–#56. Die nachstehenden Nachweise beziehen sich auf den neuen Reader; die ursprünglichen NetNewsWire-Targets wurden in diesem Umsetzungslauf nicht erneut abgenommen.
+The existing Reader is implemented and partially verified; **full product acceptance remains open**. The active goal continues on `main` under [umbrella #45](https://github.com/mpwg/NetNewsWire/issues/45), packages #46–#56. Evidence below concerns Reader, not renewed acceptance of the original NetNewsWire targets.
 
-## Fortsetzung: A / #46
+## A / #46: current foundation
 
-PR [#57](https://github.com/mpwg/NetNewsWire/pull/57) wurde bereits vor Beginn dieser Fortsetzung nach `main` übernommen (Squashcommit `4f9f256e5`). Der Dateistand entspricht vollständig `codex/intelligence-reader` bei `2528bc1b8`; ein erneuter Merge oder Neubau ist nicht nötig. Das Arbeitsverzeichnis einschließlich `iOS/Resources/Info.plist` war sauber; diese Datei wird nicht geändert.
+PR [#57](https://github.com/mpwg/NetNewsWire/pull/57) adopted `codex/intelligence-reader` (`2528bc1b8`) onto `main` as `4f9f256e5` before this continuation. The trees were identical; no second implementation or merge was needed. `iOS/Resources/Info.plist` was clean on resumption and remains unchanged.
 
-Der Compilerfehler aus [Lauf 40115342568](https://github.com/mpwg/NetNewsWire/actions/runs/40115342568) ist im macOS-Job erneut belegt. Das Icon-URLProtocol-Fixture übergibt jetzt eine explizit `@Sendable` markierte Closure mit unveränderlichen Captures an `Task`. Mutex-/Actor-Schutz und die Abbruchprüfung bleiben erhalten. Korrekturcommit: `96b05cbbe`. Lokaler gezielter Nachweis: `swift test --package-path ReaderKit --filter IconServiceTests`, sechs Tests erfolgreich; die beiden Python-Runner-Vertragstests sind ebenfalls erfolgreich. Aktuelle native Nachweise und Befehle: [A-Prüfprotokoll](evidence/a-2026-10-24.md).
+Commit `96b05cbbe` fixed the hosted Icon URLProtocol fixture's task capture using explicit `@Sendable` and immutable captures. Hosted [run 40116159532](https://github.com/mpwg/NetNewsWire/actions/runs/40116159532) subsequently compiled on Mac and passed iPhone/iPad jobs; Mac failed in the original UI window setup. It is not a green overall CI run.
 
-| A-Kriterium | Status | Aktueller Beleg / nächster Schritt |
+At the owner's request, Xcode MCP created `Reader/Reader.xcodeproj` directly from Apple's multiplatform app template. It preserves the existing app and six libraries. ReaderTests now contains the existing code contracts in a native **unhosted Swift Testing** target; ReaderUITests retains native XCTest/XCUIAutomation. The shared scheme uses Apple's automatic test plan. CI references this project and performs no generation. The older root Reader.xcodeproj/ReaderApp infrastructure remains temporarily pending Release/configuration verification and preservation of user edits.
+
+| Criterion | Status | Evidence and remaining work |
 |---|---|---|
-| OS-27-Builds und Bundle-IDs | erfüllt | Aktuelle Debug-/Releasebuilds auf Mac und iOS-Simulator; expandierte IDs `eu.mpwg.reader.debug` / `eu.mpwg.reader`, Mindestversion jeweils 27.0. Native Signaturprüfung auf Mac erfolgreich. |
-| Native Testpläne und Fehlerweitergabe | offen | Mac: 78 Fachtests erfolgreich, zwei UI-Tests durch bestätigte AX-Sperre fehlgeschlagen. iPhone/iPad jeweils 78 Fachtests plus ein UI-Test erfolgreich (85 Ausführungen, keine Skips). Beide Runner-Vertragstests erfolgreich. [Gehosteter Korrekturlauf](https://github.com/mpwg/NetNewsWire/actions/runs/40115851871) läuft noch. Lokale Mac-UI-Abnahme bleibt auf Nutzerwunsch vorerst offen. |
-| Debug-/Release-Stores getrennt | erfüllt | Beide aktuellen Mac-Apps tatsächlich ohne `--ui-testing` gestartet: `lsof` belegt getrennte SQLite-/WAL-/SHM-Dateien in `~/Library/Containers/eu.mpwg.reader.debug/…/eu.mpwg.reader.debug/Reader.store` und `~/Library/Containers/eu.mpwg.reader/…/eu.mpwg.reader/Reader.store`. Kein Legacy-Store geöffnet. |
-| README | erfüllt | Reader-README und Repository-Einstieg beschreiben Korrekturstand, Prüfprotokoll und die noch offenen Nachweise. |
-| SwiftLint | erfüllt | SwiftLint 0.65.1 auf gesamtem Repository strikt erfolgreich. Generierte SwiftPM-Dateien unter `ReaderKit/.build/` jetzt ausdrücklich ausgeschlossen; keine Produkt-/Testquelle ausgeschlossen. |
+| OS 27 builds and correct bundle IDs | Partial for native replacement | Native Debug build-for-testing succeeds on Mac and iPhone/iPad Simulator. Earlier root-project Debug/Release builds proved minimum 27.0 and `eu.mpwg.reader.debug` / `eu.mpwg.reader`. Repeat Release/configuration verification on the native replacement before removing old infrastructure. |
+| Real native tests and failure propagation | Local evidence passed; hosted acceptance open | Current native Mac: 81 distinct code tests plus two UI tests, 89 executions. iPhone/iPad: 81 code tests plus one UI test, 88 executions each. No failures or skips. Three runner contracts prove all-platform collection, failure propagation and refusal to test stale products after a failed build. Await current hosted workflow evidence. |
+| Approachable Concurrency and warnings as errors | Enabled and Debug-verified | All three native targets enable `SWIFT_APPROACHABLE_CONCURRENCY`, `SWIFT_TREAT_WARNINGS_AS_ERRORS` and `GCC_TREAT_WARNINGS_AS_ERRORS`. All seven package targets share both remaining Swift 6 upcoming features and `.treatAllWarnings(as: .error)` without configuration restrictions. Six library targets are exercised by native builds; a fresh standalone recovery-probe build remains to verify. |
+| Separate persistent Debug/Release stores | Earlier implementation evidence passed | Actual Mac launches without UI-test mode opened separate SQLite/WAL/SHM files under each bundle's sandbox. See [A evidence](evidence/a-2026-10-24.md). Repeat on native replacement if configuration verification changes startup settings. |
+| README and test review | Updated | Native project, code-test emphasis, compiler policy, evidence and remaining checks documented. English source/localization conversion is still in progress. |
+| SwiftLint and runner checks | Passed | Whole repository passes SwiftLint 0.65.1 `--strict`. Three Python runner contracts pass. Shell syntax and Actionlint pass, excluding only Actionlint's outdated known-label list for `xcode-27`. |
 
-## Fortsetzung: B / #47
+## Native test evidence with requested compiler settings
 
-Projektgrundlage A ist implementiert und lokal gebaut; ihre vollständige CI-/UI-Abnahme bleibt offen. B ergänzt die vorhandene Implementierung ausschließlich um Nachweise: einen Swift-Testing-Fall für reine Löschungen und ein separates natives Prozesswerkzeug, das denselben `ReaderStore` verwendet. Keine Neuimplementierung oder Änderung am Persistenzkern. [Prüfprotokoll B](evidence/b-2026-10-24.md), [Rohbericht](evidence/b-recovery-2026-10-24.json).
+Environment: MacBook Pro arm64, macOS 27.0.1 (26A434), Xcode 27.1, Swift 6.4. Interactive builds and tests were executed through Xcode MCP. Full paths and detailed review: [test review](test-review-2026-10-24.md).
 
-| B-Kriterium | Status | Aktueller Beleg |
+| Destination | Distinct tests / executions | Result bundle suffix under `ActionArtifacts/default/RunAllTests/` |
 |---|---|---|
-| Neustart mit dauerhaftem Store erhält lokale Änderungen | erfüllt | Schreibprozess nach Commitmarker mit SIGKILL beendet (WAL: 271.952 Byte); zwei neue native Prozesse prüfen 10.000 Artikel, exakte Outbox-UUIDs, Rollback, Einstellungen und Digestrevision. Dies ist ein SwiftData-Kernnachweis auf Mac, keine vollständige App-UI-/Geräteabnahme. |
-| Kanonische vollständige Artikelversion | erfüllt | Recovery prüft die vollständige gespeicherte Fassung einschließlich Titel, HTML/Text, Original-URL, Veröffentlichungsdatum und stabiler Eingangszeit. Zugehöriger Swift-Testing-Vertrag auf allen drei Plattformen grün. |
-| Reine Löschungen aktualisieren Abfragen/Zähler, Sterne bleiben erreichbar | erfüllt | Neuer Swift-Testing-Fall prüft Änderungsrevision, neue Abfragen, Ungelesen-/Sternanzahl und entfernte Identität. Recovery behält nach Abbestellen zwei Originale für Stern/Pending und Digest; weiterer Prozessneustart bestätigt sie. |
-| README | erfüllt | Modul- und Reader-README sowie Repository-Einstieg dokumentieren die Probe und ihre Grenzen. |
+| My Mac, macOS 27.0.1 | 83 / 89 | `Test-Reader-2026.10.24_20-56-35-+0200.xcresult` |
+| iPhone Duo, iOS 27.1 Simulator | 82 / 88 | `Test-Reader-2026.10.24_20-57-27-+0200.xcresult` |
+| iPad Pro 13-inch (M5), iOS 27.0 Simulator | 82 / 88 | `Test-Reader-2026.10.24_20-59-00-+0200.xcresult` |
 
-Aktuelle native Läufe für B: Mac ausschließlich `ReaderContractTests`: 79 Fachtests / 85 Ausführungen; iPhone und iPad jeweils 80 Tests / 86 Ausführungen einschließlich UI-Smoke; keine Fehler oder Skips. Alle 25 Persistenztests auch im Paket erfolgreich. SwiftLint strikt erfolgreich. Der Mac-CI-Job ist um dieselbe Prozessprobe und Bericht-/Log-Artefakte ergänzt; Workflow mit Actionlint geprüft (bekannte veraltete Labelliste für `xcode-27` ausgenommen). B bleibt formal offen, solange Abhängigkeit A und der aktuelle gehostete Stand noch nicht abgenommen sind.
+Counts come from each xcresult bundle's summary and device execution count. The MCP's inline iOS count incorrectly includes the Mac-only second-window test. No nonexistent iOS test is counted as acceptance.
 
-Die folgenden Nachweise stammen vom gesicherten Handoff-Stand und werden nicht pauschal als Abnahme des aktuellen Commits verwendet.
+The first Mac window appears automatically without Command-N. The second-window test keeps both connection sheets open and verifies independent drafts and cancellation. The former direct-AX diagnosis was invalid: a sandboxed runner's `AXIsProcessTrusted=false` does not establish XCTest automation-service permissions. Removing the `-ApplePersistenceIgnoreState YES` launch argument fixed the suppressed initial window. The owner enabled Xcode Helper, but this alone is not claimed as the fix. VoiceOver and broad accessibility acceptance remain separate.
 
-## Aktuelle automatisierte Nachweise
+Approachable Concurrency initially exposed mixed cached module signatures and a further FreshRSS fixture task capture. After consistent package settings and full code-target recompilation, normal incremental builds and the full test plan pass. Temporary recompilation settings were removed. Compiler warning promotion remains enabled; Apple's build tool can still report skipped App Intents metadata extraction when the app has no AppIntents dependency.
 
-Umgebung: MacBook Pro arm64, macOS 27.0.1, Xcode 27.1 (27A9275). Die finalen Xcode-Testpläne enthalten **78 unterschiedliche Fachtests** in zehn Suiten. Zwei parametrisierte Tests ergeben zusammen acht Parameterausführungen, also 84 Fachtestausführungen pro Plattform.
+## B / #47: persistence evidence
 
-| Prüfung | Status | Beleg und Grenze |
+The existing ReaderStore implementation is unchanged. Commit `929b7b830` added a deletion-only query/count/retention contract and a separate executable using the shipping store.
+
+| Criterion | Status | Evidence |
 |---|---|---|
-| macOS Fachtests | erfüllt | 78 Tests / 84 Ausführungen, 0 Fehler. `/tmp/reader-final-verification-mac.xcresult`; ausschließlich `ReaderContractTests` ausgewählt. |
-| iPhone-Simulator | erfüllt | iPhone Duo, iOS 27.1: 78 Fachtests plus ein nativer Anmeldeformular-/Abbrechen-Test; 79 Tests / 85 Ausführungen, 0 Fehler, 0 übersprungen. `/tmp/reader-final-verification-ios/ios.xcresult`. Zuvor auch iPhone 17 / iOS 27.0 erfolgreich. |
-| iPad-Simulator | erfüllt | iPad Pro 13 Zoll (M5), iOS 27.0: 78 Fachtests plus derselbe native UI-Test; 79 Tests / 85 Ausführungen, 0 Fehler, 0 übersprungen. `/tmp/reader-final-verification-ipad/ipad.xcresult`. |
-| macOS native UI-Automation | nicht prüfbar | App sichtbar; Runner gültig Ad-hoc-signiert. Fensterabfrage liefert `AXIsProcessTrusted=false` und `kAXErrorAPIDisabled` (-25211). Die beiden UI-Tests scheitern daran, wurden nicht durch Skips ersetzt. Nach Freigabe erneut ausführen. |
-| Releasebuilds und Namespace | erfüllt | macOS und generischer iOS-Simulator bauen; expandierte Release-ID jeweils `eu.mpwg.reader`, Mindestversion jeweils 27.0. Debug-ID `eu.mpwg.reader.debug`, Store/Keychain-Dienst davon abgeleitet. |
-| Vollständiger lokaler Testrunner | erfüllt | `scripts/test-reader.sh ios` und `ipad` tatsächlich erfolgreich. Zwei Python-Vertragstests belegen alle drei Plattformaufrufe und Fehlerweitergabe ohne falsche Erfolgsmeldung. |
-| SwiftLint | erfüllt | SwiftLint 0.65.1, gesamtes Repository mit `--strict`: keine Befunde. Die Testkonfiguration erlaubt Satznamen gemäß `modernize-tests`. |
-| GitHub CI | offen | [Lauf 40113981641](https://github.com/mpwg/NetNewsWire/actions/runs/40113981641) startet nach korrigiertem Workflow alle drei Plattformjobs, scheitert aber beim Kompilieren des Testfixtures `ReaderKit/Tests/ReaderSyncTests/IconServiceTests.swift:156`: `passing closure as a 'sending' parameter risks causing data races`. Lokal kompiliert derselbe Stand. Diese Toolchain-/Fixture-Abweichung ist der erste Fortsetzungspunkt in #46. Die vorherige unzulässige `runner`-Kontextverwendung im Job-`env` ist separat korrigiert und mit Actionlint 1.7.12 geprüft (dokumentiertes Previewlabel aus der älteren Labelliste ausgenommen). Kein gehosteter Erfolg behauptet. |
+| Durable state after abrupt process termination | Passed on documented Mac core | Seed process killed with SIGKILL after commit marker, WAL 271,952 bytes. Two new native processes verify 10,000 synthetic articles, account, exact pending UUIDs, preferences, rollback and digest revision. |
+| One complete canonical article version | Passed | Recovery checks title, HTML/text, URL, publication date and original arrival time together. The corresponding code contract passes across all three native destinations. |
+| Deletion-only queries/counts and retained originals | Passed | Code test checks committed revision, removed identities and unread/star counts. Recovery retains the two originals protected by pending/star/digest references after unsubscribing, then verifies another process restart. |
+| README | Updated | [B evidence](evidence/b-2026-10-24.md), [raw report](evidence/b-recovery-2026-10-24.json), module and Reader guides. |
 
-Der anfangs ungültig signierte `ReaderSmokeTests-Runner` wurde korrigiert. `codesign --verify --deep --strict` bestätigt die aktuellen Mac-Testartefakte. Es wurden keine Gatekeeper-, Accessibility- oder anderen globalen Schutz-/Rechteeinstellungen geändert. Swift-Compilerwarnings wurden beseitigt; Apple-Werkzeuge melden weiterhin übersprungene App-Intents-Metadatenextraktion ohne entsprechende Frameworkabhängigkeit und teils SDK-Buildnummer-Diagnosen.
+B remains formally open while dependency A and current hosted evidence remain open. The process probe is core recovery evidence, not full application UI recovery, physical-device behavior or real FreshRSS synchronization.
 
-Temporäre Logs/Resultbundles sind lokale Belege und können durch Betriebssystembereinigung verschwinden. Reproduzierbare Quellen, Fixtures und Befehle liegen im Repository; die Ergebniszusammenfassung wird in den GitHub-Arbeitspaketen weitergeführt.
+## Work-package matrix
 
-## Kriterien nach Arbeitspaket
-
-| Paket | Erfüllt | Offen / nicht prüfbar |
+| Package | Implemented or exercised evidence | Still open |
 |---|---|---|
-| A / #46 | Eigenständige OS-27-App, Namespace, eigener Store, gemeinsame Tests, sichere lokale Testsignierung, Fehlerweitergabe | Erfolgreichen gehosteten CI-Lauf und reguläre Geräteprovisionierung separat prüfen. |
-| B / #47 | 25 Persistenztests plus native SIGKILL-/Recovery-Probe mit 10.000 Artikeln: Wiederöffnen eines dauerhaften Stores, kanonische Artikelversion, versionierte Outbox, Rollback, Pending-Schutz, Sterne, Ordner-/Kontoabgrenzung, Änderungsstream, atomare Quellen-/Importprüfung | SwiftData-Prozessneustart auf Mac belegt; vollständige App-UI mit persistentem Store, reale Geräte und FreshRSS-Integration separat offen. Keine alten Datenbanken importieren. |
-| C / #48 | FreshRSS-HTTP-/Store-Verträge: vollständige Pagination, alte Veröffentlichungen, exakte Bestätigungen, Fehlerweitergabe, leere Ordner, Inhaltvollständigkeit | Echter FreshRSS-Server, echte API-Anmeldung, Mehrgeräteabgleich und Offline-Wiederanlauf wurden nicht mit persönlichen Konten ausgeführt. |
-| D / #49 | Gemeinsame Views, asynchrone Suche/Pagination, Generationenprüfung, Quellzugriff, unverdrängte normale Artikel, eingefrorene Digestrevision | Vollständige native Bedienung mit echten Feedinhalten und Tastatur prüfen. |
-| E / #50 | Szenenbezogener Zustand, gemeinsam besessene/debouncte Aktualisierung, keine globalen Screen-/Szenenadapter im neuen Pfad | Mac-AX-Freigabe; native Mehrfenster-, Größen-, RTL-, Tastatur-, VoiceOver- und Dynamic-Type-Abnahme. |
-| F / #51 | Neun Content-/OPML-Tests: lokale Extraktion ohne Seitenskripte, relative Links, HTTP 403, Timeout, neue URL-Inhaltsversion, Größenlimit; atomare Stale-Write-Abweisung | Reale blockierte Seiten, HTML-/Medienvarianten und Readeransicht auf den Geräten prüfen. |
-| G / #52 | Gerätelokaler Keychain-Dienst, begrenzte Iconaufträge, unabhängiger Fallback, temporärer Retry und Abbruch; Tests in ReaderSync | Echte Keychain-Anmeldung sowie reale Energie-/Bildlast prüfen. Die UI verwendet zunächst Systemsymbole für Feeds. |
-| H / #53 | Parser-/Export- und API-/SwiftData-Integration für verschachtelte Ordner, Homepage, Redirect-Wiederholung und atomaren Präferenzerhalt | Gegen echten FreshRSS bestätigen. Kategorien sind dort flach; Hierarchie wird zusätzlich lokal erhalten. |
-| I / #54 | Lokale Foundation-Models-Inferenz im echten Mac-Framework mit zwei synthetischen Angebotsquellen mehrfach erfolgreich; dynamisches Budget, strukturierte Quellen, aktuelle Cloudfreigabe | PCC-Freigabe/Provisionierung und Native-App-PCC-Abnahme fehlen. Breite Qualitäts-/Sprach-/Langtextabnahme bleibt offen. |
-| J / #55 | Sieben Digesttests: 250 Quellen, Tagesbündelung, unvollständige KI, alte angezeigte Revision, Quelländerung, Widerruf und fensterunabhängiger Auftragsbesitz | Tatsächlichen Preisjäger-Feed und repräsentative Nachrichtenqualität einschließlich Fehler-/Modellvarianten abnehmen. |
-| K / #56 | Zuordnung aller 40 Auditbefunde, geprüfter neuer Abhängigkeitsgraph, dokumentierter Bestand | Vollständige Produktabnahme und erst danach Legacy-Entfernung. Physische Geräte, VoiceOver, Dynamic Type, Langzeit-/Energieverhalten, Distribution sind nicht abgenommen. |
+| A / #46 | Standalone OS-27 Reader, native Apple-template app/test targets, shared libraries, local native tests, compiler policy and runner failure contracts | Native replacement Release/configuration checks, current hosted CI success and regular physical-device provisioning. |
+| B / #47 | 25 persistence contracts and native SIGKILL recovery with 10,000 articles, exact outbox acknowledgements, rollback, retention, streams and atomic source/import validation | Dependency A; complete persistent-app UI restart, device and real service evidence remain separate. |
+| C / #48 | FreshRSS HTTP/store contracts: complete pagination, old publication dates, exact acknowledgements, errors, empty folders and complete content | Real FreshRSS API login, multiple devices and offline recovery against an authorized test account. |
+| D / #49 | Shared views, async search/pagination, generation checks, source access and frozen displayed revisions | Representative real feed content and full native keyboard/navigation acceptance. |
+| E / #50 | Scene state, shared/debounced refresh, Mac automatic first window and simultaneous independent connection sheets | iPad multiwindow, resizing, RTL, complete keyboard, VoiceOver and Dynamic Type acceptance. |
+| F / #51 | Nine content/OPML contracts: local extraction without page scripts, relative links, HTTP 403, timeout, changing content, size limits and atomic stale-write rejection | Real blocked pages, varied HTML/media and native reader rendering on target devices. |
+| G / #52 | Device-local Keychain service; bounded icon requests, independent fallback, transient retry and cancellation contracts | Real Keychain-backed login, energy/image load and acceptance of UI icon usage. UI currently uses system symbols. |
+| H / #53 | Nested OPML paths, homepage fallback, redirects, repeat imports and concurrent preference preservation | Confirm against real FreshRSS; remote categories remain flat with local hierarchy metadata. |
+| I / #54 | Prior local Foundation Models experiment with two synthetic offer sources; dynamic budgets, structured sources and live consent | Apple PCC entitlement/provisioning and native PCC acceptance; broad language, long-text and quality evaluation. |
+| J / #55 | Nine digest/fixture contracts including 250 sources, partial coverage, source revision, consent revocation and shared job ownership | Real Preisjäger feed and representative news quality, model/error variants and editorial review. |
+| K / #56 | Mapping of all 40 audit findings, new dependency graph and retained legacy inventory | Complete replacement acceptance before removing legacy targets/code; physical devices, accessibility, sustained load and distribution. |
 
-## Ergänzende Experimente
+## Historical experiments and limits
 
-- Lokale KI: drei wiederholte Aufrufe mit zwei synthetischen Angeboten ergaben jeweils zwei belegte Abschnitte, korrekte Händler und Preise sowie beide Quellen. Gemessene Inferenz etwa 1,6–1,7 Sekunden. Das ist ein kleiner Funktionsnachweis, keine systematische Qualitätsgarantie.
-- PCC: Eine isolierte synthetische Entwicklerprobe meldete zunächst `available`, beendete den Prozess beim Request aber wegen fehlendem `com.apple.developer.private-cloud-compute`. Daher sperrt der normale Build diesen Aufruf **vor** der API-Anfrage; der Cloudschalter ist ohne konfigurierte Freigabe deaktiviert. Diese Sperre ist keine erteilte PCC-Berechtigung.
-- SwiftData-Lastprobe mit 10.000 synthetischen Artikeln auf diesem Mac: Einfügen 0,82 s, erste 200 Artikel 0,006 s, normalisierte Suche 0,007 s, 1.000 Statusänderungen 1,97 s. Kein Vergleich mit Legacy und kein Scroll-/Energie- oder Gerätelastnachweis.
+Three local model calls with two synthetic offers produced two sourced sections with correct merchants/prices, around 1.6–1.7 seconds per inference. This is a narrow functional experiment, not systematic quality acceptance. A synthetic PCC probe reported availability but terminated when requesting without `com.apple.developer.private-cloud-compute`; the normal build therefore blocks the request before calling that API. Availability alone is not authorization.
 
-## Audit-Issues und nächste Abnahme
+A previous 10,000-article core load experiment measured insertion 0.82 s, first 200 articles 0.006 s, normalized search 0.007 s and 1,000 status changes 1.97 s. It did not compare legacy behavior or measure scrolling, energy or devices.
 
-21 nicht übernommene Befunde wurden auf ausdrücklichen Nutzerauftrag als **nicht geplant** geschlossen: #2, #3, #4, #6, #7, #8, #9, #11, #13, #14, #18, #19, #20, #23, #24, #27, #28, #31, #32, #35, #36. Das ist keine Reparatur oder bereits erfolgte Entfernung ihrer alten Codepfade.
+The owner explicitly closed 21 excluded audit issues as not planned: #2, #3, #4, #6, #7, #8, #9, #11, #13, #14, #18, #19, #20, #23, #24, #27, #28, #31, #32, #35 and #36. Superseded proposal #42 is not planned; #43/#44 are completed reports. These closures are not repairs or evidence of removed legacy code. The remaining 19 relevant audit issues and all implementation packages require criterion-specific evidence before closure.
 
-Der ersetzte Migrationsvorschlag #42 ist ebenfalls als nicht geplant geschlossen. #43 und #44 sind als fertig erstellte Berichte abgeschlossen. 19 weiterhin relevante Befund-Issues bleiben offen und sind den neuen Paketen zugeordnet. Die elf Umsetzungspakete bleiben bis zur kriteriumsgerechten Abnahme offen; Implementierungs- und Testfortschritt wird dort getrennt ausgewiesen.
-
-Die nächste Arbeit beginnt mit dem [Handoff](handoff-2026-10-24.md), nicht mit einem weiteren parallelen Neubau.
+Temporary result bundles can expire. Source fixtures, reproduction instructions and the recovery JSON are versioned. Continue from the [handoff](handoff-2026-10-24.md), preserving the existing implementation and unrelated user changes.

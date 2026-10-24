@@ -5,7 +5,7 @@ import ReaderDomain
 @testable import ReaderSync
 
 struct IconServiceTests {
-    @Test func `Iconkandidaten erhalten relative Pfade und werden pro Homepage gebildet`() throws {
+    @Test("Icon candidates preserve relative paths and are scoped to each homepage") func iconCandidatesPreserveRelativePathsAndAreScopedToEachHomepage() throws {
         let base = try #require(URL(string: "https://example.test/news/index"))
         let html = "<link rel='shortcut icon' href='../favicon.png?v=1&amp;s=2'><link rel='stylesheet' href='bad.css'><link rel='ICON' href='https://cdn.test/icon.png'>"
         #expect(IconService.iconCandidates(in: html, relativeTo: base).map(\.absoluteString) == [
@@ -13,7 +13,7 @@ struct IconServiceTests {
         ])
     }
 
-    @Test func `Homepagefehler verhindert unabhängigen Favicon-Fallback nicht`() async throws {
+    @Test("Homepage failures do not prevent independent favicon fallback") func homepageFailuresDoNotPreventIndependentFaviconFallback() async throws {
         let fixture = try IconFixture()
         await fixture.server.setMode(.homepageFailure)
         let icon = try await fixture.service.icon(for: fixture.url("/home"))
@@ -21,7 +21,7 @@ struct IconServiceTests {
         #expect(await fixture.server.paths == ["/home", "/favicon.ico"])
     }
 
-    @Test func `Verschachtelte Homepages behalten unabhängige Ergebnisse und transiente Fehler sind erneut versuchbar`() async throws {
+    @Test("Nested homepages keep independent results and transient failures remain retryable") func nestedHomepagesKeepIndependentResultsAndTransientFailuresRemainRetryable() async throws {
         let fixture = try IconFixture()
         await fixture.server.setMode(.transientA)
         async let a = fixture.service.icon(for: fixture.url("/a"))
@@ -36,7 +36,7 @@ struct IconServiceTests {
         #expect(await fixture.server.paths.filter { $0 == "/b" }.count == 1)
     }
 
-    @Test func `Falscher Inhaltstyp und übergroße Bildantwort werden verworfen`() async throws {
+    @Test("Incorrect MIME types and oversized image responses are rejected") func incorrectMIMETypesAndOversizedImageResponsesAreRejected() async throws {
         let fixture = try IconFixture(maximumBytes: 128)
         await fixture.server.setMode(.wrongType)
         #expect(try await fixture.service.icon(for: fixture.url("/a")) == nil)
@@ -44,7 +44,7 @@ struct IconServiceTests {
         #expect(try await fixture.service.icon(for: fixture.url("/a")) == nil)
     }
 
-    @Test(.timeLimit(.minutes(1))) func `Abbruch des letzten Konsumenten verhindert den Fallback-Request`() async throws {
+    @Test("Cancelling the final consumer prevents the fallback request", .timeLimit(.minutes(1))) func cancellingTheFinalConsumerPreventsTheFallbackRequest() async throws {
         let fixture = try IconFixture()
         let gate = IconRequestGate()
         await fixture.server.setGate(gate)
@@ -56,7 +56,7 @@ struct IconServiceTests {
         #expect(await fixture.server.paths == ["/home"])
     }
 
-    @Test(.timeLimit(.minutes(1))) func `Ein einzelner Netzwerkplatz serialisiert vollständige Iconaufträge`() async throws {
+    @Test("A single network slot serializes complete icon jobs", .timeLimit(.minutes(1))) func aSingleNetworkSlotSerializesCompleteIconJobs() async throws {
         let fixture = try IconFixture(maximumConcurrentRequests: 1)
         let gate = IconRequestGate()
         await fixture.server.setGate(gate)

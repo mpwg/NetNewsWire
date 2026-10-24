@@ -13,14 +13,14 @@ struct ReaderSessionTests {
         let feed = FeedSnapshot(id: FeedKey(accountID: account.id, remoteID: "feed/1"), title: "Testfeed", url: account.serverURL)
         let articles = (0..<count).map { index in
             ArticleSnapshot(id: ArticleKey(accountID: account.id, remoteID: "\(index)"), feedID: feed.id.remoteID,
-                            title: "Artikel \(index)", text: "Inhalt \(index)", dateArrived: Date(timeIntervalSince1970: Double(index)))
+                            title: "Artikel \(index)", text: "Content \(index)", dateArrived: Date(timeIntervalSince1970: Double(index)))
         }
         try await store.applyRefresh(RefreshSnapshot(accountID: account.id, feeds: [feed], folders: [], articles: articles,
                                                     unreadIDs: Set(articles.map(\.id.remoteID)), starredIDs: []))
         return (store, ReaderServices(repository: store), feed, articles)
     }
 
-    @Test func `Fenster besitzen unabhängige Auswahl und Suche`() async throws {
+    @Test("Sessions own independent selection and search state") func sessionsOwnIndependentSelectionAndSearchState() async throws {
         let (_, services, feed, _) = try await fixture()
         let a = ReaderSession(services: services)
         let b = ReaderSession(services: services)
@@ -36,7 +36,7 @@ struct ReaderSessionTests {
         #expect(!b.showingAccount)
     }
 
-    @Test func `Öffnen einer Übersicht verändert keinen Originalstatus`() async throws {
+    @Test("Opening a digest does not change original article status") func openingADigestDoesNotChangeOriginalArticleStatus() async throws {
         let (store, services, feed, articles) = try await fixture()
         let digest = DigestSnapshot(id: "day", feed: feed.id, day: Date(), timeZoneID: "Europe/Vienna",
                                     sections: [], sources: articles.map(\.id))
@@ -49,7 +49,7 @@ struct ReaderSessionTests {
         #expect(try await store.pendingChanges(accountID: feed.id.accountID).isEmpty)
     }
 
-    @Test func `Nicht zusammengefasste Originale bleiben trotz Digestmodus sichtbar`() async throws {
+    @Test("Unprocessed originals remain visible in digest mode") func unprocessedOriginalsRemainVisibleInDigestMode() async throws {
         let (store, services, feed, articles) = try await fixture()
         try await store.savePreferences(FeedPreferences(id: feed.id, mode: .digest))
         let digest = DigestSnapshot(id: "day", feed: feed.id, day: Date(), timeZoneID: "Europe/Vienna",
@@ -62,7 +62,7 @@ struct ReaderSessionTests {
         #expect(session.rows.contains { $0.id == .article(articles[2].id) })
     }
 
-    @Test func `Quellen außerhalb der geladenen Seite bleiben erreichbar`() async throws {
+    @Test("Sources outside the loaded page remain accessible") func sourcesOutsideTheLoadedPageRemainAccessible() async throws {
         let (store, services, feed, articles) = try await fixture(count: 350)
         let digest = DigestSnapshot(id: "day", feed: feed.id, day: Date(), timeZoneID: "Europe/Vienna",
                                     sections: [], sources: articles.map(\.id))
@@ -77,7 +77,7 @@ struct ReaderSessionTests {
         #expect(session.selectedArticle?.id == articles[0].id)
     }
 
-    @Test func `Abhaken einer angezeigten Revision lässt neue Quellen ungelesen`() async throws {
+    @Test("Marking the displayed revision read leaves new sources unread") func markingTheDisplayedRevisionReadLeavesNewSourcesUnread() async throws {
         let (store, services, feed, articles) = try await fixture()
         let displayed = DigestSnapshot(id: "day", feed: feed.id, day: Date(), timeZoneID: "Europe/Vienna",
                                        sections: [], sources: [articles[0].id])
@@ -91,7 +91,7 @@ struct ReaderSessionTests {
         #expect(Set(unread.map(\.id)) == Set([articles[1].id, articles[2].id]))
     }
 
-    @Test func `Pagination erreicht mehr als tausend Artikel`() async throws {
+    @Test("Pagination reaches more than one thousand articles") func paginationReachesMoreThanOneThousandArticles() async throws {
         let (_, services, _, _) = try await fixture(count: 1_210)
         let session = ReaderSession(services: services)
         await session.reload()
@@ -100,7 +100,7 @@ struct ReaderSessionTests {
         #expect(!session.canLoadMore)
     }
 
-    @Test func `Verspätete Antworten von A und B überschreiben C nicht`() async throws {
+    @Test("Late responses from A and B do not overwrite C") func lateResponsesFromAAndBDoNotOverwriteC() async throws {
         let (store, _, feed, _) = try await fixture()
         let gate = QueryGate(accountID: feed.id.accountID)
         let repository = ScriptedRepository(base: store) { query in await gate.response(query.search) }
@@ -125,7 +125,7 @@ struct ReaderSessionTests {
         #expect(session.rows.first?.title == "C")
     }
 
-    @Test func `Überlappende Datenbankseiten ergeben keine doppelten Zeilen`() async throws {
+    @Test("Overlapping database pages do not produce duplicate rows") func overlappingDatabasePagesDoNotProduceDuplicateRows() async throws {
         let (store, _, _, _) = try await fixture(count: 450)
         let repository = ScriptedRepository(base: store) { query in
             var page = try await store.articles(query)
@@ -139,7 +139,7 @@ struct ReaderSessionTests {
         #expect(Set(session.rows.map(\.id)).count == session.rows.count)
     }
 
-    @Test func `Aktualisierung ersetzt die angezeigte Digestrevision erst auf Wunsch`() async throws {
+    @Test("Refresh replaces the displayed digest revision only on request") func refreshReplacesTheDisplayedDigestRevisionOnlyOnRequest() async throws {
         let (store, services, feed, articles) = try await fixture()
         let original = DigestSnapshot(id: "day", feed: feed.id, day: Date(), timeZoneID: "Europe/Vienna", sections: [], sources: [articles[0].id])
         try await store.saveDigest(original)
@@ -157,7 +157,7 @@ struct ReaderSessionTests {
         #expect(session.selectedDigest?.revision == updated.revision)
     }
 
-    @Test func `Gebündelte Rohartikel verdrängen normale Feeds nicht aus der ersten Seite`() async throws {
+    @Test("Bundled originals do not displace normal feeds from the first page") func bundledOriginalsDoNotDisplaceNormalFeedsFromTheFirstPage() async throws {
         let (store, services, feed, articles) = try await fixture(count: 251)
         let normal = FeedSnapshot(id: FeedKey(accountID: feed.id.accountID, remoteID: "normal"), title: "Normal", url: feed.url)
         var oldest = articles[0]

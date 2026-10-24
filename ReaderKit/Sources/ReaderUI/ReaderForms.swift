@@ -35,7 +35,7 @@ struct AccountConnectionView: View {
             .formStyle(.grouped)
             .navigationTitle("FreshRSS verbinden")
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) { Button("Abbrechen") { dismiss() }.disabled(working) }
+                ToolbarItem(placement: .cancellationAction) { Button("Abbrechen") { dismiss() }.disabled(working).accessibilityIdentifier("cancelConnection") }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Verbinden") {
                         Task {
