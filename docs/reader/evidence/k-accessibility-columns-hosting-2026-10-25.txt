@@ -1,0 +1,31 @@
+auditType=8
+Element has no description
+This element is missing useful accessibility information.
+type=XCUIElementType(rawValue: 3)
+identifier=
+label=
+frame=(231.0, 273.0, 204.0, 19.0)
+Attributes: Group, 0x7845fd3200, {{231.0, 273.0}, {204.0, 19.0}}, Disabled
+Element subtree:
+ →Group, 0x7845fd3200, {{231.0, 273.0}, {204.0, 19.0}}, Disabled
+    StaticText, 0x7845fd21c0, {{231.0, 275.5}, {55.0, 14.0}}, label: 'Bibliothek'
+Path to element:
+ →Application, 0x7845fd35c0, pid: 37237, title: 'Reader', Disabled
+  ↳Window (Main), 0x7845fd2f80, {{217.0, 221.0}, {1200.0, 800.0}}, identifier: 'reader-AppWindow-1', title: 'Alle Artikel', Disabled
+   ↳Group, 0x7845fd0dc0, {{217.0, 221.0}, {1200.0, 800.0}}, label: 'Reader', Disabled
+    ↳SplitGroup, 0x7845fd2d00, {{217.0, 221.0}, {1200.0, 800.0}}, identifier: 'reader-AppWindow-1, SidebarNavigationSplitView', Disabled
+     ↳Group, 0x7845fd2940, {{217.0, 221.0}, {220.0, 800.0}}, label: 'Bibliothek', Disabled
+      ↳ScrollView, 0x7845fd1400, {{217.0, 273.0}, {220.0, 748.0}}, Disabled
+       ↳Outline, 0x7845fd2a80, {{216.0, 272.0}, {222.0, 750.0}}, identifier: 'readerSidebar', label: 'Seitenleiste'
+        ↳OutlineRow, 0x7845fd30c0, {{217.0, 273.0}, {220.0, 19.0}}, Disabled
+         ↳Cell, 0x7845fd3340, {{227.0, 273.0}, {200.0, 19.0}}, Keyboard Focused
+          ↳Group, 0x7845fd3200, {{231.0, 273.0}, {204.0, 19.0}}, Disabled
+Query chain:
+ →Find: Target Application 'eu.mpwg.reader.debug'
+  Output: {
+    Application, 0x7845904280, pid: 37237, title: 'Reader', Disabled
+  }
+  ↪︎Find: Descendant with identity binding to AX element pid: 37237, token: dZEAAAAAAABvY29jVQAAAAAAAAD//////////1cAAAAAAAAAAAAAAAAAAAA=
+    Output: {
+      Group, 0x7845907c00, {{231.0, 273.0}, {204.0, 19.0}}, Disabled
+    }

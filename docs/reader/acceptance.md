@@ -1,5 +1,7 @@
 # Reader acceptance — updated 2026-10-25
 
+K split-column follow-up: native containers now expose localized Library/current timeline/Article descriptions. Five Swift Testing functions / nine executions cover the actual English/German split view, context, label ownership, reparenting and restoration. The existing connection smoke passes; no UI method is added. The repeated diagnostic audit still fails on remaining header/contrast/role/action requirements; full accessibility/VoiceOver remains open. [Current evidence](evidence/k-accessibility-columns-2026-10-25.md).
+
 K accessibility checkpoint: the native Mac audit runs and reports unresolved findings. Window-local hosting labels and the timeline's existing localized navigation title correct two missing-description paths. Three Swift Testing ownership cases and the existing connection smoke method with an actual outline-label assertion pass. No UI test method is added. The failed diagnostic audit is preserved; complete accessibility/VoiceOver acceptance remains open. [Diagnosis, results and remaining criteria](evidence/k-accessibility-2026-10-25.md).
 
 K security-analysis gate: [current compatibility evidence](evidence/k-codeql-compatibility-2026-10-25.md) distinguishes the unproved cause of the macOS-26 tracer crash from CodeQL's documented lack of a supported complete SDK-27 Swift scan. No check or language is disabled; full Swift analysis remains open while other Mac acceptance work continues.

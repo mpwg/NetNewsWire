@@ -10,6 +10,7 @@ import AppKit
 public struct ReaderWindow: View {
     private let services: ReaderServices
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.locale) private var locale
     @State private var session: ReaderSession
     @State private var editedFeed: FeedSnapshot?
     @State private var feedToRemove: FeedSnapshot?
@@ -33,11 +34,23 @@ public struct ReaderWindow: View {
                           editFolder: { editedFolder = $0 }, removeFolder: { folderToRemove = $0 },
                           markRead: { feedToMarkRead = $0 })
                 .navigationSplitViewColumnWidth(min: 220, ideal: 260, max: 360)
+                #if os(macOS)
+                .background { ReaderWindowAccessibility(label: String(localized: LocalizedStringResource("Library", locale: locale, bundle: .atURL(#bundle.bundleURL))), scope: .nearestGroup)
+                        .allowsHitTesting(false).accessibilityHidden(true) }
+                #endif
         } content: {
             ReaderTimeline(session: session, markRead: { feedToMarkRead = $0 })
                 .navigationSplitViewColumnWidth(min: 280, ideal: 360, max: 520)
+                #if os(macOS)
+                .background { ReaderWindowAccessibility(label: session.title, scope: .nearestGroup)
+                        .allowsHitTesting(false).accessibilityHidden(true) }
+                #endif
         } detail: {
             ReaderDetail(session: session)
+                #if os(macOS)
+                .background { ReaderWindowAccessibility(label: String(localized: LocalizedStringResource("Article", locale: locale, bundle: .atURL(#bundle.bundleURL))), scope: .nearestGroup)
+                        .allowsHitTesting(false).accessibilityHidden(true) }
+                #endif
         }
         .navigationSplitViewStyle(.balanced)
         #if os(macOS)
@@ -384,27 +397,88 @@ private struct TimelineRowView: View {
 
 #if os(macOS)
 struct ReaderWindowAccessibility: NSViewRepresentable {
+    enum Scope { case windowContent, nearestGroup }
+
+    var label = "Reader"
+    var scope: Scope = .windowContent
+
     func makeNSView(context: Context) -> NSView {
         let anchor = ReaderWindowAccessibilityAnchor()
         anchor.setAccessibilityElement(false)
+        anchor.configure(label: label, scope: scope)
         return anchor
     }
 
     func updateNSView(_ nsView: NSView, context: Context) {
-        (nsView as? ReaderWindowAccessibilityAnchor)?.labelWindowContent()
+        (nsView as? ReaderWindowAccessibilityAnchor)?.configure(label: label, scope: scope)
+    }
+
+    static func dismantleNSView(_ nsView: NSView, coordinator: ()) {
+        (nsView as? ReaderWindowAccessibilityAnchor)?.restoreLabel()
     }
 }
 
-private final class ReaderWindowAccessibilityAnchor: NSView {
-    override func viewDidMoveToWindow() {
-        super.viewDidMoveToWindow()
-        labelWindowContent()
+final class ReaderWindowAccessibilityAnchor: NSView {
+    private var label = "Reader"
+    private var scope: ReaderWindowAccessibility.Scope = .windowContent
+    private weak var labelledView: NSView?
+    private var previousLabel: String?
+    private var appliedLabel: String?
+
+    override func viewDidMoveToSuperview() {
+        super.viewDidMoveToSuperview()
+        labelContainer()
     }
 
-    func labelWindowContent() {
-        guard let content = window?.contentView, content.accessibilityLabel()?.isEmpty ?? true else { return }
-        // Name the native hosting container while preserving every SwiftUI child.
-        content.setAccessibilityLabel("Reader")
+    override func viewDidMoveToWindow() {
+        super.viewDidMoveToWindow()
+        labelContainer()
+    }
+
+    func configure(label: String, scope: ReaderWindowAccessibility.Scope) {
+        self.label = label
+        self.scope = scope
+        labelContainer()
+    }
+
+    func restoreLabel() {
+        if let labelledView, labelledView.accessibilityLabel() == appliedLabel {
+            labelledView.setAccessibilityLabel(previousLabel)
+        }
+        labelledView = nil
+        previousLabel = nil
+        appliedLabel = nil
+    }
+
+    private func labelContainer() {
+        let target = targetContainer()
+        if target !== labelledView { restoreLabel() }
+        guard let target else { return }
+        if target === labelledView {
+            guard target.accessibilityLabel() == appliedLabel else { return }
+        } else {
+            guard target.accessibilityLabel()?.isEmpty ?? true else { return }
+            previousLabel = target.accessibilityLabel()
+            labelledView = target
+        }
+        // Describe the native container without replacing or combining its children.
+        target.setAccessibilityLabel(label)
+        appliedLabel = label
+    }
+
+    private func targetContainer() -> NSView? {
+        guard let window else { return nil }
+        switch scope {
+        case .windowContent:
+            return window.contentView
+        case .nearestGroup:
+            var ancestor = superview
+            while let view = ancestor {
+                if view.accessibilityRole() == .group { return view }
+                ancestor = view.superview
+            }
+            return nil
+        }
     }
 }
 #endif
