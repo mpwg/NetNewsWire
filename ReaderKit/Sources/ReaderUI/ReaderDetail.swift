@@ -40,6 +40,7 @@ private struct ArticleDetailView: View {
     let article: ArticleSnapshot
     @State private var page = makeArticlePage()
     @State private var extracting = false
+    @State private var extractionRequest: UUID?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -56,24 +57,38 @@ private struct ArticleDetailView: View {
                     if let url = article.url { Link("Original", destination: url) }
                     Menu(LocalizedStringResource("Article", bundle: .atURL(#bundle.bundleURL)), systemImage: "ellipsis") {
                         Button(LocalizedStringResource("Load full text", bundle: .atURL(#bundle.bundleURL)), systemImage: "doc.text.magnifyingglass") {
-                            Task {
-                                extracting = true
-                                defer { extracting = false }
-                                await session.extract(article)
-                            }
+                            extracting = true
+                            extractionRequest = UUID()
                         }
                         .disabled(extracting || article.url == nil)
+                        .accessibilityIdentifier("loadFullText")
                     }
+                    .accessibilityIdentifier("articleActions")
                     if extracting { ProgressView().controlSize(.small) }
                 }
                 .buttonStyle(.borderless)
                 .font(.callout)
+                if let error = session.fullTextError {
+                    Label {
+                        Text("Full text is unavailable. Showing saved feed content.", bundle: #bundle)
+                    } icon: { Image(systemName: "exclamationmark.triangle") }
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .help(Text(error))
+                    .accessibilityIdentifier("fullTextUnavailable")
+                }
             }
             .padding()
             Divider()
             WebView(page)
                 .task(id: article.html + article.text) { await loadHTML() }
         }
+        .task(id: extractionRequest) {
+            guard extractionRequest != nil else { return }
+            defer { extracting = false }
+            await session.extract(article)
+        }
+        .onDisappear { page.stopLoading() }
     }
 
     private func loadHTML() async {
@@ -87,7 +102,11 @@ private struct ArticleDetailView: View {
         do {
             for try await _ in page.load(html: html, baseURL: article.url ?? URL(fileURLWithPath: "/")) { }
         } catch is CancellationError {
-        } catch { session.errorMessage = error.localizedDescription }
+        } catch {
+            if !Task.isCancelled, session.selection == .article(article.id) {
+                session.errorMessage = error.localizedDescription
+            }
+        }
     }
 
     private func escape(_ text: String) -> String {

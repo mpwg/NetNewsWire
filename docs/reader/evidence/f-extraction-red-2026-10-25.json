@@ -1,0 +1,93 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "00006040-000A51392100801C",
+        "deviceName" : "My Mac",
+        "modelName" : "MacBook Pro",
+        "osBuildNumber" : "26A434",
+        "osVersion" : "27.0.1",
+        "platform" : "macOS"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 8,
+      "passedTests" : 6,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "Reader · Built with macOS 27.0.1",
+  "expectedFailures" : 0,
+  "failedTests" : 4,
+  "finishTime" : 1792941889.016,
+  "passedTests" : 2,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1792941886.498,
+  "statistics" : [
+    {
+      "subtitle" : "13 test runs",
+      "title" : "5 tests ran with dynamic parameters"
+    }
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "Expectation failed: await fixture.server.requests == (point == .beforeRequest ? 0 : 1)",
+      "targetName" : "ReaderTests",
+      "testIdentifier" : 6,
+      "testIdentifierString" : "ReaderExtractionTests/cancelledExtractionHasNoSideEffects(point:)",
+      "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/ReaderExtractionTests/cancelledExtractionHasNoSideEffects(point:)",
+      "testName" : "Cancelled extraction ends while HTTP is held without content, revisions or alerts"
+    },
+    {
+      "failureText" : "Expectation failed: fixture.services.revision == 0\nfixture.services.revision → 1",
+      "targetName" : "ReaderTests",
+      "testIdentifier" : 1,
+      "testIdentifierString" : "ReaderExtractionTests/newerFailureSupersedesOldSuccess()",
+      "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/ReaderExtractionTests/newerFailureSupersedesOldSuccess()",
+      "testName" : "A newer failed request supersedes an older successful request"
+    },
+    {
+      "failureText" : "Expectation failed: fixture.session.errorMessage == nil\nfixture.session.errorMessage → \"Der Auftrag wurde durch einen neueren ersetzt.\"",
+      "targetName" : "ReaderTests",
+      "testIdentifier" : 3,
+      "testIdentifierString" : "ReaderExtractionTests/olderRequestCannotReplaceNewerExtraction(fails:)",
+      "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/ReaderExtractionTests/olderRequestCannotReplaceNewerExtraction(fails:)",
+      "testName" : "An older request for the same article cannot replace a newer extraction or its status"
+    },
+    {
+      "failureText" : "Expectation failed: fixture.session.errorMessage == \"Current view status\"\nfixture.session.errorMessage → \"Serverfehler (HTTP 403).\"",
+      "targetName" : "ReaderTests",
+      "testIdentifier" : 2,
+      "testIdentifierString" : "ReaderExtractionTests/oldExtractionCannotPublishAcrossSelections(outcome:)",
+      "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/ReaderExtractionTests/oldExtractionCannotPublishAcrossSelections(outcome:)",
+      "testName" : "An old extraction cannot publish content or errors across selection generations"
+    }
+  ],
+  "title" : "Test - Reader",
+  "topInsights" : [
+    {
+      "category" : "Common Failures",
+      "impact" : "50% of failures",
+      "text" : "3 runs of 2 tests failed with Expectation failed: try await fixture.store.article(fixture.a.id) == fixture.a"
+    },
+    {
+      "category" : "Common Failures",
+      "impact" : "50% of failures",
+      "text" : "3 runs of 2 tests failed with Expectation failed: fixture.services.revision == 0"
+    },
+    {
+      "category" : "Common Failures",
+      "impact" : "25% of failures",
+      "text" : "2 runs of 1 test failed with Expectation failed: fixture.session.errorMessage == nil"
+    }
+  ],
+  "totalTestCount" : 6
+}

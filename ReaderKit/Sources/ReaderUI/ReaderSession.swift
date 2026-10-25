@@ -26,6 +26,8 @@ public final class ReaderSession {
         didSet {
             guard oldValue != timelineSelection else { return }
             articleGeneration &+= 1
+            selectionGeneration &+= 1
+            fullTextError = nil
             preservesSourceSelection = false
             selectedDigestRevisions = selectedDigestRevisions.filter { timelineSelection.contains(.digest($0.key)) }
             for case .digest(let id) in timelineSelection where selectedDigestRevisions[id] == nil {
@@ -46,6 +48,7 @@ public final class ReaderSession {
         }
     }
     public var errorMessage: String?
+    public private(set) var fullTextError: String?
     public var showingAccount = false
     public private(set) var accounts: [ReaderAccount] = []
     public private(set) var feeds: [FeedSnapshot] = []
@@ -70,6 +73,8 @@ public final class ReaderSession {
     private var generation = 0
     private var sourceGeneration = 0
     private var articleGeneration = 0
+    private var selectionGeneration = 0
+    private var extractionGeneration = 0
     private var limit = 200
 
     public init(services: ReaderServices) { self.services = services }
@@ -368,18 +373,30 @@ public final class ReaderSession {
     }
 
     public func extract(_ article: ArticleSnapshot) async {
-        guard let url = article.url, let content = services.content else { return }
-        let selected = selection
+        guard !Task.isCancelled, selection == .article(article.id),
+              let url = article.url, let content = services.content else { return }
+        extractionGeneration &+= 1
+        let request = extractionGeneration
+        let selectionVersion = selectionGeneration
+        fullTextError = nil
         do {
             let result = try await content.extract(url: url)
-            try Task.checkCancellation()
-            guard try await services.repository.updateContent(article, html: result.html, text: result.text) else {
-                throw ReaderError.staleResult
-            }
+            guard !Task.isCancelled, request == extractionGeneration, selectionVersion == selectionGeneration,
+                  selection == .article(article.id) else { return }
+            let accepted = try await services.repository.updateContent(article, html: result.html, text: result.text)
+            guard !Task.isCancelled, request == extractionGeneration, selectionVersion == selectionGeneration,
+                  selection == .article(article.id) else { return }
+            guard accepted else { throw ReaderError.staleResult }
             services.didChange()
-            if selection == selected { await reload() }
+            await reload()
         } catch is CancellationError {
-        } catch { if selection == selected { errorMessage = error.localizedDescription } }
+        } catch {
+            if !Task.isCancelled, request == extractionGeneration, selectionVersion == selectionGeneration,
+               selection == .article(article.id) {
+                fullTextError = error.localizedDescription
+                errorMessage = error.localizedDescription
+            }
+        }
     }
 
     public func runMutation(_ operation: () async throws -> Void) async {

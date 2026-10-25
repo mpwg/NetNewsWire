@@ -1,6 +1,13 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Full text is unavailable. Showing saved feed content." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Volltext nicht verfügbar. Gespeicherter Feed-Inhalt wird angezeigt." } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Full text is unavailable. Showing saved feed content." } }
+      }
+    },
     "%@ · Daily digest" : {
       "extractionState" : "manual",
       "localizations" : {

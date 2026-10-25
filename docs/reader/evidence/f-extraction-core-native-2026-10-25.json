@@ -1,0 +1,52 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "00006040-000A51392100801C",
+        "deviceName" : "My Mac",
+        "modelName" : "MacBook Pro",
+        "osBuildNumber" : "26A434",
+        "osVersion" : "27.0.1",
+        "platform" : "macOS"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 0,
+      "passedTests" : 243,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "Reader · Built with macOS 27.0.1",
+  "expectedFailures" : 0,
+  "failedTests" : 0,
+  "finishTime" : 1792942367.304,
+  "passedTests" : 148,
+  "result" : "Passed",
+  "runtimeWarnings" : [
+
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1792942183.406,
+  "statistics" : [
+    {
+      "subtitle" : "131 test runs",
+      "title" : "36 tests ran with dynamic parameters"
+    }
+  ],
+  "testFailures" : [
+
+  ],
+  "title" : "Test - Reader",
+  "topInsights" : [
+    {
+      "category" : "Longest Test Runs",
+      "impact" : "17% of duration",
+      "text" : "7 longest test runs with outlier durations exceeding 0.58s (three standard deviations)"
+    }
+  ],
+  "totalTestCount" : 148
+}
