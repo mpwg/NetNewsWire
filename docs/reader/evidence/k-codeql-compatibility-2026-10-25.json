@@ -1,0 +1,57 @@
+{
+  "checkedAt": "2026-10-25",
+  "source": "ed8e9f8a91e180b1d22a9dc8f00237eacf8eb746",
+  "runId": 40238561575,
+  "swiftJobId": 121305244261,
+  "cliVersion": "2.27.3",
+  "runner": {
+    "image": "macos-26-arm64",
+    "version": "20261013.0424.1",
+    "os": "26.6.2",
+    "osBuild": "25G83",
+    "imageDefaultXcode": "26.6",
+    "selectedXcodeBeforeCrash": "not emitted by job"
+  },
+  "swiftResult": "failed before analysis",
+  "otherJobs": {
+    "actions": "success",
+    "python": "success",
+    "javascript-typescript": "success"
+  },
+  "observedError": "2026-10-25T22:06:24.6930450Z [2026-10-25 22:06:24] [ERROR] Spawned process exited abnormally (code 139; tried to run: [/Users/runner/work/_temp/d42375a7-d27f-472c-85d2-d98f0a467a40/codeql/tools/osx64/preload_tracer, /Users/runner/work/_temp/d42375a7-d27f-472c-85d2-d98f0a467a40/codeql/swift/tools/autobuild.sh])",
+  "crashRootCause": "not established",
+  "defaultSetup": {
+    "state": "configured",
+    "languages": [
+      "actions",
+      "javascript",
+      "javascript-typescript",
+      "python",
+      "swift",
+      "typescript"
+    ],
+    "query_suite": "default",
+    "threat_model": "remote",
+    "updated_at": "2026-10-25T14:49:52Z",
+    "schedule": "weekly",
+    "runner_type": "standard",
+    "runner_label": ""
+  },
+  "manufacturerLimits": {
+    "swift": "5.4–6.3",
+    "macOS27": "build-mode none only",
+    "macOS26WithXcode27Selected": "build-mode none only",
+    "swiftBuildModes": [
+      "autobuild",
+      "manual"
+    ]
+  },
+  "references": [
+    "https://github.com/mpwg/NetNewsWire/actions/runs/40238561575/job/121305244261",
+    "https://codeql.github.com/docs/codeql-overview/system-requirements/",
+    "https://codeql.github.com/docs/codeql-overview/supported-languages-and-frameworks/",
+    "https://docs.github.com/en/code-security/reference/code-scanning/codeql/build-options-for-compiled-languages",
+    "https://github.com/actions/runner-images/blob/macos-26-arm64/20261013.0424/images/macos/macos-26-arm64-Readme.md"
+  ],
+  "repositoryConfigurationChanged": false
+}

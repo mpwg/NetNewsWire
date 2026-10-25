@@ -1,5 +1,7 @@
 # Reader
 
+Swift CodeQL remains an open acceptance gate. The current job fails before analysis; its runner and the vendor's separate SDK-27 support limits are documented in [K's compatibility evidence](docs/reader/evidence/k-codeql-compatibility-2026-10-25.md). Existing checks remain enabled. Reader's passing native CI does not establish successful Swift security analysis.
+
 Native Mac OPML file export is accepted at **071a7aee7**. [Reader CI 40237736169](https://github.com/mpwg/NetNewsWire/actions/runs/40237736169) passes **392 executions: 384 Swift Testing code executions and eight native UI methods**, with no failures/skips, plus lint, runner failure propagation and process recovery. The standard Save panel writes the exact chosen OPML filename using user-selected Read/Write and the imported OPML type; App Sandbox remains enabled. One intentional model-guardrail runtime warning is retained. #53's native export follow-up and the earlier H server contract are accepted; full product acceptance remains open. The owner-selected complete-initial-refresh publication policy is unchanged. [Criteria and raw evidence](docs/reader/evidence/h-file-export-2026-10-25.md).
 
 A native FreshRSS reader for macOS, iOS and iPadOS 27 or later, built with SwiftUI, SwiftData and Apple's Foundation Models. Each feed can show ordinary articles or a sourced daily digest. Originals stay accessible through feeds, search, stars and digest source links.
