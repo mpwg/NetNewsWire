@@ -45,6 +45,7 @@ private struct ArticleDetailView: View {
         VStack(alignment: .leading, spacing: 0) {
             VStack(alignment: .leading, spacing: 10) {
                 Text(article.title).font(.title2.bold()).textSelection(.enabled)
+                    .accessibilityIdentifier("articleDetailTitle")
                 HStack {
                     Button(article.read ? LocalizedStringResource("Mark unread", bundle: .atURL(#bundle.bundleURL)) : LocalizedStringResource("Mark read", bundle: .atURL(#bundle.bundleURL)), systemImage: article.read ? "envelope.badge" : "checkmark.circle") {
                         Task { await session.setStatus([article.id], field: .read, value: !article.read) }

@@ -15,13 +15,21 @@ struct ReaderApplication: App {
     var body: some Scene {
         WindowGroup(id: "reader") {
             if let services = bootstrap.services {
-                ReaderWindow(services: services)
-                    #if DEBUG && os(macOS)
-                    .safeAreaInset(edge: .bottom) {
-                        if let fixture = bootstrap.imageLoadFixture { ReaderImageLoadPanel(fixture: fixture) }
-                        if let fixture = bootstrap.timelineFixture { ReaderTimelinePanel(fixture: fixture) }
+                #if DEBUG && os(macOS)
+                VStack(spacing: 0) {
+                    ReaderWindow(services: services)
+                    if let fixture = bootstrap.imageLoadFixture {
+                        Divider()
+                        ReaderImageLoadPanel(fixture: fixture)
                     }
-                    #endif
+                    if let fixture = bootstrap.timelineFixture {
+                        Divider()
+                        ReaderTimelinePanel(fixture: fixture)
+                    }
+                }
+                #else
+                ReaderWindow(services: services)
+                #endif
             } else {
                 ContentUnavailableView("Reader could not start", systemImage: "externaldrive.badge.exclamationmark",
                                        description: Text(bootstrap.errorMessage ?? String(localized: "The local data store is unavailable.")))

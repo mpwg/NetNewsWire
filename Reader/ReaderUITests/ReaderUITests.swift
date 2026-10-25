@@ -173,6 +173,111 @@ final class ReaderSmokeTests: XCTestCase {
         XCTAssertEqual(XCTWaiter.wait(for: [expectation], timeout: timeout), .completed)
     }
 
+    func testWindowSearchAndSelectionSurviveClosingAnotherWindow() throws {
+        let app = launchReader(arguments: ["--ui-testing-timeline", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"])
+        let firstID = app.windows.firstMatch.identifier
+        XCTAssertFalse(firstID.isEmpty)
+        let first = app.windows.matching(identifier: firstID).firstMatch
+        waitForValue(first.staticTexts["timelineFixturePhase"], equalTo: "ready", timeout: 10)
+        let firstRow = first.outlines["readerTimeline"].staticTexts["Timeline article 299"].firstMatch
+        XCTAssertTrue(firstRow.waitForExistence(timeout: 10))
+        firstRow.click()
+        waitForValue(first.staticTexts["articleDetailTitle"], equalTo: "Timeline article 299")
+
+        app.typeKey("n", modifierFlags: .command)
+        let second = app.windows.matching(NSPredicate(format: "identifier != %@", firstID)).firstMatch
+        XCTAssertTrue(second.waitForExistence(timeout: 5))
+        XCTAssertEqual(app.windows.count, 2)
+        let secondSearch = second.searchFields.firstMatch
+        XCTAssertTrue(secondSearch.waitForExistence(timeout: 5))
+        secondSearch.click()
+        secondSearch.typeText("article 298")
+        waitForValue(second.staticTexts["timelineCounts"], equalTo: "Entries: 1 · Loaded originals: 1")
+        second.outlines["readerTimeline"].staticTexts["Timeline article 298"].firstMatch.click()
+        waitForValue(second.staticTexts["articleDetailTitle"], equalTo: "Timeline article 298")
+        XCTAssertEqual(first.searchFields.firstMatch.value as? String, "")
+        waitForValue(first.staticTexts["articleDetailTitle"], equalTo: "Timeline article 299")
+
+        app.typeKey("`", modifierFlags: .command)
+        let firstSearch = first.searchFields.firstMatch
+        XCTAssertTrue(firstSearch.wait(for: \.isHittable, toEqual: true, timeout: 5))
+        firstSearch.click()
+        firstSearch.typeText("article 299")
+        waitForValue(first.staticTexts["timelineCounts"], equalTo: "Entries: 1 · Loaded originals: 1")
+        // Changing this window’s query intentionally clears only its own selection.
+        first.outlines["readerTimeline"].staticTexts["Timeline article 299"].firstMatch.click()
+        waitForValue(first.staticTexts["articleDetailTitle"], equalTo: "Timeline article 299")
+        XCTAssertEqual(secondSearch.value as? String, "article 298")
+        waitForValue(second.staticTexts["articleDetailTitle"], equalTo: "Timeline article 298")
+
+        app.typeKey("`", modifierFlags: .command)
+        let hold = second.buttons["holdTimelineQueries"]
+        XCTAssertTrue(hold.wait(for: \.isHittable, toEqual: true, timeout: 5))
+        hold.click()
+        secondSearch.click()
+        secondSearch.typeKey("a", modifierFlags: .command)
+        secondSearch.typeText("article 270")
+        waitForPositiveValue(second.staticTexts["timelineHeldQueries"])
+        app.typeKey("`", modifierFlags: .command)
+        let close = first.buttons[XCUIIdentifierCloseWindow]
+        XCTAssertTrue(close.wait(for: \.isHittable, toEqual: true, timeout: 5))
+        close.click()
+        XCTAssertTrue(first.wait(for: \.exists, toEqual: false, timeout: 5))
+        XCTAssertEqual(app.windows.count, 1)
+        XCTAssertEqual(secondSearch.value as? String, "article 270")
+        waitForPositiveValue(second.staticTexts["timelineHeldQueries"])
+        second.buttons["releaseTimelineQueries"].click()
+        waitForValue(second.staticTexts["timelineHeldQueries"], equalTo: "0")
+        waitForValue(second.staticTexts["timelineCounts"], equalTo: "Entries: 1 · Loaded originals: 1")
+        let survivorRow = second.outlines["readerTimeline"].staticTexts["Timeline article 270"].firstMatch
+        XCTAssertTrue(survivorRow.waitForExistence(timeout: 5))
+        survivorRow.click()
+        waitForValue(second.staticTexts["articleDetailTitle"], equalTo: "Timeline article 270")
+        let initialFrame = second.frame
+        let narrowFrame = resizeWindow(second, delta: CGVector(dx: -240, dy: -160))
+        XCTAssertTrue(secondSearch.isHittable)
+        XCTAssertEqual(secondSearch.value as? String, "article 270")
+        waitForValue(second.staticTexts["articleDetailTitle"], equalTo: "Timeline article 270")
+        second.descendants(matching: .any)["readerActions"].firstMatch.click()
+        app.menuItems["connectAccount"].click()
+        let username = second.sheets.firstMatch.textFields["username"]
+        XCTAssertTrue(username.waitForExistence(timeout: 5))
+        username.click()
+        username.typeText("Narrow window")
+        XCTAssertEqual(username.value as? String, "Narrow window")
+        second.sheets.firstMatch.buttons["cancelConnection"].firstMatch.click()
+        let narrowEvidence = XCTAttachment(screenshot: second.screenshot())
+        narrowEvidence.name = "Native Reader search, detail and account sheet remain usable after window resize"
+        narrowEvidence.lifetime = .keepAlways
+        add(narrowEvidence)
+        let restoredFrame = resizeWindow(second, delta: CGVector(dx: 240, dy: 160))
+        waitForValue(second.staticTexts["articleDetailTitle"], equalTo: "Timeline article 270")
+        XCTAssertEqual(secondSearch.value as? String, "article 270")
+        let dimensions = XCTAttachment(string: "initial=\(initialFrame), narrow=\(narrowFrame), restored=\(restoredFrame); independent searches/selections and native close completed; surviving search returned article 270.")
+        dimensions.name = "Observed native window sizes and surviving search"
+        dimensions.lifetime = .keepAlways
+        add(dimensions)
+        let evidence = XCTAttachment(screenshot: second.screenshot())
+        evidence.name = "Surviving native window completes its held search after another window closes"
+        evidence.lifetime = .keepAlways
+        add(evidence)
+    }
+
+    private func resizeWindow(_ window: XCUIElement, delta: CGVector) -> CGRect {
+        let initialFrame = window.frame
+        let corner = window.coordinate(withNormalizedOffset: CGVector(dx: 1, dy: 1)).withOffset(CGVector(dx: -2, dy: -2))
+        corner.click(forDuration: 0.2, thenDragTo: corner.withOffset(delta))
+        let resized = NSPredicate { _, _ in
+            let frame = window.frame
+            let widthChanged = delta.dx < 0 ? frame.width < initialFrame.width - 100 : frame.width > initialFrame.width + 100
+            let heightChanged = delta.dy < 0 ? frame.height < initialFrame.height - 80 : frame.height > initialFrame.height + 80
+            return widthChanged && heightChanged
+        }
+        let expectation = XCTNSPredicateExpectation(predicate: resized, object: window)
+        XCTAssertEqual(XCTWaiter.wait(for: [expectation], timeout: 5), .completed)
+        return window.frame
+    }
+
     func testNewWindowHasIndependentConnectionForm() throws {
         let app = launchReader()
         let firstID = app.windows.firstMatch.identifier

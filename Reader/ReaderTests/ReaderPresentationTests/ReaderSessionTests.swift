@@ -20,8 +20,9 @@ struct ReaderSessionTests {
         return (store, ReaderServices(repository: store), feed, articles)
     }
 
-    @Test("Sessions own independent selection and search state") func sessionsOwnIndependentSelectionAndSearchState() async throws {
-        let (_, services, feed, _) = try await fixture()
+    @Test("Sessions keep selection, search and sheets independent across query changes")
+    func sessionsOwnIndependentSelectionAndSearchState() async throws {
+        let (_, services, feed, articles) = try await fixture()
         let a = ReaderSession(services: services)
         let b = ReaderSession(services: services)
         a.sidebarSelection = feed.id.id
@@ -32,8 +33,34 @@ struct ReaderSessionTests {
         #expect(a.articles.count == 1)
         #expect(b.articles.count == 3)
         #expect(b.search.isEmpty)
+        a.selection = .article(articles[1].id)
+        b.selection = .article(articles[0].id)
         a.showingAccount = true
         #expect(!b.showingAccount)
+
+        b.search = "Article 2"
+        await b.reload()
+        #expect(b.selection == nil)
+        b.selection = .article(articles[2].id)
+        #expect(a.search == "Article 1")
+        #expect(a.sidebarSelection == feed.id.id)
+        #expect(a.selectedArticle?.id == articles[1].id)
+        #expect(a.showingAccount)
+        b.showingAccount = true
+        a.showingAccount = false
+        #expect(b.showingAccount)
+        await a.reload()
+        #expect(a.selectedArticle?.id == articles[1].id)
+
+        a.search = "Article 0"
+        await a.reload()
+        #expect(a.selection == nil)
+        #expect(a.articles.map(\.id) == [articles[0].id])
+        #expect(b.search == "Article 2")
+        #expect(b.sidebarSelection == "all")
+        #expect(b.selectedArticle?.id == articles[2].id)
+        #expect(b.articles.map(\.id) == [articles[2].id])
+        #expect(b.showingAccount)
     }
 
     @Test("Opening a digest does not change original article status") func openingADigestDoesNotChangeOriginalArticleStatus() async throws {
