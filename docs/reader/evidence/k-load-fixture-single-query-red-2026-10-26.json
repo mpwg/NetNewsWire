@@ -1,0 +1,29 @@
+{
+  "scope": "Rejected single-query fixture check; shipping repository deliberately caps each page at 1000.",
+  "counts": {
+    "expectedFailures": 0,
+    "failed": 1,
+    "notRun": 0,
+    "passed": 1,
+    "skipped": 0,
+    "total": 2
+  },
+  "results": [
+    {
+      "displayName": "10000",
+      "state": "Failed",
+      "identifier": "ReaderLoadScenarioTests/loadScenarioPreservesStoredCoverage(articleCount:)",
+      "errorExcerpts": [
+        "Reader/ReaderTests/ReaderPresentationTests/ReaderLoadScenarioTests.swift:19 ReaderLoadScenarioTests/loadScenarioPreservesStoredCoverage(articleCount:): Expectation failed: stored.count == articleCount\nstored.count → 1000\narticleCount → 10000"
+      ]
+    },
+    {
+      "displayName": "1000",
+      "state": "Passed",
+      "identifier": "ReaderLoadScenarioTests/loadScenarioPreservesStoredCoverage(articleCount:)",
+      "errorExcerpts": []
+    }
+  ],
+  "collectionComparisonDiagnosticOmitted": true,
+  "originalResultBundlePath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/Test-Reader-2026.10.26_00-27-59-+0100.xcresult"
+}

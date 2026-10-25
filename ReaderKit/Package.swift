@@ -23,6 +23,7 @@ let package = Package(
             path: "Probes/ReaderStoreRecoveryProbe",
             swiftSettings: readerSwiftSettings
         ),
+        // Synthetic workload support is guarded by DEBUG in the domain sources.
         .target(name: "ReaderDomain", resources: [.process("Resources")], swiftSettings: readerSwiftSettings),
         .target(
             name: "ReaderPersistence", dependencies: ["ReaderDomain"],

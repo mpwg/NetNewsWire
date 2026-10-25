@@ -22,6 +22,10 @@ struct ReaderApplication: App {
                         Divider()
                         ReaderImageLoadPanel(fixture: fixture)
                     }
+                    if let fixture = bootstrap.loadFixture {
+                        Divider()
+                        ReaderLoadPanel(fixture: fixture)
+                    }
                     if let fixture = bootstrap.timelineFixture {
                         Divider()
                         ReaderTimelinePanel(fixture: fixture)
@@ -57,6 +61,7 @@ private final class ReaderBootstrap {
     #if DEBUG && os(macOS)
     private(set) var imageLoadFixture: ReaderImageLoadFixture?
     private(set) var timelineFixture: ReaderTimelineFixture?
+    private(set) var loadFixture: ReaderLoadFixture?
     private(set) var contentFixture: ReaderContentFixture?
     #endif
 
@@ -69,6 +74,12 @@ private final class ReaderBootstrap {
             let uiTesting = ProcessInfo.processInfo.arguments.contains("--ui-testing")
             let store = try ReaderStore(url: uiTesting ? nil : directory.appendingPathComponent("Reader.store"), inMemory: uiTesting)
             #if DEBUG && os(macOS)
+            if uiTesting && ProcessInfo.processInfo.arguments.contains("--ui-testing-load") {
+                loadFixture = ReaderLoadFixture(store: store)
+                services = ReaderServices(repository: store)
+                errorMessage = nil
+                return
+            }
             if uiTesting && ProcessInfo.processInfo.arguments.contains("--ui-testing-content") {
                 let fixture = ReaderContentFixture(store: store)
                 contentFixture = fixture
