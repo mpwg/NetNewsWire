@@ -1,0 +1,22 @@
+{
+  "result": "passed",
+  "syntheticArticles": 10000,
+  "seedPID": 75694,
+  "seedExitCode": -9,
+  "walBytesBeforeKill": 271952,
+  "restarts": [
+    {
+      "phase": "recover",
+      "pid": 75698,
+      "exitCode": 0
+    },
+    {
+      "phase": "verify",
+      "pid": 76048,
+      "exitCode": 0
+    }
+  ],
+  "retainedArticles": 2,
+  "pendingRevisions": 2,
+  "durationSeconds": 6.359
+}

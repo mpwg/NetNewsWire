@@ -132,12 +132,14 @@ struct ReaderAccessibilityTests {
         let timeline = ReaderSession(services: services).title
         let expected = Set(["Reader", library, article, timeline])
         let deadline = ContinuousClock.now.advanced(by: .seconds(3))
-        while !expected.isSubset(of: Set(groupLabels(in: host))) && ContinuousClock.now < deadline {
+        while (!expected.isSubset(of: Set(groupLabels(in: host))) || groupLabels(in: host).filter { $0 == library }.count < 2)
+            && ContinuousClock.now < deadline {
             host.layoutSubtreeIfNeeded()
             try await Task.sleep(for: .milliseconds(10))
         }
         let labels = Set(groupLabels(in: host))
         #expect(expected.isSubset(of: labels))
+        #expect(groupLabels(in: host).filter { $0 == library }.count >= 2)
     }
 
     private func groupLabels(in view: NSView) -> [String] {

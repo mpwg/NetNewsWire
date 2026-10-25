@@ -1,0 +1,97 @@
+{
+  "activeTestPlanName": "Reader",
+  "counts": {
+    "expectedFailures": 0,
+    "failed": 0,
+    "notRun": 0,
+    "passed": 11,
+    "skipped": 0,
+    "total": 11
+  },
+  "fullConsoleLogsPath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/test-console-log-2026-10-25T23-57-21+01-00.txt",
+  "fullSummaryPath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/FDC06FF1-B1D1-424B-82D1-2031D6791FF0.txt",
+  "results": [
+    {
+      "displayName": "nil",
+      "errorMessages": [],
+      "identifier": "ReaderAccessibilityTests/hostingLabelsPreserveWindowOwnership(initialLabel:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"\"",
+      "errorMessages": [],
+      "identifier": "ReaderAccessibilityTests/hostingLabelsPreserveWindowOwnership(initialLabel:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"Existing container\"",
+      "errorMessages": [],
+      "identifier": "ReaderAccessibilityTests/hostingLabelsPreserveWindowOwnership(initialLabel:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "nil",
+      "errorMessages": [],
+      "identifier": "ReaderAccessibilityTests/groupLabelsFollowTheirContext(originalLabel:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"\"",
+      "errorMessages": [],
+      "identifier": "ReaderAccessibilityTests/groupLabelsFollowTheirContext(originalLabel:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "An external description change is preserved during updates and detachment",
+      "errorMessages": [],
+      "identifier": "ReaderAccessibilityTests/externalDescriptionsKeepOwnership()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Changing label scope restores the previous container before naming its replacement",
+      "errorMessages": [],
+      "identifier": "ReaderAccessibilityTests/scopeChangesRestorePreviousContainer()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"en\", \"Library\", \"Article\"",
+      "errorMessages": [],
+      "identifier": "ReaderAccessibilityTests/splitColumnsExposeLocalizedDescriptions(localeID:library:article:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"de\", \"Bibliothek\", \"Artikel\"",
+      "errorMessages": [],
+      "identifier": "ReaderAccessibilityTests/splitColumnsExposeLocalizedDescriptions(localeID:library:article:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "testConnectionFormCanBeOpenedAndCancelled()",
+      "errorMessages": [],
+      "identifier": "ReaderSmokeTests/testConnectionFormCanBeOpenedAndCancelled()",
+      "state": "Passed",
+      "targetName": "ReaderUITests"
+    },
+    {
+      "displayName": "testTimelineSupportsKeyboardSelectionAndBulkRead()",
+      "errorMessages": [],
+      "identifier": "ReaderSmokeTests/testTimelineSupportsKeyboardSelectionAndBulkRead()",
+      "state": "Passed",
+      "targetName": "ReaderUITests"
+    }
+  ],
+  "schemeName": "Reader",
+  "summary": "11 tests: 11 passed, 0 failed, 0 skipped, 0 expected failures, 0 not run",
+  "totalResults": 11,
+  "truncated": false,
+  "xcresultBundlePath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/Test-Reader-2026.10.25_23-57-21-+0100.xcresult"
+}

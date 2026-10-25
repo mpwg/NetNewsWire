@@ -154,6 +154,7 @@ public struct ReaderWindow: View {
 }
 
 private struct ReaderSidebar: View {
+    @Environment(\.locale) private var locale
     @Bindable var session: ReaderSession
     var edit: (FeedSnapshot) -> Void
     var remove: (FeedSnapshot) -> Void
@@ -163,10 +164,22 @@ private struct ReaderSidebar: View {
 
     var body: some View {
         List(selection: $session.sidebarSelection) {
-            Section(LocalizedStringResource("Library", bundle: .atURL(#bundle.bundleURL))) {
+            Section {
                 NavigationLink(LocalizedStringResource("Unread", bundle: .atURL(#bundle.bundleURL)), value: "unread").tag("unread")
+                    .accessibilityAddTraits(.isButton)
+                    .accessibilityIdentifier("readerUnread")
                 NavigationLink(LocalizedStringResource("All articles", bundle: .atURL(#bundle.bundleURL)), value: "all").tag("all")
+                    .accessibilityAddTraits(.isButton)
+                    .accessibilityIdentifier("readerAllArticles")
                 NavigationLink(LocalizedStringResource("Starred", bundle: .atURL(#bundle.bundleURL)), value: "starred").tag("starred")
+                    .accessibilityAddTraits(.isButton)
+                    .accessibilityIdentifier("readerStarred")
+            } header: {
+                Text("Library", bundle: #bundle)
+                    #if os(macOS)
+                    .background { ReaderWindowAccessibility(label: String(localized: LocalizedStringResource("Library", locale: locale, bundle: .atURL(#bundle.bundleURL))), scope: .nearestGroup)
+                            .allowsHitTesting(false).accessibilityHidden(true) }
+                    #endif
             }
             ForEach(session.accounts) { account in
                 Section(account.name + " · " + account.username) {
@@ -180,6 +193,8 @@ private struct ReaderSidebar: View {
                             }
                         } label: {
                             NavigationLink(value: folder.id) { Label(folder.title, systemImage: "folder") }
+                                .accessibilityAddTraits(.isButton)
+                                .accessibilityIdentifier("folderRow-\(folder.id)")
                         }
                         .tag(folder.id)
                         .contextMenu {
@@ -220,6 +235,7 @@ private struct ReaderSidebar: View {
             }
         }
             .tag(feed.id.id)
+            .accessibilityAddTraits(.isButton)
             .accessibilityIdentifier("feedRow-\(feed.id.id)")
             .contextMenu {
                 Button { markRead(feed) } label: {
