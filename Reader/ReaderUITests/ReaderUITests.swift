@@ -137,14 +137,16 @@ final class ReaderSmokeTests: XCTestCase {
         waitForValue(queries, equalTo: before)
         markFeed.click()
         XCTAssertTrue(app.buttons["confirmFeedRead"].waitForExistence(timeout: 5))
-        waitForValue(queries, equalTo: before)
-        waitForValue(app.staticTexts["timelineFeedReadCalls"], equalTo: "0")
         let menuEvidence = XCTAttachment(screenshot: app.windows.firstMatch.screenshot())
         menuEvidence.name = "Native feed confirmation while timeline query remains held"
         menuEvidence.lifetime = .keepAlways
         add(menuEvidence)
         app.windows.firstMatch.buttons["Cancel"].firstMatch.click()
+        XCTAssertTrue(app.buttons["confirmFeedRead"].wait(for: \.exists, toEqual: false, timeout: 5))
+        // Native modal dialogs can hide background diagnostics from the accessibility query.
+        // Check the full menu/dialog/cancellation interval once its controls are accessible again.
         waitForValue(queries, equalTo: before)
+        waitForValue(app.staticTexts["timelineFeedReadCalls"], equalTo: "0")
         waitForValue(app.staticTexts["timelinePendingReadCount"], equalTo: "0")
         first.rightClick()
         markFeed.click()

@@ -1,0 +1,81 @@
+{
+  "arguments" : [
+    {
+      "value" : "10000"
+    },
+    {
+      "value" : "1000"
+    }
+  ],
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "292e6ae22bdbb7335ea98c7097e901373df9b7c5",
+      "deviceName" : "My Mac",
+      "modelName" : "Virtual Machine",
+      "osBuildNumber" : "26A434",
+      "osVersion" : "27.0.1",
+      "platform" : "macOS"
+    }
+  ],
+  "duration" : "Average duration 3,1 seconds",
+  "durationInSeconds" : 3.1122305393218994,
+  "functionName" : "loadScenarioPreservesStoredCoverage(articleCount:)",
+  "hasMediaAttachments" : false,
+  "hasPerformanceMetrics" : false,
+  "testDescription" : "Test case with 2 runs",
+  "testIdentifier" : "ReaderLoadScenarioTests/loadScenarioPreservesStoredCoverage(articleCount:)",
+  "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/ReaderLoadScenarioTests/loadScenarioPreservesStoredCoverage(articleCount:)",
+  "testName" : "loadScenarioPreservesStoredCoverage(articleCount:)",
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Test Scheme Action"
+    }
+  ],
+  "testResult" : "Passed",
+  "testRuns" : [
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "details" : "Swift.Int",
+              "name" : "articleCount : 1000",
+              "nodeType" : "Test Value"
+            }
+          ],
+          "name" : "Arguments",
+          "nodeType" : "Arguments"
+        }
+      ],
+      "duration" : "0,42s",
+      "durationInSeconds" : 0.4205918312072754,
+      "name" : "1000",
+      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/ReaderLoadScenarioTests/loadScenarioPreservesStoredCoverage(articleCount:)?args=40510175845988f13f6162ed8526f0b09f73384467fa855e1e79b44a56562a58",
+      "nodeType" : "Arguments",
+      "result" : "Passed"
+    },
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "details" : "Swift.Int",
+              "name" : "articleCount : 10000",
+              "nodeType" : "Test Value"
+            }
+          ],
+          "name" : "Arguments",
+          "nodeType" : "Arguments"
+        }
+      ],
+      "duration" : "5s",
+      "durationInSeconds" : 5.803869247436523,
+      "name" : "10000",
+      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/ReaderLoadScenarioTests/loadScenarioPreservesStoredCoverage(articleCount:)?args=39e5b4830d4d9c14db7368a95b65d5463ea3d09520373723430c03a5a453b5df",
+      "nodeType" : "Arguments",
+      "result" : "Passed"
+    }
+  ]
+}
