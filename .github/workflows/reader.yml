@@ -23,7 +23,7 @@ jobs:
     name: SwiftLint
     runs-on: macos-26
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Install SwiftLint
         run: brew install swiftlint
       - name: Check Reader sources
@@ -40,7 +40,7 @@ jobs:
     env:
       DEVELOPER_DIR: /Applications/Xcode_27.1.app/Contents/Developer
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Verify runner failure propagation with Swift Testing
         if: matrix.platform == 'macos'
         run: |
