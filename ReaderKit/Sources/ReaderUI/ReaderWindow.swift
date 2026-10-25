@@ -330,7 +330,7 @@ private struct ReaderTimeline: View {
         .safeAreaInset(edge: .bottom) {
             HStack {
                 Text("Entries: \(session.rows.count) · Loaded originals: \(session.articles.count)", bundle: #bundle)
-                    .font(.caption).foregroundStyle(.secondary)
+                    .font(.caption).foregroundStyle(.primary)
                     .accessibilityIdentifier("timelineCounts")
                 Spacer()
                 if session.loading { ProgressView().controlSize(.small) }

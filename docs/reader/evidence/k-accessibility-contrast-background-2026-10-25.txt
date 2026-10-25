@@ -1,0 +1,26 @@
+auditType=1
+Contrast failed
+Contrast failed for 0 Einträge · 0 geladene Originale
+type=XCUIElementType(rawValue: 48)
+identifier=timelineCounts
+label=
+frame=(453.0, 1000.0, 158.0, 13.0)
+Attributes: StaticText, 0x7c2b638f00, {{453.0, 1000.0}, {158.0, 13.0}}, identifier: 'timelineCounts', value: 0 Einträge · 0 gel...
+Element subtree:
+ →StaticText, 0x7c2b638f00, {{453.0, 1000.0}, {158.0, 13.0}}, identifier: 'timelineCounts', value: 0 Einträge · 0 gel...
+Path to element:
+ →Application, 0x7c2b6b2940, pid: 39334, title: 'Reader', Disabled
+  ↳Window (Main), 0x7c2b6b3700, {{217.0, 221.0}, {1200.0, 800.0}}, identifier: 'reader-AppWindow-1', title: 'Alle Artikel', Disabled
+   ↳Group, 0x7c2b6b35c0, {{217.0, 221.0}, {1200.0, 800.0}}, label: 'Reader', Disabled
+    ↳SplitGroup, 0x7c2b6b2d00, {{217.0, 221.0}, {1200.0, 800.0}}, identifier: 'reader-AppWindow-1, SidebarNavigationSplitView', Disabled
+     ↳Group, 0x7c2b639540, {{217.0, 221.0}, {500.0, 800.0}}, label: 'Alle Artikel', Disabled
+      ↳StaticText, 0x7c2b638f00, {{453.0, 1000.0}, {158.0, 13.0}}, identifier: 'timelineCounts', value: 0 Einträge · 0 gel...
+Query chain:
+ →Find: Target Application 'eu.mpwg.reader.debug'
+  Output: {
+    Application, 0x7c2b635f40, pid: 39334, title: 'Reader', Disabled
+  }
+  ↪︎Find: Descendant with identity binding to AX element pid: 39334, token: ppkAAAAAAABvY29jSAAAAAAAAAA=
+    Output: {
+      StaticText, 0x7c2b6b2a80, {{453.0, 1000.0}, {158.0, 13.0}}, identifier: 'timelineCounts', value: 0 Einträge · 0 gel...
+    }

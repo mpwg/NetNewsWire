@@ -27,7 +27,7 @@ struct AccountConnectionView: View {
                 }
                 Section {
                     Text("Enable API access in FreshRSS and use its separate API password. Credentials are stored in this device’s Keychain.", bundle: #bundle)
-                        .font(.callout).foregroundStyle(.secondary)
+                        .font(.callout).foregroundStyle(.primary)
                 }
                 if let error { Text(error).foregroundStyle(.red) }
                 if working { ProgressView(LocalizedStringResource("Connecting", bundle: .atURL(#bundle.bundleURL))) }

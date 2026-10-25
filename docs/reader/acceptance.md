@@ -1,5 +1,7 @@
 # Reader acceptance — updated 2026-10-25
 
+K contrast follow-up: native primary text styling clears the active timeline footer and connection-help contrast findings. The repeated full audit remains failed, including a footer report on the dimmed background while the sheet is open; no finding is filtered. Existing connection smoke and strict lint pass. See the targeted contrast section in the split-column evidence below. Full accessibility acceptance remains open.
+
 K split-column follow-up: native containers now expose localized Library/current timeline/Article descriptions. Five Swift Testing functions / nine executions cover the actual English/German split view, context, label ownership, reparenting and restoration. The existing connection smoke passes; no UI method is added. The repeated diagnostic audit still fails on remaining header/contrast/role/action requirements; full accessibility/VoiceOver remains open. [Current evidence](evidence/k-accessibility-columns-2026-10-25.md).
 
 K accessibility checkpoint: the native Mac audit runs and reports unresolved findings. Window-local hosting labels and the timeline's existing localized navigation title correct two missing-description paths. Three Swift Testing ownership cases and the existing connection smoke method with an actual outline-label assertion pass. No UI test method is added. The failed diagnostic audit is preserved; complete accessibility/VoiceOver acceptance remains open. [Diagnosis, results and remaining criteria](evidence/k-accessibility-2026-10-25.md).
