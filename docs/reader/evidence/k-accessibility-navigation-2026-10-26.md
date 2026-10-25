@@ -43,6 +43,14 @@ The current local run starts at Test-Reader-2026.10.25_23-58-38-+0100.xcresult a
 
 Both fingerprints are unchanged after completion. Default Folder X was temporarily stopped for the native Save-panel scenario and restored in finally (PID 44720). It is not a permanent configuration change. Compiler warning policy, security settings and test selection are unchanged.
 
+## Remaining toolbar-menu action: rejected style-only workaround
+
+An isolated owned SwiftUI Menu reports isAccessibilitySelectorAllowed(press)=true and showMenu=false for the default/explicit-button-trait variants. The native borderlessButton style reports both selectors allowed. These are selector-permission observations, not evidence that an action was invoked successfully.
+
+Applying that public style to the actual Reader toolbar Menu does **not** repair its action audit. The repeated native run at 00:07:01 still reports both readerActions failures across the initial/form states, plus the separate virtual emoji action failure. [Raw failed result](k-accessibility-menu-style-red-2026-10-26.json). The observed toolbar item is presented with the localized More title in that experiment. Standalone control metadata is therefore insufficient to accept the toolbar implementation.
+
+The ineffective production style and temporary audit collector are reverted through Xcode MCP. Git diff confirms no remaining source/test changes, and both tested SHA-256 values above still match f43e3094e. Normal Debug Reader is restored, PID 46765; no new UI test method or production adapter is retained. The existing 401-execution source proof remains valid. Further work must inspect the actual toolbar accessibility action mapping and verify its real assistive-technology journey. The menu criterion stays open; do not reapply this style-only experiment as a completed fix.
+
 ## Preceding hosted checkpoint
 
 [Reader CI 40242069314](https://github.com/mpwg/NetNewsWire/actions/runs/40242069314) passes at c65a10006: **401 executions**, 197 Swift Testing functions in 32 suites / 393 code executions, all eight native UI methods, 205 distinct tests, 68 parameterized functions / 264 cases, zero failures/skips and one deliberate guardrail warning. Strict lint, direct runner failure propagation and 10,000-article SIGKILL/reopen pass. [Raw native summary](k-accessibility-ci-native-2026-10-25.json) · [Recovery report](k-accessibility-ci-recovery-2026-10-25.json).
