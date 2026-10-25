@@ -153,7 +153,7 @@ struct ReaderStoreTests {
 
     @Test("Full-text caches survive unchanged feeds and expire after content changes") func fullTextCachesSurviveUnchangedFeedsAndExpireAfterContentChanges() async throws {
         let store = try ReaderStore(inMemory: true)
-        let original = article(text: "Kurzer Feedtext")
+        let original = article(text: "Short feed text")
         try await store.applyRefresh(refresh(articles: [original]))
         try await store.updateContent(original.id, html: "<p>Long extracted full text</p>", text: "Long extracted full text")
         try await store.applyRefresh(refresh(articles: [original]))
@@ -324,14 +324,14 @@ struct ReaderStoreTests {
 
     @Test("New original URLs invalidate full text from the previous URL") func newOriginalURLsInvalidateFullTextFromThePreviousURL() async throws {
         let store = try ReaderStore(inMemory: true)
-        var original = article(text: "Kurzer Feedtext")
+        var original = article(text: "Short feed text")
         original.url = fixtureURL
         try await store.applyRefresh(refresh(articles: [original]))
         #expect(try await store.updateContent(original, html: "<p>Old full text</p>", text: "Old full text"))
         var updated = original
-        updated.url = URL(string: "https://example.org/neuer-artikel")
+        updated.url = URL(string: "https://example.org/new-article")
         try await store.applyRefresh(refresh(articles: [updated]))
-        #expect(try await store.article(original.id)?.text == "Kurzer Feedtext")
+        #expect(try await store.article(original.id)?.text == "Short feed text")
         #expect(try await store.article(original.id)?.url == updated.url)
     }
 
