@@ -6,7 +6,7 @@ The contract tests remain useful. The original native macOS test setup and its d
 
 Nine new Swift Testing functions / twenty executions cover extraction state, cancellation and graph release. Eight original failures are reproduced and repaired. A result adapter uses the real parser, then gates delivery after computation while B finishes; a controlled old-method run makes the selected parsed-success case fail. All cases pass when run by suite. Cancellation before HTTP, during held HTTP and after parsing has no cache/revision/alert side effects; weak graph references release after current outcomes and both active cancellation stages. No UI test was added for these contracts.
 
-The current full Mac plan passes **143 Swift Testing functions plus six UI methods / 247 executions**, with no failures/skips/runtime warnings; hosted confirmation is pending. Actual native view/WebPage lifetime, saved/restricted content rendering, malformed/varied pages and final platforms remain open in [F evidence](evidence/f-extraction-2026-10-25.md).
+The current full Mac plan passes **143 Swift Testing functions plus six UI methods / 247 executions**, with no failures/skips/runtime warnings. [Reader Mac CI 40208187456](https://github.com/mpwg/NetNewsWire/actions/runs/40208187456) passes at 7d433f6fe: all 143 Swift Testing functions in 23 suites, all 135 parameter-case starts, all six native UI methods, direct runner bootstrap, 10,000-article process recovery and strict SwiftLint. Actual native view/WebPage lifetime, saved/restricted content rendering, malformed/varied pages and final platforms remain open in [F evidence](evidence/f-extraction-2026-10-25.md).
 
 ## Earlier Reader-only verification — 2026-10-25
 
