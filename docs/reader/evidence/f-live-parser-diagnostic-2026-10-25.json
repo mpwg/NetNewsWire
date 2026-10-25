@@ -1,0 +1,62 @@
+[
+  {
+    "bytes" : 284004,
+    "contentType" : "text\/html",
+    "document" : {
+      "bodyPresent" : false,
+      "bodyText" : 0,
+      "children" : 1,
+      "error" : "expected '<\/input>' and got <\/button\nexpected '<\/div>' and got <\/butt\nexpected '<\/form>' and got <\/butto\nexpected '<\/div>' and got <\/butt\nexpected '<\/div>' and got <\/butt\nexpected '<\/div>' and got <\/butt\nexpected '<\/li>' and got <\/but\nexpected '<\/ul>' and got <\/but\nexpected '<\/div>' and got <\/butt\nexpected '<\/nav>' and got <\/butt\nexpected '<\/div>' and got <\/butt\nexpected '<\/meta>' and got <\/butto\nexpected '<\/div>' and got <\/butt\nexpected '<\/body>' and got <\/butto\nexpected '<\/html>' and got <\/butto\n",
+      "offset" : 40923,
+      "rootPresent" : false
+    },
+    "httpStatus" : 200,
+    "inputHasMarker" : true,
+    "kind" : "appleArticle"
+  },
+  {
+    "bytes" : 682847,
+    "contentType" : "text\/html",
+    "document" : {
+      "bodyPresent" : false,
+      "bodyText" : 0,
+      "children" : 1,
+      "error" : "expected '<\/link>' and got <\/head>\nexpected '<\/link>' and got <\/head>\nexpected '<\/link>' and got <\/head>\nexpected '<\/link>' and got <\/head>\nexpected '<\/link>' and got <\/head>\nexpected '<\/link>' and got <\/head>\nexpected '<\/link>' and got <\/head>\nexpected '<\/link>' and got <\/head>\nexpected '<\/link>' and got <\/head>\nexpected '<\/link>' and got <\/head>\nexpected '<\/link>' and got <\/head>\nexpected '<\/meta>' and got <\/head>\nexpected '<\/meta>' and got <\/head>\nexpected '<\/meta>' and got <\/head>\nexpected '<\/meta>' and got <\/head>\nexpected '<\/meta>' and got <\/head>\nexpected '<\/meta>' and got <\/head>\nexpected '<\/meta>' and got <\/head>\nexpected '<\/meta>' and got <\/head>\nexpected '<\/link>' and got <\/head>\nexpected '<\/meta>' and got <\/head>\nexpected '<\/link>' and got <\/head>\nexpected '<\/meta>' and got <\/head>\nexpected '<\/input>' and got <\/div>\n\n\nexpected '<\/img>' and got <\/span\nexpected '<\/img>' and got <\/span\nexpected '<\/img>' and got <\/a>\n\n\nexpected '<\/input>' and got <\/div>\n\t\nexpected '<\/input>' and got <\/div>\n\t\nexpected '<\/input>' and got <\/div>\n\n\nexpected '<\/input>' and got <\/div>\n\n\nexpected '<\/input>' and got <\/div>\n\n\nexpected '<\/input>' and got <\/div>\n<\nexpected '<\/input>' and got <\/div>\n\n\nexpected '<\/input>' and got <\/div>\n\n\nexpected '<\/img>' and got <\/nosc\nexpected '<\/main>' and got <\/div>\n\nexpected '<\/div>' and got <\/main\nexpected '<\/div>' and got <\/main\nexpected '<\/body>' and got <\/main>\nexpected '<\/html>' and got <\/main>\n",
+      "offset" : 668606,
+      "rootPresent" : false
+    },
+    "httpStatus" : 200,
+    "inputHasMarker" : true,
+    "kind" : "encyclopediaArticle"
+  },
+  {
+    "bytes" : 84657,
+    "contentType" : "text\/html",
+    "document" : {
+      "bodyPresent" : true,
+      "bodyText" : 58654,
+      "children" : 1,
+      "error" : "expected '<\/br>' and got <\/p><\nexpected '<\/br>' and got <\/p><\nexpected '<\/br>' and got <\/p><\nexpected '<\/br>' and got <\/p><\nexpected '<\/br>' and got <\/p><\nexpected '<\/br>' and got <\/p><\n",
+      "offset" : 84636,
+      "rootPresent" : true
+    },
+    "httpStatus" : 200,
+    "inputHasMarker" : true,
+    "kind" : "germanHelpArticle"
+  },
+  {
+    "bytes" : 282262,
+    "contentType" : "text\/html",
+    "document" : {
+      "bodyPresent" : false,
+      "bodyText" : 0,
+      "children" : 1,
+      "error" : "expected '<\/link>' and got <\/head>\nexpected '<\/link>' and got <\/head>\nexpected '<\/link>' and got <\/head>\nexpected '<\/meta>' and got <\/head>\nexpected '<\/meta>' and got <\/head>\nexpected '<\/meta>' and got <\/head>\nexpected '<\/meta>' and got <\/head>\nexpected '<\/meta>' and got <\/head>\nexpected '<\/meta>' and got <\/head>\nexpected '<\/meta>' and got <\/head>\nexpected '<\/input>' and got <\/li><li\nexpected '<\/input>' and got <\/li><\/u\nexpected '<\/article>' and got <\/div><div\nexpected '<\/a>' and got <\/di\nexpected '<\/strong>' and got <\/div><di\nexpected '<\/section>' and got <\/article>\nexpected '<\/div>' and got <\/arti\nexpected '<\/div>' and got <\/arti\nexpected '<\/div>' and got <\/arti\nexpected '<\/main>' and got <\/artic\nexpected '<\/body>' and got <\/artic\nexpected '<\/html>' and got <\/artic\n",
+      "offset" : 33868,
+      "rootPresent" : false
+    },
+    "httpStatus" : 200,
+    "inputHasMarker" : true,
+    "kind" : "dealIndex"
+  }
+]

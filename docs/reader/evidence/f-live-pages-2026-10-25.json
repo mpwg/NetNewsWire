@@ -1,0 +1,41 @@
+{
+  "accountCredentialsUsed" : false,
+  "results" : [
+    {
+      "durationSeconds" : 0.1814950704574585,
+      "error" : "unavailable(\"No article text was found on this page.\")",
+      "kind" : "appleArticle",
+      "outcome" : "error",
+      "url" : "https:\/\/www.apple.com\/newsroom\/2025\/09\/apple-unveils-iphone-17-pro-and-iphone-17-pro-max\/"
+    },
+    {
+      "durationSeconds" : 0.59949994087219238,
+      "error" : "unavailable(\"No article text was found on this page.\")",
+      "kind" : "encyclopediaArticle",
+      "outcome" : "error",
+      "url" : "https:\/\/en.wikipedia.org\/wiki\/Swift_(programming_language)"
+    },
+    {
+      "durationSeconds" : 1.8056010007858276,
+      "expectedMarkerPresent" : true,
+      "htmlBytes" : 1903,
+      "imageElements" : 2,
+      "kind" : "germanHelpArticle",
+      "links" : 5,
+      "outcome" : "extracted",
+      "scriptElements" : 0,
+      "textCharacters" : 426,
+      "url" : "https:\/\/flamedeerfaq.preisjaeger.at\/help\/wie-spiele-ich"
+    },
+    {
+      "durationSeconds" : 0.33983099460601807,
+      "error" : "unavailable(\"No article text was found on this page.\")",
+      "kind" : "dealIndex",
+      "outcome" : "error",
+      "url" : "https:\/\/www.preisjaeger.at\/"
+    }
+  ],
+  "runtime" : "Native ReaderContent snippet through Xcode MCP on macOS 27.0.1",
+  "sourceCommit" : "9d5fee9b998505098dce03c168459834f890b7a8",
+  "storeWrites" : false
+}
