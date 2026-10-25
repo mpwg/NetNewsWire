@@ -76,6 +76,13 @@ final class ReaderSmokeTests: XCTestCase {
         add(evidence)
         app.buttons["releaseTimelineQueries"].click()
         waitForValue(app.staticTexts["timelineHeldQueries"], equalTo: "0")
+        app.outlines["readerSidebar"].buttons["Unread"].click()
+        waitForValue(app.staticTexts["timelineCounts"], equalTo: "Entries: 0 · Loaded originals: 0")
+        XCTAssertFalse(app.staticTexts["Timeline article 299"].exists)
+        let filtered = XCTAttachment(string: "After all 300 read commits, the native Unread filter shows Entries: 0 · Loaded originals: 0 and clears the previous article detail.")
+        filtered.name = "Native unread counts after confirmed feed read"
+        filtered.lifetime = .keepAlways
+        add(filtered)
     }
 
     func testTimelineSupportsKeyboardSelectionAndBulkRead() throws {

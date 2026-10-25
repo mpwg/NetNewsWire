@@ -62,7 +62,8 @@ struct ReaderSessionTests {
         #expect(session.rows.contains { $0.id == .article(articles[2].id) })
     }
 
-    @Test("Sources outside the loaded page remain accessible") func sourcesOutsideTheLoadedPageRemainAccessible() async throws {
+    @Test("Sources outside the loaded page survive refresh and leave detail when the query changes", arguments: [false, true])
+    func sourcesOutsideTheLoadedPageRemainAccessible(changesQuery: Bool) async throws {
         let (store, services, feed, articles) = try await fixture(count: 350)
         let digest = DigestSnapshot(id: "day", feed: feed.id, day: Date(), timeZoneID: "Europe/Vienna",
                                     sections: [], sources: articles.map(\.id))
@@ -75,6 +76,19 @@ struct ReaderSessionTests {
         session.selection = .article(articles[0].id)
         await session.loadSelectedArticle()
         #expect(session.selectedArticle?.id == articles[0].id)
+        #expect(!session.rows.contains { $0.id == .article(articles[0].id) })
+        try await store.updateContent(articles[0].id, html: "<p>Updated source</p>", text: "Updated source")
+        await session.reload()
+        #expect(session.articles.count == 200)
+        #expect(session.selection == .article(articles[0].id))
+        #expect(session.selectedArticle?.text == "Updated source")
+        #expect(try await store.pendingChanges(accountID: feed.id.accountID).isEmpty)
+        if changesQuery {
+            session.search = "Article 1"
+            await session.reload(resetLimit: true)
+            #expect(session.timelineSelection.isEmpty)
+            #expect(session.selectedArticle == nil)
+        }
     }
 
     @Test("Marking the displayed revision read leaves new sources unread") func markingTheDisplayedRevisionReadLeavesNewSourcesUnread() async throws {
@@ -124,6 +138,157 @@ struct ReaderSessionTests {
         await b.value
         #expect(session.articles.first?.title == "C")
         #expect(session.rows.first?.title == "C")
+    }
+
+    private func expectOrdinaryRows(_ session: ReaderSession, _ keys: [ArticleKey], unread: Int, starred: Int) {
+        #expect(session.rows.map(\.id) == keys.map { .article($0) })
+        #expect(session.articles.map(\.id) == keys)
+        #expect(session.rows.filter(\.unread).count == unread)
+        #expect(session.rows.filter(\.starred).count == starred)
+        #expect(!session.loading)
+        #expect(!session.canLoadMore)
+    }
+
+    @Test("Shared status actions keep unread, stars, normalized search, selection and counts coherent")
+    func sharedActionsKeepOrdinaryResultsConsistent() async throws {
+        let (store, services, feed, articles) = try await fixture(count: 6)
+        let session = ReaderSession(services: services)
+        let all = articles.reversed().map(\.id)
+        let chosen: Set<TimelineSelection> = [.article(articles[0].id), .article(articles[1].id)]
+        session.sidebarSelection = "unread"
+        await session.reload()
+        expectOrdinaryRows(session, all, unread: 6, starred: 0)
+        session.timelineSelection = chosen
+        let target = session.statusTarget(for: chosen)
+        await session.setStatus(target, field: .starred, value: true)
+        expectOrdinaryRows(session, all, unread: 6, starred: 2)
+        #expect(session.timelineSelection == chosen)
+
+        session.sidebarSelection = "starred"
+        await session.reload()
+        expectOrdinaryRows(session, [articles[1].id, articles[0].id], unread: 2, starred: 2)
+        #expect(session.timelineSelection.isEmpty)
+        session.search = "  ÁRTICLE 1  "
+        await session.reload()
+        expectOrdinaryRows(session, [articles[1].id], unread: 1, starred: 1)
+        session.selection = .article(articles[1].id)
+        await session.setStatus(session.statusTarget(for: session.timelineSelection), field: .read, value: true)
+        expectOrdinaryRows(session, [articles[1].id], unread: 0, starred: 1)
+        #expect(session.selection == .article(articles[1].id))
+
+        session.sidebarSelection = "unread"
+        await session.reload()
+        expectOrdinaryRows(session, [], unread: 0, starred: 0)
+        #expect(session.timelineSelection.isEmpty)
+        session.search = ""
+        await session.reload()
+        expectOrdinaryRows(session, [articles[5].id, articles[4].id, articles[3].id, articles[2].id, articles[0].id], unread: 5, starred: 1)
+        session.selection = .article(articles[0].id)
+        await session.setStatus(session.statusTarget(for: session.timelineSelection), field: .read, value: true)
+        expectOrdinaryRows(session, Array(all.prefix(4)), unread: 4, starred: 0)
+        #expect(session.timelineSelection.isEmpty)
+
+        session.sidebarSelection = "all"
+        await session.reload()
+        expectOrdinaryRows(session, all, unread: 4, starred: 2)
+        session.timelineSelection = chosen
+        await session.setStatus(target, field: .starred, value: false)
+        await session.setStatus(target, field: .read, value: false)
+        expectOrdinaryRows(session, all, unread: 6, starred: 0)
+        #expect(session.timelineSelection == chosen)
+        session.sidebarSelection = "starred"
+        await session.reload()
+        expectOrdinaryRows(session, [], unread: 0, starred: 0)
+        #expect(session.timelineSelection.isEmpty)
+        let pending = try await store.pendingChanges(accountID: feed.id.accountID)
+        #expect(pending.count == 4)
+        #expect(pending.allSatisfy { !$0.value })
+        #expect(session.errorMessage == nil)
+    }
+
+    @Test("Digest badges and visible/original counts follow source status, search and stars")
+    func sharedActionsKeepDigestResultsConsistent() async throws {
+        let (store, services, feed, articles) = try await fixture()
+        try await store.savePreferences(FeedPreferences(id: feed.id, mode: .digest))
+        let digest = DigestSnapshot(id: "day", feed: feed.id, day: Date(), timeZoneID: "Europe/Vienna",
+                                    sections: [], sources: [articles[0].id, articles[1].id])
+        try await store.saveDigest(digest)
+        let session = ReaderSession(services: services)
+        session.sidebarSelection = "all"
+        await session.reload()
+        #expect(session.rows.map(\.id) == [.digest(digest.id), .article(articles[2].id)])
+        #expect(session.articles.map(\.id) == [articles[2].id])
+        #expect(session.rows.filter(\.unread).count == 2)
+        session.selection = .digest(digest.id)
+        await session.setStatus(session.statusTarget(for: session.timelineSelection), field: .read, value: true)
+        #expect(session.rows.count == 2)
+        #expect(session.articles.count == 1)
+        #expect(session.rows.filter(\.unread).count == 1)
+        #expect(session.digestUnread[digest.id] != true)
+
+        session.sidebarSelection = "unread"
+        await session.reload()
+        expectOrdinaryRows(session, [articles[2].id], unread: 1, starred: 0)
+        #expect(session.timelineSelection.isEmpty)
+        session.sidebarSelection = "all"
+        session.search = "Content 0"
+        await session.reload()
+        expectOrdinaryRows(session, [articles[0].id], unread: 0, starred: 0)
+        session.selection = .article(articles[0].id)
+        await session.setStatus([articles[0].id], field: .starred, value: true)
+        expectOrdinaryRows(session, [articles[0].id], unread: 0, starred: 1)
+        session.sidebarSelection = "starred"
+        session.search = ""
+        await session.reload()
+        expectOrdinaryRows(session, [articles[0].id], unread: 0, starred: 1)
+        await session.setStatus([articles[0].id], field: .read, value: false)
+
+        session.sidebarSelection = "unread"
+        await session.reload()
+        #expect(session.rows.map(\.id) == [.digest(digest.id), .article(articles[2].id)])
+        #expect(session.articles.map(\.id) == [articles[2].id])
+        #expect(session.rows.filter(\.unread).count == 2)
+        #expect(session.digestUnread[digest.id] == true)
+        #expect(!session.canLoadMore)
+        #expect(!session.loading)
+        #expect(session.errorMessage == nil)
+    }
+
+    enum QueryErrorOutcome: CaseIterable, Sendable { case current, cancelled, changedIdentity, replaced }
+
+    @Test("Only the current uncancelled query can publish an ordinary error",
+          .timeLimit(.minutes(1)), arguments: QueryErrorOutcome.allCases)
+    func queryErrorsRespectCurrentRequest(outcome: QueryErrorOutcome) async throws {
+        let (store, _, _, _) = try await fixture()
+        let gate = RequestGate()
+        let repository = ScriptedRepository(base: store) { query in
+            if query.search == "failed" {
+                // Already-running store work can return an ordinary error after caller cancellation.
+                try await Task.detached { try await gate.pause() }.value
+                throw ReaderError.server(500)
+            }
+            return try await store.articles(query)
+        }
+        let session = ReaderSession(services: ReaderServices(repository: repository))
+        await session.reload()
+        let previousRows = session.rows
+        session.search = "failed"
+        let request = Task { await session.reload() }
+        defer { request.cancel(); Task { await gate.open() } }
+        try await gate.waitUntilEntered()
+        switch outcome {
+        case .current: break
+        case .cancelled: request.cancel()
+        case .changedIdentity: session.search = "changed"
+        case .replaced:
+            session.search = ""
+            await session.reload()
+        }
+        await gate.open()
+        await request.value
+        #expect((session.errorMessage != nil) == (outcome == .current))
+        #expect(session.rows == previousRows)
+        #expect(!session.loading)
     }
 
     @Test("Different sidebar and search inputs never share a task identity", arguments: [false, true])

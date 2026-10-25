@@ -160,7 +160,9 @@ public final class ReaderSession {
             if let displayedDigest { await loadSources(displayedDigest) }
         } catch is CancellationError {
         } catch {
-            if current == generation { errorMessage = error.localizedDescription }
+            if !Task.isCancelled, current == generation, queryID == queryIdentity {
+                errorMessage = error.localizedDescription
+            }
         }
     }
 
