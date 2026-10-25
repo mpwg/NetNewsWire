@@ -1,5 +1,13 @@
 name: Reader OS 27
 on:
+  workflow_dispatch:
+    inputs:
+      coverage:
+        description: Platform coverage (use all for final acceptance)
+        required: true
+        default: macos
+        type: choice
+        options: [macos, all]
   pull_request:
     paths: ['ReaderKit/**', 'Reader/**', 'scripts/test-reader.sh', 'scripts/verify-reader-store.py', 'scripts/tests/**', '.github/workflows/reader.yml']
   push:
@@ -18,7 +26,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [macos, ios, ipad]
+        # Focus development on macOS; retain the complete final acceptance matrix.
+        platform: ${{ fromJSON(inputs.coverage == 'all' && '["macos","ios","ipad"]' || '["macos"]') }}
     env:
       DEVELOPER_DIR: /Applications/Xcode_27.1.app/Contents/Developer
     steps:

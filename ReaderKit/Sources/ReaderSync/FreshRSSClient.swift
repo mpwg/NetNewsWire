@@ -279,6 +279,10 @@ public actor FreshRSSClient {
         return request
     }
 
+    static func untitledArticleTitle(locale: Locale = .current) -> String {
+        String(localized: LocalizedStringResource("Untitled", locale: locale, bundle: .atURL(#bundle.bundleURL)))
+    }
+
     static func form(_ fields: [(String, String)]) -> String {
         let allowed = CharacterSet.alphanumerics.union(CharacterSet(charactersIn: "-._~"))
         return fields.map { key, value in
@@ -341,7 +345,7 @@ private struct Entry: Decodable, Sendable {
         let timestamp = crawlTimeMsec.flatMap(Double.init).map { $0 / 1000 }
             ?? timestampUsec.flatMap(Double.init).map { $0 / 1_000_000 }
         return ArticleSnapshot(id: ArticleKey(accountID: accountID, remoteID: try ReaderItemID.canonical(id)),
-                               feedID: origin.streamId, title: Self.plainText(title ?? "Ohne Titel"), html: html, text: Self.plainText(html),
+                               feedID: origin.streamId, title: Self.plainText(title ?? FreshRSSClient.untitledArticleTitle()), html: html, text: Self.plainText(html),
                                url: alternate?.first.flatMap { URL(string: $0.href) }, datePublished: published.map(Date.init(timeIntervalSince1970:)),
                                dateArrived: timestamp.map(Date.init(timeIntervalSince1970:)) ?? Date())
     }

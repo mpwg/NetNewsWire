@@ -1,5 +1,7 @@
 # Reader acceptance — updated 2026-10-25
 
+Current owner direction: concentrate development verification on macOS and defer iPhone/iPad revalidation to final acceptance. Push/PR CI runs Mac; manual Reader OS 27 `coverage: all` retains the complete final matrix. Earlier platform results below remain historical evidence for their named checkpoints, not coverage of subsequent changes.
+
 The existing Reader is implemented and partially verified; **full product acceptance remains open**. The active goal continues on `main` under [umbrella #45](https://github.com/mpwg/NetNewsWire/issues/45), packages #46–#56. Evidence below concerns Reader, not renewed acceptance of the original NetNewsWire targets.
 
 ## A / #46: accepted foundation
@@ -62,7 +64,7 @@ B is accepted on 2026-10-25 after dependency A. Current hosted recovery at 2be91
 | D / #49 | Shared views, async search/pagination, generation checks, source access and frozen displayed revisions | Representative real feed content and full native keyboard/navigation acceptance. |
 | E / #50 | Scene state, shared/debounced refresh, Mac automatic first window and simultaneous independent connection sheets | iPad multiwindow, resizing, RTL, complete keyboard, VoiceOver and Dynamic Type acceptance. |
 | F / #51 | Nine content/OPML contracts: local extraction without page scripts, relative links, HTTP 403, timeout, changing content, size limits and atomic stale-write rejection | Real blocked pages, varied HTML/media and native reader rendering on target devices. |
-| G / #52 | 89d792555 CI passes all platforms; bounded icon requests and separate ImageIO actor connected to feed rows; real PNG/cache/retry/size contracts; owner-confirmed live login and a fresh native Keychain/client refresh (one feed/ten articles, 32×32 icon) | Native UI responsiveness under image/retry load, energy and complete service cancellation acceptance. See current G evidence. |
+| G / #52 | Current full Mac plan: 92 code contracts + two UI tests / 110 executions. Pre-cancelled refresh and 500/501-item cancellation contracts pass; bounded icon/ImageIO pipeline, real PNG/cache/retry/size contracts; owner-confirmed live login and native Keychain/client refresh (one feed/ten articles, 32×32 icon). Earlier 89d792555 CI passed all platforms | Native UI responsiveness and view cancellation under image/retry load, energy; final iPhone/iPad revalidation deferred. Current Mac CI pending. See current G evidence. |
 | H / #53 | Nested OPML paths, homepage fallback, redirects, repeat imports and concurrent preference preservation | Confirm against real FreshRSS; remote categories remain flat with local hierarchy metadata. |
 | I / #54 | Prior local Foundation Models experiment with two synthetic offer sources; dynamic budgets, structured sources and live consent | Apple PCC entitlement/provisioning and native PCC acceptance; broad language, long-text and quality evaluation. |
 | J / #55 | Nine digest/fixture contracts including 250 sources, partial coverage, source revision, consent revocation and shared job ownership | Real Preisjäger feed and representative news quality, model/error variants and editorial review. |

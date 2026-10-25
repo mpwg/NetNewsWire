@@ -114,6 +114,48 @@ struct FreshRSSClientTests {
         #expect(writes[1].fields["r"] == ["user/-/state/com.google/read"])
     }
 
+    @Test("Untitled article titles use the requested resource language",
+          arguments: [("en", "Untitled"), ("de", "Ohne Titel")])
+    func untitledArticleTitlesUseRequestedLanguage(localeID: String, expected: String) {
+        #expect(FreshRSSClient.untitledArticleTitle(locale: Locale(identifier: localeID)) == expected)
+    }
+
+    @Test("Already cancelled refreshes send no authentication request")
+    func alreadyCancelledRefreshesSendNoAuthenticationRequest() async throws {
+        let fixture = try Fixture()
+        let request = Task {
+            withUnsafeCurrentTask { $0?.cancel() }
+            try await fixture.client.refresh(account: fixture.account)
+        }
+        await #expect(throws: CancellationError.self) { try await request.value }
+        #expect(await fixture.server.calls.isEmpty)
+        #expect(await fixture.repository.snapshots.isEmpty)
+    }
+
+    @Test("Cancelling a status batch prevents the next batch and preserves pending revisions", .timeLimit(.minutes(1)))
+    func cancellingStatusBatchPreventsNextBatchAndPreservesPendingRevisions() async throws {
+        let fixture = try Fixture()
+        let changes = (0..<501).map {
+            PendingChange(article: ArticleKey(accountID: fixture.account.id, remoteID: String($0)), field: .read, value: true)
+        }
+        await fixture.repository.replacePending(changes)
+        let gate = RequestGate()
+        await fixture.server.setWriteGate(gate)
+        let request = Task { try await fixture.client.flush(account: fixture.account) }
+        defer { request.cancel(); Task { await gate.open() } }
+        try await gate.waitUntilEntered()
+        request.cancel()
+        await #expect {
+            try await request.value
+        } throws: { error in
+            error is CancellationError || (error as? URLError)?.code == .cancelled
+        }
+        let writes = await fixture.server.calls.filter { $0.path.hasSuffix("/edit-tag") }
+        #expect(writes.count == 1)
+        #expect(writes.first?.fields["i"]?.count == 500)
+        #expect(await fixture.repository.pending == changes)
+    }
+
     @Test("Empty authoritative folder lists are propagated") func emptyAuthoritativeFolderListsArePropagated() async throws {
         let fixture = try Fixture()
         await fixture.server.setFailure(.emptyFolders)
@@ -159,6 +201,7 @@ private actor TestRepository: ReaderRepository {
     var snapshots: [RefreshSnapshot] = []
     var pending: [PendingChange] = []
     func replacePending(_ change: PendingChange) { pending = [change] }
+    func replacePending(_ changes: [PendingChange]) { pending = changes }
     func accounts() -> [ReaderAccount] { [] }
     func saveAccount(_ account: ReaderAccount) {}
     func feeds() -> [FeedSnapshot] { [] }

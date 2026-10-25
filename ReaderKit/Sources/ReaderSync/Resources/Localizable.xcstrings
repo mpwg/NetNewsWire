@@ -1,6 +1,13 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "Untitled": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Untitled" } },
+        "de": { "stringUnit": { "state": "translated", "value": "Ohne Titel" } }
+      }
+    },
     "The icon is too large.": {
       "extractionState": "manual",
       "localizations": {

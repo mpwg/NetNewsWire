@@ -8,6 +8,8 @@ The Reader persistence core (B/#47) is accepted after A: 25 code contracts and c
 
 G/#52 now connects bounded ImageIO thumbnails to normal feed rows, with three new code contracts. [Current implementation, tests and open acceptance](docs/reader/evidence/g-2026-10-25.md) distinguish this step from real image-load, credential and energy checks.
 
+Development verification now focuses on macOS at the owner's request. Automatic Reader CI runs Mac; manual `coverage: all` preserves the complete matrix for final acceptance. iPhone/iPad revalidation and physical-device prerequisites remain open.
+
 The following guide describes the original NetNewsWire targets, retained during replacement acceptance.
 
 <img src=Technotes/Images/icon_1024.png height=128 width=128 style="display: block; margin: auto;"> 
