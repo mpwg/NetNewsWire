@@ -53,12 +53,23 @@ final class ReaderSmokeTests: XCTestCase {
         XCTAssertTrue(save.wait(for: \.isEnabled, toEqual: true, timeout: 5))
         save.click()
         XCTAssertTrue(panel.wait(for: \.exists, toEqual: false, timeout: 5))
-        let output = directory.appendingPathComponent("ReaderExportProbe.opml")
         let written = XCTNSPredicateExpectation(
-            predicate: NSPredicate { _, _ in FileManager.default.fileExists(atPath: output.path) },
+            predicate: NSPredicate { _, _ in
+                (try? FileManager.default.contentsOfDirectory(atPath: directory.path).count) == 1
+            },
             object: nil
         )
-        XCTAssertEqual(XCTWaiter.wait(for: [written], timeout: 10), .completed)
+        let result = XCTWaiter.wait(for: [written], timeout: 10)
+        let outputs = try FileManager.default.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil)
+        let filenames = XCTAttachment(string: outputs.map(\.lastPathComponent).joined(separator: "\n"))
+        filenames.name = "Native OPML export filenames"
+        filenames.lifetime = .keepAlways
+        add(filenames)
+        XCTAssertEqual(result, .completed)
+        XCTAssertEqual(outputs.count, 1)
+        let output = try XCTUnwrap(outputs.first)
+        XCTAssertEqual(output.deletingPathExtension().lastPathComponent, "ReaderExportProbe")
+        XCTAssertTrue(["opml", "xml"].contains(output.pathExtension))
         let data = try Data(contentsOf: output)
         XCTAssertFalse(data.isEmpty)
         XCTAssertTrue(String(decoding: data, as: UTF8.self).contains("<opml"))
