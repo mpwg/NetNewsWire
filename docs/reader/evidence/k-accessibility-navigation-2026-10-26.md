@@ -10,6 +10,8 @@ The full current local Mac plan passes **401 executions: 197 Swift Testing funct
 
 Full product, K and complete accessibility/VoiceOver acceptance remain **open**.
 
+Current-source hosted confirmation is now complete: **Reader CI 40243128791 passes at f43e3094e**, with the same 401 executions, all eight UI methods, strict lint, direct runner propagation and 10,000-article process recovery. [Current raw CI result](k-accessibility-navigation-ci-2026-10-26.json) · [Current recovery](k-accessibility-navigation-ci-recovery-2026-10-26.json). The single deliberate guardrail warning remains preserved. Later changes through 9c1bf86d8 are documentation only; tested source/test fingerprints are unchanged.
+
 ## Criteria
 
 | Criterion | Status | Evidence |
@@ -19,7 +21,7 @@ Full product, K and complete accessibility/VoiceOver acceptance remain **open**.
 | Context, ownership and localization | Passed | All nine existing ReaderAccessibilityTests executions pass, including non-overwrite, reparenting/restoration, scope changes and actual English/German split view/header groups. No code-test function is added. |
 | Actual native interactions | Passed for existing scenarios | Connection/open/cancel and keyboard multi-selection/bulk-read both pass in the focused 11-execution run, then all eight UI methods pass in the full plan. No UI method is added. |
 | Full native Mac regression | Passed locally | Current 401-execution original DerivedData bundle, build, strict lint and whitespace checks pass. Normal Debug Reader is restored via Xcode MCP, PID 45000. |
-| Hosted regression | Passed on preceding source; latest source pending | Reader CI 40242069314 passes at c65a10006 before these role/header changes. The new source requires its own hosted confirmation. |
+| Hosted regression | Passed at current source f43e3094e | Reader CI 40243128791 passes all 401 executions, strict lint, runner propagation and 10,000-article recovery. Raw reports preserve exact source scope and the deliberate guardrail warning. |
 | Full accessibility and remaining K criteria | Open | Remaining diagnostic failures include contrasts, Reader-menu action, parent/child mismatch and virtual Touch Bar/emoji elements. No finding is filtered or declared a false positive. Populated-screen audit/VoiceOver and final platforms remain required. |
 
 ## Native diagnosis and repeated audit
@@ -50,6 +52,16 @@ An isolated owned SwiftUI Menu reports isAccessibilitySelectorAllowed(press)=tru
 Applying that public style to the actual Reader toolbar Menu does **not** repair its action audit. The repeated native run at 00:07:01 still reports both readerActions failures across the initial/form states, plus the separate virtual emoji action failure. [Raw failed result](k-accessibility-menu-style-red-2026-10-26.json). The observed toolbar item is presented with the localized More title in that experiment. Standalone control metadata is therefore insufficient to accept the toolbar implementation.
 
 The ineffective production style and temporary audit collector are reverted through Xcode MCP. Git diff confirms no remaining source/test changes, and both tested SHA-256 values above still match f43e3094e. Normal Debug Reader is restored, PID 46765; no new UI test method or production adapter is retained. The existing 401-execution source proof remains valid. Further work must inspect the actual toolbar accessibility action mapping and verify its real assistive-technology journey. The menu criterion stays open; do not reapply this style-only experiment as a completed fix.
+
+## Actual toolbar metadata, structural probe and interaction capability
+
+Xcode MCP debugger inspection of the running Reader (PID 47245), paused on its main thread, confirms a native toolbar hosting view around the Reader menu. Public selector metadata reports press=true/showMenu=true on its outer AXGroup and press=true/showMenu=false on the child AXMenuButton. The process is resumed after inspection. No menu action or account mutation is invoked by this read-only metadata probe. This narrows the diagnosis to the actual toolbar hierarchy; it does not prove that VoiceOver activation succeeds or that the framework is responsible for every audit finding.
+
+A second controlled source probe uses one ToolbarItem for the existing single Menu. Native audit at 00:13:05 still reports both readerActions failures across its two states, alongside the separate virtual emoji action failure. [Raw failed structural probe](k-accessibility-single-toolbar-red-2026-10-26.json). That ineffective change and the temporary collector are reverted. Source/test SHA-256 values above still match f43e3094e. No workaround or extra UI method is retained.
+
+The device-interaction skill requires delegated verification. Its delegated native-Mac capability check calls DeviceInteractionStartSession with the exact native Mac destination ID from the result bundle. The tool rejects it with: Cannot select specified device. To recover, pick from a list of eligible devices. The eligible list contains only stopped iPhone/iPad simulators and no Mac. No session is created, no fallback simulator is started, and no screenshot/hierarchy capture or app/system-setting change occurs. This is a limitation of that DeviceInteraction interface, not of the working native XCTest path through Xcode MCP. Mac modifier-key support and actual VoiceOver cannot be inferred from the interface's text-entry command.
+
+Normal Debug Reader is restored through Xcode MCP (PID 48929). A manual basic VoiceOver journey is requested from the owner: reach Library/list/article, hear content, open the Reader menu, open the connection form and verify field labels before cancelling. The response is pending; no manual acceptance is claimed. [Apple's VoiceOver commands](https://support.apple.com/en-ie/guide/voiceover/cpvokys01/mac) · [Menu navigation](https://support.apple.com/en-ae/guide/voiceover/mchlp2748/mac). Broader populated-screen, keyboard and assistive-technology criteria remain open even if this basic journey succeeds.
 
 ## Preceding hosted checkpoint
 
