@@ -115,6 +115,8 @@ public actor AppleSummaryGenerator: SummaryGenerator {
                                                      options: GenerationOptions(maximumResponseTokens: 1200))
             let permitted = Set(chunk.map(\.0))
             for group in response.content.groups {
+                guard !group.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+                      !group.summary.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { throw ReaderError.invalidResponse }
                 guard !group.sourceNumbers.isEmpty, group.sourceNumbers.allSatisfy(permitted.contains) else {
                     throw ReaderError.unavailable(String(localized: "The model returned invalid sources. Use the original articles.", bundle: #bundle))
                 }

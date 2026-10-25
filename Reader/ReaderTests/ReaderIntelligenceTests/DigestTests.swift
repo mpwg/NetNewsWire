@@ -227,7 +227,11 @@ struct AppleSummaryGeneratorTests {
             #"{"groups":[{"title":"Offer","summary":"EUR 999","sourceNumbers":[0]}]}"#,
             #"{"groups":[{"title":"Offer","summary":"https://invented.test","sourceNumbers":[0]}]}"#,
             #"{"groups":[{"title":"https://invented.test","summary":"Stored offer","sourceNumbers":[0]}]}"#,
-            #"{"groups":[{"title":"Offer","summary":"HTTPS://invented.test","sourceNumbers":[0]}]}"#
+            #"{"groups":[{"title":"Offer","summary":"HTTPS://invented.test","sourceNumbers":[0]}]}"#,
+            #"{"groups":[{"title":"","summary":"Stored offer","sourceNumbers":[0]}]}"#,
+            #"{"groups":[{"title":" \t","summary":"Stored offer","sourceNumbers":[0]}]}"#,
+            #"{"groups":[{"title":"Offer","summary":"","sourceNumbers":[0]}]}"#,
+            #"{"groups":[{"title":"Offer","summary":" \n\t","sourceNumbers":[0]}]}"#
           ])
     func structuredGenerationRejectsUntrustedOutput(response: String) async throws {
         let journal = ModelRequestJournal(response: response)
@@ -244,12 +248,13 @@ struct AppleSummaryGeneratorTests {
 private struct FixtureGenerator: SummaryGenerator {
     var omitLast = false
     var invalid = false
+    var blank = false
     var failure: (any Error)?
     func summarize(_ articles: [ArticleSnapshot], cloudAllowed: Bool) async throws -> [DigestSection] {
         if let failure { throw failure }
         if invalid { return [DigestSection(title: "Invalid", text: "", sources: [ArticleKey(accountID: UUID(), remoteID: "wrong")])] }
         let sources = omitLast ? Array(articles.dropLast()) : articles
-        return [DigestSection(title: "Offers", text: "Sourced digest", sources: sources.map(\.id))]
+        return [DigestSection(title: "Offers", text: blank ? " \n\t" : "Sourced digest", sources: sources.map(\.id))]
     }
 }
 
@@ -275,6 +280,20 @@ private actor ControlledGenerator: SummaryGenerator {
 }
 
 struct DigestTests {
+
+    @Test("Blank model text cannot claim complete source coverage or publish a digest")
+    func blankModelTextDoesNotClaimCoverage() async throws {
+        let (store, feed, articles) = try await fixture()
+        let coordinator = DigestCoordinator(repository: store, generator: FixtureGenerator(blank: true))
+        await #expect(throws: ReaderError.invalidResponse) { try await coordinator.generate(feed: feed) }
+        #expect(try await store.digests().isEmpty)
+        for source in articles {
+            let original = try #require(try await store.article(source.id))
+            #expect(original.text == source.text)
+            #expect(!original.read)
+        }
+        #expect(try await store.pendingChanges(accountID: feed.id.accountID).isEmpty)
+    }
 
     @Test("Model failures keep their native warning and every unread original", arguments: [0, 1, 2, 3])
     func modelFailuresPreserveWarningsAndOriginals(kind: Int) async throws {

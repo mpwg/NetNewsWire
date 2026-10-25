@@ -83,7 +83,11 @@ public actor DigestCoordinator {
                 })
             } catch is CancellationError { throw CancellationError() } catch { sections = []; warnings.append(error.localizedDescription) }
             let allKeys = Set(sources.map(\.id))
-            guard sections.flatMap(\.sources).allSatisfy(allKeys.contains) else { throw ReaderError.invalidResponse }
+            guard sections.allSatisfy({ section in
+                !section.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+                !section.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+                !section.sources.isEmpty && section.sources.allSatisfy(allKeys.contains)
+            }) else { throw ReaderError.invalidResponse }
             let covered = Set(sections.flatMap(\.sources))
             let missing = sources.filter { !covered.contains($0.id) }
             if !missing.isEmpty {

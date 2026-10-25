@@ -1,0 +1,67 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "00006040-000A51392100801C",
+        "deviceName" : "My Mac",
+        "modelName" : "MacBook Pro",
+        "osBuildNumber" : "26A434",
+        "osVersion" : "27.0.1",
+        "platform" : "macOS"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 5,
+      "passedTests" : 37,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "Reader · Built with macOS 27.0.1",
+  "expectedFailures" : 0,
+  "failedTests" : 2,
+  "finishTime" : 1792959111.473,
+  "passedTests" : 21,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+    {
+      "issueType" : "Runtime Warning",
+      "message" : "Safety guardrails were triggered. If this is unexpected, please use `LanguageModelSession.logFeedbackAttachment(sentiment:issues:desiredOutput:)` to export the feedback attachment and file a feedback report at https://feedbackassistant.apple.com.",
+      "sourceURL" : "file:///Users/mat/code/NetNewsWire/Reader/ReaderTests/ReaderIntelligenceTests/DigestTests.swift"
+    }
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1792959106.685,
+  "statistics" : [
+    {
+      "subtitle" : "25 test runs",
+      "title" : "6 tests ran with dynamic parameters"
+    }
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "Expectation failed: an error was expected but none was thrown and \"[ReaderDomain.DigestSnapshot(id: \"97D04D47-6F88-4834-9E0C-5D7671115173/feed/1/Europe/Vienna/1789941600\", revision: 09631DCA-EC18-4EDB-A1E1-27797CDD53E0, feed: ReaderDomain.FeedKey(accountID: 97D04D47-6F88-4834-9E0C-5D7671115173, remoteID: \"feed/1\"), day: 2026-09-20 22:00:00 +0000, timeZoneID: \"Europe/Vienna\", sections: [ReaderDomain.DigestSection(title: \"Offers\", text: \" \\n\\t\", sources: [ReaderDomain.ArticleKey(accountID: 97D04D47-6F88-4834-9E0C-5D7671115173, remoteID: \"0\"), ReaderDomain.ArticleKey(accountID: 97D04D47-6F88-4834-9E0C-5D7671115173, remoteID: \"1\")])], sources: [ReaderDomain.ArticleKey(accountID: 97D04D47-6F88-4834-9E0C-5D7671115173, remoteID: \"0\"), ReaderDomain.ArticleKey(accountID: 97D04D47-6F88-4834-9E0C-5D7671115173, remoteID: \"1\")], warning: nil, generatedAt: 2026-10-25 20:11:51 +0000, sourceFingerprint: \"dc00b64a480dcc9a7297deaadebfd9ad7253339a6b63627d1bc34730d512dd17\")]\" was returned: ReaderError.invalidResponse",
+      "targetName" : "ReaderTests",
+      "testIdentifier" : 7,
+      "testIdentifierString" : "DigestTests/blankModelTextDoesNotClaimCoverage()",
+      "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/blankModelTextDoesNotClaimCoverage()",
+      "testName" : "Blank model text cannot claim complete source coverage or publish a digest"
+    },
+    {
+      "failureText" : "Expectation failed: an error was expected but none was thrown and \"[ReaderDomain.DigestSection(title: \"\", text: \"Stored offer\", sources: [ReaderDomain.ArticleKey(accountID: 3C9C8AE1-AF1D-4788-9817-AD368A4836AF, remoteID: \"stored\")])]\" was returned: ReaderError.self",
+      "targetName" : "ReaderTests",
+      "testIdentifier" : 18,
+      "testIdentifierString" : "AppleSummaryGeneratorTests/structuredGenerationRejectsUntrustedOutput(response:)",
+      "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/structuredGenerationRejectsUntrustedOutput(response:)",
+      "testName" : "Native structured generation rejects invalid sources, unsupported numbers and model-written links"
+    }
+  ],
+  "title" : "Test - Reader",
+  "topInsights" : [
+
+  ],
+  "totalTestCount" : 23
+}
