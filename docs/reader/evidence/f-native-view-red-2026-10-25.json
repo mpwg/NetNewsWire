@@ -1,0 +1,55 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "00006040-000A51392100801C",
+        "deviceName" : "My Mac",
+        "modelName" : "MacBook Pro",
+        "osBuildNumber" : "26A434",
+        "osVersion" : "27.0.1",
+        "platform" : "macOS"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 1,
+      "passedTests" : 2,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "Reader · Built with macOS 27.0.1",
+  "expectedFailures" : 0,
+  "failedTests" : 1,
+  "finishTime" : 1792944203.899,
+  "passedTests" : 0,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1792944196.474,
+  "statistics" : [
+    {
+      "subtitle" : "3 test runs",
+      "title" : "1 test ran with dynamic parameters"
+    }
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "Expectation failed: current.text.contains(\"Extracted native article\")\ncurrent.text → \"Saved native article\"",
+      "targetName" : "ReaderTests",
+      "testIdentifier" : 1,
+      "testIdentifierString" : "ReaderArticleViewTests/removingHostedArticleReleasesItsGraph(outcome:)",
+      "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/ReaderArticleViewTests/removingHostedArticleReleasesItsGraph(outcome:)",
+      "testName" : "Removing the actual hosted article view ends extraction and releases its graph"
+    }
+  ],
+  "title" : "Test - Reader",
+  "topInsights" : [
+
+  ],
+  "totalTestCount" : 1
+}

@@ -1,0 +1,52 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "00006040-000A51392100801C",
+        "deviceName" : "My Mac",
+        "modelName" : "MacBook Pro",
+        "osBuildNumber" : "26A434",
+        "osVersion" : "27.0.1",
+        "platform" : "macOS"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 1,
+      "passedTests" : 0,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "Reader · Built with macOS 27.0.1",
+  "expectedFailures" : 0,
+  "failedTests" : 1,
+  "finishTime" : 1792944858.834,
+  "passedTests" : 0,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1792944834.02,
+  "statistics" : [
+
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "-[XCUIElementMacOSEventTarget clickWithError:]_block_invoke cannot be called with Touch Bar elements, not valid for \"OK\" Button.",
+      "targetName" : "ReaderUITests",
+      "testIdentifier" : 1,
+      "testIdentifierString" : "ReaderSmokeTests/testArticleRemovalCancelsExtractionAndBlockedPageKeepsSavedContent()",
+      "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testArticleRemovalCancelsExtractionAndBlockedPageKeepsSavedContent",
+      "testName" : "testArticleRemovalCancelsExtractionAndBlockedPageKeepsSavedContent()"
+    }
+  ],
+  "title" : "Test - Reader",
+  "topInsights" : [
+
+  ],
+  "totalTestCount" : 1
+}

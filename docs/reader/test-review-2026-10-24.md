@@ -2,7 +2,20 @@
 
 The contract tests remain useful. The original native macOS test setup and its diagnosis needed correction. The native project was created with Apple's Xcode template through Xcode MCP. Original and superseded infrastructure has now been removed on explicit owner instruction.
 
-## Current F extraction checkpoint — 2026-10-25
+## Current test boundaries and native F checkpoint — 2026-10-25
+
+The owner's rule is to use Swift Testing for everything that does not require app UI automation. A test using a real framework is not automatically a UI test. Keep pure unit tests small, test service/store contracts with isolated integrations, and host native components directly when that proves their lifecycle. Reserve XCUIAutomation for actual app input, focus, windows and visible controls; do not repeat state/error matrices there.
+
+| Boundary | Framework | Current evidence |
+|---|---|---|
+| Domain, validation, parser, presentation state and runner rules | Swift Testing | Deterministic inputs, typed errors, parameterized cases and explicit failure propagation. |
+| Synchronization, SwiftData, transport and lifetime integration | Swift Testing | Real stores/services, isolated transport, observed gates and weak references; separate process probe for actual SIGKILL/reopen. |
+| WebKit document and SwiftUI component integration | Swift Testing | Actual WebPage DOM/script policy/image decoding; real NSWindow/NSHostingView mounting the shipping article view and proving nine-object graph release. These are native component tests, not app automation or pure unit tests. |
+| Actual app interaction and visible presentation | XCTest/XCUIAutomation | Seven Mac methods cover first window/form/sheets, keyboard selection, held-query/image interaction, separate windows/resize and full-text selection/menu/visible fallback. |
+
+The latest full Mac plan passes **151 Swift Testing functions / 262 executions plus seven native UI methods / 269 total executions**, 158 distinct tests and 43 parameterized functions / 154 cases, with no failures/skips/runtime warnings. This F step adds eight Swift Testing functions / 21 executions and only one native UI method. Parser fragment and unavailable-content failures are reproduced, repaired and preserved; the first app-query failure selected a Touch Bar control and is corrected by window scoping. The early component loading-race hypothesis was not established. Actual WebKit documents and nine-reference hosted-component release are now proved on Mac. [Native F evidence, raw summaries and actual app image](evidence/f-rendering-2026-10-25.md). Local lint/build checks pass; exact-head hosted confirmation is pending. Actual network-off, broad real-page/media/resource behavior and final platforms/accessibility remain open.
+
+## Earlier F extraction checkpoint — 2026-10-25
 
 Nine new Swift Testing functions / twenty executions cover extraction state, cancellation and graph release. Eight original failures are reproduced and repaired. A result adapter uses the real parser, then gates delivery after computation while B finishes; a controlled old-method run makes the selected parsed-success case fail. All cases pass when run by suite. Cancellation before HTTP, during held HTTP and after parsing has no cache/revision/alert side effects; weak graph references release after current outcomes and both active cancellation stages. No UI test was added for these contracts.
 

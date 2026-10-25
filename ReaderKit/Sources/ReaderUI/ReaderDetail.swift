@@ -1,4 +1,5 @@
 import SwiftUI
+import Observation
 import WebKit
 import ReaderDomain
 
@@ -35,14 +36,19 @@ struct ReaderDetail: View {
     }
 }
 
-private struct ArticleDetailView: View {
+struct ArticleDetailView: View {
     var session: ReaderSession
     let article: ArticleSnapshot
-    @State private var page = makeArticlePage()
-    @State private var extracting = false
-    @State private var extractionRequest: UUID?
+    @State private var reader: ReaderArticleState
+
+    init(session: ReaderSession, article: ArticleSnapshot, reader: ReaderArticleState = ReaderArticleState()) {
+        self.session = session
+        self.article = article
+        self.reader = reader
+    }
 
     var body: some View {
+        let request = reader.extractionRequest
         VStack(alignment: .leading, spacing: 0) {
             VStack(alignment: .leading, spacing: 10) {
                 Text(article.title).font(.title2.bold()).textSelection(.enabled)
@@ -57,14 +63,13 @@ private struct ArticleDetailView: View {
                     if let url = article.url { Link("Original", destination: url) }
                     Menu(LocalizedStringResource("Article", bundle: .atURL(#bundle.bundleURL)), systemImage: "ellipsis") {
                         Button(LocalizedStringResource("Load full text", bundle: .atURL(#bundle.bundleURL)), systemImage: "doc.text.magnifyingglass") {
-                            extracting = true
-                            extractionRequest = UUID()
+                            reader.beginExtraction()
                         }
-                        .disabled(extracting || article.url == nil)
+                        .disabled(reader.extracting || article.url == nil)
                         .accessibilityIdentifier("loadFullText")
                     }
                     .accessibilityIdentifier("articleActions")
-                    if extracting { ProgressView().controlSize(.small) }
+                    if reader.extracting { ProgressView().controlSize(.small) }
                 }
                 .buttonStyle(.borderless)
                 .font(.callout)
@@ -80,27 +85,21 @@ private struct ArticleDetailView: View {
             }
             .padding()
             Divider()
-            WebView(page)
+            WebView(reader.page)
                 .task(id: article.html + article.text) { await loadHTML() }
         }
-        .task(id: extractionRequest) {
-            guard extractionRequest != nil else { return }
-            defer { extracting = false }
+        .task(id: request) {
+            guard let request, !Task.isCancelled, reader.extractionRequest == request else { return }
+            defer { if reader.extractionRequest == request { reader.extracting = false } }
             await session.extract(article)
         }
-        .onDisappear { page.stopLoading() }
+        .onDisappear { reader.page.stopLoading() }
     }
 
     private func loadHTML() async {
-        let content = article.html.isEmpty ? "<pre>\(escape(article.text))</pre>" : article.html
-        let html = """
-        <!doctype html><html><head><meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src https: data:; style-src 'unsafe-inline'; media-src https:;">
-        <style>:root{color-scheme:light dark}body{font:17px -apple-system;line-height:1.6;max-width:48rem;margin:auto;padding:1.2rem;overflow-wrap:anywhere}img,video{max-width:100%;height:auto}pre{white-space:pre-wrap}a{color:LinkText}</style>
-        </head><body>\(content)</body></html>
-        """
+        let html = ReaderArticleDocument.html(for: article)
         do {
-            for try await _ in page.load(html: html, baseURL: article.url ?? URL(fileURLWithPath: "/")) { }
+            for try await _ in reader.page.load(html: html, baseURL: article.url ?? URL(fileURLWithPath: "/")) { }
         } catch is CancellationError {
         } catch {
             if !Task.isCancelled, session.selection == .article(article.id) {
@@ -109,16 +108,44 @@ private struct ArticleDetailView: View {
         }
     }
 
-    private func escape(_ text: String) -> String {
-        text.replacingOccurrences(of: "&", with: "&amp;").replacingOccurrences(of: "<", with: "&lt;").replacingOccurrences(of: ">", with: "&gt;")
+}
+
+@MainActor @Observable
+final class ReaderArticleState {
+    let page: WebPage
+    var extracting = false
+    var extractionRequest: UUID?
+
+    init(page: WebPage = ReaderArticleDocument.makePage()) { self.page = page }
+
+    func beginExtraction() {
+        extracting = true
+        extractionRequest = UUID()
     }
 }
 
-@MainActor
-private func makeArticlePage() -> WebPage {
-    var configuration = WebPage.Configuration()
-    configuration.defaultNavigationPreferences.allowsContentJavaScript = false
-    return WebPage(configuration: configuration)
+/// Shared document construction and WebKit policy for the shipping article view.
+enum ReaderArticleDocument {
+    @MainActor
+    static func makePage(configuration: WebPage.Configuration = WebPage.Configuration()) -> WebPage {
+        var configuration = configuration
+        configuration.defaultNavigationPreferences.allowsContentJavaScript = false
+        return WebPage(configuration: configuration)
+    }
+
+    static func html(for article: ArticleSnapshot) -> String {
+        let content = article.html.isEmpty ? "<pre>\(escape(article.text))</pre>" : article.html
+        return """
+        <!doctype html><html><head><meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src https: data:; style-src 'unsafe-inline'; media-src https:;">
+        <style>:root{color-scheme:light dark}body{font:17px -apple-system;line-height:1.6;max-width:48rem;margin:auto;padding:1.2rem;overflow-wrap:anywhere}img,video{max-width:100%;height:auto}pre{white-space:pre-wrap}a{color:LinkText}</style>
+        </head><body>\(content)</body></html>
+        """
+    }
+
+    private static func escape(_ text: String) -> String {
+        text.replacingOccurrences(of: "&", with: "&amp;").replacingOccurrences(of: "<", with: "&lt;").replacingOccurrences(of: ">", with: "&gt;")
+    }
 }
 
 private struct DigestDetailView: View {

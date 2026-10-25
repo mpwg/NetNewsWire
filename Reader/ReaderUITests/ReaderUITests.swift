@@ -173,6 +173,44 @@ final class ReaderSmokeTests: XCTestCase {
         XCTAssertEqual(XCTWaiter.wait(for: [expectation], timeout: timeout), .completed)
     }
 
+    func testArticleRemovalCancelsExtractionAndBlockedPageKeepsSavedContent() throws {
+        let app = launchReader(arguments: ["--ui-testing-content", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"])
+        waitForValue(app.staticTexts["contentFixturePhase"], equalTo: "ready", timeout: 10)
+        let timeline = app.outlines["readerTimeline"]
+        let a = timeline.staticTexts["Saved article A"].firstMatch
+        XCTAssertTrue(a.waitForExistence(timeout: 10))
+        a.click()
+        let savedA = app.webViews.firstMatch.staticTexts["Saved native article A"].firstMatch
+        XCTAssertTrue(savedA.waitForExistence(timeout: 10))
+        app.descendants(matching: .any)["articleActions"].firstMatch.click()
+        app.menuItems["loadFullText"].firstMatch.click()
+        waitForValue(app.staticTexts["contentActive"], equalTo: "1")
+        waitForValue(app.staticTexts["contentRequests"], equalTo: "1")
+        timeline.staticTexts["Saved article B"].firstMatch.click()
+        waitForValue(app.staticTexts["articleDetailTitle"], equalTo: "Saved article B")
+        waitForValue(app.staticTexts["contentCancelled"], equalTo: "1")
+        waitForValue(app.staticTexts["contentActive"], equalTo: "0")
+        let savedB = app.webViews.firstMatch.staticTexts["Saved native article B"].firstMatch
+        XCTAssertTrue(savedB.waitForExistence(timeout: 10))
+        XCTAssertTrue(savedB.wait(for: \.isHittable, toEqual: true, timeout: 5))
+        app.descendants(matching: .any)["articleActions"].firstMatch.click()
+        app.menuItems["loadFullText"].firstMatch.click()
+        let ok = app.windows.firstMatch.buttons["OK"].firstMatch
+        XCTAssertTrue(ok.waitForExistence(timeout: 10))
+        ok.click()
+        let warning = app.descendants(matching: .any)["fullTextUnavailable"].firstMatch
+        XCTAssertTrue(warning.waitForExistence(timeout: 5))
+        XCTAssertTrue(warning.wait(for: \.isHittable, toEqual: true, timeout: 5))
+        XCTAssertTrue(savedB.isHittable)
+        waitForValue(app.staticTexts["contentRequests"], equalTo: "2")
+        waitForValue(app.staticTexts["contentActive"], equalTo: "0")
+        waitForValue(app.staticTexts["contentCancelled"], equalTo: "1")
+        let evidence = XCTAttachment(screenshot: app.windows.firstMatch.screenshot())
+        evidence.name = "Native Reader retains saved article with unavailable-full-text warning"
+        evidence.lifetime = .keepAlways
+        add(evidence)
+    }
+
     func testWindowSearchAndSelectionSurviveClosingAnotherWindow() throws {
         let app = launchReader(arguments: ["--ui-testing-timeline", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"])
         let firstID = app.windows.firstMatch.identifier

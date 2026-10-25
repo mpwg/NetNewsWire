@@ -58,13 +58,30 @@ public actor ArticleContentService: ArticleContentExtracting {
         let script = """
         (function () {
           const doc = new JSDOMParser().parse(sourceHTML);
+          if (!doc.documentElement) {
+            const root = doc.createElement('html');
+            for (const child of Array.from(doc.childNodes)) root.appendChild(child);
+            doc.appendChild(root);
+            doc.documentElement = root;
+          }
+          if (!doc.body) {
+            const body = doc.createElement('body');
+            for (const child of Array.from(doc.documentElement.childNodes)) {
+              if (child !== doc.head) body.appendChild(child);
+            }
+            doc.documentElement.appendChild(body);
+            doc.body = body;
+          }
           doc.documentURI = sourceURL;
           const parsed = new Readability(doc, {charThreshold: 0, maxElemsToParse: 50000}).parse();
           return parsed ? JSON.stringify({html: parsed.content || '', text: parsed.textContent || ''}) : null;
         })()
         """
-        guard let value = context.evaluateScript(script), context.exception == nil,
-              let json = value.toString(), let data = json.data(using: .utf8) else { throw ReaderError.invalidResponse }
+        guard let value = context.evaluateScript(script), context.exception == nil else { throw ReaderError.invalidResponse }
+        guard !value.isNull, !value.isUndefined else {
+            throw ReaderError.unavailable(String(localized: "No article text was found on this page.", bundle: #bundle))
+        }
+        guard let json = value.toString(), let data = json.data(using: .utf8) else { throw ReaderError.invalidResponse }
         struct Result: Decodable { var html: String; var text: String }
         let result = try JSONDecoder().decode(Result.self, from: data)
         let text = result.text.trimmingCharacters(in: .whitespacesAndNewlines)

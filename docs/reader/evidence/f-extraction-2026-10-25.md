@@ -1,5 +1,7 @@
 # F / #51: extraction publication and ownership — 2026-10-25
 
+This records the earlier code-only checkpoints. The subsequent [native rendering and component evidence](f-rendering-2026-10-25.md) proves the named Mac WebPage/view-lifetime and restricted-content criteria while retaining actual offline and final-platform gaps.
+
 ## First stable code checkpoint
 
 Eight new Swift Testing functions / sixteen executions exercise the shipping ReaderSession, ArticleContentService, real ReaderStore and isolated URLSession transport. The first fourteen-case run reproduces eight failures: old success can cache after selection changes, A→B→A accepts old error/success, older requests alter newer outcomes, and pre-cancelled/in-flight cancellation surfaces an alert. [Raw initial result](f-extraction-red-2026-10-25.json), original 16-24-46. Two additional contracts verify independent detail-lookup generations and full-text error/retry state.

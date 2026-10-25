@@ -27,6 +27,36 @@ struct ContentTests {
         let subscriptions = try OPMLDocument.parse(OPMLDocument.export(feeds: [first, second], folders: [], preferences: prefs))
         #expect(subscriptions.map(\.folderPath) == [["A", "News"], ["B", "News"]])
     }
+    @Test("Complete HTML fragments gain a document and body before Readability", .timeLimit(.minutes(1)),
+          arguments: [0, 1, 2, 3])
+    func completeFragmentsGainDocumentStructure(kind: Int) async throws {
+        let marker = String(repeating: "Fragment article content remains readable. ", count: 40)
+        let article = "<article><h1>Fragment article</h1><p>" + marker + "<a href='../offer'>Relative offer</a></p></article>"
+        let html: String
+        switch kind {
+        case 0: html = article
+        case 1: html = "<body>" + article + "</body>"
+        case 2: html = "<html><head><title>Fragment title</title></head>" + article + "</html>"
+        default: html = marker
+        }
+        let service = ArticleContentService()
+        let result = try await service.extract(html: html, baseURL: #require(URL(string: "https://fragment.reader.invalid/articles/source")))
+        #expect(result.text.contains("Fragment article content remains readable."))
+        if kind != 3 { #expect(result.html.contains("https://fragment.reader.invalid/offer")) }
+    }
+
+    @Test("Unrecoverable malformed HTML returns an unavailable-content error", .timeLimit(.minutes(1)),
+          arguments: ["<html><body><article><p>Unfinished content", "<html><body></body></html>"])
+    func unrecoverableMarkupReportsUnavailable(html: String) async throws {
+        let content = ArticleContentService()
+        await #expect {
+            try await content.extract(html: html, baseURL: #require(URL(string: "https://malformed.reader.invalid/source")))
+        } throws: { error in
+            guard let error = error as? ReaderError, case .unavailable(let message) = error else { return false }
+            return !message.isEmpty
+        }
+    }
+
     @Test("Full text is extracted without executing page scripts") func fullTextIsExtractedWithoutExecutingPageScripts() async throws {
         let content = ArticleContentService()
         let html = "<html><head><title>Offers</title></head><body><article><h1>Café for €2.99</h1><p>" + String(repeating: "Fresh coffee from the merchant. ", count: 80) + "<a href='/offer'>View offer</a></p><script>throw new Error('page script must not execute')</script></article></body></html>"

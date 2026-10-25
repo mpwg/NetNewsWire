@@ -1,0 +1,64 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "00006040-000A51392100801C",
+        "deviceName" : "My Mac",
+        "modelName" : "MacBook Pro",
+        "osBuildNumber" : "26A434",
+        "osVersion" : "27.0.1",
+        "platform" : "macOS"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 2,
+      "passedTests" : 10,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "Reader · Built with macOS 27.0.1",
+  "expectedFailures" : 0,
+  "failedTests" : 1,
+  "finishTime" : 1792944936.184,
+  "passedTests" : 5,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1792944933.268,
+  "statistics" : [
+    {
+      "subtitle" : "9 test runs",
+      "title" : "3 tests ran with dynamic parameters"
+    }
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "Expectation failed: expected error of type ReaderError, but \"DecodingError.valueNotFound: Expected value of type Dictionary<String, Any>. Debug description: Cannot get keyed decoding container -- found null value instead\" was thrown instead: ReaderError.self\nvalueNotFound → (Swift.Dictionary<Swift.String, Any>, Swift.DecodingError.Context(codingPath: [], debugDescription: \"Cannot get keyed decoding container -- found null value instead\", underlyingError: nil))",
+      "targetName" : "ReaderTests",
+      "testIdentifier" : 5,
+      "testIdentifierString" : "ContentTests/unrecoverableMarkupReportsUnavailable(html:)",
+      "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/ContentTests/unrecoverableMarkupReportsUnavailable(html:)",
+      "testName" : "Unrecoverable malformed HTML returns an unavailable-content error"
+    }
+  ],
+  "title" : "Test - Reader",
+  "topInsights" : [
+    {
+      "category" : "Common Failures",
+      "impact" : "100% of failures",
+      "text" : "2 runs of 1 test failed with Expectation failed: unavailable"
+    },
+    {
+      "category" : "Common Failures",
+      "impact" : "100% of failures",
+      "text" : "2 runs of 1 test failed with Expectation failed: expected error of type ReaderError, but \"DecodingError.valueNotFound: Expected value of type Dictionary<String, Any>. Debug description: Cannot get keyed decoding container -- found null value instead\" was thrown instead: ReaderError.self"
+    }
+  ],
+  "totalTestCount" : 6
+}
