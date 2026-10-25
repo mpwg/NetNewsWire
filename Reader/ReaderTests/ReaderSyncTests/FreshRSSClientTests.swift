@@ -2,6 +2,7 @@ import Foundation
 import Synchronization
 import Testing
 import ReaderDomain
+import ReaderPersistence
 @testable import ReaderSync
 
 struct FreshRSSClientTests {
@@ -165,6 +166,96 @@ struct FreshRSSClientTests {
     }
 }
 
+struct FreshRSSPersistenceTests {
+    enum FailureStage: CaseIterable, Sendable { case statusSend, unreadRetrieval }
+
+    @Test("Late status acknowledgement preserves a newer SwiftData revision", .timeLimit(.minutes(1)))
+    func lateAcknowledgementPreservesNewerStoredRevision() async throws {
+        let store = try ReaderStore(inMemory: true)
+        let fixture = try Fixture(repository: store)
+        try await store.saveAccount(fixture.account)
+        try await fixture.client.refresh(account: fixture.account)
+        let key = ArticleKey(accountID: fixture.account.id, remoteID: "1")
+        try await store.setStatus([key], field: .read, value: true)
+        let old = try #require(try await store.pendingChanges(accountID: fixture.account.id).first)
+        let gate = RequestGate()
+        await fixture.server.setWriteGate(gate)
+        let first = Task { try await fixture.client.flush(account: fixture.account) }
+        defer { first.cancel(); Task { await gate.open() } }
+        try await gate.waitUntilEntered()
+        try await store.setStatus([key], field: .read, value: false)
+        let newer = try #require(try await store.pendingChanges(accountID: fixture.account.id).first)
+        #expect(newer.id != old.id)
+        await gate.open()
+        try await first.value
+        #expect(try await store.pendingChanges(accountID: fixture.account.id) == [newer])
+        #expect(try await store.article(key)?.read == false)
+        await fixture.server.setFailure(.secondWrite)
+        await #expect(throws: ReaderError.server(500)) { try await fixture.client.flush(account: fixture.account) }
+        #expect(try await store.pendingChanges(accountID: fixture.account.id) == [newer])
+        #expect(try await store.article(key)?.read == false)
+        await fixture.server.setFailure(nil)
+        try await fixture.client.refresh(account: fixture.account)
+        #expect(try await store.pendingChanges(accountID: fixture.account.id).isEmpty)
+        #expect(try await store.article(key)?.read == false)
+    }
+
+    @Test("Failed sync stages preserve unread state and retry through SwiftData", .timeLimit(.minutes(1)),
+          arguments: FailureStage.allCases)
+    func failedSyncPreservesStoredUnreadAndRetries(stage: FailureStage) async throws {
+        let store = try ReaderStore(inMemory: true)
+        let fixture = try Fixture(repository: store)
+        try await store.saveAccount(fixture.account)
+        try await fixture.client.refresh(account: fixture.account)
+        let key = ArticleKey(accountID: fixture.account.id, remoteID: "2")
+        #expect(try await store.article(key)?.read == true)
+        let gate = RequestGate()
+        if stage == .unreadRetrieval { await fixture.server.setUnreadGate(gate) }
+        await fixture.server.setFailure(stage == .statusSend ? .writeBody : .unread)
+        if stage == .statusSend { try await store.setStatus([key], field: .read, value: false) }
+        let refresh = Task { try await fixture.client.refresh(account: fixture.account) }
+        defer { refresh.cancel(); Task { await gate.open() } }
+        if stage == .unreadRetrieval {
+            try await gate.waitUntilEntered()
+            try await store.setStatus([key], field: .read, value: false)
+        }
+        let pending = try await store.pendingChanges(accountID: fixture.account.id)
+        let original = try await store.article(key)
+        try #require(pending.count == 1)
+        await gate.open()
+        let expected: ReaderError = stage == .statusSend ? .invalidResponse : .server(503)
+        await #expect(throws: expected) { try await refresh.value }
+        #expect(try await store.pendingChanges(accountID: fixture.account.id) == pending)
+        #expect(try await store.article(key) == original)
+        #expect(original?.read == false)
+        await fixture.server.setFailure(nil)
+        try await fixture.client.refresh(account: fixture.account)
+        #expect(try await store.pendingChanges(accountID: fixture.account.id).isEmpty)
+        #expect(try await store.article(key)?.read == false)
+    }
+
+    @Test("Empty memberships and folder deletion reach the stored root feed")
+    func authoritativeEmptyFoldersUpdateStoredMemberships() async throws {
+        let store = try ReaderStore(inMemory: true)
+        let fixture = try Fixture(repository: store)
+        try await store.saveAccount(fixture.account)
+        try await fixture.client.refresh(account: fixture.account)
+        #expect(try await store.folders().count == 1)
+        #expect(try await store.feeds().first?.folderIDs == ["user/-/label/News"])
+        await fixture.server.setFailure(.emptyMemberships)
+        try await fixture.client.refresh(account: fixture.account)
+        #expect(try await store.folders().count == 1)
+        #expect(try await store.feeds().first?.folderIDs.isEmpty == true)
+        await fixture.server.setFailure(.emptyFolders)
+        try await fixture.client.refresh(account: fixture.account)
+        #expect(try await store.folders().isEmpty)
+        let feed = try #require(try await store.feeds().first)
+        #expect(feed.id == FeedKey(accountID: fixture.account.id, remoteID: "feed/1"))
+        #expect(feed.folderIDs.isEmpty)
+        #expect(try await store.articles(ArticleQuery(accountID: fixture.account.id)).count == 2)
+    }
+}
+
 private final class Fixture: @unchecked Sendable {
     let account: ReaderAccount
     let repository = TestRepository()
@@ -173,14 +264,14 @@ private final class Fixture: @unchecked Sendable {
     private let host: String
     private let session: URLSession
 
-    init() throws {
+    init(repository clientRepository: (any ReaderRepository)? = nil) throws {
         host = UUID().uuidString.lowercased() + ".test"
         let url = try #require(URL(string: "https://" + host + "/rss"))
         account = ReaderAccount(serverURL: url, username: "mat+test")
         let configuration = URLSessionConfiguration.ephemeral
         configuration.protocolClasses = [MockURLProtocol.self]
         session = URLSession(configuration: configuration)
-        client = FreshRSSClient(repository: repository, credentials: TestCredentials(), session: session)
+        client = FreshRSSClient(repository: clientRepository ?? repository, credentials: TestCredentials(), session: session)
         let server = server
         MockURLProtocol.register(host: host) { request in try await server.respond(request) }
     }
@@ -274,14 +365,17 @@ struct RequestGateTests {
 }
 
 private actor TestServer {
-    enum Failure { case unread, mutation, writeBody, missingContent, continuationLoop, expiredWriteToken, secondWrite, emptyFolders }
+    enum Failure { case unread, mutation, writeBody, missingContent, continuationLoop, expiredWriteToken, secondWrite, emptyMemberships, emptyFolders }
     private var failure: Failure?
     private var gate: RequestGate?
+    private var unreadGate: RequestGate?
+    private var unreadIDs: Set<String> = ["1"]
     private var writes = 0
     var tokenRequests = 0
     var calls: [RequestCall] = []
-    func setFailure(_ value: Failure) { failure = value }
+    func setFailure(_ value: Failure?) { failure = value }
     func setWriteGate(_ value: RequestGate) { gate = value }
+    func setUnreadGate(_ value: RequestGate) { unreadGate = value }
 
     func respond(_ request: URLRequest) async throws -> (Int, Data) {
         let url = try #require(request.url)
@@ -298,7 +392,7 @@ private actor TestServer {
         if path.hasSuffix("ClientLogin") { return data("SID=ignored\nAuth=auth==\n") }
         if path.hasSuffix("/token") { tokenRequests += 1; return data("write-\(tokenRequests)\n") }
         if path.hasSuffix("/subscription/list") {
-            let categories = failure == .emptyFolders ? "[]" : "[{\"id\":\"user/-/label/News\"}]"
+            let categories = failure == .emptyFolders || failure == .emptyMemberships ? "[]" : "[{\"id\":\"user/-/label/News\"}]"
             return data("{\"subscriptions\":[{\"id\":\"feed/1\",\"title\":\"News\",\"url\":\"https://news.test/feed\",\"htmlUrl\":\"https://news.test\",\"categories\":\(categories)}]}")
         }
         if path.hasSuffix("/tag/list") {
@@ -306,8 +400,10 @@ private actor TestServer {
         }
         if path.hasSuffix("/stream/items/ids") {
             if query["xt"] != nil {
+                if let unreadGate { try await unreadGate.pause() }
                 if failure == .unread { return data("temporarily unavailable", status: 503) }
-                return data("{\"itemRefs\":[{\"id\":\"1\"}]}")
+                let references = unreadIDs.sorted().map { ["id": $0] }
+                return (200, try JSONSerialization.data(withJSONObject: ["itemRefs": references]))
             }
             if query["s"] == "user/-/state/com.google/starred" { return data("{\"itemRefs\":[{\"id\":\"2\"}]}") }
             if query["c"] == "next", failure != .continuationLoop { return data("{\"itemRefs\":[{\"id\":\"2\"}]}") }
@@ -326,6 +422,9 @@ private actor TestServer {
             if failure == .secondWrite, current == 2 { return data("failure", status: 500) }
             if failure == .writeBody { return data("Error=notApplied") }
             if failure == .expiredWriteToken, fields["T"] == ["write-1"] { return data("expired", status: 403) }
+            let ids = try Set((fields["i"] ?? []).map(ReaderItemID.canonical))
+            if fields["a"] == ["user/-/state/com.google/read"] { unreadIDs.subtract(ids) }
+            if fields["r"] == ["user/-/state/com.google/read"] { unreadIDs.formUnion(ids) }
             return data("OK")
         }
         if path.hasSuffix("/subscription/edit") { return data("failure", status: failure == .mutation ? 500 : 200) }
