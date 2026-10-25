@@ -1,0 +1,4 @@
+Diagnostic bundle: eu.mpwg.reader.debug
+Matching acceptance accounts: 1
+Persisted account feeds: 1
+Native thumbnail after head scanning: 32x32
