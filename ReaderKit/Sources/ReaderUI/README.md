@@ -1,5 +1,7 @@
 # ReaderUI
 
+Normal feed rows load thumbnails through the shared FeedImageService actor. Each icon reads its nearest display scale and a Dynamic Type scaled size, cancels its view task when its request changes, and checks cancellation before replacing the displayed image. ImageIO decoding stays outside MainActor. Missing or invalid images use a system-symbol fallback; digest feeds keep their Sparkles mode symbol. This wiring does not by itself establish native responsiveness or energy acceptance under image load.
+
 Shared SwiftUI views for macOS, iOS and iPadOS 27 and later. Every ReaderWindow owns a ReaderSession with its own selection, search, presentations and query generation. ReaderServices shares only persistence, FreshRSS and content/intelligence services.
 
 Articles and daily digests remain accessible together. Search, stars and feed navigation expose originals; incomplete or failed summaries never hide unprocessed articles. Opening content changes no read status. Marking a digest read uses exactly the sources of its displayed revision.

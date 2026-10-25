@@ -4,9 +4,11 @@ The shared SwiftUI/SwiftData app uses FreshRSS and on-device daily digests. Open
 
 Accepted foundation checkpoint [2be912aef](https://github.com/mpwg/NetNewsWire/commit/2be912aef): [Mac, iPhone and iPad CI pass](https://github.com/mpwg/NetNewsWire/actions/runs/40172667411/attempts/2), including 86 Swift Testing contracts in 12 suites, two Mac / one iOS native UI tests, and the Mac process-recovery probe. The shared Debug launch default is saved through Xcode. The initial hosted iPad XCTest startup failure and successful selective rerun remain documented in [A evidence](docs/reader/evidence/a-2026-10-25.md). Superseded infrastructure remains preserved for K; full device, service, accessibility and quality acceptance is separate.
 
-The following guide describes the original NetNewsWire targets, retained during replacement acceptance.
-
 The Reader persistence core (B/#47) is accepted after A: 25 code contracts and current 10,000-article SIGKILL/reopen evidence prove durable state, complete canonical versions and deletion/star retention. [B evidence and remaining app/device/service limits](docs/reader/evidence/b-2026-10-25.md).
+
+G/#52 now connects bounded ImageIO thumbnails to normal feed rows, with three new code contracts. [Current implementation, tests and open acceptance](docs/reader/evidence/g-2026-10-25.md) distinguish this step from real image-load, credential and energy checks.
+
+The following guide describes the original NetNewsWire targets, retained during replacement acceptance.
 
 <img src=Technotes/Images/icon_1024.png height=128 width=128 style="display: block; margin: auto;"> 
 

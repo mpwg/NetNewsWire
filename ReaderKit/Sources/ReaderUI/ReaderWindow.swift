@@ -175,13 +175,55 @@ private struct ReaderSidebar: View {
 
     private func feedRow(_ feed: FeedSnapshot) -> some View {
         NavigationLink(value: feed.id.id) {
-            Label(feed.title, systemImage: session.preferences(for: feed).mode == .digest ? "sparkles" : "dot.radiowaves.up.forward")
+            Label {
+                Text(feed.title)
+            } icon: {
+                if session.preferences(for: feed).mode == .digest {
+                    Image(systemName: "sparkles")
+                } else {
+                    ReaderFeedIcon(homePage: feed.homePageURL, images: session.services.images)
+                }
+            }
         }
             .tag(feed.id.id)
             .contextMenu {
                 Button(LocalizedStringResource("Feed settings", bundle: .atURL(#bundle.bundleURL)), systemImage: "slider.horizontal.3") { edit(feed) }
                 Button(LocalizedStringResource("Unsubscribe", bundle: .atURL(#bundle.bundleURL)), systemImage: "minus.circle", role: .destructive) { remove(feed) }
             }
+    }
+}
+
+private struct ReaderFeedIcon: View {
+    let homePage: URL?
+    let images: FeedImageService
+    @Environment(\.displayScale) private var displayScale
+    @ScaledMetric(relativeTo: .body) private var pointSize: CGFloat = 18
+    @State private var image: CGImage?
+
+    private struct Request: Hashable { let url: URL?; let pixels: Int }
+
+    var body: some View {
+        let request = Request(url: homePage, pixels: Int((pointSize * displayScale).rounded(.up)))
+        Group {
+            if let image {
+                Image(decorative: image, scale: displayScale).resizable().scaledToFit()
+            } else {
+                Image(systemName: "dot.radiowaves.up.forward")
+            }
+        }
+        .frame(width: pointSize, height: pointSize)
+        .accessibilityHidden(true)
+        .task(id: request) {
+            image = nil
+            guard let homePage else { return }
+            do {
+                let loaded = try await images.image(for: homePage, maximumPixelSize: request.pixels)
+                try Task.checkCancellation()
+                image = loaded
+            } catch {
+                if !Task.isCancelled { image = nil }
+            }
+        }
     }
 }
 

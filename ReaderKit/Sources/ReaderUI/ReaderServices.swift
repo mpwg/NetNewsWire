@@ -13,6 +13,7 @@ public final class ReaderServices {
     public let client: FreshRSSClient?
     public let digests: DigestCoordinator?
     public let content: ArticleContentService?
+    public let images: FeedImageService
     public let privateCloudComputeConfigured: Bool
     public private(set) var revision = 0
     @ObservationIgnored private var refreshTask: Task<Void, Error>?
@@ -20,12 +21,13 @@ public final class ReaderServices {
 
     public init(repository: any ReaderRepository, credentials: (any CredentialStore)? = nil,
                 client: FreshRSSClient? = nil, digests: DigestCoordinator? = nil, content: ArticleContentService? = nil,
-                privateCloudComputeConfigured: Bool = false) {
+                privateCloudComputeConfigured: Bool = false, images: FeedImageService = FeedImageService()) {
         self.repository = repository
         self.credentials = credentials
         self.client = client
         self.digests = digests
         self.content = content
+        self.images = images
         self.privateCloudComputeConfigured = privateCloudComputeConfigured
     }
 

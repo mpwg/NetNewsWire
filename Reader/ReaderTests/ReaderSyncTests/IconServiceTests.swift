@@ -1,4 +1,6 @@
 import Foundation
+import CoreGraphics
+import ImageIO
 import Synchronization
 import Testing
 import ReaderDomain
@@ -72,6 +74,58 @@ struct IconServiceTests {
     }
 }
 
+struct FeedImageServiceTests {
+    @Test("Thumbnails use display pixel bounds and share encoded requests")
+    func thumbnailsUsePixelBoundsAndShareEncodedRequests() async throws {
+        let fixture = try IconFixture()
+        await fixture.server.setMode(.encoded(try Self.png()))
+        let images = FeedImageService(icons: fixture.service)
+        let small = try #require(try await images.image(for: fixture.url("/a"), maximumPixelSize: 32))
+        #expect(small.width == 32 && small.height == 16)
+        let same = try #require(try await images.image(for: fixture.url("/a#fragment"), maximumPixelSize: 32))
+        #expect(same === small)
+        let large = try #require(try await images.image(for: fixture.url("/a"), maximumPixelSize: 64))
+        #expect(large.width == 64 && large.height == 32)
+        #expect(await fixture.server.paths == ["/a", "/a.png"])
+    }
+
+    @Test("Malformed image data remains retryable after decoding fails")
+    func malformedImageDataRemainsRetryableAfterDecodingFails() async throws {
+        let fixture = try IconFixture()
+        let images = FeedImageService(icons: fixture.service)
+        #expect(try await images.image(for: fixture.url("/a"), maximumPixelSize: 32) == nil)
+        await fixture.server.setMode(.encoded(try Self.png()))
+        #expect(try await images.image(for: fixture.url("/a"), maximumPixelSize: 32) != nil)
+        #expect(await fixture.server.paths == ["/a", "/a.png", "/a", "/a.png"])
+    }
+
+    @Test("Thumbnail dimensions stay bounded for invalid or excessive size requests",
+          arguments: [0, -1, Int.max])
+    func thumbnailDimensionsStayBounded(requestedPixels: Int) async throws {
+        let fixture = try IconFixture()
+        await fixture.server.setMode(.encoded(try Self.png()))
+        let images = FeedImageService(icons: fixture.service)
+        let thumbnail = try #require(try await images.image(for: fixture.url("/a"), maximumPixelSize: requestedPixels))
+        let expected = min(256, max(1, requestedPixels))
+        #expect(thumbnail.width == expected)
+        #expect(thumbnail.height > 0 && thumbnail.height <= expected)
+    }
+
+    private static func png() throws -> Data {
+        let context = try #require(CGContext(data: nil, width: 512, height: 256, bitsPerComponent: 8,
+                                             bytesPerRow: 0, space: CGColorSpaceCreateDeviceRGB(),
+                                             bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue))
+        context.setFillColor(CGColor(red: 0.2, green: 0.5, blue: 0.8, alpha: 1))
+        context.fill(CGRect(x: 0, y: 0, width: 512, height: 256))
+        let image = try #require(context.makeImage())
+        let data = try #require(CFDataCreateMutable(nil, 0))
+        let destination = try #require(CGImageDestinationCreateWithData(data, "public.png" as CFString, 1, nil))
+        CGImageDestinationAddImage(destination, image, nil)
+        try #require(CGImageDestinationFinalize(destination))
+        return data as Data
+    }
+}
+
 private final class IconFixture: @unchecked Sendable {
     let server = IconTestServer()
     let service: IconService
@@ -97,7 +151,7 @@ private struct IconResponse: Sendable {
 }
 
 private actor IconTestServer {
-    enum Mode { case normal, homepageFailure, transientA, wrongType, oversized }
+    enum Mode: Equatable, Sendable { case normal, homepageFailure, transientA, wrongType, oversized, encoded(Data) }
     private var mode: Mode = .normal
     private var gate: RequestGate?
     var paths: [String] = []
@@ -116,6 +170,7 @@ private actor IconTestServer {
         }
         if path == "/a.png" {
             switch mode {
+            case .encoded(let data): return IconResponse(status: 200, mime: "image/png", data: data)
             case .transientA: return IconResponse(status: 503, mime: "text/plain", data: Data())
             case .wrongType: return IconResponse(status: 200, mime: "text/html", data: Data("<script>bad</script>".utf8))
             case .oversized: return IconResponse(status: 200, mime: "image/png", data: Data(repeating: 0, count: 129))

@@ -1,4 +1,5 @@
 import Foundation
+import ImageIO
 import ReaderDomain
 
 /// Coalesces requests per homepage and bounds network concurrency, response sizes and memory.
@@ -74,7 +75,11 @@ public actor IconService {
         } else { jobs[homePage] = job }
     }
 
-    private static func normalized(_ url: URL) -> URL? {
+    fileprivate func discardCachedIcon(for homePage: URL) {
+        if let key = Self.normalized(homePage) { cache[key] = nil }
+    }
+
+    fileprivate static func normalized(_ url: URL) -> URL? {
         guard ["https", "http"].contains(url.scheme?.lowercased()), url.host != nil,
               url.user == nil, url.password == nil,
               var parts = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return nil }
@@ -148,6 +153,56 @@ public actor IconService {
             data.append(byte)
         }
         return (data, http)
+    }
+}
+
+/// Decodes bounded thumbnails on its own actor, never on the UI actor.
+public actor FeedImageService {
+    private struct Key: Hashable { let url: URL; let pixels: Int }
+    private struct Cached { let image: CGImage; let created: Date }
+    private let icons: IconService
+    private var cache: [Key: Cached] = [:]
+
+    public init(icons: IconService = IconService()) { self.icons = icons }
+
+    public func image(for homePage: URL, maximumPixelSize: Int) async throws -> CGImage? {
+        try Task.checkCancellation()
+        guard let url = IconService.normalized(homePage) else { throw ReaderError.invalidURL }
+        let pixels = min(256, max(1, maximumPixelSize))
+        let key = Key(url: url, pixels: pixels)
+        if let image = cachedImage(for: key) { return image }
+        guard let data = try await icons.icon(for: url) else { return nil }
+        try Task.checkCancellation()
+        // Another consumer may have decoded the same pixels while this request awaited bytes.
+        if let image = cachedImage(for: key) { return image }
+        guard let image = Self.thumbnail(data, pixels: pixels) else {
+            // Malformed image bytes must not prevent a later network retry.
+            await icons.discardCachedIcon(for: url)
+            return nil
+        }
+        try Task.checkCancellation()
+        if cache.count >= 32, let oldest = cache.min(by: { $0.value.created < $1.value.created })?.key {
+            cache[oldest] = nil
+        }
+        cache[key] = Cached(image: image, created: Date())
+        return image
+    }
+
+    private func cachedImage(for key: Key) -> CGImage? {
+        guard let cached = cache[key], Date().timeIntervalSince(cached.created) < 86_400 else { return nil }
+        return cached.image
+    }
+
+    private static func thumbnail(_ data: Data, pixels: Int) -> CGImage? {
+        guard let source = CGImageSourceCreateWithData(data as CFData,
+                                                       [kCGImageSourceShouldCache: false] as CFDictionary) else { return nil }
+        let options: [CFString: Any] = [
+            kCGImageSourceCreateThumbnailFromImageAlways: true,
+            kCGImageSourceCreateThumbnailWithTransform: true,
+            kCGImageSourceThumbnailMaxPixelSize: pixels,
+            kCGImageSourceShouldCacheImmediately: true
+        ]
+        return CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary)
     }
 }
 
