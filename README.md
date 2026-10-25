@@ -6,6 +6,8 @@ Accepted foundation checkpoint [2be912aef](https://github.com/mpwg/NetNewsWire/c
 
 The following guide describes the original NetNewsWire targets, retained during replacement acceptance.
 
+The Reader persistence core (B/#47) is accepted after A: 25 code contracts and current 10,000-article SIGKILL/reopen evidence prove durable state, complete canonical versions and deletion/star retention. [B evidence and remaining app/device/service limits](docs/reader/evidence/b-2026-10-25.md).
+
 <img src=Technotes/Images/icon_1024.png height=128 width=128 style="display: block; margin: auto;"> 
 
 # NetNewsWire
