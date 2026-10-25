@@ -10,7 +10,11 @@ public actor FreshRSSClient {
     private var authentication: [UUID: String] = [:]
     private var writeTokens: [UUID: String] = [:]
     private var busyAccounts: Set<UUID> = []
-    private var waiters: [UUID: [CheckedContinuation<Void, Never>]] = [:]
+    private struct QueuedOperation {
+        let id: UUID
+        let continuation: CheckedContinuation<Void, any Error>
+    }
+    private var waiters: [UUID: [QueuedOperation]] = [:]
 
     public init(repository: any ReaderRepository, credentials: any CredentialStore, session: URLSession = .shared) {
         self.repository = repository
@@ -19,14 +23,14 @@ public actor FreshRSSClient {
     }
 
     public func refresh(account: ReaderAccount) async throws {
-        await acquire(account.id)
+        try await acquire(account.id)
         defer { release(account.id) }
         try Task.checkCancellation()
         try await refreshUnlocked(account)
     }
 
     public func flush(account: ReaderAccount) async throws {
-        await acquire(account.id)
+        try await acquire(account.id)
         defer { release(account.id) }
         try Task.checkCancellation()
         try await flushUnlocked(account)
@@ -39,7 +43,7 @@ public actor FreshRSSClient {
     @discardableResult
     public func addSubscription(account: ReaderAccount, url: URL, title: String? = nil, folderID: String? = nil) async throws -> FeedKey {
         guard ["https", "http"].contains(url.scheme?.lowercased()), url.host != nil else { throw ReaderError.invalidURL }
-        await acquire(account.id)
+        try await acquire(account.id)
         defer { release(account.id) }
         try Task.checkCancellation()
         let data = try await write(account, path: "subscription/quickadd", fields: [("quickadd", url.absoluteString), ("output", "json")])
@@ -104,11 +108,31 @@ public actor FreshRSSClient {
         return url
     }
 
-    private func acquire(_ accountID: UUID) async {
+    /// Snapshot of suspended operations for account-level diagnostics.
+    func queuedOperationCount(accountID: UUID) -> Int { waiters[accountID]?.count ?? 0 }
+
+    private func acquire(_ accountID: UUID) async throws {
+        try Task.checkCancellation()
         if busyAccounts.insert(accountID).inserted { return }
-        await withCheckedContinuation { continuation in
-            waiters[accountID, default: []].append(continuation)
+        let id = UUID()
+        try await withTaskCancellationHandler {
+            try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, any Error>) in
+                if Task.isCancelled {
+                    continuation.resume(throwing: CancellationError())
+                } else {
+                    waiters[accountID, default: []].append(QueuedOperation(id: id, continuation: continuation))
+                }
+            }
+        } onCancel: {
+            Task { await self.cancelQueuedOperation(accountID: accountID, id: id) }
         }
+    }
+
+    private func cancelQueuedOperation(accountID: UUID, id: UUID) {
+        guard var queued = waiters[accountID], let index = queued.firstIndex(where: { $0.id == id }) else { return }
+        let operation = queued.remove(at: index)
+        waiters[accountID] = queued.isEmpty ? nil : queued
+        operation.continuation.resume(throwing: CancellationError())
     }
 
     private func release(_ accountID: UUID) {
@@ -119,11 +143,11 @@ public actor FreshRSSClient {
         }
         let next = queued.removeFirst()
         waiters[accountID] = queued
-        next.resume()
+        next.continuation.resume()
     }
 
     private func mutate(_ account: ReaderAccount, path: String, fields: [(String, String)]) async throws {
-        await acquire(account.id)
+        try await acquire(account.id)
         defer { release(account.id) }
         try Task.checkCancellation()
         try await writeOK(account, path: path, fields: fields)

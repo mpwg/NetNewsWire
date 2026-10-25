@@ -384,19 +384,22 @@ private final class CommitEvents: Sendable {
 private actor CommitGateRepository: ReaderRepository {
     static let failure = ReaderError.unavailable("Isolated persistence failure.")
     let store: ReaderStore
-    let gate: RequestGate
+    let gates: [RequestGate]
     let events: CommitEvents
     let fail: Bool
+    private var started = 0
 
-    init(store: ReaderStore, gate: RequestGate, events: CommitEvents, fail: Bool) {
-        self.store = store; self.gate = gate; self.events = events; self.fail = fail
+    init(store: ReaderStore, gate: RequestGate, events: CommitEvents, fail: Bool, followingGates: [RequestGate] = []) {
+        self.store = store; self.gates = [gate] + followingGates; self.events = events; self.fail = fail
     }
 
     func applyRefresh(_ snapshot: RefreshSnapshot) async throws {
+        let index = started
+        started += 1
         events.append("saveEntered")
-        try await gate.pause()
+        try await gates[min(index, gates.count - 1)].pause()
         try Task.checkCancellation()
-        if fail { throw Self.failure }
+        if fail, index == 0 { throw Self.failure }
         try await store.applyRefresh(snapshot)
         events.append("saved")
     }
@@ -419,6 +422,231 @@ private actor CommitGateRepository: ReaderRepository {
     func saveDigest(_ digest: DigestSnapshot) async throws { try await store.saveDigest(digest) }
     func updateContent(_ key: ArticleKey, html: String, text: String) async throws {
         try await store.updateContent(key, html: html, text: text)
+    }
+}
+
+struct FreshRSSQueueTests {
+    enum Operation: CaseIterable, Sendable {
+        case refresh, flush, addSubscription, rename
+
+        fileprivate func perform(_ fixture: Fixture) async throws {
+            switch self {
+            case .refresh: try await fixture.client.refresh(account: fixture.account)
+            case .flush: try await fixture.client.flush(account: fixture.account)
+            case .addSubscription:
+                _ = try await fixture.client.addSubscription(account: fixture.account,
+                                                              url: #require(URL(string: "https://feed.test/new")))
+            case .rename: try await fixture.client.renameFeed(account: fixture.account, feedID: "feed/1", title: "Cancelled")
+            }
+        }
+    }
+
+    @Test("Cancelled queued operations finish while the owner remains blocked", .timeLimit(.minutes(1)),
+          arguments: Operation.allCases, [true, false])
+    func cancelledQueuedOperationsDoNotWaitForOwner(operation: Operation, alreadyCancelled: Bool) async throws {
+        let store = try ReaderStore(inMemory: true)
+        let fixture = try Fixture(repository: store)
+        try await store.saveAccount(fixture.account)
+        try await fixture.client.refresh(account: fixture.account)
+        try await store.setStatus([ArticleKey(accountID: fixture.account.id, remoteID: "1")], field: .read, value: true)
+        let pending = try await store.pendingChanges(accountID: fixture.account.id)
+        let gate = RequestGate()
+        await fixture.server.setWriteGate(gate)
+        let owner = Task { try await fixture.client.flush(account: fixture.account) }
+        defer { owner.cancel(); Task { await gate.open() } }
+        try await gate.waitUntilEntered()
+        let callsBefore = await fixture.server.calls.count
+        let events = CommitEvents()
+        let request = Task {
+            defer { events.append("finished") }
+            if alreadyCancelled { withUnsafeCurrentTask { $0?.cancel() } }
+            try await operation.perform(fixture)
+        }
+        defer { request.cancel() }
+        if !alreadyCancelled {
+            try await Self.waitForQueue(fixture, count: 1)
+            request.cancel()
+        }
+        let finished = try await Self.waitForEvent("finished", events: events)
+        #expect(finished, "Cancellation must complete before releasing the blocked owner.")
+        #expect(await fixture.client.queuedOperationCount(accountID: fixture.account.id) == 0)
+        #expect(await fixture.server.calls.count == callsBefore)
+        #expect(await fixture.server.completedWrites.isEmpty)
+        #expect(try await store.pendingChanges(accountID: fixture.account.id) == pending)
+        await gate.open()
+        try await owner.value
+        await #expect(throws: CancellationError.self) { try await request.value }
+        try await fixture.client.refresh(account: fixture.account)
+        #expect(try await store.pendingChanges(accountID: fixture.account.id).isEmpty)
+    }
+
+    @Test("Queued sends cannot reverse response order or acknowledge a newer stored revision", .timeLimit(.minutes(1)))
+    func queuedSendsKeepResponseOrderAndNewerRevision() async throws {
+        let store = try ReaderStore(inMemory: true)
+        let fixture = try Fixture(repository: store)
+        try await store.saveAccount(fixture.account)
+        try await fixture.client.refresh(account: fixture.account)
+        let key = ArticleKey(accountID: fixture.account.id, remoteID: "1")
+        try await store.setStatus([key], field: .read, value: true)
+        let gate = RequestGate()
+        await fixture.server.setWriteGate(gate)
+        let first = Task { try await fixture.client.flush(account: fixture.account) }
+        defer { first.cancel(); Task { await gate.open() } }
+        try await gate.waitUntilEntered()
+        try await store.setStatus([key], field: .read, value: false)
+        let newer = try await store.pendingChanges(accountID: fixture.account.id)
+        await fixture.server.setFailure(.secondWrite)
+        let second = Task { try await fixture.client.flush(account: fixture.account) }
+        defer { second.cancel() }
+        try await Self.waitForQueue(fixture, count: 1)
+        #expect(await fixture.server.calls.filter { $0.path.hasSuffix("/edit-tag") }.count == 1)
+        #expect(await fixture.server.completedWrites.isEmpty)
+        await gate.open()
+        try await first.value
+        await #expect(throws: ReaderError.server(500)) { try await second.value }
+        #expect(await fixture.server.completedWrites == [1, 2])
+        #expect(try await store.pendingChanges(accountID: fixture.account.id) == newer)
+        #expect(try await store.article(key)?.read == false)
+        let writes = await fixture.server.calls.filter { $0.path.hasSuffix("/edit-tag") }
+        #expect(writes.map { $0.fields["a"] ?? $0.fields["r"] ?? [] } ==
+                [["user/-/state/com.google/read"], ["user/-/state/com.google/read"]])
+        #expect(writes.first?.fields["a"] != nil)
+        #expect(writes.last?.fields["r"] != nil)
+        #expect(await fixture.client.queuedOperationCount(accountID: fixture.account.id) == 0)
+    }
+
+    @Test("Overlapping refreshes wait for their own commit after owner success failure or cancellation",
+          .timeLimit(.minutes(1)), arguments: FreshRSSCompletionTests.Outcome.allCases)
+    func overlappingRefreshesKeepIndependentCompletion(outcome: FreshRSSCompletionTests.Outcome) async throws {
+        let store = try ReaderStore(inMemory: true)
+        let firstGate = RequestGate(), secondGate = RequestGate()
+        let events = CommitEvents()
+        let repository = CommitGateRepository(store: store, gate: firstGate, events: events,
+                                               fail: outcome == .storeFailure, followingGates: [secondGate])
+        let fixture = try Fixture(repository: repository)
+        try await store.saveAccount(fixture.account)
+        let first = Task { try await fixture.client.refresh(account: fixture.account); events.append("firstReturned") }
+        defer { first.cancel(); Task { await firstGate.open(); await secondGate.open() } }
+        try await firstGate.waitUntilEntered()
+        let second = Task { try await fixture.client.refresh(account: fixture.account); events.append("secondReturned") }
+        defer { second.cancel() }
+        try await Self.waitForQueue(fixture, count: 1)
+        #expect(events.values == ["saveEntered"])
+        #expect(try await store.feeds().isEmpty)
+        #expect(await fixture.server.calls.filter { $0.path.hasSuffix("/subscription/list") }.count == 1)
+        if outcome == .cancelled { first.cancel() }
+        await firstGate.open()
+        switch outcome {
+        case .saved: try await first.value
+        case .storeFailure: await #expect(throws: CommitGateRepository.failure) { try await first.value }
+        case .cancelled: await #expect(throws: CancellationError.self) { try await first.value }
+        }
+        try await secondGate.waitUntilEntered()
+        #expect(!events.values.contains("secondReturned"))
+        #expect(events.values.filter { $0 == "saveEntered" }.count == 2)
+        #expect(events.values.filter { $0 == "saved" }.count == (outcome == .saved ? 1 : 0))
+        #expect(try await store.feeds().count == (outcome == .saved ? 1 : 0))
+        await secondGate.open()
+        try await second.value
+        #expect(events.values.last == "secondReturned")
+        #expect(events.values.filter { $0 == "saved" }.count == (outcome == .saved ? 2 : 1))
+        #expect(try await store.articles(ArticleQuery(accountID: fixture.account.id)).count == 2)
+        #expect(try await store.pendingChanges(accountID: fixture.account.id).isEmpty)
+        #expect(await fixture.client.queuedOperationCount(accountID: fixture.account.id) == 0)
+    }
+
+    @Test("Cancelling a middle waiter preserves FIFO survivors and recovers after a failed send", .timeLimit(.minutes(1)))
+    func cancellingMiddleWaiterPreservesSurvivorsAndRecovery() async throws {
+        let store = try ReaderStore(inMemory: true)
+        let fixture = try Fixture(repository: store)
+        try await store.saveAccount(fixture.account)
+        try await fixture.client.refresh(account: fixture.account)
+        let key = ArticleKey(accountID: fixture.account.id, remoteID: "1")
+        try await store.setStatus([key], field: .read, value: true)
+        let gate = RequestGate()
+        await fixture.server.setWriteGate(gate)
+        let owner = Task { try await fixture.client.flush(account: fixture.account) }
+        defer { owner.cancel(); Task { await gate.open() } }
+        try await gate.waitUntilEntered()
+        try await store.setStatus([key], field: .read, value: false)
+        let newer = try await store.pendingChanges(accountID: fixture.account.id)
+        await fixture.server.setFailure(.secondWrite)
+        let firstWaiter = Task { try await fixture.client.flush(account: fixture.account) }
+        defer { firstWaiter.cancel() }
+        try await Self.waitForQueue(fixture, count: 1)
+        let cancelledEvents = CommitEvents()
+        let middle = Task {
+            defer { cancelledEvents.append("finished") }
+            try await fixture.client.renameFeed(account: fixture.account, feedID: "feed/1", title: "Cancelled")
+        }
+        defer { middle.cancel() }
+        try await Self.waitForQueue(fixture, count: 2)
+        let lastWaiter = Task { try await fixture.client.refresh(account: fixture.account) }
+        defer { lastWaiter.cancel() }
+        try await Self.waitForQueue(fixture, count: 3)
+        middle.cancel()
+        #expect(try await Self.waitForEvent("finished", events: cancelledEvents))
+        #expect(await fixture.client.queuedOperationCount(accountID: fixture.account.id) == 2)
+        #expect(await fixture.server.completedWrites.isEmpty)
+        #expect(try await store.pendingChanges(accountID: fixture.account.id) == newer)
+        await gate.open()
+        try await owner.value
+        await #expect(throws: CancellationError.self) { try await middle.value }
+        await #expect(throws: ReaderError.server(500)) { try await firstWaiter.value }
+        try await lastWaiter.value
+        #expect(await fixture.server.completedWrites == [1, 2, 3])
+        #expect(await fixture.server.calls.filter { $0.path.hasSuffix("/subscription/edit") }.isEmpty)
+        #expect(try await store.pendingChanges(accountID: fixture.account.id).isEmpty)
+        #expect(try await store.article(key)?.read == false)
+        #expect(await fixture.client.queuedOperationCount(accountID: fixture.account.id) == 0)
+    }
+
+    @Test("A blocked account does not prevent another account from committing", .timeLimit(.minutes(1)))
+    func blockedAccountsDoNotHoldIndependentAccounts() async throws {
+        let store = try ReaderStore(inMemory: true)
+        let fixture = try Fixture(repository: store)
+        let other = ReaderAccount(serverURL: fixture.account.serverURL, username: "independent-fixture")
+        try await store.saveAccount(fixture.account)
+        try await store.saveAccount(other)
+        try await fixture.client.refresh(account: fixture.account)
+        try await store.setStatus([ArticleKey(accountID: fixture.account.id, remoteID: "1")], field: .read, value: true)
+        let pending = try await store.pendingChanges(accountID: fixture.account.id)
+        let gate = RequestGate()
+        await fixture.server.setWriteGate(gate)
+        let owner = Task { try await fixture.client.flush(account: fixture.account) }
+        defer { owner.cancel(); Task { await gate.open() } }
+        try await gate.waitUntilEntered()
+        let events = CommitEvents()
+        let independent = Task {
+            try await fixture.client.refresh(account: other)
+            events.append("committed")
+        }
+        defer { independent.cancel() }
+        #expect(try await Self.waitForEvent("committed", events: events))
+        #expect(try await store.articles(ArticleQuery(accountID: other.id)).count == 2)
+        #expect(try await store.feeds().filter { $0.id.accountID == other.id }.count == 1)
+        #expect(try await store.pendingChanges(accountID: fixture.account.id) == pending)
+        #expect(await fixture.server.completedWrites.isEmpty)
+        #expect(await fixture.client.queuedOperationCount(accountID: other.id) == 0)
+        await gate.open()
+        try await owner.value
+        try await independent.value
+    }
+
+    private static func waitForQueue(_ fixture: Fixture, count: Int) async throws {
+        let deadline = ContinuousClock.now.advanced(by: .seconds(3))
+        while await fixture.client.queuedOperationCount(accountID: fixture.account.id) != count {
+            try #require(ContinuousClock.now < deadline, "The actual account queue must reach the expected depth.")
+            try await Task.sleep(for: .milliseconds(10))
+        }
+    }
+
+    private static func waitForEvent(_ event: String, events: CommitEvents) async throws -> Bool {
+        let deadline = ContinuousClock.now.advanced(by: .seconds(2))
+        while !events.values.contains(event), ContinuousClock.now < deadline {
+            try await Task.sleep(for: .milliseconds(10))
+        }
+        return events.values.contains(event)
     }
 }
 
@@ -537,6 +765,7 @@ private actor TestServer {
     private var unreadGate: RequestGate?
     private var unreadIDs: Set<String> = ["1"]
     private var writes = 0
+    var completedWrites: [Int] = []
     var tokenRequests = 0
     var calls: [RequestCall] = []
     func setFailure(_ value: Failure?) { failure = value }
@@ -588,6 +817,7 @@ private actor TestServer {
         if path.hasSuffix("/edit-tag") {
             writes += 1
             let current = writes
+            defer { completedWrites.append(current) }
             if current == 1, let gate { try await gate.pause() }
             if failure == .secondWrite, current == 2 { return data("failure", status: 500) }
             if failure == .writeBody { return data("Error=notApplied") }
