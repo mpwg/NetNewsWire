@@ -289,6 +289,7 @@ private struct ReaderTimeline: View {
     var body: some View {
         timelineList
         .accessibilityIdentifier("readerTimeline")
+        .accessibilityLabel(Text(verbatim: session.title))
         .contextMenu(forSelectionType: TimelineSelection.self) { items in
             if !items.isEmpty {
                 TimelineStatusActions(session: session, target: session.statusTarget(for: items))

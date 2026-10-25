@@ -27,6 +27,10 @@ Outstanding findings include unnamed split-column groups and timeline outline, c
 
 ## Remaining acceptance
 
+### Timeline follow-up
+
+The timeline outline now exposes its existing localized navigation title as its accessibility label. Text(verbatim:) preserves feed/account titles as data; no new translation key or selection behavior is introduced. The existing connection smoke method now also asserts that the actual Mac outline has a nonempty label before opening the form. This passes in the native run at 23:41:18; [raw result](k-accessibility-timeline-2026-10-25.json). This is an additional assertion in an existing UI method, justified by the native accessibility-tree contract. No UI method is added. The earlier failed audit above is historical evidence before this follow-up; a complete repeated audit and the remaining split-column/contrast/action/role findings are still open.
+
 Correct and repeat the actual Mac audit on meaningful populated and empty screens, establish native action/role behavior, and perform a real VoiceOver journey. A zero-issue automated audit would still not replace VoiceOver acceptance. Final iPhone/iPad, physical devices, offline/restart, PCC, representative intelligence quality and distribution remain independent requirements.
 
 Apple references: [accessibility audits](https://developer.apple.com/documentation/accessibility/performing-accessibility-audits-for-your-app), [performAccessibilityAudit](https://developer.apple.com/documentation/xcuiautomation/xcuiapplication/performaccessibilityaudit(for:_:)).

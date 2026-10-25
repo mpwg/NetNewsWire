@@ -11,6 +11,9 @@ final class ReaderSmokeTests: XCTestCase {
         let connect = app.buttons["connectFreshRSS"]
         XCTAssertTrue(connect.waitForExistence(timeout: 15))
         XCTAssertTrue(connect.wait(for: \.isHittable, toEqual: true, timeout: 5))
+        #if os(macOS)
+        XCTAssertFalse(app.outlines["readerTimeline"].label.isEmpty)
+        #endif
         connect.clickOrTap()
         XCTAssertTrue(app.textFields["serverURL"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.textFields["username"].exists)
