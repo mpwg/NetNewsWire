@@ -111,7 +111,7 @@ public struct ReaderWindow: View {
             case .failure(let error): session.errorMessage = error.localizedDescription
             }
         }
-        .fileExporter(isPresented: $exportingOPML, document: exportDocument, contentType: .xml, defaultFilename: "Feeds.opml") { result in
+        .fileExporter(isPresented: $exportingOPML, document: exportDocument, contentType: ReaderOPMLFile.contentType, defaultFilename: "Feeds.opml") { result in
             if case .failure(let error) = result { session.errorMessage = error.localizedDescription }
         }
     }
@@ -376,7 +376,9 @@ private struct TimelineRowView: View {
 }
 
 struct ReaderOPMLFile: FileDocument {
-    static let readableContentTypes: [UTType] = [.xml]
+    static let contentType = UTType(importedAs: "org.opml.opml", conformingTo: .xml)
+    static let readableContentTypes: [UTType] = [contentType, .xml]
+    static let writableContentTypes: [UTType] = [contentType]
     var data: Data
     init(data: Data) { self.data = data }
     init(configuration: ReadConfiguration) throws { data = configuration.file.regularFileContents ?? Data() }

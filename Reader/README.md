@@ -2,6 +2,8 @@
 
 Native Mac OPML export uses the standard Save panel with user-selected Read/Write access while App Sandbox remains enabled. One genuine system-dialog UI method enters a complete filename and verifies the chosen directory, actual filename and nonempty OPML output; business rules remain Swift Testing. It does not assume an automatically supplied extension or a shared system preference. New feeds appear only after complete initial refresh, as the owner reconfirmed. [Export criteria and current evidence](../docs/reader/evidence/h-file-export-2026-10-25.md).
 
+The app imports the standard `org.opml.opml` type, conforming to XML with the `opml` extension, through its native Info.plist declaration. `ReaderOPMLFile` writes that type explicitly and can still read generic XML. This keeps the standard exporter from appending an extra `.xml` suffix on systems with different type registrations.
+
 Open `Reader.xcodeproj` in this directory and select the shared Reader scheme. This project was created through Xcode MCP with Apple's multiplatform SwiftUI app template. It links the six existing ReaderKit libraries; the standalone store recovery probe is not an app dependency.
 
 ReaderTests is an unhosted Swift Testing code-test target. All code-testable behavior, including connection validation and CI runner failure propagation, belongs here. CI bootstraps the Swift runner contracts directly before trusting the aggregate shell script. ReaderUITests is a small native XCTest/XCUIAutomation target. Apple's automatic scheme test plan discovers both; no generated project, scheme or test-plan script is required. Use Xcode MCP for interactive builds, tests and project changes.
