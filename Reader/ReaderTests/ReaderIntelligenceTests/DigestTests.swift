@@ -39,6 +39,26 @@ private actor ModelRequestJournal {
 
 struct AppleSummaryGeneratorTests {
 
+    @Test("Model instructions name the requested language explicitly", arguments: [("en_AT", "English"), ("de_AT", "German")])
+    func instructionsNameRequestedLanguage(localeID: String, language: String) async throws {
+        let journal = ModelRequestJournal()
+        let source = try article()
+        _ = try await AppleSummaryGenerator().generate([source], model: ControlledLanguageModel(journal: journal),
+                                                      capacity: 10000, locale: Locale(identifier: localeID), count: { $0.count })
+        let request = try #require(await journal.requests.first)
+        let instructions = request.transcript.compactMap { entry -> String? in
+            guard case .instructions(let instructions) = entry else { return nil }
+            return instructions.segments.compactMap { segment -> String? in
+                guard case .text(let text) = segment else { return nil }
+                return text.content
+            }.joined()
+        }.joined()
+        #expect(instructions.contains("in " + language + "."))
+        #expect(instructions.contains("at most two sentences"))
+        #expect(instructions.contains("Do not repeat"))
+        #expect(instructions.contains("Cover every supplied source"))
+    }
+
     @Test("Long source text reaches native sessions without loss within the runtime budget", arguments: [3500, 4500])
     func longSourceChunksPreserveContent(capacity: Int) async throws {
         let journal = ModelRequestJournal()

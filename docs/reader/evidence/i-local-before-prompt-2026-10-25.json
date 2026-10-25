@@ -1,0 +1,114 @@
+{
+  "cases" : [
+    {
+      "allSourcesStored" : true,
+      "case" : "offers",
+      "coveredSources" : [
+        "offer-a",
+        "offer-b"
+      ],
+      "durationSeconds" : 2.7962989807128906,
+      "inputExceedsModelContext" : false,
+      "inputTokens" : 48,
+      "outcome" : "success",
+      "sections" : [
+        {
+          "sources" : [
+            "offer-a"
+          ],
+          "text" : "Example Store lists a notebook for EUR 29.99.",
+          "title" : "Notebook offer"
+        },
+        {
+          "sources" : [
+            "offer-b"
+          ],
+          "text" : "Sample Shop lists headphones for EUR 49.00.",
+          "title" : "Headphones offer"
+        }
+      ],
+      "sourceCount" : 2
+    },
+    {
+      "allSourcesStored" : true,
+      "case" : "news",
+      "coveredSources" : [
+        "news-a"
+      ],
+      "durationSeconds" : 1.7032029628753662,
+      "inputExceedsModelContext" : false,
+      "inputTokens" : 58,
+      "outcome" : "success",
+      "sections" : [
+        {
+          "sources" : [
+            "news-a"
+          ],
+          "text" : "Se realizaron reparaciones a la pavelería y se mejoró el drenaje del sendero junto al río. El informe no menciona costos ni fecha de apertura.",
+          "title" : "Restauración del sendero"
+        }
+      ],
+      "sourceCount" : 2
+    },
+    {
+      "allSourcesStored" : true,
+      "case" : "long-source",
+      "coveredSources" : [
+        "long"
+      ],
+      "durationSeconds" : 58.196696043014526,
+      "inputExceedsModelContext" : true,
+      "inputTokens" : 12006,
+      "outcome" : "success",
+      "sections" : [
+        {
+          "sources" : [
+            "long"
+          ],
+          "text" : "El reporte de restauración del camino de sintetico describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje. El reporte describe la reparación de la pavimentación y la mejora de la drenaje.",
+          "title" : "Repaired Paving and Drainage Improvements"
+        },
+        {
+          "sources" : [
+            "long"
+          ],
+          "text" : "The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage.",
+          "title" : "Repaired Paving"
+        }
+      ],
+      "sourceCount" : 1
+    },
+    {
+      "allSourcesStored" : true,
+      "case" : "untrusted-instructions",
+      "coveredSources" : [
+        "untrusted"
+      ],
+      "durationSeconds" : 0.89142692089080811,
+      "inputExceedsModelContext" : false,
+      "inputTokens" : 53,
+      "outcome" : "success",
+      "sections" : [
+        {
+          "sources" : [
+            "untrusted"
+          ],
+          "text" : "The library renewed its seating.",
+          "title" : "Library seating renewed"
+        }
+      ],
+      "sourceCount" : 1
+    }
+  ],
+  "cloudAllowed" : false,
+  "contextSize" : 8192,
+  "localAvailable" : true,
+  "locale" : "en_AT",
+  "os" : "Version 27.0.1 (Build 26A434)",
+  "platform" : "macOS",
+  "privateCloudComputeEnabled" : false,
+  "processID" : 84528,
+  "sourceKind" : "Synthetic acceptance inputs; no real publisher or current offer is claimed",
+  "sourceSHA256" : "08f8366ca7f304f362484806f1bc5d2eeaa0ac9478261b490928441ce63ca358",
+  "version" : 1
+}

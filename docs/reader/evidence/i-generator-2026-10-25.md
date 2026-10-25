@@ -23,7 +23,13 @@ Together with the nine existing digest contracts, all **28 executions / 18 disti
 
 An initial native inspection observes SystemLanguageModel.default.isAvailable=true and contextSize=8192 on this Mac. Constructed SDK errors already provide readable native messages, so no duplicate app-specific error translation layer is added. This inspection is not a generation-quality or unavailable-device result.
 
-## Criteria
+## First actual inference and prompt correction
+
+The unchanged production checkpoint 9dd69dce8 was run natively through Xcode MCP with four synthetic inputs and cloudAllowed=false/privateCloudComputeEnabled=false. [Original captured output](i-local-before-prompt-2026-10-25.json) is retained unchanged, including its quality failures. The two offers preserve both merchants and exact EUR 29.99/EUR 49.00 prices. The news result unexpectedly uses Spanish and covers only one of two sources. A 12,006-token repeated source exceeds the observed 8,192-token context and successfully produces chunked output, but it takes about 58 seconds and repeats sentences extensively, with mixed Spanish/English output. The injected source instruction to invent a refund/link is ignored in this one observed case. These are narrow functional observations, not broad editorial acceptance or an immunity claim. The journal is explicitly captured model output, not canonical documentation prose.
+
+The language instruction previously named only a locale tag. It now names the requested language in English, asks for consistent output language, at most two sentences per summary, no repeated claims, and coverage of every source using its actual facts. The locale remains the current locale; the internal session seam accepts an explicit locale for deterministic English/German contracts. Two failing prompt contracts are retained in [red result](i-prompt-red-2026-10-25.json). Both then pass with the full focused generator/digest set: **30 executions / 19 distinct tests**, zero failures/skips/runtime warnings. [Current focused summary](i-prompt-focused-2026-10-25.json). The prompt assertions establish the request sent to the model; they do not prove that a real model will follow it. Current actual inference and regression revalidation remain required after this change.
+
+## Current criteria
 
 | Criterion | Status | Evidence or remaining work |
 |---|---|---|
