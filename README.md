@@ -18,7 +18,7 @@ The original NetNewsWire application, modules, extensions, assets, distribution 
 
 Enable FreshRSS API access and set a separate API password. Enter the HTTPS server, username and API password in Reader. Debug uses eu.mpwg.reader.debug; Release uses eu.mpwg.reader, with separate stores and Keychain services. A development team and provisioning are needed for physical-device execution.
 
-All code-testable app and runner behavior uses **Swift Testing** under Reader/ReaderTests. XCTest/XCUIAutomation is reserved for native window, sheet, keyboard, scrolling and rendering behavior. Most tests are code tests. Function identifiers use English lowerCamelCase; readable descriptions belong in @Test display names.
+All code-testable app and runner behavior uses **Swift Testing** under Reader/ReaderTests. XCTest/XCUIAutomation is reserved for native window, sheet, keyboard, scrolling and rendering behavior. Current Mac verification passes 221 code-test executions and five UI executions, locally and in Reader CI. See the linked acceptance evidence for exact scope. Function identifiers use English lowerCamelCase; readable descriptions belong in @Test display names.
 
 Every app, test and ReaderKit target enables Approachable Concurrency and compiler warnings as errors in Debug and Release. The shared scheme uses Apple's automatic test plan. CI first executes the Swift Testing runner contracts directly, then runs the native Reader plan and the process-recovery probe. Automatic coverage focuses on Mac; manual coverage: all retains Mac/iPhone/iPad validation for final acceptance.
 
