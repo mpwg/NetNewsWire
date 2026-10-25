@@ -21,6 +21,64 @@ final class ReaderSmokeTests: XCTestCase {
     }
 
     #if os(macOS)
+    func testImageLoadKeepsConnectionFormResponsiveAndCancelsRemovedRows() throws {
+        let app = launchReader(arguments: ["--ui-testing-image-load"])
+        let phase = app.staticTexts["imageLoadPhase"]
+        waitForValue(phase, equalTo: "ready", timeout: 10)
+        XCTAssertTrue(app.buttons["Load feed 0"].waitForExistence(timeout: 5))
+        app.buttons["startImageLoad"].click()
+        waitForPositiveValue(app.staticTexts["imageLoadDelivered"])
+        waitForPositiveValue(app.staticTexts["imageLoadRetries"])
+        waitForPositiveValue(app.staticTexts["imageLoadActive"])
+
+        app.descendants(matching: .any)["readerSidebar"].firstMatch.scroll(byDeltaX: 0, deltaY: -300)
+        app.descendants(matching: .any)["readerActions"].firstMatch.click()
+        app.menuItems["connectAccount"].click()
+        let username = app.textFields["username"]
+        XCTAssertTrue(username.waitForExistence(timeout: 5))
+        username.click()
+        username.typeText("Responsive during image load")
+        XCTAssertEqual(username.value as? String, "Responsive during image load")
+        app.buttons["cancelConnection"].firstMatch.click()
+        waitForPositiveValue(app.staticTexts["imageLoadActive"])
+        let imageLoad = XCTAttachment(screenshot: app.windows.firstMatch.screenshot())
+        imageLoad.name = "Native Reader during image retries and thumbnail loading"
+        imageLoad.lifetime = .keepAlways
+        add(imageLoad)
+
+        waitForPositiveValue(app.staticTexts["imageLoadActive"])
+        let cancelledBeforeRemoval = try XCTUnwrap(Int(app.staticTexts["imageLoadCancelled"].value as? String ?? ""))
+        app.buttons["removeImageLoadFeeds"].click()
+        waitForValue(phase, equalTo: "removed")
+        let rows = app.descendants(matching: .any).matching(NSPredicate(format: "identifier BEGINSWITH %@", "feedRow-"))
+        let noRows = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in rows.count == 0 }, object: app)
+        XCTAssertEqual(XCTWaiter.wait(for: [noRows], timeout: 5), .completed)
+        waitForValueGreaterThan(app.staticTexts["imageLoadCancelled"], baseline: cancelledBeforeRemoval)
+        waitForValue(app.staticTexts["imageLoadActive"], equalTo: "0")
+        let maximumActive = try XCTUnwrap(Int(app.staticTexts["imageLoadMaximumActive"].value as? String ?? ""))
+        XCTAssertLessThanOrEqual(maximumActive, 3)
+        let cancelled = try XCTUnwrap(app.staticTexts["imageLoadCancelled"].value as? String)
+        let counters = XCTAttachment(string: "cancelledBeforeRemoval=\(cancelledBeforeRemoval), cancelledAfterRemoval=\(cancelled), active=0, maximumActive=\(maximumActive)")
+        counters.name = "Image load cancellation after native rows disappear"
+        counters.lifetime = .keepAlways
+        add(counters)
+    }
+
+    private func waitForValue(_ element: XCUIElement, equalTo expected: String, timeout: TimeInterval = 5) {
+        let expectation = XCTNSPredicateExpectation(predicate: NSPredicate(format: "value == %@", expected), object: element)
+        XCTAssertEqual(XCTWaiter.wait(for: [expectation], timeout: timeout), .completed)
+    }
+
+    private func waitForPositiveValue(_ element: XCUIElement, timeout: TimeInterval = 20) {
+        waitForValueGreaterThan(element, baseline: 0, timeout: timeout)
+    }
+
+    private func waitForValueGreaterThan(_ element: XCUIElement, baseline: Int, timeout: TimeInterval = 5) {
+        let predicate = NSPredicate { _, _ in (Int(element.value as? String ?? "") ?? -1) > baseline }
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
+        XCTAssertEqual(XCTWaiter.wait(for: [expectation], timeout: timeout), .completed)
+    }
+
     func testNewWindowHasIndependentConnectionForm() throws {
         let app = launchReader()
         let firstID = app.windows.firstMatch.identifier
@@ -58,9 +116,9 @@ final class ReaderSmokeTests: XCTestCase {
     }
     #endif
 
-    private func launchReader() -> XCUIApplication {
+    private func launchReader(arguments: [String] = []) -> XCUIApplication {
         let app = XCUIApplication()
-        app.launchArguments = ["--ui-testing"]
+        app.launchArguments = ["--ui-testing"] + arguments
         app.launch()
         #if os(macOS)
         XCTAssertTrue(app.windows.firstMatch.waitForExistence(timeout: 10), "The first window must open on launch without a keyboard command.")

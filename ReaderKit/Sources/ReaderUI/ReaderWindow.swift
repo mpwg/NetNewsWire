@@ -47,6 +47,7 @@ public struct ReaderWindow: View {
             ToolbarItemGroup {
                 Menu("Reader", systemImage: "ellipsis.circle") {
                     Button(LocalizedStringResource("Connect FreshRSS account", bundle: .atURL(#bundle.bundleURL)), systemImage: "person.badge.plus") { session.showingAccount = true }
+                        .accessibilityIdentifier("connectAccount")
                     Button(LocalizedStringResource("Add feed", bundle: .atURL(#bundle.bundleURL)), systemImage: "plus") { addingFeed = true }
                         .disabled(session.accounts.isEmpty)
                     Divider()
@@ -54,6 +55,7 @@ public struct ReaderWindow: View {
                         .disabled(session.accounts.isEmpty)
                     Button(LocalizedStringResource("Export OPML", bundle: .atURL(#bundle.bundleURL)), systemImage: "square.and.arrow.up") { exportOPML() }
                 }
+                .accessibilityIdentifier("readerActions")
             }
         }
         .task(id: session.queryIdentity) { await session.reload(resetLimit: true) }
@@ -157,6 +159,7 @@ private struct ReaderSidebar: View {
                 }
             }
         }
+        .accessibilityIdentifier("readerSidebar")
         .navigationTitle("Reader")
         .overlay {
             if session.accounts.isEmpty && !session.loading {
@@ -186,6 +189,7 @@ private struct ReaderSidebar: View {
             }
         }
             .tag(feed.id.id)
+            .accessibilityIdentifier("feedRow-\(feed.id.id)")
             .contextMenu {
                 Button(LocalizedStringResource("Feed settings", bundle: .atURL(#bundle.bundleURL)), systemImage: "slider.horizontal.3") { edit(feed) }
                 Button(LocalizedStringResource("Unsubscribe", bundle: .atURL(#bundle.bundleURL)), systemImage: "minus.circle", role: .destructive) { remove(feed) }

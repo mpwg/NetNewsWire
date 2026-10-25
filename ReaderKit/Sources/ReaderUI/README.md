@@ -2,6 +2,8 @@
 
 Normal feed rows load thumbnails through the shared FeedImageService actor. Each icon reads its nearest display scale and a Dynamic Type scaled size, cancels its view task when its request changes, and checks cancellation before replacing the displayed image. ImageIO decoding stays outside MainActor. Missing or invalid images use a system-symbol fallback; digest feeds keep their Sparkles mode symbol. This wiring does not by itself establish native responsiveness or energy acceptance under image load.
 
+The native Mac image-load scenario now verifies scrolling and account-form interaction while the shipping pipeline handles large synthetic homepages, HTTP 503 fallbacks and 4096-pixel images. Removing all fixture feeds makes their actual view tasks disappear; additional transport cancellations and zero active requests are required, with a maximum of three simultaneous requests. [Window screenshot and exact scoped results](../../../docs/reader/evidence/g-2026-10-25.md) record this Mac observation. The fixture is Debug/Mac-only, isolated in memory and uses no real credentials. Final platform and broad energy acceptance remain separate.
+
 Shared SwiftUI views for macOS, iOS and iPadOS 27 and later. Every ReaderWindow owns a ReaderSession with its own selection, search, presentations and query generation. ReaderServices shares only persistence, FreshRSS and content/intelligence services.
 
 Articles and daily digests remain accessible together. Search, stars and feed navigation expose originals; incomplete or failed summaries never hide unprocessed articles. Opening content changes no read status. Marking a digest read uses exactly the sources of its displayed revision.

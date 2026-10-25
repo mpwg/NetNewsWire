@@ -16,6 +16,11 @@ struct ReaderApplication: App {
         WindowGroup(id: "reader") {
             if let services = bootstrap.services {
                 ReaderWindow(services: services)
+                    #if DEBUG && os(macOS)
+                    .safeAreaInset(edge: .bottom) {
+                        if let fixture = bootstrap.imageLoadFixture { ReaderImageLoadPanel(fixture: fixture) }
+                    }
+                    #endif
             } else {
                 ContentUnavailableView("Reader could not start", systemImage: "externaldrive.badge.exclamationmark",
                                        description: Text(bootstrap.errorMessage ?? String(localized: "The local data store is unavailable.")))
@@ -30,6 +35,9 @@ struct ReaderApplication: App {
 private final class ReaderBootstrap {
     let services: ReaderServices?
     let errorMessage: String?
+    #if DEBUG && os(macOS)
+    private(set) var imageLoadFixture: ReaderImageLoadFixture?
+    #endif
 
     init() {
         do {
@@ -39,6 +47,15 @@ private final class ReaderBootstrap {
             try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
             let uiTesting = ProcessInfo.processInfo.arguments.contains("--ui-testing")
             let store = try ReaderStore(url: uiTesting ? nil : directory.appendingPathComponent("Reader.store"), inMemory: uiTesting)
+            #if DEBUG && os(macOS)
+            if uiTesting && ProcessInfo.processInfo.arguments.contains("--ui-testing-image-load") {
+                let fixture = ReaderImageLoadFixture(store: store)
+                imageLoadFixture = fixture
+                services = ReaderServices(repository: store, images: fixture.images)
+                errorMessage = nil
+                return
+            }
+            #endif
             let credentials = KeychainCredentialStore(service: bundleID)
             let client = FreshRSSClient(repository: store, credentials: credentials)
             let content = ArticleContentService()

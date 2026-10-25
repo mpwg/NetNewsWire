@@ -1,0 +1,1 @@
+cancelledBeforeRemoval=0, cancelledAfterRemoval=3, active=0, maximumActive=3
