@@ -30,7 +30,11 @@ The full plan passes **101 code functions plus the unchanged three UI tests / 14
 
 `/Users/mat/Library/Developer/Xcode/DerivedData/Reader-fuevgxanyutuuihcfejpioljllaa/Logs/Test/Test-Reader-2026.10.25_11-34-56-+0100.xcresult`
 
-Raw xcresult summary confirms 104 distinct tests, 14 parameterized functions / 53 cases and no runtime warnings. The MCP-exported copy lacks Info.plist; it is not the count source. Xcode MCP built/ran the Mac plan with the existing concurrency/warning policy; whole-repository SwiftLint strict passes. Hosted revalidation is pending.
+Raw xcresult summary confirms 104 distinct tests, 14 parameterized functions / 53 cases and no runtime warnings. The MCP-exported copy lacks Info.plist; it is not the count source. Xcode MCP built/ran the Mac plan with the existing concurrency/warning policy; whole-repository SwiftLint strict passes.
+
+[Mac-only CI 40186614810](https://github.com/mpwg/NetNewsWire/actions/runs/40186614810) passes on its first attempt at **10b5777d7**. Job 121148645254 explicitly reports 101 code tests in 15 suites, the nine credential-error cases, two recovery-cancellation cases, three graph outcomes, image release and streamed limits, all three native UI tests, process recovery and runner contracts. The native image-load case passes in 34.141 seconds. No iPhone/iPad job was launched.
+
+Audit #16/#30 are closed as completed for the replacement's corresponding service contracts, alongside earlier #37/#38. Fifteen mapped findings remain open. G/#52 remains open for deferred final scope; its exercised Mac/service criteria are fulfilled. C/#48 can proceed with Mac-focused verification while final platform acceptance remains explicitly deferred. These scoped acceptances do not authorize legacy removal.
 
 ## Retained failures and diagnostics
 
