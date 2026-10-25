@@ -169,6 +169,23 @@ struct OPMLImportServiceTests {
         #expect(try await fixture.repository.folders().first?.title == "A/label/News")
     }
 
+    @Test("New imports remain unpublished when confirmed subscriptions fail their initial refresh",
+          arguments: ["/subscription/list", "/tag/list", "/stream/items/ids"])
+    func initialRefreshFailureKeepsNewImportUnpublished(path: String) async throws {
+        let fixture = try OPMLFixture()
+        await fixture.server.failRefresh(at: path)
+        await #expect(throws: ReaderError.server(503)) {
+            try await fixture.importer.importDocument(Self.nested, account: fixture.account)
+        }
+        // Quick-add and category/title writes succeeded before the requested refresh failure.
+        #expect(await fixture.server.quickAdds == 1)
+        #expect(await fixture.server.confirmedEdits == 1)
+        #expect(await fixture.server.failedRefreshes == 1)
+        #expect(try await fixture.repository.feeds().isEmpty)
+        #expect(try await fixture.repository.folders().isEmpty)
+        #expect(try await fixture.repository.preferences().isEmpty)
+    }
+
     private static let nested = Data("""
     <?xml version="1.0"?><opml version="2.0"><body>
       <outline text="A"><outline text="News"><outline title="Feed A" xmlUrl="https://source.test/feed-a" htmlUrl="https://source.test/home-a"/></outline></outline>
@@ -215,6 +232,10 @@ private actor OPMLTestServer {
     private var feeds: [RemoteFeed] = []
     private var reject = false
     private var moveGate: RequestGate?
+    private var failedRefreshPath: String?
+    var confirmedEdits = 0
+    var failedRefreshes = 0
+    func failRefresh(at path: String) { failedRefreshPath = path }
     var requestCount = 0
     var quickAdds = 0
     var moves = 0
@@ -246,7 +267,12 @@ private actor OPMLTestServer {
             if let title = fields["t"] { feeds[index].title = title }
             if let old = fields["r"] { feeds[index].folders.removeAll { $0 == old }; moves += 1 }
             if let folder = fields["a"] { feeds[index].folders.append(folder) }
+            confirmedEdits += 1
             return (200, Data("OK".utf8))
+        }
+        if let failedRefreshPath, path.hasSuffix(failedRefreshPath) {
+            failedRefreshes += 1
+            return (503, Data())
         }
         if path.hasSuffix("/subscription/list") {
             let subscriptions: [[String: Any]] = feeds.map { feed in
