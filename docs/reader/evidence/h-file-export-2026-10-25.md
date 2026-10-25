@@ -25,7 +25,13 @@ The sandboxed runner initially could not create a directory at the global `/tmp`
 | Actual native Save-panel export writes nonempty OPML outside Reader's container | Fulfilled locally | Final 22:11:16 run, one pass, no skips; exact target directory and bytes verified. |
 | Least required sandbox capability | Fulfilled for exercised path | Read Only fails the same journey; Read/Write passes twice. App Sandbox remains enabled. |
 | Business logic remains code-tested | Fulfilled | Existing Swift Testing OPML contracts are unchanged; only one system-dialog UI method is added. |
-| Complete current-source regression | Open | Full native plan and hosted Reader CI pending. |
+| Complete current-source regression | Open | Full native plan passes all 392 executions at 43da4cc22: 384 code and eight UI, zero failures/skips. Hosted Reader CI 40234454261 remains pending. |
 | README and acceptance matrix | Updated | Root and native README, matrix, handoff and test review link this follow-up. |
 
 This does not accept iPhone/iPad file presentation, accessibility, actual network-off/restart, physical-device signing, model quality or PCC. Those requirements remain explicitly open with their owning packages. Swift CodeQL's pre-analysis failure remains separate under K; no check is disabled.
+
+## Complete local regression
+
+The unchanged current source at **43da4cc22** passes the complete native plan, started at 22:12:08: **192 Swift Testing functions in 31 suites / 384 code executions plus eight native UI methods / 392 total**, 200 distinct tests, 65 parameterized functions / 257 cases, zero failures or skips. [Raw full summary](h-file-export-all-native-2026-10-25.json). One deliberately injected Foundation Models guardrail runtime warning is preserved; compiler warnings-as-errors remain enabled. Strict lint and `git diff --check` pass. The normal Debug Reader is restored through Xcode MCP (PID 11459), and Default Folder X is running again.
+
+Exact-source [Reader CI 40234454261](https://github.com/mpwg/NetNewsWire/actions/runs/40234454261) is still running. Separate [CodeQL 40234454149](https://github.com/mpwg/NetNewsWire/actions/runs/40234454149), Swift job 121292920151, again fails before analysis in `preload_tracer`/autobuild with exit 139. That failure is not a Reader test failure or successful security analysis.
