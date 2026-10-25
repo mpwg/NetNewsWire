@@ -41,7 +41,23 @@ The delayed-query scenario cannot hit Unread at x=-72; the window scenario canno
 
 ![Initial hosted Reader window clipped on the smaller display](f-first-ci-clipped-window-2026-10-25.png)
 
-The follow-up caps new Mac windows to the SwiftUI placement context's visible display rectangle, leaving edge space, while retaining the preferred maximum 1200×800 size and normal user restoration/resizing. It uses defaultWindowPlacement and context.defaultDisplay, following Apple's current SDK documentation; no global screen lookup or test-only geometry override is added. The UI assertions remain intact. Native build-for-testing and strict lint pass; both affected UI scenarios pass through Xcode MCP at 17-33-43, [raw summary](f-window-placement-native-2026-10-25.json). Fresh hosted revalidation on the smaller display is pending. This geometry correction requires actual native window evidence, rather than a unit test that repeats its size calculation.
+The follow-up caps new Mac windows to the SwiftUI placement context's visible display rectangle, leaving edge space, while retaining the preferred maximum 1200×800 size and normal user restoration/resizing. It uses defaultWindowPlacement and context.defaultDisplay, following Apple's current SDK documentation; no global screen lookup or test-only geometry override is added. The UI assertions remain intact. Native build-for-testing and strict lint pass; both affected UI scenarios pass through Xcode MCP at 17-33-43, [raw summary](f-window-placement-native-2026-10-25.json). This geometry correction requires actual native window evidence, rather than a unit test that repeats its size calculation.
+
+## Final hosted confirmation and current local image
+
+[Reader Mac CI 40212463634](https://github.com/mpwg/NetNewsWire/actions/runs/40212463634) passes at **7e9ee89c2**: all 151 Swift Testing functions in 25 suites and seven native UI methods, direct runner bootstrap and strict lint. The [raw hosted summary](f-final-ci-native-2026-10-25.json) confirms all 269 executions, 158 distinct tests and 43 parameterized functions / 154 cases, no failures/skips/runtime warnings. The [10,000-article recovery report](f-final-ci-recovery-2026-10-25.json) records seed PID 13329 exit -9 and recovery/reopen PIDs 13633/13667 exit 0.
+
+The unchanged hosted window scenario now observes 976×629→736×469→976×629, with its surviving search and native close still passing. [Exact sizes](f-final-ci-window-sizes-2026-10-25.txt). The hosted capture shows the sidebar/title-bar area inside the display:
+
+![Corrected native window on the smaller hosted display](f-final-ci-window-2026-10-25.png)
+
+Hosted captures omit the WebKit pixels even though the article heading is present/hittable through Accessibility. [Retained diagnostic capture](f-final-ci-saved-content-2026-10-25.png). This is **not** accepted proof that the article body painted on the VM; native event/Accessibility assertions and pixel review have different limits. No cause is established for the missing captured pixels.
+
+The same extraction UI method passes again locally on the final source at 17-49-49. [Raw current local result](f-final-local-paint-2026-10-25.json). Its actual app-window image visibly contains both the saved article body and unavailable-content warning:
+
+![Current local native Reader with fully drawn saved article and warning](f-final-local-saved-content-2026-10-25.png)
+
+This local image is the final pixel evidence; the hosted image is retained only as a capture limitation. Earlier incomplete NSView cache captures remain rejected. Broader hosted WebKit pixel-capture reliability stays open; a green test does not silently accept it.
 
 ## Criterion matrix
 
@@ -49,13 +65,13 @@ The follow-up caps new Mac windows to the SwiftUI placement context's visible di
 |---|---|---|
 | Late success/failure cannot change the current article | Fulfilled on exercised Mac core | Existing twenty Swift Testing extraction executions retain the precise after-parsing delivery gate, A→B→A and cancellation without replacement. Native selection additionally cancels A's active transport. |
 | Removed article view and extraction graph release | Fulfilled on Mac component | Actual NSHostingView/ArticleDetailView removal, success/failure/malformed/held-cancellation, nine weak references released. Actual WebPage/handler/server release covers three navigation outcomes. |
-| Restricted page preserves usable saved content | Fulfilled on exercised Mac | Actual app menu/selection, HTTP 403 alert, visible warning and readable saved heading; malformed-content component fallback. |
+| Restricted page preserves usable saved content | Fulfilled on exercised local Mac | Actual app menu/selection, HTTP 403 alert, visible warning and readable body in the final local image; malformed-content component fallback. Hosted events/Accessibility pass, but its blank WebKit capture is not pixel evidence. |
 | Relative links, plain text, malformed markup and script policy | Fulfilled for named fixtures | Actual WebKit DOM/image assertions; four complete parser fragment forms recover and two unavailable forms fail explicitly. Existing HTTP timeout contract remains passing. |
 | Real network-off/restart | Open | Owner explicitly deferred this Mac run. Synthetic documents/transports do not replace it. Do not re-request until resumed. |
 | Representative real-site/media and resource acceptance | Open | Broader real pages/media, sustained memory/energy and the 4 MB check after response buffering remain separate; there is no streamed download memory bound. |
-| Final platforms and accessibility | Open | iPhone/iPad, physical-device signing and broad accessibility remain deferred/unavailable. |
-| README, matrix and hosted confirmation | Open for hosted run | Reader, ReaderKit, ReaderUI and root guides, matrix, handoff and test review are updated. Local checks pass; exact-head Reader CI must still confirm this checkpoint. |
+| Final platforms and accessibility | Open | iPhone/iPad, physical-device signing and broad accessibility remain deferred/unavailable. Hosted WebKit pixel-capture reliability also remains open. |
+| README, matrix and hosted confirmation | Fulfilled | Reader, ReaderKit, ReaderUI and root guides, matrix, handoff and test review are updated. Reader Mac CI 40212463634 passes all 269 executions, bootstrap, recovery and strict lint at 7e9ee89c2. The preceding failed run and both image scopes remain explicit. |
 
 F and #33/#34 remain open for their deferred criteria. Native Mac lifetime/rendering evidence is now present; previous native-gap statements describe the earlier extraction-only checkpoint.
 
-Separate [CodeQL run 40211531653, Swift job 121223603838](https://github.com/mpwg/NetNewsWire/actions/runs/40211531653/job/121223603838) fails in Autobuild with preload_tracer exit 139 before analysis. Python, JavaScript/TypeScript and Actions jobs pass. [Exact current error excerpt](f-codeql-2026-10-25.txt). K retains this failure; no check is disabled and Reader test success is not complete repository CI acceptance.
+Separate [CodeQL run 40212462615, Swift job 121226446365](https://github.com/mpwg/NetNewsWire/actions/runs/40212462615/job/121226446365) again fails in Autobuild with preload_tracer exit 139 before analysis at 7e9ee89c2. Python, JavaScript/TypeScript and Actions jobs pass. [Exact error excerpts from both source checkpoints](f-codeql-2026-10-25.txt). K retains this failure; no check is disabled and Reader test success is not complete repository CI acceptance.

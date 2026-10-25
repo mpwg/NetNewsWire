@@ -1,0 +1,1 @@
+initial=(14.0, 45.0, 976.0, 629.0), narrow=(14.0, 45.0, 736.0, 469.0), restored=(14.0, 45.0, 976.0, 629.0); independent searches/selections and native close completed; surviving search returned article 270.
