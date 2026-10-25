@@ -56,6 +56,7 @@ public final class ReaderSession {
     public private(set) var rows: [TimelineRow] = []
     public private(set) var loading = false
     public private(set) var syncing = false
+    public private(set) var markingFeedsRead: Set<FeedKey> = []
     public private(set) var generating = false
     public private(set) var canLoadMore = false
     public private(set) var sourceArticles: [ArticleSnapshot] = []
@@ -172,7 +173,7 @@ public final class ReaderSession {
         let covered = Set(digests.filter { bundled.contains($0.feed) }.flatMap(\.sources))
         var nextRows = articles.filter { showOriginals || !covered.contains($0.id) }
             .map { article in
-                TimelineRow(id: .article(article.id), title: article.title, subtitle: article.text,
+                TimelineRow(id: .article(article.id), feed: FeedKey(accountID: article.id.accountID, remoteID: article.feedID), title: article.title, subtitle: article.text,
                             date: article.datePublished ?? article.dateArrived, unread: !article.read,
                             starred: article.starred, isDigest: false)
             }
@@ -183,7 +184,7 @@ public final class ReaderSession {
                 let unread = digestUnread[digest.id] == true
                 if sidebarSelection == "unread" && !unread { continue }
                 let feedTitle = feeds.first { $0.id == digest.feed }?.title ?? "Feed"
-                nextRows.append(TimelineRow(id: .digest(digest.id), title: String(localized: "\(feedTitle) · Daily digest", bundle: #bundle),
+                nextRows.append(TimelineRow(id: .digest(digest.id), feed: digest.feed, title: String(localized: "\(feedTitle) · Daily digest", bundle: #bundle),
                                            subtitle: String(localized: "\(digest.sources.count) original articles", bundle: #bundle), date: digest.day,
                                            unread: unread, starred: false, isDigest: true))
             }
@@ -290,6 +291,29 @@ public final class ReaderSession {
                     try await client.flush(account: account)
                 }
             }
+        } catch { errorMessage = error.localizedDescription }
+    }
+
+    public func feedForStatusAction(_ items: Set<TimelineSelection>) -> FeedSnapshot? {
+        guard !items.isEmpty else { return nil }
+        let matching = rows.filter { items.contains($0.id) }
+        guard matching.count == items.count, let feed = matching.first?.feed,
+              matching.allSatisfy({ $0.feed == feed }) else { return nil }
+        return feeds.first { $0.id == feed }
+    }
+
+    public func markFeedRead(_ feed: FeedKey) async {
+        guard markingFeedsRead.insert(feed).inserted else { return }
+        defer { markingFeedsRead.remove(feed) }
+        do {
+            let changed = try await services.repository.markFeedRead(feed)
+            services.didChange()
+            await reload()
+            if !changed.isEmpty, let client = services.client,
+               let account = accounts.first(where: { $0.id == feed.accountID }) {
+                try await client.flush(account: account)
+            }
+        } catch is CancellationError {
         } catch { errorMessage = error.localizedDescription }
     }
 

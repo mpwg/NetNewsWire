@@ -51,8 +51,9 @@ private final class ReaderBootstrap {
             let store = try ReaderStore(url: uiTesting ? nil : directory.appendingPathComponent("Reader.store"), inMemory: uiTesting)
             #if DEBUG && os(macOS)
             if uiTesting && ProcessInfo.processInfo.arguments.contains("--ui-testing-timeline") {
-                timelineFixture = ReaderTimelineFixture(store: store)
-                services = ReaderServices(repository: store)
+                let fixture = ReaderTimelineFixture(store: store)
+                timelineFixture = fixture
+                services = ReaderServices(repository: fixture.repository)
                 errorMessage = nil
                 return
             }

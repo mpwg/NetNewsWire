@@ -189,23 +189,46 @@ public actor ReaderStore: ReaderRepository {
     }
 
     public func setStatus(_ keys: [ArticleKey], field: StatusField, value: Bool) throws {
+        try write { try updateStatus(keys, field: field, value: value) }
+    }
+
+    /// Select and change the current unread set in one actor-owned transaction, only after confirmation.
+    public func markFeedRead(_ feed: FeedKey) async throws -> [ArticleKey] {
+        try Task.checkCancellation()
+        var keys: [ArticleKey] = []
         try write {
-            for key in Set(keys).sorted(by: { $0.id < $1.id }) {
-                let recordKey = key.id
-                let descriptor = FetchDescriptor<ArticleRecord>(predicate: #Predicate { $0.key == recordKey })
-                guard let record = try context.fetch(descriptor).first else { throw ReaderError.invalidResponse }
-                switch field {
-                case .read: record.read = value
-                case .starred: record.starred = value
-                }
-                let queueKey = PendingRecord.key(for: key, field: field)
-                let queueDescriptor = FetchDescriptor<PendingRecord>(predicate: #Predicate { $0.key == queueKey })
-                let change = PendingChange(article: key, field: field, value: value)
-                if let pending = try context.fetch(queueDescriptor).first {
-                    pending.revision = change.id
-                    pending.value = value
-                } else { context.insert(PendingRecord(change)) }
+            let feedKey = feed.id
+            var feedQuery = FetchDescriptor<FeedRecord>(predicate: #Predicate { $0.key == feedKey })
+            feedQuery.fetchLimit = 1
+            guard try !context.fetch(feedQuery).isEmpty else { throw ReaderError.invalidResponse }
+            let accountID = feed.accountID
+            let feedID = feed.remoteID
+            let query = FetchDescriptor<ArticleRecord>(predicate: #Predicate {
+                $0.accountID == accountID && $0.feedID == feedID && !$0.read
+            }, sortBy: [SortDescriptor(\.key)])
+            keys = try context.fetch(query).map { ArticleKey(accountID: accountID, remoteID: $0.remoteID) }
+            try Task.checkCancellation()
+            try updateStatus(keys, field: .read, value: true)
+        }
+        return keys
+    }
+
+    private func updateStatus(_ keys: [ArticleKey], field: StatusField, value: Bool) throws {
+        for key in Set(keys).sorted(by: { $0.id < $1.id }) {
+            let recordKey = key.id
+            let descriptor = FetchDescriptor<ArticleRecord>(predicate: #Predicate { $0.key == recordKey })
+            guard let record = try context.fetch(descriptor).first else { throw ReaderError.invalidResponse }
+            switch field {
+            case .read: record.read = value
+            case .starred: record.starred = value
             }
+            let queueKey = PendingRecord.key(for: key, field: field)
+            let queueDescriptor = FetchDescriptor<PendingRecord>(predicate: #Predicate { $0.key == queueKey })
+            let change = PendingChange(article: key, field: field, value: value)
+            if let pending = try context.fetch(queueDescriptor).first {
+                pending.revision = change.id
+                pending.value = value
+            } else { context.insert(PendingRecord(change)) }
         }
     }
 

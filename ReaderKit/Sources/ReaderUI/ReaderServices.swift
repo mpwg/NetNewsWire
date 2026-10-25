@@ -62,6 +62,7 @@ public enum TimelineSelection: Hashable, Sendable {
 
 public struct TimelineRow: Identifiable, Hashable, Sendable {
     public var id: TimelineSelection
+    public var feed: FeedKey
     public var title: String
     public var subtitle: String
     public var date: Date

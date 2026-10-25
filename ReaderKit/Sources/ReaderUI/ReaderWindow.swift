@@ -10,6 +10,7 @@ public struct ReaderWindow: View {
     @State private var session: ReaderSession
     @State private var editedFeed: FeedSnapshot?
     @State private var feedToRemove: FeedSnapshot?
+    @State private var feedToMarkRead: FeedSnapshot?
     @State private var editedFolder: FolderSnapshot?
     @State private var folderToRemove: FolderSnapshot?
     @State private var addingFeed = false
@@ -26,10 +27,11 @@ public struct ReaderWindow: View {
         @Bindable var session = session
         NavigationSplitView {
             ReaderSidebar(session: session, edit: { editedFeed = $0 }, remove: { feedToRemove = $0 },
-                          editFolder: { editedFolder = $0 }, removeFolder: { folderToRemove = $0 })
+                          editFolder: { editedFolder = $0 }, removeFolder: { folderToRemove = $0 },
+                          markRead: { feedToMarkRead = $0 })
                 .navigationSplitViewColumnWidth(min: 220, ideal: 260, max: 360)
         } content: {
-            ReaderTimeline(session: session)
+            ReaderTimeline(session: session, markRead: { feedToMarkRead = $0 })
                 .navigationSplitViewColumnWidth(min: 280, ideal: 360, max: 520)
         } detail: {
             ReaderDetail(session: session)
@@ -67,6 +69,15 @@ public struct ReaderWindow: View {
         .sheet(isPresented: $addingFeed) { FeedCreationView(session: session) }
         .sheet(item: $editedFeed) { feed in FeedSettingsView(session: session, feed: feed) }
         .sheet(item: $editedFolder) { folder in FolderSettingsView(session: session, folder: folder) }
+        .confirmationDialog(Text("Mark feed read?", bundle: #bundle), item: $feedToMarkRead) { feed in
+            Button { Task { await session.markFeedRead(feed.id) } } label: {
+                Text("Mark all read", bundle: #bundle)
+            }
+            .accessibilityIdentifier("confirmFeedRead")
+            Button(LocalizedStringResource("Cancel", bundle: .atURL(#bundle.bundleURL)), role: .cancel) { }
+        } message: { feed in
+            Text("Mark all currently unread articles in \(feed.title) as read.", bundle: #bundle)
+        }
         .confirmationDialog(Text("Unsubscribe from feed?", bundle: #bundle), item: $feedToRemove) { feed in
             Button(LocalizedStringResource("Unsubscribe", bundle: .atURL(#bundle.bundleURL)), role: .destructive) {
                 Task {
@@ -129,6 +140,7 @@ private struct ReaderSidebar: View {
     var remove: (FeedSnapshot) -> Void
     var editFolder: (FolderSnapshot) -> Void
     var removeFolder: (FolderSnapshot) -> Void
+    var markRead: (FeedSnapshot) -> Void
 
     var body: some View {
         List(selection: $session.sidebarSelection) {
@@ -191,6 +203,10 @@ private struct ReaderSidebar: View {
             .tag(feed.id.id)
             .accessibilityIdentifier("feedRow-\(feed.id.id)")
             .contextMenu {
+                Button { markRead(feed) } label: {
+                    Text("Mark all in feed read…", bundle: #bundle)
+                }
+                .disabled(session.markingFeedsRead.contains(feed.id))
                 Button(LocalizedStringResource("Feed settings", bundle: .atURL(#bundle.bundleURL)), systemImage: "slider.horizontal.3") { edit(feed) }
                 Button(LocalizedStringResource("Unsubscribe", bundle: .atURL(#bundle.bundleURL)), systemImage: "minus.circle", role: .destructive) { remove(feed) }
             }
@@ -233,6 +249,7 @@ private struct ReaderFeedIcon: View {
 
 private struct ReaderTimeline: View {
     @Bindable var session: ReaderSession
+    var markRead: (FeedSnapshot) -> Void
 
     private var timelineList: some View {
         #if os(macOS)
@@ -269,6 +286,13 @@ private struct ReaderTimeline: View {
         .contextMenu(forSelectionType: TimelineSelection.self) { items in
             if !items.isEmpty {
                 TimelineStatusActions(session: session, target: session.statusTarget(for: items))
+                if let feed = session.feedForStatusAction(items) {
+                    Divider()
+                    Button { markRead(feed) } label: {
+                        Text("Mark all in feed read…", bundle: #bundle)
+                    }
+                    .disabled(session.markingFeedsRead.contains(feed.id))
+                }
             }
         }
         .toolbar {

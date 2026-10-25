@@ -10,6 +10,7 @@ public protocol ReaderRepository: Sendable {
     func changes() async -> AsyncStream<UInt64>
     func applyRefresh(_ snapshot: RefreshSnapshot) async throws
     func setStatus(_ keys: [ArticleKey], field: StatusField, value: Bool) async throws
+    func markFeedRead(_ feed: FeedKey) async throws -> [ArticleKey]
     func pendingChanges(accountID: UUID) async throws -> [PendingChange]
     func acknowledge(_ changes: [PendingChange]) async throws
     func preferences() async throws -> [FeedPreferences]
@@ -23,6 +24,9 @@ public protocol ReaderRepository: Sendable {
 }
 
 public extension ReaderRepository {
+    func markFeedRead(_ feed: FeedKey) async throws -> [ArticleKey] {
+        throw ReaderError.unavailable(String(localized: "This store does not support atomic feed status changes.", bundle: #bundle))
+    }
     func mergeImportMetadata(feed: FeedKey, homePageURL: URL?, folderPath: [String], feedURL: URL) async throws {
         throw ReaderError.unavailable(String(localized: "This store does not support atomic metadata import.", bundle: #bundle))
     }

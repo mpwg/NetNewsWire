@@ -322,18 +322,18 @@
       }
     },
     "Choose an action for the selected entries." : {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wähle eine Aktion für die ausgewählten Einträge."
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wähle eine Aktion für die ausgewählten Einträge."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Choose an action for the selected entries."
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose an action for the selected entries."
           }
         }
       }
@@ -684,6 +684,57 @@
         }
       }
     },
+    "Mark all currently unread articles in %@ as read." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle derzeit ungelesenen Artikel in %@ als gelesen markieren."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mark all currently unread articles in %@ as read."
+          }
+        }
+      }
+    },
+    "Mark all in feed read…" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle im Feed als gelesen markieren …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mark all in feed read…"
+          }
+        }
+      }
+    },
+    "Mark all read" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle als gelesen markieren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mark all read"
+          }
+        }
+      }
+    },
     "Mark digest read" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -697,6 +748,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mark digest read"
+          }
+        }
+      }
+    },
+    "Mark feed read?" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feed als gelesen markieren?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mark feed read?"
           }
         }
       }
@@ -1023,35 +1091,35 @@
       }
     },
     "Selected entries: %lld" : {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ausgewählte Einträge: %lld"
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausgewählte Einträge: %lld"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Selected entries: %lld"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selected entries: %lld"
           }
         }
       }
     },
     "Selection actions" : {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Auswahlaktionen"
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auswahlaktionen"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Selection actions"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selection actions"
           }
         }
       }

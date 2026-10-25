@@ -251,7 +251,7 @@ struct ReaderSessionTests {
 
     @Test("Preparing selection actions performs no repository lookups")
     func selectionActionPreparationDoesNotQueryArticles() async throws {
-        let (store, _, _, articles) = try await fixture()
+        let (store, _, feed, articles) = try await fixture()
         let lookups = SessionLookupCount()
         let repository = ScriptedRepository(base: store, articleLookup: { key in
             await lookups.record()
@@ -268,7 +268,10 @@ struct ReaderSessionTests {
             let target = session.statusTarget(for: session.timelineSelection)
             #expect(target.keys.count == 2)
             #expect(target.canStar)
+            #expect(session.feedForStatusAction(session.timelineSelection)?.id == feed.id)
         }
+        #expect(session.feedForStatusAction([]) == nil)
+        #expect(session.feedForStatusAction([.digest("missing")]) == nil)
         #expect(await lookups.count == before)
     }
 

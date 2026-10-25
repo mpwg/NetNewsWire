@@ -21,10 +21,67 @@ final class ReaderSmokeTests: XCTestCase {
     }
 
     #if os(macOS)
+    func testDelayedTimelineQueryKeepsInputAndFeedMenuResponsive() throws {
+        let app = launchReader(arguments: ["--ui-testing-timeline", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"])
+        waitForValue(app.staticTexts["timelineFixturePhase"], equalTo: "ready", timeout: 10)
+        let first = app.outlines["readerTimeline"].staticTexts["Timeline article 299"].firstMatch
+        XCTAssertTrue(first.waitForExistence(timeout: 10))
+        first.click()
+        app.buttons["holdTimelineQueries"].click()
+        app.outlines["readerSidebar"].buttons["Timeline fixture"].click()
+        waitForPositiveValue(app.staticTexts["timelineHeldQueries"])
+        let search = app.searchFields.firstMatch
+        search.click()
+        search.typeText("Representative")
+        waitForPositiveValue(app.staticTexts["timelineHeldQueries"])
+        app.descendants(matching: .any)["readerActions"].firstMatch.click()
+        app.menuItems["connectAccount"].click()
+        let username = app.textFields["username"]
+        XCTAssertTrue(username.waitForExistence(timeout: 5))
+        username.click()
+        username.typeText("Input while timeline query waits")
+        XCTAssertEqual(username.value as? String, "Input while timeline query waits")
+        waitForPositiveValue(app.staticTexts["timelineHeldQueries"])
+        app.buttons["cancelConnection"].firstMatch.click()
+        let timeline = app.outlines["readerTimeline"]
+        timeline.scroll(byDeltaX: 0, deltaY: -250)
+        timeline.scroll(byDeltaX: 0, deltaY: 250)
+        XCTAssertTrue(first.wait(for: \.isHittable, toEqual: true, timeout: 5))
+        let queries = app.staticTexts["timelineQueryCount"]
+        let before = try XCTUnwrap(queries.value as? String)
+        first.rightClick()
+        let markFeed = app.menuItems["Mark all in feed read…"]
+        XCTAssertTrue(markFeed.waitForExistence(timeout: 5))
+        waitForValue(queries, equalTo: before)
+        markFeed.click()
+        XCTAssertTrue(app.buttons["confirmFeedRead"].waitForExistence(timeout: 5))
+        waitForValue(queries, equalTo: before)
+        waitForValue(app.staticTexts["timelineFeedReadCalls"], equalTo: "0")
+        let menuEvidence = XCTAttachment(screenshot: app.windows.firstMatch.screenshot())
+        menuEvidence.name = "Native feed confirmation while timeline query remains held"
+        menuEvidence.lifetime = .keepAlways
+        add(menuEvidence)
+        app.windows.firstMatch.buttons["Cancel"].firstMatch.click()
+        waitForValue(queries, equalTo: before)
+        waitForValue(app.staticTexts["timelinePendingReadCount"], equalTo: "0")
+        first.rightClick()
+        markFeed.click()
+        app.buttons["confirmFeedRead"].click()
+        waitForValue(app.staticTexts["timelineFeedReadCalls"], equalTo: "1")
+        waitForValue(app.staticTexts["timelinePendingReadCount"], equalTo: "300")
+        waitForPositiveValue(app.staticTexts["timelineHeldQueries"])
+        let evidence = XCTAttachment(string: "Native form input and scrolling completed while a timeline query was held; menu and cancelled confirmation left lookup count=\(before), feedReadCalls=0, pending=0. Confirmation called feed read once and queued all 300 unread rows beyond the 200-row page.")
+        evidence.name = "Delayed native query and confirmed feed action"
+        evidence.lifetime = .keepAlways
+        add(evidence)
+        app.buttons["releaseTimelineQueries"].click()
+        waitForValue(app.staticTexts["timelineHeldQueries"], equalTo: "0")
+    }
+
     func testTimelineSupportsKeyboardSelectionAndBulkRead() throws {
         let app = launchReader(arguments: ["--ui-testing-timeline", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"])
         waitForValue(app.staticTexts["timelineFixturePhase"], equalTo: "ready", timeout: 10)
-        let first = app.staticTexts["Timeline article 299"].firstMatch
+        let first = app.outlines["readerTimeline"].staticTexts["Timeline article 299"].firstMatch
         XCTAssertTrue(first.waitForExistence(timeout: 10))
         first.click()
         app.typeKey(.downArrow, modifierFlags: .shift)

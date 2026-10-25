@@ -1,0 +1,1 @@
+Native form input and scrolling completed while a timeline query was held; menu and cancelled confirmation left lookup count=20, feedReadCalls=0, pending=0. Confirmation called feed read once and queued all 300 unread rows beyond the 200-row page.
