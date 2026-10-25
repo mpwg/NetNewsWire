@@ -1,8 +1,10 @@
-# Reader acceptance — 2026-10-24
+# Reader acceptance — updated 2026-10-25
 
 The existing Reader is implemented and partially verified; **full product acceptance remains open**. The active goal continues on `main` under [umbrella #45](https://github.com/mpwg/NetNewsWire/issues/45), packages #46–#56. Evidence below concerns Reader, not renewed acceptance of the original NetNewsWire targets.
 
-## A / #46: current foundation
+## A / #46: accepted foundation
+
+Accepted on 2026-10-25 at **2be912aef**: [current hosted run, attempt 2](https://github.com/mpwg/NetNewsWire/actions/runs/40172667411/attempts/2) passes Mac/iPhone/iPad. The shared Debug default is saved through Xcode. Current local full plans pass on all three destinations; their raw summaries and the failed first iPad hosted bootstrap are preserved in [A evidence](evidence/a-2026-10-25.md). No full product or physical-device acceptance is implied. Superseded infrastructure retirement stays in K with foreign edits preserved.
 
 PR [#57](https://github.com/mpwg/NetNewsWire/pull/57) adopted `codex/intelligence-reader` (`2528bc1b8`) onto `main` as `4f9f256e5` before this continuation. The trees were identical; no second implementation or merge was needed. `iOS/Resources/Info.plist` was clean on resumption and remains unchanged.
 
@@ -54,7 +56,7 @@ B remains formally open pending dependency A; current hosted evidence passes at 
 
 | Package | Implemented or exercised evidence | Still open |
 |---|---|---|
-| A / #46 | Standalone OS-27 Reader, native Apple-template app/test targets, Debug/Release namespaces, full hosted CI success, compiler policy and runner failure contracts; Xcode-saved Debug launch default | Current revalidation of the saved default before closure; superseded infrastructure retirement belongs to K and physical-device provisioning remains separate. |
+| A / #46 | Accepted 2026-10-25 at 2be912aef: native OS-27 foundation, Debug/Release namespaces, real tests, compiler policy, failure contracts and saved Debug default | No remaining A criterion. K retains infrastructure retirement and sustained reliability; physical-device signing remains open. |
 | B / #47 | 25 persistence contracts and native SIGKILL recovery with 10,000 articles, exact outbox acknowledgements, rollback, retention, streams and atomic source/import validation | Dependency A; complete persistent-app UI restart, device and real service evidence remain separate. |
 | C / #48 | FreshRSS HTTP/store contracts: complete pagination, old publication dates, exact acknowledgements, errors, empty folders and complete content | Real FreshRSS API login, multiple devices and offline recovery against an authorized test account. |
 | D / #49 | Shared views, async search/pagination, generation checks, source access and frozen displayed revisions | Representative real feed content and full native keyboard/navigation acceptance. |
