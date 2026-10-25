@@ -1,0 +1,195 @@
+Xcode MCP RunCodeSnippet
+sourceFilePath: ReaderKit/Sources/ReaderUI/ReaderServices.swift
+purpose: Record verified source fingerprints and restored FreshRSS OPML state
+Credentials are read from the existing device Keychain, never printed or written to this journal.
+Only the isolated Test account is used. Only self-created feeds/categories are removed.
+
+import ReaderSync
+import ReaderPersistence
+import ReaderContent
+
+@MainActor final class HLiveJournal {
+    let url = FileManager.default.temporaryDirectory.appendingPathComponent("reader-h-live-opml-20261025.json")
+    var values: [String:Any] = ["runtime":"Native Reader through Xcode MCP on macOS 27.0.1",
+                              "server":"feedreader.gehri.stream","username":"Test","processID":ProcessInfo.processInfo.processIdentifier,
+                              "credentialsPrinted":false,"accountCredentialsUsed":true,"persistentAppStoreWrites":false]
+    func write(_ phase:String, _ fields:[String:Any] = [:]) throws {
+        values.merge(fields) { _,new in new }
+        values["phase"] = phase
+        values["updatedAt"] = Date().timeIntervalSince1970
+        try JSONSerialization.data(withJSONObject:values,options:[.prettyPrinted,.sortedKeys]).write(to:url,options:.atomic)
+        print("READER_H_PHASE=" + phase)
+    }
+}
+func requireH(_ condition:Bool) throws { guard condition else { throw ReaderError.invalidResponse } }
+func safeHError(_ error:any Error) -> String {
+    if let error = error as? ReaderError {
+        switch error { case .server(let status): return "server-" + String(status)
+        case .invalidResponse: return "invalidResponse"
+        case .invalidURL: return "invalidURL"
+        default: return "ReaderError" }
+    }
+    if let error = error as? URLError { return "URLError-" + String(error.code.rawValue) }
+    return String(reflecting:type(of:error))
+}
+let journal = HLiveJournal()
+journal.values["opmlSourceSHA256"] = "4d208ae0144c64a931b21d089ed34093b4b7e3f215fad5035cc8490a592df39e"
+journal.values["freshRSSSourceSHA256"] = "72d142e23d96e1ef4f25e911ffb2fb4c91f96e22e04f4d6cbdc99d4e1fc4032f"
+
+let applicationStore = try ReaderStore(url:URL(fileURLWithPath:"/Users/mat/Library/Containers/eu.mpwg.reader.debug/Data/Library/Application Support/eu.mpwg.reader.debug/Reader.store"))
+let accounts = try await applicationStore.accounts().filter { $0.username == "Test" && $0.serverURL.host == "feedreader.gehri.stream" }
+try requireH(accounts.count == 1)
+let account = accounts[0]
+let store = try ReaderStore(inMemory:true)
+try await store.saveAccount(account)
+let credentials = KeychainCredentialStore(service:"eu.mpwg.reader.debug")
+let configuration = URLSessionConfiguration.ephemeral
+configuration.timeoutIntervalForRequest = 20
+configuration.timeoutIntervalForResource = 40
+configuration.urlCache = nil
+let transport = URLSession(configuration:configuration)
+defer { transport.invalidateAndCancel() }
+let client = FreshRSSClient(repository:store,credentials:credentials,session:transport)
+try await client.refresh(account:account)
+let baselineFeeds = try await store.feeds()
+let baselineFolders = try await store.folders()
+let baselineArticles = try await store.articles(ArticleQuery(limit:10000))
+let baselineIDs = Set(baselineFeeds.map(\.id))
+let baselineFolderIDs = Set(baselineFolders.map(\.remoteID))
+let prefix = "Reader H 20261025 " + String(UUID().uuidString.prefix(8))
+let sourceURLs = ["https://github.com/apple/swift/releases.atom","https://github.com/duckdb/duckdb/releases.atom"]
+let allowedURLs = Set(sourceURLs + ["https://github.com/swiftlang/swift/releases.atom"])
+let invalidURL = "https://reader-h-" + UUID().uuidString.lowercased() + ".invalid/feed.xml"
+try requireH(baselineFeeds.count == 1 && baselineArticles.count == 10)
+try requireH(!baselineFeeds.contains { allowedURLs.contains($0.url.absoluteString) })
+try journal.write("baseline",["prefix":prefix,"sourceURLs":sourceURLs,"invalidURL":invalidURL,
+                             "baselineFeedCount":baselineFeeds.count,"baselineFolderCount":baselineFolders.count,
+                             "baselineArticleCount":baselineArticles.count,
+                             "baselineFeeds":baselineFeeds.map { ["id":$0.id.remoteID,"url":$0.url.absoluteString,"title":$0.title,"folders":$0.folderIDs] as [String:Any] }])
+let importer = OPMLImportService(repository:store,client:client)
+var checks: [String:Bool] = [:]
+var primaryError:String?
+do {
+    let document = Data("""
+    <opml version="2.0"><body><outline text="\(prefix)">
+    <outline text="A"><outline text="News"><outline title="H imported A" xmlUrl="\(sourceURLs[0])" htmlUrl="https://imported.reader.invalid/a"/></outline></outline>
+    <outline text="B"><outline text="News"><outline title="H imported B" xmlUrl="\(sourceURLs[1])" htmlUrl="https://imported.reader.invalid/b"/></outline></outline>
+    </outline></body></opml>
+    """.utf8)
+    try journal.write("importing")
+    let imported = try await importer.importDocument(document,account:account)
+    let firstFeeds = try await store.feeds()
+    let owned = firstFeeds.filter { !baselineIDs.contains($0.id) }
+    let preferences = try await store.preferences()
+    checks["twoConfirmedFeeds"] = imported == 2 && owned.count == 2
+    let expectedPaths = Set([[prefix,"A","News"],[prefix,"B","News"]])
+    checks["hierarchyRetained"] = Set(preferences.filter { !baselineIDs.contains($0.id) }.map(\.importedFolderPath)) == expectedPaths
+    let exportFolders = try await store.folders()
+    let exported = try OPMLDocument.parse(OPMLDocument.export(feeds:owned,folders:exportFolders,preferences:preferences))
+    checks["roundTripHierarchy"] = Set(exported.map(\.folderPath)) == expectedPaths
+    checks["exportedHomepagesPresent"] = exported.count == 2 && exported.allSatisfy { $0.homePageURL != nil }
+    try journal.write("imported",["checks":checks,"ownedFeeds":owned.map { ["id":$0.id.remoteID,"url":$0.url.absoluteString,"folders":$0.folderIDs,"home":$0.homePageURL?.absoluteString ?? ""] as [String:Any] }])
+    try requireH(checks.values.allSatisfy { $0 })
+    let firstKey = owned[0].id
+    var preference = preferences.first { $0.id == firstKey }!
+    preference.mode = .digest
+    preference.timeZoneID = "Europe/Vienna"
+    try await store.savePreferences(preference)
+    try await client.renameFeed(account:account,feedID:firstKey.remoteID,title:"H confirmed server title")
+    let beforeRepeatedFeeds = try await store.feeds()
+    _ = try await importer.importDocument(document,account:account)
+    let repeatedFeeds = try await store.feeds()
+    let repeatedPreferences = try await store.preferences()
+    checks["repeatNoDuplicate"] = Set(repeatedFeeds.map(\.id)) == Set(firstFeeds.map(\.id))
+    checks["betterTitleAndHomepagePreserved"] = repeatedFeeds.first { $0.id == firstKey }?.title == "H confirmed server title"
+        && repeatedFeeds.first { $0.id == firstKey }?.homePageURL == beforeRepeatedFeeds.first { $0.id == firstKey }?.homePageURL
+    checks["displayPreferencesPreserved"] = repeatedPreferences.first { $0.id == firstKey }?.mode == .digest
+        && repeatedPreferences.first { $0.id == firstKey }?.timeZoneID == "Europe/Vienna"
+    let firstBeforeRoot = repeatedFeeds.first { $0.id == firstKey }!
+    let rootDocument = Data("<opml><body><outline xmlUrl='\(firstBeforeRoot.url.absoluteString)'/></body></opml>".utf8)
+    _ = try await importer.importDocument(rootDocument,account:account)
+    checks["rootImportPreservesFolder"] = try await store.feeds().first { $0.id == firstKey }?.folderIDs == firstBeforeRoot.folderIDs
+    try journal.write("repeated",["checks":checks])
+    try requireH(checks.values.allSatisfy { $0 })
+    let priorPath = try await store.preferences().first { $0.id == firstKey }!.importedFolderPath
+    let priorFolder = firstBeforeRoot.folderIDs.first!
+    let renamedTitle = prefix + "/Renamed/label/News"
+    try await client.renameFolder(account:account,folderID:priorFolder,title:renamedTitle)
+    let renamed = try await store.feeds().first { $0.id == firstKey }!
+    let afterRenameFolders = try await store.folders()
+    let afterRenamePreferences = try await store.preferences()
+    let renamedExport = try OPMLDocument.parse(OPMLDocument.export(feeds:[renamed],folders:afterRenameFolders,preferences:afterRenamePreferences))
+    checks["completeServerFolderTitle"] = afterRenameFolders.contains { $0.remoteID == FreshRSSClient.folderID(renamedTitle) && $0.title == renamedTitle }
+    checks["serverFolderRenameConfirmed"] = renamed.folderIDs.contains(FreshRSSClient.folderID(renamedTitle))
+    checks["exportFollowsServerRename"] = renamedExport.first?.folderPath == [renamedTitle]
+    checks["staleImportedPathStillDistinct"] = afterRenamePreferences.first { $0.id == firstKey }?.importedFolderPath == priorPath
+    try journal.write("renamed",["checks":checks])
+    try requireH(checks.values.allSatisfy { $0 })
+    let services = ReaderServices(repository:store,credentials:credentials,client:client)
+    let presentation = ReaderSession(services:services)
+    await presentation.reload()
+    let beforeFailureFeeds = try await store.feeds()
+    let beforeFailurePreferences = try await store.preferences()
+    let revision = services.revision
+    let rejected = Data("<opml><body><outline xmlUrl='\(invalidURL)'/></body></opml>".utf8)
+    var rejectionCase = "none"
+    await presentation.runMutation {
+        do { _ = try await importer.importDocument(rejected,account:account) }
+        catch {
+            if let failure = error as? ReaderError {
+                switch failure {
+                case .server(let status): rejectionCase = "server-" + String(status)
+                case .unavailable: rejectionCase = "server-found-no-feed"
+                default: rejectionCase = "ReaderError"
+                }
+            } else if let failure = error as? URLError { rejectionCase = "network-" + String(failure.code.rawValue) }
+            else { rejectionCase = String(reflecting:type(of:error)) }
+            throw error
+        }
+    }
+    journal.values["rejectionCase"] = rejectionCase
+    checks["serverRejectionVisible"] = presentation.errorMessage != nil && services.revision == revision
+    let failureFeeds = try await store.feeds()
+    let failurePreferences = try await store.preferences()
+    checks["rejectionLeavesLocalState"] = failureFeeds == beforeFailureFeeds && failurePreferences == beforeFailurePreferences
+    try journal.write("rejected",["checks":checks])
+    try requireH(checks.values.allSatisfy { $0 })
+} catch {
+    primaryError = safeHError(error)
+    try journal.write("operationFailed",["checks":checks,"operationError":primaryError!])
+}
+var cleanupErrors:[String] = []
+do {
+    try journal.write("cleaning",["checks":checks])
+    try await client.refresh(account:account)
+    let current = try await store.feeds()
+    let candidates = current.filter { !baselineIDs.contains($0.id) &&
+        (allowedURLs.contains($0.url.absoluteString) || $0.url.absoluteString == invalidURL ||
+         $0.folderIDs.contains { $0.hasPrefix(FreshRSSClient.folderID(prefix)) }) }
+    for feed in candidates {
+        do { try await client.removeFeed(account:account,feedID:feed.id.remoteID) } catch { cleanupErrors.append(safeHError(error)) }
+    }
+    let folders = try await store.folders().filter { !baselineFolderIDs.contains($0.remoteID) && $0.title.hasPrefix(prefix) }
+    for folder in folders {
+        do { try await client.removeFolder(account:account,folderID:folder.remoteID) } catch { cleanupErrors.append(safeHError(error)) }
+    }
+    let verifierStore = try ReaderStore(inMemory:true)
+    try await verifierStore.saveAccount(account)
+    let verifier = FreshRSSClient(repository:verifierStore,credentials:credentials,session:transport)
+    try await verifier.refresh(account:account)
+    let finalFeeds = try await verifierStore.feeds()
+    let finalFolders = try await verifierStore.folders()
+    let finalArticles = try await verifierStore.articles(ArticleQuery(limit:10000))
+    checks["baselineFeedsRestored"] = Set(finalFeeds) == Set(baselineFeeds)
+    checks["baselineFoldersRestored"] = Set(finalFolders) == Set(baselineFolders)
+    checks["originalStatusesPreserved"] = baselineArticles.allSatisfy { original in
+        finalArticles.contains { $0.id == original.id && $0.read == original.read && $0.starred == original.starred }
+    }
+    checks["noPendingWrites"] = try await verifierStore.pendingChanges(accountID:account.id).isEmpty
+    try journal.write("verifiedCleanup",["checks":checks,"cleanupErrors":cleanupErrors,"finalFeedCount":finalFeeds.count,
+                                        "finalFolderCount":finalFolders.count,"finalArticleCount":finalArticles.count])
+} catch { cleanupErrors.append(safeHError(error)) }
+try journal.write(primaryError == nil && cleanupErrors.isEmpty && checks.values.allSatisfy({ $0 }) ? "complete" : "needsReview",
+                  ["checks":checks,"cleanupErrors":cleanupErrors])
+print("READER_H_REPORT=" + journal.url.path)
+

@@ -2,6 +2,7 @@ import Foundation
 import Testing
 import ReaderDomain
 import ReaderPersistence
+import ReaderContent
 @testable import ReaderSync
 
 struct OPMLImportServiceTests {
@@ -110,6 +111,62 @@ struct OPMLImportServiceTests {
         #expect(restored.cloudAllowed)
         #expect(restored.timeZoneID == "Europe/Vienna")
         #expect(restored.importedFolderPath == ["B"])
+    }
+
+    @Test("A root-level repeated import preserves the confirmed category and hierarchy")
+    func rootLevelImportPreservesExistingFolder() async throws {
+        let fixture = try OPMLFixture()
+        let nested = Data("<opml><body><outline text='A'><outline text='News'><outline xmlUrl='https://source.test/feed'/></outline></outline></body></opml>".utf8)
+        let root = Data("<opml><body><outline xmlUrl='https://source.test/feed'/></body></opml>".utf8)
+        _ = try await fixture.importer.importDocument(nested, account: fixture.account)
+        _ = try await fixture.importer.importDocument(root, account: fixture.account)
+        let feeds = try await fixture.repository.feeds()
+        let preferences = try await fixture.repository.preferences()
+        #expect(feeds.first?.folderIDs == ["user/-/label/A/News"])
+        #expect(preferences.first?.importedFolderPath == ["A", "News"])
+        #expect(await fixture.server.quickAdds == 1)
+        #expect(await fixture.server.moves == 0)
+        let folders = try await fixture.repository.folders()
+        let exported = try OPMLDocument.parse(OPMLDocument.export(feeds: feeds, folders: folders, preferences: preferences))
+        #expect(exported.first?.folderPath == ["A", "News"])
+        _ = try await fixture.importer.importDocument(root, account: fixture.account)
+        #expect(await fixture.server.quickAdds == 1)
+        #expect(await fixture.server.moves == 0)
+    }
+
+    @Test("Confirmed feeds merge imported homepages without a network refresh", arguments: [0, 1, 2, 3])
+    func homepageMergesIntoConfirmedFeedWithoutHTTP(kind: Int) async throws {
+        let fixture = try OPMLFixture()
+        let url = try #require(URL(string: "https://source.test/feed"))
+        let serverHome = try #require(URL(string: "https://server.test/better"))
+        let importedHome = try #require(URL(string: "https://source.test/imported"))
+        let earlierHome = try #require(URL(string: "https://earlier.test/home"))
+        let key = FeedKey(accountID: fixture.account.id, remoteID: "confirmed")
+        let feed = FeedSnapshot(id: key, title: "Confirmed server title", url: url, homePageURL: kind == 1 ? serverHome : nil)
+        try await fixture.repository.applyRefresh(RefreshSnapshot(accountID: fixture.account.id, feeds: [feed], folders: [],
+                                                                 articles: [], unreadIDs: [], starredIDs: []))
+        if kind == 2 {
+            try await fixture.repository.savePreferences(FeedPreferences(id: key, importedHomePageURL: earlierHome))
+        }
+        let home = kind == 3 ? "" : " htmlUrl='\(importedHome.absoluteString)'"
+        let data = Data(("<opml><body><outline title='Older import title' xmlUrl='\(url.absoluteString)'\(home)/></body></opml>").utf8)
+        _ = try await fixture.importer.importDocument(data, account: fixture.account)
+        let current = try #require(try await fixture.repository.feeds().first)
+        #expect(current.title == "Confirmed server title")
+        let expected: URL? = kind == 1 ? serverHome : kind == 2 ? earlierHome : kind == 3 ? nil : importedHome
+        #expect(current.homePageURL == expected)
+        let missing = Data("<opml><body><outline xmlUrl='https://source.test/feed'/></body></opml>".utf8)
+        _ = try await fixture.importer.importDocument(missing, account: fixture.account)
+        #expect(try await fixture.repository.feeds().first?.homePageURL == expected)
+        #expect(await fixture.server.requestCount == 0)
+    }
+
+    @Test("Folder names retain label-like path components after server confirmation")
+    func confirmedFolderNamesRetainLabelComponents() async throws {
+        let fixture = try OPMLFixture()
+        let data = Data("<opml><body><outline text='A'><outline text='label'><outline text='News'><outline xmlUrl='https://source.test/feed'/></outline></outline></outline></body></opml>".utf8)
+        _ = try await fixture.importer.importDocument(data, account: fixture.account)
+        #expect(try await fixture.repository.folders().first?.title == "A/label/News")
     }
 
     private static let nested = Data("""

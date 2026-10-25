@@ -21,12 +21,36 @@ struct ContentTests {
     }
     @Test("Nested folders with matching names remain distinct during export") func nestedFoldersWithMatchingNamesRemainDistinctDuringExport() throws {
         let account = UUID()
-        let first = FeedSnapshot(id: FeedKey(accountID: account, remoteID: "a"), title: "A", url: try #require(URL(string: "https://a.example/rss")))
-        let second = FeedSnapshot(id: FeedKey(accountID: account, remoteID: "b"), title: "B", url: try #require(URL(string: "https://b.example/rss")))
+        let first = FeedSnapshot(id: FeedKey(accountID: account, remoteID: "a"), title: "A", url: try #require(URL(string: "https://a.example/rss")), folderIDs: ["user/-/label/A/News"])
+        let second = FeedSnapshot(id: FeedKey(accountID: account, remoteID: "b"), title: "B", url: try #require(URL(string: "https://b.example/rss")), folderIDs: ["user/-/label/B/News"])
         let prefs = [FeedPreferences(id: first.id, importedFolderPath: ["A", "News"]), FeedPreferences(id: second.id, importedFolderPath: ["B", "News"])]
         let subscriptions = try OPMLDocument.parse(OPMLDocument.export(feeds: [first, second], folders: [], preferences: prefs))
         #expect(subscriptions.map(\.folderPath) == [["A", "News"], ["B", "News"]])
     }
+
+    @Test("An authoritative server category supersedes stale imported export hierarchy", arguments: [false, true])
+    func exportedFoldersRespectCurrentServerState(movedToRoot: Bool) throws {
+        let account = UUID()
+        let imported = ["A", "News"]
+        let currentID = "user/-/label/Current"
+        let feed = FeedSnapshot(id: FeedKey(accountID: account, remoteID: "a"), title: "Article feed",
+                                url: try #require(URL(string: "https://folder.example/feed")),
+                                folderIDs: movedToRoot ? [] : [currentID])
+        let preference = FeedPreferences(id: feed.id, importedFolderPath: imported)
+        let folders = [FolderSnapshot(accountID: account, remoteID: currentID, title: "Current")]
+        let result = try OPMLDocument.parse(OPMLDocument.export(feeds: [feed], folders: folders, preferences: [preference]))
+        #expect(result.first?.folderPath == (movedToRoot ? [] : ["Current"]))
+    }
+
+    @Test("Missing tag metadata preserves the complete label name", arguments: ["user/-/label/A/label/News", "opaque-label"])
+    func exportedLabelFallbackKeepsAllNameComponents(folderID: String) throws {
+        let account = UUID()
+        let feed = FeedSnapshot(id: FeedKey(accountID: account, remoteID: "fallback"), title: "Feed",
+                                url: try #require(URL(string: "https://fallback.example/feed")), folderIDs: [folderID])
+        let parsed = try OPMLDocument.parse(OPMLDocument.export(feeds: [feed], folders: []))
+        #expect(parsed.first?.folderPath == [folderID == "opaque-label" ? "opaque-label" : "A/label/News"])
+    }
+
     @Test("Complete HTML fragments gain a document and body before Readability", .timeLimit(.minutes(1)),
           arguments: [0, 1, 2, 3])
     func completeFragmentsGainDocumentStructure(kind: Int) async throws {

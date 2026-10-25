@@ -1,0 +1,77 @@
+{
+  "accountCredentialsUsed" : true,
+  "baselineArticleCount" : 10,
+  "baselineFeedCount" : 1,
+  "baselineFeeds" : [
+    {
+      "folders" : [
+        "user\/-\/label\/Unkategorisiert"
+      ],
+      "id" : "feed\/1",
+      "title" : "FreshRSS releases",
+      "url" : "https:\/\/github.com\/FreshRSS\/FreshRSS\/releases.atom"
+    }
+  ],
+  "baselineFolderCount" : 1,
+  "checks" : {
+    "baselineFeedsRestored" : true,
+    "baselineFoldersRestored" : true,
+    "betterTitleAndHomepagePreserved" : true,
+    "completeServerFolderTitle" : true,
+    "displayPreferencesPreserved" : true,
+    "exportedHomepagesPresent" : true,
+    "exportFollowsServerRename" : true,
+    "hierarchyRetained" : true,
+    "noPendingWrites" : true,
+    "originalStatusesPreserved" : true,
+    "rejectionLeavesLocalState" : true,
+    "repeatNoDuplicate" : true,
+    "rootImportPreservesFolder" : true,
+    "roundTripHierarchy" : true,
+    "serverFolderRenameConfirmed" : true,
+    "serverRejectionVisible" : true,
+    "staleImportedPathStillDistinct" : true,
+    "twoConfirmedFeeds" : true
+  },
+  "cleanupErrors" : [
+
+  ],
+  "credentialsPrinted" : false,
+  "finalArticleCount" : 10,
+  "finalFeedCount" : 1,
+  "finalFolderCount" : 1,
+  "freshRSSSourceSHA256" : "72d142e23d96e1ef4f25e911ffb2fb4c91f96e22e04f4d6cbdc99d4e1fc4032f",
+  "invalidURL" : "https:\/\/reader-h-818fdde1-0795-4969-ac02-595268ea6a71.invalid\/feed.xml",
+  "opmlSourceSHA256" : "4d208ae0144c64a931b21d089ed34093b4b7e3f215fad5035cc8490a592df39e",
+  "ownedFeeds" : [
+    {
+      "folders" : [
+        "user\/-\/label\/Reader H 20261025 6923EB09\/A\/News"
+      ],
+      "home" : "https:\/\/github.com\/swiftlang\/swift\/releases",
+      "id" : "feed\/6",
+      "url" : "https:\/\/github.com\/apple\/swift\/releases.atom"
+    },
+    {
+      "folders" : [
+        "user\/-\/label\/Reader H 20261025 6923EB09\/B\/News"
+      ],
+      "home" : "https:\/\/github.com\/duckdb\/duckdb\/releases",
+      "id" : "feed\/7",
+      "url" : "https:\/\/github.com\/duckdb\/duckdb\/releases.atom"
+    }
+  ],
+  "persistentAppStoreWrites" : false,
+  "phase" : "complete",
+  "prefix" : "Reader H 20261025 6923EB09",
+  "processID" : 75657,
+  "rejectionCase" : "server-found-no-feed",
+  "runtime" : "Native Reader through Xcode MCP on macOS 27.0.1",
+  "server" : "feedreader.gehri.stream",
+  "sourceURLs" : [
+    "https:\/\/github.com\/apple\/swift\/releases.atom",
+    "https:\/\/github.com\/duckdb\/duckdb\/releases.atom"
+  ],
+  "updatedAt" : 1792956564.633837,
+  "username" : "Test"
+}

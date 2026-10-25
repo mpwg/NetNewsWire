@@ -38,10 +38,16 @@ public enum OPMLDocument {
         let tree = ExportNode()
         for feed in feeds.sorted(by: { $0.id.id < $1.id.id }) {
             let importedPath = preferences.first { $0.id == feed.id }?.importedFolderPath ?? []
-            let serverPaths = feed.folderIDs.compactMap { id in
-                folders.first { $0.accountID == feed.id.accountID && $0.remoteID == id }.map { [$0.title] }
+            let serverPaths = feed.folderIDs.map { id -> [String] in
+                let labelName = id.range(of: "/label/").map { String(id[$0.upperBound...]) } ?? id
+                let title = folders.first { $0.accountID == feed.id.accountID && $0.remoteID == id }?.title ?? labelName
+                let importedTitle = importedPath.joined(separator: "/")
+                if !importedPath.isEmpty, title == importedTitle || id == "user/-/label/" + importedTitle {
+                    return importedPath
+                }
+                return [title]
             }
-            let paths = !importedPath.isEmpty ? [importedPath] : (serverPaths.isEmpty ? [[]] : serverPaths)
+            let paths = serverPaths.isEmpty ? [[]] : serverPaths
             for path in paths {
                 var node = tree
                 for component in path {

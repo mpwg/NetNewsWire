@@ -26,7 +26,7 @@ Intelligence preferences and digests stay on the device. FreshRSS subscriptions 
 
 ## OPML
 
-Import and export are available from Reader's menu. FreshRSS categories are flat: paths such as `A/News` and `B/News` become distinct categories, with hierarchy retained locally for nested OPML round trips. Server metadata takes precedence over local homepage fallbacks. Identical repeated imports are coalesced. Conflicting paths for the same feed are rejected before server writes.
+Import and export are available from Reader's menu. FreshRSS categories are flat: paths such as `A/News` and `B/News` become distinct categories, with hierarchy retained locally for nested OPML round trips. Export reuses that hierarchy only while it matches the current confirmed category; server moves/renames cannot be masked by stale import metadata. Category names containing another /label/ component remain complete. A folderless repeated import preserves an existing assignment, as the owner specified. Server metadata takes precedence over local homepage fallbacks; confirmed feeds can receive imported metadata without another HTTP refresh. Identical repeated imports are coalesced. Conflicting paths for the same feed are rejected before server writes. [H code and real FreshRSS evidence](../docs/reader/evidence/h-opml-2026-10-25.md) records idempotence, metadata preservation, visible rejection and cleanup of all self-created test objects.
 
 ## Architecture and testing
 

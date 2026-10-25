@@ -182,8 +182,9 @@ public actor FreshRSSClient {
             return FeedSnapshot(id: FeedKey(accountID: account.id, remoteID: item.id), title: item.title, url: url,
                                 homePageURL: item.htmlUrl.flatMap(URL.init(string:)), folderIDs: item.categories.map(\.id))
         }
-        let folders = tags.tags.filter { $0.id.contains("/label/") }.map {
-            FolderSnapshot(accountID: account.id, remoteID: $0.id, title: $0.id.components(separatedBy: "/label/").last ?? $0.id)
+        let folders = tags.tags.filter { $0.id.contains("/label/") }.map { tag in
+            let title = tag.id.range(of: "/label/").map { String(tag.id[$0.upperBound...]) } ?? tag.id
+            return FolderSnapshot(accountID: account.id, remoteID: tag.id, title: title)
         }
         try Task.checkCancellation()
         try await repository.applyRefresh(RefreshSnapshot(accountID: account.id, feeds: feeds, folders: folders,

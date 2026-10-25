@@ -1,0 +1,241 @@
+{
+  "activeTestPlanName": "Reader",
+  "counts": {
+    "expectedFailures": 0,
+    "failed": 2,
+    "notRun": 0,
+    "passed": 29,
+    "skipped": 0,
+    "total": 31
+  },
+  "fullConsoleLogsPath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/test-console-log-2026-10-25T20-27-29+01-00.txt",
+  "fullSummaryPath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/5010D021-10B3-4C23-AE6D-B4FDED7559E9.txt",
+  "results": [
+    {
+      "displayName": "\"user/-/label/A/label/News\"",
+      "errorMessages": [
+        "Reader/ReaderTests/ReaderContentTests/ContentTests.swift:51 ContentTests/exportedLabelFallbackKeepsAllNameComponents(folderID:): Expectation failed: parsed.first?.folderPath == [folderID == \"opaque-label\" ? \"opaque-label\" : \"A/label/News\"]\nparsed.first?.folderPath → [\"News\"]\n[folderID == \"opaque-label\" ? \"opaque-label\" : \"A/label/News\"] → [\"A/label/News\"]"
+      ],
+      "identifier": "ContentTests/exportedLabelFallbackKeepsAllNameComponents(folderID:)",
+      "state": "Failed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Folder names retain label-like path components after server confirmation",
+      "errorMessages": [
+        "Reader/ReaderTests/ReaderSyncTests/OPMLImportServiceTests.swift:169 OPMLImportServiceTests/confirmedFolderNamesRetainLabelComponents(): Expectation failed: try await fixture.repository.folders().first?.title == \"A/label/News\""
+      ],
+      "identifier": "OPMLImportServiceTests/confirmedFolderNamesRetainLabelComponents()",
+      "state": "Failed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "OPML round trips preserve homepages and folders",
+      "errorMessages": [],
+      "identifier": "ContentTests/opmlRoundTripsPreserveHomepagesAndFolders()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"<opml><body>\"",
+      "errorMessages": [],
+      "identifier": "ContentTests/invalidOPMLIsRejected(xml:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"<rss/>\"",
+      "errorMessages": [],
+      "identifier": "ContentTests/invalidOPMLIsRejected(xml:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"<opml><body><outline xmlUrl='file:///private'/></body></opml>\"",
+      "errorMessages": [],
+      "identifier": "ContentTests/invalidOPMLIsRejected(xml:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Nested folders with matching names remain distinct during export",
+      "errorMessages": [],
+      "identifier": "ContentTests/nestedFoldersWithMatchingNamesRemainDistinctDuringExport()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "false",
+      "errorMessages": [],
+      "identifier": "ContentTests/exportedFoldersRespectCurrentServerState(movedToRoot:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "true",
+      "errorMessages": [],
+      "identifier": "ContentTests/exportedFoldersRespectCurrentServerState(movedToRoot:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"opaque-label\"",
+      "errorMessages": [],
+      "identifier": "ContentTests/exportedLabelFallbackKeepsAllNameComponents(folderID:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "0",
+      "errorMessages": [],
+      "identifier": "ContentTests/completeFragmentsGainDocumentStructure(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "1",
+      "errorMessages": [],
+      "identifier": "ContentTests/completeFragmentsGainDocumentStructure(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "2",
+      "errorMessages": [],
+      "identifier": "ContentTests/completeFragmentsGainDocumentStructure(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "3",
+      "errorMessages": [],
+      "identifier": "ContentTests/completeFragmentsGainDocumentStructure(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"<html><body></body></html>\"",
+      "errorMessages": [],
+      "identifier": "ContentTests/contentWithoutArticleTextReportsUnavailable(html:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"<html><body><script>const hiddenText = \"Script is not article text\";</script><style>body { color: red }</style></body></html>\"",
+      "errorMessages": [],
+      "identifier": "ContentTests/contentWithoutArticleTextReportsUnavailable(html:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"<html><body><img src=\"reader-resource://blocked/image\"></body></html>\"",
+      "errorMessages": [],
+      "identifier": "ContentTests/contentWithoutArticleTextReportsUnavailable(html:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Full text is extracted without executing page scripts",
+      "errorMessages": [],
+      "identifier": "ContentTests/fullTextIsExtractedWithoutExecutingPageScripts()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Confirmed imports preserve nested matching folder names and homepages",
+      "errorMessages": [],
+      "identifier": "OPMLImportServiceTests/confirmedImportsPreserveNestedMatchingFolderNamesAndHomepages()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Repeated imports use confirmed redirect identities and preserve local intelligence preferences",
+      "errorMessages": [],
+      "identifier": "OPMLImportServiceTests/repeatedImportsUseConfirmedRedirectIdentitiesAndPreserveLocalIntelligencePreferences()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Conflicting duplicates are rejected before any server writes",
+      "errorMessages": [],
+      "identifier": "OPMLImportServiceTests/conflictingDuplicatesAreRejectedBeforeAnyServerWrites()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Identical duplicates are imported once",
+      "errorMessages": [],
+      "identifier": "OPMLImportServiceTests/identicalDuplicatesAreImportedOnce()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "An invalid later feed URL prevents all earlier server writes",
+      "errorMessages": [],
+      "identifier": "OPMLImportServiceTests/anInvalidLaterFeedURLPreventsAllEarlierServerWrites()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Existing subscriptions are moved after confirmation without duplication",
+      "errorMessages": [],
+      "identifier": "OPMLImportServiceTests/existingSubscriptionsAreMovedAfterConfirmationWithoutDuplication()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Rejected folder assignments do not save unconfirmed import metadata",
+      "errorMessages": [],
+      "identifier": "OPMLImportServiceTests/rejectedFolderAssignmentsDoNotSaveUnconfirmedImportMetadata()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Imports preserve intelligence consent changed during the server response",
+      "errorMessages": [],
+      "identifier": "OPMLImportServiceTests/importsPreserveIntelligenceConsentChangedDuringTheServerResponse()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "A root-level repeated import preserves the confirmed category and hierarchy",
+      "errorMessages": [],
+      "identifier": "OPMLImportServiceTests/rootLevelImportPreservesExistingFolder()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "0",
+      "errorMessages": [],
+      "identifier": "OPMLImportServiceTests/homepageMergesIntoConfirmedFeedWithoutHTTP(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "1",
+      "errorMessages": [],
+      "identifier": "OPMLImportServiceTests/homepageMergesIntoConfirmedFeedWithoutHTTP(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "2",
+      "errorMessages": [],
+      "identifier": "OPMLImportServiceTests/homepageMergesIntoConfirmedFeedWithoutHTTP(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "3",
+      "errorMessages": [],
+      "identifier": "OPMLImportServiceTests/homepageMergesIntoConfirmedFeedWithoutHTTP(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    }
+  ],
+  "schemeName": "Reader",
+  "summary": "31 tests: 29 passed, 2 failed, 0 skipped, 0 expected failures, 0 not run",
+  "totalResults": 31,
+  "truncated": false,
+  "xcresultBundlePath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/Test-Reader-2026.10.25_20-27-29-+0100.xcresult"
+}

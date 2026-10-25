@@ -1,0 +1,129 @@
+{
+  "activeTestPlanName": "Reader",
+  "counts": {
+    "expectedFailures": 0,
+    "failed": 2,
+    "notRun": 0,
+    "passed": 13,
+    "skipped": 0,
+    "total": 15
+  },
+  "fullConsoleLogsPath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/test-console-log-2026-10-25T20-16-30+01-00.txt",
+  "fullSummaryPath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/E0E39F30-1213-4C4B-A767-D9FF04EB7078.txt",
+  "results": [
+    {
+      "displayName": "false",
+      "errorMessages": [
+        "Reader/ReaderTests/ReaderContentTests/ContentTests.swift:42 ContentTests/exportedFoldersRespectCurrentServerState(movedToRoot:): Expectation failed: result.first?.folderPath == (movedToRoot ? [] : [\"Current\"])\nresult.first?.folderPath → [\"A\", \"News\"]\n(movedToRoot ? [] : [\"Current\"]) → [\"Current\"]"
+      ],
+      "identifier": "ContentTests/exportedFoldersRespectCurrentServerState(movedToRoot:)",
+      "state": "Failed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "true",
+      "errorMessages": [
+        "Reader/ReaderTests/ReaderContentTests/ContentTests.swift:42 ContentTests/exportedFoldersRespectCurrentServerState(movedToRoot:): Expectation failed: result.first?.folderPath == (movedToRoot ? [] : [\"Current\"])\nresult.first?.folderPath → [\"A\", \"News\"]\n(movedToRoot ? [] : [\"Current\"]) → []"
+      ],
+      "identifier": "ContentTests/exportedFoldersRespectCurrentServerState(movedToRoot:)",
+      "state": "Failed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "OPML round trips preserve homepages and folders",
+      "errorMessages": [],
+      "identifier": "ContentTests/opmlRoundTripsPreserveHomepagesAndFolders()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"<opml><body>\"",
+      "errorMessages": [],
+      "identifier": "ContentTests/invalidOPMLIsRejected(xml:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"<rss/>\"",
+      "errorMessages": [],
+      "identifier": "ContentTests/invalidOPMLIsRejected(xml:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"<opml><body><outline xmlUrl='file:///private'/></body></opml>\"",
+      "errorMessages": [],
+      "identifier": "ContentTests/invalidOPMLIsRejected(xml:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Nested folders with matching names remain distinct during export",
+      "errorMessages": [],
+      "identifier": "ContentTests/nestedFoldersWithMatchingNamesRemainDistinctDuringExport()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "0",
+      "errorMessages": [],
+      "identifier": "ContentTests/completeFragmentsGainDocumentStructure(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "1",
+      "errorMessages": [],
+      "identifier": "ContentTests/completeFragmentsGainDocumentStructure(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "2",
+      "errorMessages": [],
+      "identifier": "ContentTests/completeFragmentsGainDocumentStructure(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "3",
+      "errorMessages": [],
+      "identifier": "ContentTests/completeFragmentsGainDocumentStructure(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"<html><body></body></html>\"",
+      "errorMessages": [],
+      "identifier": "ContentTests/contentWithoutArticleTextReportsUnavailable(html:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"<html><body><script>const hiddenText = \"Script is not article text\";</script><style>body { color: red }</style></body></html>\"",
+      "errorMessages": [],
+      "identifier": "ContentTests/contentWithoutArticleTextReportsUnavailable(html:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"<html><body><img src=\"reader-resource://blocked/image\"></body></html>\"",
+      "errorMessages": [],
+      "identifier": "ContentTests/contentWithoutArticleTextReportsUnavailable(html:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Full text is extracted without executing page scripts",
+      "errorMessages": [],
+      "identifier": "ContentTests/fullTextIsExtractedWithoutExecutingPageScripts()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    }
+  ],
+  "schemeName": "Reader",
+  "summary": "15 tests: 13 passed, 2 failed, 0 skipped, 0 expected failures, 0 not run",
+  "totalResults": 15,
+  "truncated": false,
+  "xcresultBundlePath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/Test-Reader-2026.10.25_20-16-30-+0100.xcresult"
+}
