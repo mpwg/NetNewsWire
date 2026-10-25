@@ -2,7 +2,7 @@
 
 Reader is a standalone FreshRSS client for macOS, iOS and iPadOS **27 or later**, with a shared SwiftUI application and SwiftData store. Open **`Reader/Reader.xcodeproj`** in Xcode 27 and select the **Reader** scheme. The native project was created with Apple's multiplatform app template through Xcode MCP; it reuses the existing ReaderKit implementation.
 
-The older root `Reader.xcodeproj` and `ReaderApp/` are superseded migration artifacts. Do not run their generator. They remain temporarily pending the replacement's hosted CI acceptance and preservation of user edits. The original NetNewsWire targets remain pending acceptance of their replacements.
+The owner authorized Reader-only source retirement on 2026-10-25. The original NetNewsWire application and the superseded root Reader project/app/test copies are removed; Git history preserves them. `Reader/Reader.xcodeproj` is the only active app project. This source cleanup does not imply full product/platform acceptance.
 
 ## Accounts and storage
 
@@ -34,19 +34,15 @@ ReaderDomain provides Sendable snapshots and protocols. ReaderPersistence owns S
 
 **Approachable Concurrency and compiler warnings as errors are enabled for every Reader application/test target and all seven ReaderKit targets, in Debug and Release.** Swift 6 already enables three of Approachable Concurrency's five features; Package.swift explicitly enables `InferIsolatedConformances` and `NonisolatedNonsendingByDefault`, together with `.treatAllWarnings(as: .error)`. Library code retains its appropriate actor boundaries.
 
-Most tests are unhosted Swift Testing code tests under `Reader/ReaderTests/`. Function identifiers use English `lowerCamelCase` without spaces; `@Test("Readable description")` supplies display names. The small native XCTest/XCUIAutomation target checks launch and sheet behavior. Its first Mac window must appear without Command-N; Command-N requests only the second window. Fixtures need no personal credentials or model requests.
+All code-testable app and runner behavior uses unhosted Swift Testing under `Reader/ReaderTests/`. Function identifiers use English `lowerCamelCase` without spaces; `@Test("Readable description")` supplies display names. Native XCTest/XCUIAutomation is limited to window/sheet lifecycle, real keyboard/menu/scroll interaction, rendering and view-task cancellation. Business validation, queries, counters, synchronization and ownership stay in code tests. Fixtures need no personal credentials or model requests.
 
 Use Xcode MCP for interactive builds and tests. The shared Reader scheme includes both native test targets using Apple's automatic test plan. ReaderKit no longer declares separate SwiftPM test targets, so `swift test --package-path ReaderKit` is not the test entry point.
 
-CI uses the committed native project through `scripts/test-reader.sh`. It does not generate Xcode files. The runner executes test targets without parallel Simulator clones after repeated hosted service-hub startup failures; every test remains included. The `all` mode collects all platform outcomes and returns a failure if any platform fails; a failed build never runs stale test products. Runner contracts can be verified without starting Xcode:
-
-```sh
-python3 -m unittest discover -s scripts/tests -v
-```
+CI first runs ReaderRunnerTests directly through the native code-test target, independently of the aggregate shell runner. It then uses `scripts/test-reader.sh` for the full native plan, with no project generation or parallel Simulator clones. The runner collects every destination's outcome and fails if any fails; a failed build cannot test stale products. Its former Python unit suite is replaced by three Swift Testing functions / five cases using isolated fake executables. Run them from ReaderTests in Xcode MCP.
 
 The SwiftData recovery probe separately exercises 10,000 synthetic articles across three real processes including SIGKILL. See [recovery evidence](../docs/reader/evidence/b-2026-10-24.md). This establishes core recovery, not complete app UI recovery or real FreshRSS behavior.
 
-Hosted run 40128954068 at c44b99642 passes Mac, iPhone and iPad with every test target. A subsequent fixture-only cleanup has 86 code contracts / 99 case executions: current Mac/iPad code-only runs pass, and iPhone passes the full 100-execution plan. All request/query/model gates are bounded and cancellation aware. The latest local Mac full plan reports UI activation failures; its passing code subset is recorded separately, not presented as an overall pass. Native Release builds and actual separate Debug/Release stores pass. English UI/error sources use explicit package bundles; German translations and plural forms live in String Catalogs, with ten compiled localization cases. See the [test review](../docs/reader/test-review-2026-10-24.md), [native evidence](../docs/reader/evidence/native-2026-10-24.md) and [acceptance matrix](../docs/reader/acceptance.md) for the current hosted follow-up and device/service limits.
+Current Mac evidence includes native/code/hosted query, menu, selection and counter contracts, controlled refresh ownership/cancellation and exact process recovery. Earlier runner initialization failures remain historical evidence. Native Release builds and separate Debug/Release stores are verified at their recorded checkpoints. English resources use explicit package bundles; German translations and plural forms have compiled-resource code tests. See the [test review](../docs/reader/test-review-2026-10-24.md) and [acceptance matrix](../docs/reader/acceptance.md) for current scope and limits.
 
 ## Attribution
 

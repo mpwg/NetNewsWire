@@ -1,5 +1,9 @@
 root = true
 
-[*.{swift,m,h,c}]
-indent_style = tab
+[*.swift]
+indent_style = space
 indent_size = 4
+
+[*.{yml,yaml,json,xcstrings}]
+indent_style = space
+indent_size = 2

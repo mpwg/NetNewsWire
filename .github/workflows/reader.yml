@@ -9,16 +9,25 @@ on:
         type: choice
         options: [macos, all]
   pull_request:
-    paths: ['ReaderKit/**', 'Reader/**', 'scripts/test-reader.sh', 'scripts/verify-reader-store.py', 'scripts/tests/**', '.github/workflows/reader.yml']
+    paths: ['ReaderKit/**', 'Reader/**', 'scripts/test-reader.sh', 'scripts/verify-reader-store.py', '.swiftlint.yml', '.github/workflows/reader.yml']
   push:
     branches: [main, 'codex/intelligence-reader']
-    paths: ['ReaderKit/**', 'Reader/**', 'scripts/test-reader.sh', 'scripts/verify-reader-store.py', 'scripts/tests/**', '.github/workflows/reader.yml']
+    paths: ['ReaderKit/**', 'Reader/**', 'scripts/test-reader.sh', 'scripts/verify-reader-store.py', '.swiftlint.yml', '.github/workflows/reader.yml']
 permissions:
   contents: read
 concurrency:
   group: reader-${{ github.ref }}
   cancel-in-progress: true
 jobs:
+  swiftlint:
+    name: SwiftLint
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install SwiftLint
+        run: brew install swiftlint
+      - name: Check Reader sources
+        run: swiftlint lint --strict --reporter github-actions-logging
   tests:
     # https://github.com/actions/runner-images/blob/main/images/macos/xcode-27-arm64-Readme.md
     runs-on: xcode-27
@@ -32,8 +41,17 @@ jobs:
       DEVELOPER_DIR: /Applications/Xcode_27.1.app/Contents/Developer
     steps:
       - uses: actions/checkout@v5
-      - name: Verify aggregate failure propagation
-        run: python3 -m unittest discover -s scripts/tests -v
+      - name: Verify runner failure propagation with Swift Testing
+        if: matrix.platform == 'macos'
+        run: |
+          mkdir -p "$RUNNER_TEMP/reader-results"
+          xcodebuild -project Reader/Reader.xcodeproj -scheme Reader \
+            -destination 'platform=macOS,arch=arm64' \
+            -derivedDataPath "$RUNNER_TEMP/reader-results/macos-derived" \
+            -resultBundlePath "$RUNNER_TEMP/reader-results/runner-contracts.xcresult" \
+            -parallel-testing-enabled NO \
+            -only-testing:ReaderTests/ReaderRunnerTests \
+            CODE_SIGN_IDENTITY=- DEVELOPMENT_TEAM= CODE_SIGN_STYLE=Manual test
       - name: Verify SwiftData process recovery
         if: matrix.platform == 'macos'
         run: python3 scripts/verify-reader-store.py --results-dir "$RUNNER_TEMP/reader-store-recovery"

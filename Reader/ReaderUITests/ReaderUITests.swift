@@ -15,7 +15,6 @@ final class ReaderSmokeTests: XCTestCase {
         XCTAssertTrue(app.textFields["serverURL"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.textFields["username"].exists)
         XCTAssertTrue(app.secureTextFields["apiPassword"].exists)
-        XCTAssertFalse(app.buttons["submitConnection"].isEnabled)
         app.buttons["cancelConnection"].firstMatch.clickOrTap()
         XCTAssertTrue(connect.waitForExistence(timeout: 5))
     }

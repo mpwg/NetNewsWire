@@ -1,6 +1,12 @@
 # Reader test and infrastructure review — 2026-10-24
 
-The contract tests remain useful. The original native macOS test setup and its diagnosis needed correction. The project infrastructure is being migrated to Apple's Xcode templates, created and maintained through Xcode MCP, at the owner's request.
+The contract tests remain useful. The original native macOS test setup and its diagnosis needed correction. The native project was created with Apple's Xcode template through Xcode MCP. Original and superseded infrastructure has now been removed on explicit owner instruction.
+
+## Current Reader-only verification — 2026-10-25
+
+The full Mac plan after legacy removal passes **134 Swift Testing functions and five native UI methods / 226 executions**, with no failures or skips. All code-testable contracts use Swift Testing. Connection validation now has six negative cases with no HTTP/credential/account side effects and a successful real service/store fixture; its business assertion was removed from the UI test. The former Python runner unit suite is now three Swift Testing functions / five executions, bootstrapped directly by CI before the aggregate script. The recovery Python file is process orchestration, not a unit-test suite. [Cleanup and raw result](evidence/k-reader-only-2026-10-25.md).
+
+E's refresh follow-up also replaces a weak overlap assumption with observed gates and waiters. Four initial failures prove cancellation was delayed until the held network response. The repair separates cancellable window waits from the account-owned job; eight controlled refresh cases and 44 focused service/session executions pass. No new UI scenario was added for this code-testable behavior. Actual native window-close and final adaptive-platform acceptance remain open. [Refresh evidence](evidence/e-refresh-2026-10-25.md).
 
 ## Findings and disposition
 
@@ -37,7 +43,7 @@ The native replacement project is not accepted by this baseline result. It requi
 
 ## Native replacement and compiler-policy verification
 
-The native project is `Reader/Reader.xcodeproj`, created through Xcode MCP with Apple's multiplatform app template. Existing contracts moved into the unhosted ReaderTests target, linked to the six ReaderKit libraries. ReaderUITests retains native XCUIAutomation. The shared scheme uses Apple's automatic test plan; CI builds this committed project without generation. Superseded root-project cleanup awaits remaining Release/configuration checks and preservation of user edits.
+The native project is `Reader/Reader.xcodeproj`, created through Xcode MCP with Apple's multiplatform app template. Existing contracts moved into the unhosted ReaderTests target, linked to the six ReaderKit libraries. ReaderUITests retains native XCUIAutomation. The shared scheme uses Apple's automatic test plan; CI builds this committed project without generation. Release/configuration checks subsequently passed; original/superseded project cleanup is complete under the later explicit owner instruction, with Git history as the source archive.
 
 All three native targets enable Approachable Concurrency and Swift/C-family compiler warnings as errors without configuration restrictions. All seven ReaderKit targets share `InferIsolatedConformances`, `NonisolatedNonsendingByDefault` and `.treatAllWarnings(as: .error)`. The other three Approachable features are enabled by Swift 6 language mode. Current native builds exercise the six libraries; fresh recovery-probe compilation remains to verify.
 
@@ -57,7 +63,7 @@ All bundles are under `/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionAr
 
 The normal incremental Mac run is green after complete recompilation; the additional whole-module diagnostic run at `20-55-44` also passed 89 executions. Compiler logs contain both upcoming-feature flags and `-warnings-as-errors`. An Xcode MCP snippet in ReaderDomain confirms both features enabled. Build-tool messages about skipped App Intents metadata extraction are separate from compiler warnings.
 
-The aggregate CI runner now continues across all platforms after a failed platform and reports failure overall. Every build/signature failure returns before test-without-building, preventing stale-product execution. Three Python runner contracts cover successful native-project calls, each platform's injected test failure and an injected build failure. Shell syntax, Actionlint and whole-repository SwiftLint pass. No physical-device, real FreshRSS/PCC, broad accessibility or product-quality acceptance follows from these results.
+The aggregate CI runner now continues across all platforms after a failed platform and reports failure overall. Every build/signature failure returns before test-without-building, preventing stale-product execution. At this historical checkpoint, three Python runner contracts covered successful native-project calls, each platform's injected test failure and an injected build failure. The Reader-only cleanup below replaces them with native Swift Testing. Shell syntax, Actionlint and whole-repository SwiftLint pass. No physical-device, real FreshRSS/PCC, broad accessibility or product-quality acceptance follows from these results.
 
 ## Current localization and Release follow-up
 

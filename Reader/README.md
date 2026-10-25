@@ -2,7 +2,7 @@
 
 Open `Reader.xcodeproj` in this directory and select the shared Reader scheme. This project was created through Xcode MCP with Apple's multiplatform SwiftUI app template. It links the six existing ReaderKit libraries; the standalone store recovery probe is not an app dependency.
 
-ReaderTests is an unhosted Swift Testing code-test target. ReaderUITests is a small native XCTest/XCUIAutomation target. Apple's automatic scheme test plan discovers both; no generated project, scheme or test-plan script is required. Use Xcode MCP for interactive builds, tests and project changes.
+ReaderTests is an unhosted Swift Testing code-test target. All code-testable behavior, including connection validation and CI runner failure propagation, belongs here. CI bootstraps the Swift runner contracts directly before trusting the aggregate shell script. ReaderUITests is a small native XCTest/XCUIAutomation target. Apple's automatic scheme test plan discovers both; no generated project, scheme or test-plan script is required. Use Xcode MCP for interactive builds, tests and project changes.
 
 Current development verification focuses on My Mac. Push and pull-request CI run macOS; the Reader OS 27 workflow's manual `coverage: all` option retains the complete Mac/iPhone/iPad matrix for final acceptance. iOS and iPadOS revalidation is deferred until then, rather than inferred from Mac results. The aggregate runner still supports every platform and propagates failures.
 

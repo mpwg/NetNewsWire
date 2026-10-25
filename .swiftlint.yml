@@ -28,7 +28,6 @@ disabled_rules:
   - type_body_length
   - function_parameter_count
   - line_length
-  - function_name_whitespace
   - nesting
   - class_delegate_protocol
   - optional_data_string_conversion
@@ -38,13 +37,5 @@ excluded:
   - ".git"
   - ".swiftpm"
   - ReaderKit/.build/
-  - ".claude"
-  - Modules/*/.build/
-  - Modules/Secrets/Sources/Secrets/SecretKey.swift
-  - Modules/Account/Tests/
-  - Modules/Account/Sources/Account/Feedly/
-  - Widget/Resources/Localized.swift
-  - Shared/Extensions/NSAttributedString+NetNewsWire.swift
-  - buildscripts/
 
 
