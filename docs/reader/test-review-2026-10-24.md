@@ -2,7 +2,13 @@
 
 The contract tests remain useful. The original native macOS test setup and its diagnosis needed correction. The native project was created with Apple's Xcode template through Xcode MCP. Original and superseded infrastructure has now been removed on explicit owner instruction.
 
-## Current Reader-only verification — 2026-10-25
+## Current F extraction checkpoint — 2026-10-25
+
+Nine new Swift Testing functions / twenty executions cover extraction state, cancellation and graph release. Eight original failures are reproduced and repaired. A result adapter uses the real parser, then gates delivery after computation while B finishes; a controlled old-method run makes the selected parsed-success case fail. All cases pass when run by suite. Cancellation before HTTP, during held HTTP and after parsing has no cache/revision/alert side effects; weak graph references release after current outcomes and both active cancellation stages. No UI test was added for these contracts.
+
+The current full Mac plan passes **143 Swift Testing functions plus six UI methods / 247 executions**, with no failures/skips/runtime warnings; hosted confirmation is pending. Actual native view/WebPage lifetime, saved/restricted content rendering, malformed/varied pages and final platforms remain open in [F evidence](evidence/f-extraction-2026-10-25.md).
+
+## Earlier Reader-only verification — 2026-10-25
 
 The full Mac plan after legacy removal passes **134 Swift Testing functions and five native UI methods / 226 executions**, with no failures or skips. All code-testable contracts use Swift Testing. Connection validation now has six negative cases with no HTTP/credential/account side effects and a successful real service/store fixture; its business assertion was removed from the UI test. The former Python runner unit suite is now three Swift Testing functions / five executions, bootstrapped directly by CI before the aggregate script. The recovery Python file is process orchestration, not a unit-test suite. [Cleanup and raw result](evidence/k-reader-only-2026-10-25.md). [Reader Mac CI 40204058510](https://github.com/mpwg/NetNewsWire/actions/runs/40204058510) passes at e61b2fa26: all 134 Swift Testing functions in 22 suites, all five native UI tests, direct runner bootstrap and 10,000-article process recovery. Strict hosted SwiftLint passes as well.
 

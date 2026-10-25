@@ -120,21 +120,51 @@ struct ReaderExtractionTests {
         #expect(fixture.session.selectedArticle?.text.contains("New extraction") == true)
     }
 
-    enum CancellationPoint: CaseIterable, Sendable { case beforeRequest, whileLoading }
+    @Test("Already parsed content or failure cannot publish after another article finishes",
+          .timeLimit(.minutes(1)), arguments: [false, true])
+    func parsedOutcomeCannotPublishAfterAnotherArticle(fails: Bool) async throws {
+        let fixture = try await ExtractionFixture(failFirst: fails, holdResult: true)
+        let delivery = try #require(fixture.deliveryGate)
+        await fixture.gate.open()
+        let first = Task { await fixture.session.extract(fixture.a) }
+        defer { first.cancel(); Task { await delivery.open() } }
+        try await delivery.waitUntilEntered()
+        #expect(await fixture.delivery?.resultsCaptured == 1)
+        fixture.session.selection = .article(fixture.b.id)
+        await fixture.session.extract(fixture.b)
+        let latestB = try #require(try await fixture.store.article(fixture.b.id))
+        #expect(latestB.text.contains("New extraction"))
+        #expect(fixture.session.selectedArticle == latestB)
+        #expect(fixture.services.revision == 1)
+        await delivery.open()
+        await first.value
+        #expect(fixture.session.selectedArticle == latestB)
+        #expect(try await fixture.store.article(fixture.a.id) == fixture.a)
+        #expect(try await fixture.store.article(fixture.b.id) == latestB)
+        #expect(fixture.session.errorMessage == nil)
+        #expect(fixture.session.fullTextError == nil)
+        #expect(fixture.services.revision == 1)
+    }
+
+    enum CancellationPoint: CaseIterable, Sendable { case beforeRequest, whileLoading, afterParsing }
 
     @Test("Cancelled extraction ends while HTTP is held without content, revisions or alerts",
           .timeLimit(.minutes(1)), arguments: CancellationPoint.allCases)
     func cancelledExtractionHasNoSideEffects(point: CancellationPoint) async throws {
-        let fixture = try await ExtractionFixture()
+        let fixture = try await ExtractionFixture(holdResult: point == .afterParsing)
+        if point == .afterParsing { await fixture.gate.open() }
         let completion = ExtractionCompletion()
         let request = Task {
             if point == .beforeRequest { withUnsafeCurrentTask { $0?.cancel() } }
             await fixture.session.extract(fixture.a)
             completion.finished = true
         }
-        defer { request.cancel(); Task { await fixture.gate.open() } }
+        defer { request.cancel(); Task { await fixture.gate.open(); await fixture.deliveryGate?.open() } }
         if point == .whileLoading {
             try await fixture.gate.waitUntilEntered()
+            request.cancel()
+        } else if point == .afterParsing {
+            try await fixture.deliveryGate?.waitUntilEntered()
             request.cancel()
         }
         #expect(try await waitUntil { completion.finished })
@@ -149,7 +179,7 @@ struct ReaderExtractionTests {
         await request.value
     }
 
-    enum LifetimeOutcome: CaseIterable, Sendable { case success, failure, cancelled }
+    enum LifetimeOutcome: CaseIterable, Sendable { case success, failure, cancelled, cancelledAfterParsing }
 
     @Test("Extraction graphs release after success, failure and cancelled loading",
           .timeLimit(.minutes(1)), arguments: LifetimeOutcome.allCases)
@@ -159,16 +189,21 @@ struct ReaderExtractionTests {
     }
 
     private func exerciseLifetime(_ outcome: LifetimeOutcome) async throws -> WeakExtractionGraph {
-        let fixture = try await ExtractionFixture(failFirst: outcome == .failure)
+        let fixture = try await ExtractionFixture(failFirst: outcome == .failure, holdResult: outcome == .cancelledAfterParsing)
+        if outcome == .cancelledAfterParsing { await fixture.gate.open() }
         let graph = WeakExtractionGraph(fixture)
         let completion = ExtractionCompletion()
         let request = Task { [session = fixture.session, article = fixture.a] in
             await session.extract(article)
             completion.finished = true
         }
-        defer { request.cancel(); Task { await fixture.gate.open() } }
+        defer { request.cancel(); Task { await fixture.gate.open(); await fixture.deliveryGate?.open() } }
         try await fixture.gate.waitUntilEntered()
-        if outcome == .cancelled {
+        if outcome == .cancelledAfterParsing {
+            try await fixture.deliveryGate?.waitUntilEntered()
+            request.cancel()
+            #expect(try await waitUntil { completion.finished })
+        } else if outcome == .cancelled {
             request.cancel()
             #expect(try await waitUntil { completion.finished })
             #expect(try await waitUntil { await fixture.server.cancellations == 1 })
@@ -204,9 +239,11 @@ private final class ExtractionFixture {
     let services: ReaderServices
     let session: ReaderSession
     let gate = RequestGate()
+    let deliveryGate: RequestGate?
+    let delivery: HeldExtractionResult?
     let server: ExtractionServer
 
-    init(failFirst: Bool = false, failSecond: Bool = false) async throws {
+    init(failFirst: Bool = false, failSecond: Bool = false, holdResult: Bool = false) async throws {
         host = UUID().uuidString.lowercased() + ".extraction.test"
         let url = try #require(URL(string: "https://" + host))
         account = ReaderAccount(serverURL: url, username: "extraction-fixture")
@@ -226,7 +263,17 @@ private final class ExtractionFixture {
         configuration.urlCache = nil
         transport = URLSession(configuration: configuration)
         content = ArticleContentService(session: transport)
-        services = ReaderServices(repository: store, content: content)
+        if holdResult {
+            let resultGate = RequestGate()
+            let held = HeldExtractionResult(base: content, gate: resultGate)
+            deliveryGate = resultGate
+            delivery = held
+            services = ReaderServices(repository: store, content: held)
+        } else {
+            deliveryGate = nil
+            delivery = nil
+            services = ReaderServices(repository: store, content: content)
+        }
         session = ReaderSession(services: services)
         server = ExtractionServer(gate: gate, failFirst: failFirst, failSecond: failSecond)
         let server = server
@@ -269,6 +316,23 @@ private actor ExtractionServer {
     }
 }
 
+private actor HeldExtractionResult: ArticleContentExtracting {
+    let base: ArticleContentService
+    let gate: RequestGate
+    private(set) var resultsCaptured = 0
+
+    init(base: ArticleContentService, gate: RequestGate) { self.base = base; self.gate = gate }
+
+    func extract(url: URL) async throws -> ExtractedContent {
+        let first = resultsCaptured == 0
+        let result: Result<ExtractedContent, any Error>
+        do { result = .success(try await base.extract(url: url)) } catch { result = .failure(error) }
+        resultsCaptured += 1
+        if first { try await gate.pause() }
+        return try result.get()
+    }
+}
+
 @MainActor
 private final class WeakExtractionGraph {
     weak var session: ReaderSession?
@@ -277,11 +341,12 @@ private final class WeakExtractionGraph {
     weak var transport: URLSession?
     weak var store: ReaderStore?
     weak var server: ExtractionServer?
+    weak var delivery: HeldExtractionResult?
 
     init(_ fixture: ExtractionFixture) {
         session = fixture.session; services = fixture.services; content = fixture.content
-        transport = fixture.transport; store = fixture.store; server = fixture.server
+        transport = fixture.transport; store = fixture.store; server = fixture.server; delivery = fixture.delivery
     }
 
-    var released: Bool { session == nil && services == nil && content == nil && transport == nil && store == nil && server == nil }
+    var released: Bool { session == nil && services == nil && content == nil && transport == nil && store == nil && server == nil && delivery == nil }
 }

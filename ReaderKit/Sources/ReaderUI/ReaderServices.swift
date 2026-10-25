@@ -12,7 +12,7 @@ public final class ReaderServices {
     public let credentials: (any CredentialStore)?
     public let client: FreshRSSClient?
     public let digests: DigestCoordinator?
-    public let content: ArticleContentService?
+    public let content: (any ArticleContentExtracting)?
     public let images: FeedImageService
     public let privateCloudComputeConfigured: Bool
     public private(set) var revision = 0
@@ -22,7 +22,7 @@ public final class ReaderServices {
     @ObservationIgnored private var lastSuccessfulRefresh: Date?
 
     public init(repository: any ReaderRepository, credentials: (any CredentialStore)? = nil,
-                client: FreshRSSClient? = nil, digests: DigestCoordinator? = nil, content: ArticleContentService? = nil,
+                client: FreshRSSClient? = nil, digests: DigestCoordinator? = nil, content: (any ArticleContentExtracting)? = nil,
                 privateCloudComputeConfigured: Bool = false, images: FeedImageService = FeedImageService()) {
         self.repository = repository
         self.credentials = credentials

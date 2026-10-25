@@ -8,8 +8,12 @@ public struct ExtractedContent: Hashable, Sendable {
     public init(html: String, text: String) { self.html = html; self.text = text }
 }
 
+public protocol ArticleContentExtracting: Sendable {
+    func extract(url: URL) async throws -> ExtractedContent
+}
+
 /// Runs the vendored Mozilla parser in a private JS context, without executing page scripts.
-public actor ArticleContentService {
+public actor ArticleContentService: ArticleContentExtracting {
     private let session: URLSession
     public init(session: URLSession? = nil) {
         let configuration = URLSessionConfiguration.ephemeral
