@@ -128,6 +128,8 @@ public struct DigestSection: Hashable, Codable, Sendable {
 
     /// Structural content and reference checks; this does not attest the model's factual accuracy.
     public func hasValidContent(referencing sourceKeys: Set<ArticleKey>, allowingOriginalsOnly: Bool = false) -> Bool {
+        let normalizedText = (title + " " + text).lowercased()
+        return !normalizedText.contains("http://") && !normalizedText.contains("https://") &&
         !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
         !sources.isEmpty && sources.allSatisfy(sourceKeys.contains) &&
         (!text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || (allowingOriginalsOnly && text.isEmpty))

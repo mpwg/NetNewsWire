@@ -1,0 +1,81 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "00006040-000A51392100801C",
+        "deviceName" : "My Mac",
+        "modelName" : "MacBook Pro",
+        "osBuildNumber" : "26A434",
+        "osVersion" : "27.0.1",
+        "platform" : "macOS"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 6,
+      "passedTests" : 94,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "Reader · Built with macOS 27.0.1",
+  "expectedFailures" : 0,
+  "failedTests" : 2,
+  "finishTime" : 1792960225.191,
+  "passedTests" : 44,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+    {
+      "issueType" : "Runtime Warning",
+      "message" : "Safety guardrails were triggered. If this is unexpected, please use `LanguageModelSession.logFeedbackAttachment(sentiment:issues:desiredOutput:)` to export the feedback attachment and file a feedback report at https://feedbackassistant.apple.com.",
+      "sourceURL" : "file:///Users/mat/code/NetNewsWire/Reader/ReaderTests/ReaderIntelligenceTests/DigestTests.swift"
+    }
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1792960220.592,
+  "statistics" : [
+    {
+      "subtitle" : "68 test runs",
+      "title" : "14 tests ran with dynamic parameters"
+    }
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "Expectation failed: (refreshed.revision == cached.revision) == (kind == 0)\n(refreshed.revision == cached.revision) → true\n(kind == 0) → false",
+      "targetName" : "ReaderTests",
+      "testIdentifier" : 39,
+      "testIdentifierString" : "DigestTests/cachedClaimsRequireValidContentAndSources(kind:)",
+      "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/cachedClaimsRequireValidContentAndSources(kind:)",
+      "testName" : "Cache reuse requires complete nonblank sections bound to stored sources"
+    },
+    {
+      "failureText" : "Expectation failed: session.digests.isEmpty\nsession.digests → [ReaderDomain.DigestSnapshot(id: \"cached\", revision: E5CFED0C-C348-4B9C-9670-B4DE1C09DCFE, feed: ReaderDomain.FeedKey(accountID: F11A9B3E-3BBE-4BD4-B453-6CCCC40B5C06, remoteID: \"feed/1\"), day: 2026-10-25 20:30:24 +0000, timeZoneID: \"Europe/Vienna\", sections: [ReaderDomain.DigestSection(title: \"https://invented.test\", text: \"Sourced content\", sources: [ReaderDomain.ArticleKey(accountID: F11A9B3E-3BBE-4BD4-B453-6CCCC40B5C06, remoteID: \"0\"), ReaderDomain.ArticleKey(accountID: F11A9B3E-3BBE-4BD4-B453-6CCCC40B5C06, remoteID: \"1\"), ReaderDomain.ArticleKey(accountID: F11A9B3E-3BBE-4BD4-B453-6CCCC40B5C06, remoteID: \"2\")])], sources: [ReaderDomain.ArticleKey(accountID: F11A9B3E-3BBE-4BD4-B453-6CCCC40B5C06, remoteID: \"0\"), ReaderDomain.ArticleKey(accountID: F11A9B3E-3BBE-4BD4-B453-6CCCC40B5C06, remoteID: \"1\"), ReaderDomain.ArticleKey(accountID: F11A9B3E-3BBE-4BD4-B453-6CCCC40B5C06, remoteID: \"2\")], warning: nil, generatedAt: 2026-10-25 20:30:24 +0000, sourceFingerprint: \"\")]\nisEmpty → false",
+      "targetName" : "ReaderTests",
+      "testIdentifier" : 8,
+      "testIdentifierString" : "ReaderSessionTests/invalidCachedClaimsCannotHideOriginals(kind:sidebar:)",
+      "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/ReaderSessionTests/invalidCachedClaimsCannotHideOriginals(kind:sidebar:)",
+      "testName" : "Startup publishes valid summaries or warned originals and withholds invalid cached claims"
+    }
+  ],
+  "title" : "Test - Reader",
+  "topInsights" : [
+    {
+      "category" : "Common Failures",
+      "impact" : "50% of failures",
+      "text" : "4 runs of 1 test failed with Expectation failed: session.errorMessage != nil"
+    },
+    {
+      "category" : "Common Failures",
+      "impact" : "50% of failures",
+      "text" : "2 runs of 1 test failed with Expectation failed: (refreshed.revision == cached.revision) == (kind == 0)"
+    },
+    {
+      "category" : "Longest Test Runs",
+      "impact" : "4% of duration",
+      "text" : "1 longest test run with outlier durations exceeding 0.26s (three standard deviations)"
+    }
+  ],
+  "totalTestCount" : 46
+}

@@ -8,7 +8,7 @@ import ReaderPersistence
 struct ReaderSessionTests {
 
     @Test("Startup publishes valid summaries or warned originals and withholds invalid cached claims",
-          arguments: [0, 1, 2, 3, 4, 5, 6], ["all", "unread"])
+          arguments: [0, 1, 2, 3, 4, 5, 6, 7, 8], ["all", "unread"])
     func invalidCachedClaimsCannotHideOriginals(kind: Int, sidebar: String) async throws {
         let (store, services, feed, articles) = try await fixture()
         let keys = articles.map(\.id)
@@ -23,6 +23,8 @@ struct ReaderSessionTests {
         case 4: digest.sections[0].sources = [ArticleKey(accountID: feed.id.accountID, remoteID: "not-stored")]
         case 5: digest.sections[0].sources = [keys[0]]
         case 6: digest.sections = []
+        case 7: digest.sections[0].title = "https://invented.test"
+        case 8: digest.sections[0].text = "HTTPS://invented.test"
         default: break
         }
         try await store.saveDigest(digest)

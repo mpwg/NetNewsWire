@@ -281,7 +281,7 @@ private actor ControlledGenerator: SummaryGenerator {
 
 struct DigestTests {
 
-    @Test("Cache reuse requires complete nonblank sections bound to stored sources", arguments: [0, 1, 2, 3, 4])
+    @Test("Cache reuse requires complete nonblank sections bound to stored sources", arguments: [0, 1, 2, 3, 4, 5, 6])
     func cachedClaimsRequireValidContentAndSources(kind: Int) async throws {
         let (store, feed, articles) = try await fixture()
         let coordinator = DigestCoordinator(repository: store, generator: FixtureGenerator())
@@ -291,6 +291,8 @@ struct DigestTests {
         case 2: cached.sections[0].text = " \n\t"
         case 3: cached.sections[0].sources = [ArticleKey(accountID: feed.id.accountID, remoteID: "not-stored")]
         case 4: cached.sections[0].sources = [articles[0].id]
+        case 5: cached.sections[0].title = "https://invented.test"
+        case 6: cached.sections[0].text = "HTTPS://invented.test"
         default: break
         }
         try await store.saveDigest(cached)
