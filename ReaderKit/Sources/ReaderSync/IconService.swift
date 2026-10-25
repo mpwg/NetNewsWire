@@ -115,12 +115,10 @@ public actor IconService {
     }
 
     static func iconCandidates(in html: String, relativeTo base: URL) -> [URL] {
-        guard let links = try? NSRegularExpression(pattern: "<link\\b[^>]*>", options: [.caseInsensitive]),
-              let attributes = try? NSRegularExpression(pattern: "([\\w-]+)\\s*=\\s*(?:\"([^\"]*)\"|'([^']*)'|([^\\s>]+))", options: [.caseInsensitive]) else { return [] }
+        guard let attributes = try? NSRegularExpression(pattern: "([\\w-]+)\\s*=\\s*(?:\"([^\"]*)\"|'([^']*)'|([^\\s>]+))", options: [.caseInsensitive]) else { return [] }
         var result: [URL] = []
-        for match in links.matches(in: html, range: NSRange(html.startIndex..., in: html)) {
-            guard let range = Range(match.range, in: html) else { continue }
-            let link = String(html[range])
+        for tag in HTMLHeadLinks.scan(html) {
+            let link = String(tag)
             var values: [String: String] = [:]
             for attribute in attributes.matches(in: link, range: NSRange(link.startIndex..., in: link)) {
                 guard let name = Range(attribute.range(at: 1), in: link),
@@ -203,6 +201,63 @@ public actor FeedImageService {
             kCGImageSourceShouldCacheImmediately: true
         ]
         return CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary)
+    }
+}
+
+/// A bounded metadata tokenizer, not a document renderer. Stops before body content.
+private enum HTMLHeadLinks {
+    private static let headElements: Set<String> = [
+        "html", "head", "base", "basefont", "bgsound", "link", "meta", "title", "noframes", "style", "script", "noscript"
+    ]
+
+    static func scan(_ html: String) -> [Substring] {
+        var cursor = html.startIndex
+        var links: [Substring] = []
+        var templateDepth = 0
+        while cursor < html.endIndex, let opening = html[cursor...].firstIndex(of: "<") {
+            if templateDepth == 0, html[cursor..<opening].contains(where: { !$0.isWhitespace && $0 != "\u{feff}" }) { return links }
+            if html[opening...].hasPrefix("<!--") {
+                guard let closing = html.range(of: "-->", range: opening..<html.endIndex) else { return links }
+                cursor = closing.upperBound
+                continue
+            }
+            guard let end = endOfTag(in: html, after: opening) else { return links }
+            let content = html[html.index(after: opening)..<end].trimmingCharacters(in: .whitespacesAndNewlines)
+            let closing = content.hasPrefix("/")
+            let name = content.dropFirst(closing ? 1 : 0).prefix { $0.isLetter || $0.isNumber || $0 == "-" }.lowercased()
+            cursor = html.index(after: end)
+            if name == "template" {
+                templateDepth = max(0, templateDepth + (closing ? -1 : 1))
+                continue
+            }
+            if templateDepth == 0 {
+                if closing && ["head", "body", "html", "br"].contains(name) { return links }
+                if !closing, !name.isEmpty, !headElements.contains(name) { return links }
+                if name == "link", !closing { links.append(html[opening...end]) }
+            }
+            if !closing, ["script", "style", "title", "noframes", "textarea"].contains(name) {
+                guard let closingTag = html.range(of: "</" + name + "(?=[\\s/>])",
+                                                  options: [.regularExpression, .caseInsensitive],
+                                                  range: cursor..<html.endIndex) else { return links }
+                cursor = closingTag.lowerBound
+            }
+        }
+        return links
+    }
+
+    private static func endOfTag(in html: String, after opening: String.Index) -> String.Index? {
+        var cursor = html.index(after: opening)
+        var quote: Character?
+        while cursor < html.endIndex {
+            let character = html[cursor]
+            if let currentQuote = quote {
+                if character == currentQuote { quote = nil }
+            } else if character == "\"" || character == "'" {
+                quote = character
+            } else if character == ">" { return cursor }
+            cursor = html.index(after: cursor)
+        }
+        return nil
     }
 }
 

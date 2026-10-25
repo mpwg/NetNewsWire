@@ -8,7 +8,7 @@ The Reader persistence core (B/#47) is accepted after A: 25 code contracts and c
 
 G/#52 now connects bounded ImageIO thumbnails to normal feed rows, with three new code contracts. [Current implementation, tests and open acceptance](docs/reader/evidence/g-2026-10-25.md) distinguish this step from real image-load, credential and energy checks.
 
-The added native Mac load scenario proves scrolling/form input during controlled image/HTTP-fallback work and cancellation after the real feed rows disappear. Most coverage remains code tests: 93 Swift Testing functions and three Mac UI tests. [G evidence](docs/reader/evidence/g-2026-10-25.md) preserves a window-only screenshot, exact cancellation counters and remaining audit/platform limits.
+The added native Mac load scenario proves scrolling/form input during controlled image/HTTP-fallback work and cancellation after the real feed rows disappear. Most coverage remains code tests: 94 Swift Testing functions and three Mac UI tests. Metadata scanning now stops at the head/body boundary and ignores inert markup; a controlled gate proves interleaved homepage independence. [G evidence](docs/reader/evidence/g-2026-10-25.md) preserves a window-only screenshot, exact cancellation counters and remaining audit/platform limits.
 
 Development verification now focuses on macOS at the owner's request. Automatic Reader CI runs Mac; manual `coverage: all` preserves the complete matrix for final acceptance. iPhone/iPad revalidation and physical-device prerequisites remain open.
 

@@ -15,6 +15,22 @@ struct IconServiceTests {
         ])
     }
 
+    @Test("Metadata stops at head boundaries and ignores inert markup", arguments: [
+        "<head><link rel='icon' href='/head.png'></head><link rel='icon' href='/body.png'>",
+        "<link rel='icon' href='/head.png'><BoDy><link rel='icon' href='/body.png'>",
+        "<head><!-- <body><link rel='icon' href='/comment.png'> --><script><body><link rel='icon' href='/script.png'></script><link rel='icon' href='/head.png'></head>",
+        "<head><style>/* <body><link rel='icon' href='/style.png'> */</style><link rel='icon' href='/head.png'></head>",
+        "<head><link data-note='>' rel='icon' href='/head.png'></head>",
+        "<head><template><template><link rel='icon' href='/nested.png'></template><body><link rel='icon' href='/template.png'></template><link rel='icon' href='/head.png'></head>",
+        "<head><link rel='icon' href='/head.png'><div><link rel='icon' href='/implicit-body.png'>",
+        "<head><link rel='icon' href='/head.png'>Body text<link rel='icon' href='/implicit-body.png'>",
+        "<head><noframes><body><link rel='icon' href='/fallback-markup.png'></noframes><link rel='icon' href='/head.png'></head>"
+    ])
+    func metadataStopsAtHeadBoundariesAndIgnoresInertMarkup(html: String) throws {
+        let base = try #require(URL(string: "https://example.test/news"))
+        #expect(IconService.iconCandidates(in: html, relativeTo: base).map(\.absoluteString) == ["https://example.test/head.png"])
+    }
+
     @Test("Homepage failures do not prevent independent favicon fallback") func homepageFailuresDoNotPreventIndependentFaviconFallback() async throws {
         let fixture = try IconFixture()
         await fixture.server.setMode(.homepageFailure)
@@ -23,14 +39,20 @@ struct IconServiceTests {
         #expect(await fixture.server.paths == ["/home", "/favicon.ico"])
     }
 
-    @Test("Nested homepages keep independent results and transient failures remain retryable") func nestedHomepagesKeepIndependentResultsAndTransientFailuresRemainRetryable() async throws {
+    @Test("Nested homepages keep independent results and transient failures remain retryable", .timeLimit(.minutes(1)))
+    func nestedHomepagesKeepIndependentResultsAndTransientFailuresRemainRetryable() async throws {
         let fixture = try IconFixture()
+        let gate = RequestGate()
+        defer { Task { await gate.open() } }
         await fixture.server.setMode(.transientA)
+        await fixture.server.setGate(gate, forPath: "/a.png")
         async let a = fixture.service.icon(for: fixture.url("/a"))
-        async let b = fixture.service.icon(for: fixture.url("/b"))
-        let (firstA, firstB) = try await (a, b)
-        #expect(firstA == nil)
+        try await gate.waitUntilEntered()
+        let firstB = try await fixture.service.icon(for: fixture.url("/b"))
         #expect(firstB == Data([2]))
+        #expect(await fixture.server.paths == ["/a", "/a.png", "/b", "/b.png"])
+        await gate.open()
+        #expect(try await a == nil)
         await fixture.server.setMode(.normal)
         #expect(try await fixture.service.icon(for: fixture.url("/a")) == Data([1]))
         #expect(try await fixture.service.icon(for: fixture.url("/b")) == Data([2]))
@@ -154,12 +176,15 @@ private actor IconTestServer {
     enum Mode: Equatable, Sendable { case normal, homepageFailure, transientA, wrongType, oversized, encoded(Data) }
     private var mode: Mode = .normal
     private var gate: RequestGate?
+    private var pathGates: [String: RequestGate] = [:]
     var paths: [String] = []
     func setMode(_ mode: Mode) { self.mode = mode }
     func setGate(_ gate: RequestGate) { self.gate = gate }
+    func setGate(_ gate: RequestGate, forPath path: String) { pathGates[path] = gate }
     func respond(_ request: URLRequest) async throws -> IconResponse {
         let path = try #require(request.url?.path)
         paths.append(path)
+        if let gate = pathGates[path] { try await gate.pause() }
         if path == "/home" {
             if let gate { try await gate.pause() }
             return IconResponse(status: 403, mime: "text/html", data: Data())
