@@ -1,0 +1,15 @@
+{
+  "cloud" : false,
+  "groups" : [
+    {
+      "sourceNumbers" : [
+        0
+      ],
+      "text" : "Ein Beispielgeschäft bietet ein Notebook für 29,99 EUR an. Versand und Ablaufzeit sind nicht angegeben.",
+      "title" : "Notebook Angebot"
+    }
+  ],
+  "kind" : "Fresh diagnostic request; not the previously rejected response",
+  "requestedLanguage" : "German",
+  "sourceSHA256" : "0e90f56c9a8d76eeaec88db611cf730c90863a3f90252e9172907ea486ddf0db"
+}

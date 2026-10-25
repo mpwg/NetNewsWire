@@ -5,6 +5,16 @@ import ReaderPersistence
 import FoundationModels
 @testable import ReaderIntelligence
 
+private func nativeModelFailure(_ kind: Int) -> any Error {
+    switch kind {
+    case 0: LanguageModelError.guardrailViolation(.init(debugDescription: "Controlled guardrail"))
+    case 1: LanguageModelError.contextSizeExceeded(.init(contextSize: 100, tokenCount: 200, debugDescription: "Controlled context"))
+    case 2: PrivateCloudComputeLanguageModel.Error.quotaLimitReached(.init(limitIncreaseSuggestion: nil, resetDate: nil,
+                                                                         debugDescription: "Controlled quota"))
+    default: SystemLanguageModel.Error.assetsUnavailable(.init(debugDescription: "Controlled missing assets"))
+    }
+}
+
 private struct ControlledLanguageModel: LanguageModel {
     typealias Executor = ControlledModelExecutor
     let journal: ModelRequestJournal
@@ -140,14 +150,7 @@ struct AppleSummaryGeneratorTests {
     @Test("Native framework errors propagate unchanged from the shipping session",
           arguments: [0, 1, 2, 3])
     func frameworkErrorsPropagate(kind: Int) async throws {
-        let failure: any Error
-        switch kind {
-        case 0: failure = LanguageModelError.guardrailViolation(.init(debugDescription: "Controlled guardrail"))
-        case 1: failure = LanguageModelError.contextSizeExceeded(.init(contextSize: 100, tokenCount: 200, debugDescription: "Controlled context"))
-        case 2: failure = PrivateCloudComputeLanguageModel.Error.quotaLimitReached(.init(limitIncreaseSuggestion: nil, resetDate: nil,
-                                                                                       debugDescription: "Controlled quota"))
-        default: failure = SystemLanguageModel.Error.assetsUnavailable(.init(debugDescription: "Controlled missing assets"))
-        }
+        let failure = nativeModelFailure(kind)
         let journal = ModelRequestJournal(failure: failure)
         let source = try article()
         let received = await #expect(throws: (any Error).self) {
@@ -241,7 +244,9 @@ struct AppleSummaryGeneratorTests {
 private struct FixtureGenerator: SummaryGenerator {
     var omitLast = false
     var invalid = false
+    var failure: (any Error)?
     func summarize(_ articles: [ArticleSnapshot], cloudAllowed: Bool) async throws -> [DigestSection] {
+        if let failure { throw failure }
         if invalid { return [DigestSection(title: "Invalid", text: "", sources: [ArticleKey(accountID: UUID(), remoteID: "wrong")])] }
         let sources = omitLast ? Array(articles.dropLast()) : articles
         return [DigestSection(title: "Offers", text: "Sourced digest", sources: sources.map(\.id))]
@@ -270,6 +275,24 @@ private actor ControlledGenerator: SummaryGenerator {
 }
 
 struct DigestTests {
+
+    @Test("Model failures keep their native warning and every unread original", arguments: [0, 1, 2, 3])
+    func modelFailuresPreserveWarningsAndOriginals(kind: Int) async throws {
+        let (store, feed, articles) = try await fixture()
+        let failure = nativeModelFailure(kind)
+        let coordinator = DigestCoordinator(repository: store, generator: FixtureGenerator(failure: failure))
+        let digest = try #require(try await coordinator.generate(feed: feed).first)
+        #expect(digest.warning?.contains(failure.localizedDescription) == true)
+        #expect(Set(digest.sources) == Set(articles.map(\.id)))
+        #expect(Set(digest.sections.flatMap(\.sources)) == Set(articles.map(\.id)))
+        for article in articles {
+            let original = try #require(try await store.article(article.id))
+            #expect(original.title == article.title)
+            #expect(original.text == article.text)
+            #expect(!original.read)
+        }
+        #expect(try await store.pendingChanges(accountID: feed.id.accountID).isEmpty)
+    }
     @Test("A generator gate fails promptly when generation never starts")
     func generatorGateFailsWhenGenerationNeverStarts() async {
         let model = ControlledGenerator()

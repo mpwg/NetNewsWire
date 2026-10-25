@@ -35,7 +35,15 @@ The language instruction previously named only a locale tag. It now names the re
 
 The generator now uses Apple's NLTokenizer sentence boundaries and removes only exact duplicate sentences. Text without duplicates remains unchanged. It then removes exact duplicate DigestSection values while preserving order; the identity includes title, normalized text and the exact stored source-key array, so equal text from different stored sources remains separate. No semantic merging or invented replacement claims are performed. The two duplicate cases and a distinct-source preservation case pass. The final focused generator/digest set passes **33 executions / 21 distinct tests**, zero failures/skips/runtime warnings, and strict lint. [Current raw summary](i-final-focused-2026-10-25.json). These tests establish literal duplicate handling, not general editorial accuracy.
 
-## Acceptance matrix
+## Final actual local observations and preserved error state
+
+[Final public-generator journal](i-local-final-2026-10-25.json) · [exact native snippet](i-local-probe-2026-10-25.txt). Source fingerprint 0e90f56c9a8d76eeaec88db611cf730c90863a3f90252e9172907ea486ddf0db matches the owning generator. All four narrow local cases complete with cloudAllowed=false/privateCloudComputeEnabled=false. The two offers retain exact merchants/prices, both news sources are covered in English, the 12,006-token source runs through the 8,192-token model context in about 18.7 seconds, and the single injected instruction is ignored. Exact repeated sentences are removed, but the long output still contains two semantically overlapping sections with different wording. That remaining quality defect is not hidden or accepted.
+
+[Explicit German journal](i-local-german-2026-10-25.json) · [exact snippet](i-german-probe-2026-10-25.txt). The same native production session with an explicit de_AT locale summarizes both news sources in German. The offer case is rejected by the existing numeric/link validator. Its discarded response was not captured, so the report does not establish its exact failure cause. A [separate fresh diagnostic request](i-german-raw-2026-10-25.json), using the same schema/instructions and source texts before Reader validation, converts EUR 29.99 into 29,99 EUR, translates the merchant name and omits the second offer. [Exact diagnostic snippet](i-german-raw-probe-2026-10-25.txt). This supports a localization/fact-fidelity concern; it is not the previously discarded response and is not claimed as one. Numeric validation has not been loosened to accept such output. Captured non-English model strings are explicitly translation/evaluation fixtures.
+
+Four further native SDK-error scenarios at DigestCoordinator/ReaderStore prove that the exact localized warning remains visible, every original is retained with unchanged title/text and unread state, all source links remain available and the outbox stays empty. This is controlled error-state integration, not a real PCC outage/quota experiment. The complete focused set now passes **37 executions / 22 distinct tests**: thirteen added Swift Testing functions / 28 executions plus the nine original digest functions. [Current raw summary](i-complete-focused-2026-10-25.json). Strict lint passes; no UI method is added.
+
+## Current acceptance matrix
 
 | Criterion | Status | Evidence or remaining work |
 |---|---|---|
@@ -43,9 +51,9 @@ The generator now uses Apple's NLTokenizer sentence boundaries and removes only 
 | Sources use stored articles; reject model-written links | Fulfilled in controlled native contracts | Native structured session maps exact article identities, rejects invalid references/numbers and both reproduced URL cases. Full product quality remains open. |
 | Runtime chunking and consent | Fulfilled for controlled native contracts | Unicode conservation at two capacities, prompt budget checks, live per-chunk revocation and pre-instantiation PCC gates. |
 | Current full Mac plan / hosted CI | Open | Focused contracts pass; full current regression confirmation still required. |
-| Actual on-device inference | Open | Current model availability observed; a current generation journal is still required. |
+| Actual on-device inference | Fulfilled only for the named narrow native observations | Public default local generator runs four synthetic cases, including a 12,006-token input. Explicit German news runs; offers reject and semantic duplication remains. No broad quality acceptance is claimed. |
 | Actual PCC | Not verifiable | Approved entitlement/provisioning unavailable; no PCC request is made. Availability alone does not authorize one. |
-| Multilingual, representative and long-content editorial quality | Open | Controlled output proves contracts, not semantic accuracy or broad inference quality. |
+| Multilingual, representative and long-content editorial quality | Open | Retained wrong-language/coverage/repetition observations; German offer rejection and fresh diagnostic price/merchant changes; semantically overlapping long sections remain. Real representative inputs and broader editorial evaluation are still required. |
 | README and status documents | Updated | Root/package guides and current acceptance/handoff checkpoint. |
 
 I/#54 remains open. Actual network-off/restart remains owner-deferred. Final iPhone/iPad/signing/accessibility, PCC, representative quality and broader memory/energy are not accepted by these code tests.

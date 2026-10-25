@@ -1,0 +1,55 @@
+{
+  "cases" : [
+    {
+      "case" : "offers",
+      "durationSeconds" : 2.0202059745788574,
+      "error" : "The summary contains unsupported numbers or links. Original articles remain available.",
+      "errorType" : "ReaderDomain.ReaderError",
+      "inputExceedsModelContext" : false,
+      "inputTokens" : 48,
+      "outcome" : "rejected",
+      "sourceCount" : 2
+    },
+    {
+      "allSourcesStored" : true,
+      "case" : "news",
+      "coveredSources" : [
+        "news-a",
+        "news-b"
+      ],
+      "durationSeconds" : 3.6283199787139893,
+      "inputExceedsModelContext" : false,
+      "inputTokens" : 58,
+      "outcome" : "success",
+      "sections" : [
+        {
+          "sources" : [
+            "news-a"
+          ],
+          "text" : "Die Stadt hat die Reparaturen am Flussfußweg abgeschlossen, einschließlich der Reparatur von Pflaster und der Verbesserung der Entwässerung. Der Bericht enthält keine Kosten oder Öffnungsdaten.",
+          "title" : "Wiederherstellung der Fußwegverbindung"
+        },
+        {
+          "sources" : [
+            "news-b"
+          ],
+          "text" : "Die Bibliothek hat ihren Leseraum mit neuen Regalen und Sitzgelegenheiten erneuert. Der Bericht enthält kein Budget oder Besucherzahlen.",
+          "title" : "Erneuerung des Leseraums"
+        }
+      ],
+      "sourceCount" : 2
+    }
+  ],
+  "cloudAllowed" : false,
+  "contextSize" : 8192,
+  "localAvailable" : true,
+  "locale" : "en_AT",
+  "os" : "Version 27.0.1 (Build 26A434)",
+  "platform" : "macOS",
+  "privateCloudComputeEnabled" : false,
+  "processID" : 86599,
+  "requestedLanguageCode" : "de",
+  "sourceKind" : "Synthetic acceptance inputs; no real publisher or current offer is claimed",
+  "sourceSHA256" : "0e90f56c9a8d76eeaec88db611cf730c90863a3f90252e9172907ea486ddf0db",
+  "version" : 1
+}
