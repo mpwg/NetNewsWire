@@ -3,6 +3,15 @@ import Observation
 import ReaderDomain
 import ReaderContent
 
+public struct ReaderQueryIdentity: Hashable, Sendable {
+    public let sidebarSelection: String?
+    public let search: String
+    public init(sidebarSelection: String?, search: String) {
+        self.sidebarSelection = sidebarSelection
+        self.search = search
+    }
+}
+
 @MainActor @Observable
 public final class ReaderSession {
     public let services: ReaderServices
@@ -10,6 +19,7 @@ public final class ReaderSession {
     public var search = ""
     public var selection: TimelineSelection? {
         didSet {
+            if oldValue != selection { articleGeneration &+= 1 }
             if case .digest(let id) = selection { displayedDigest = digests.first { $0.id == id } } else { displayedDigest = nil }
         }
     }
@@ -33,11 +43,14 @@ public final class ReaderSession {
     public private(set) var digestUnread: [String: Bool] = [:]
     private var generation = 0
     private var sourceGeneration = 0
+    private var articleGeneration = 0
     private var limit = 200
 
     public init(services: ReaderServices) { self.services = services }
 
-    public var queryIdentity: String { (sidebarSelection ?? "unread") + "|" + search }
+    public var queryIdentity: ReaderQueryIdentity {
+        ReaderQueryIdentity(sidebarSelection: sidebarSelection, search: search)
+    }
     public var selectedFeed: FeedSnapshot? { feeds.first { $0.id.id == sidebarSelection } }
     public var selectedFolder: FolderSnapshot? { folders.first { $0.id == sidebarSelection } }
     public var selectedArticle: ArticleSnapshot? {
@@ -155,12 +168,19 @@ public final class ReaderSession {
     }
 
     public func loadSelectedArticle() async {
+        articleGeneration &+= 1
+        let current = articleGeneration
         guard case .article(let key) = selection else { detailArticle = nil; return }
         do {
             let article = try await services.repository.article(key)
-            guard selection == .article(key) else { return }
+            guard !Task.isCancelled, current == articleGeneration, selection == .article(key) else { return }
             detailArticle = article
-        } catch { if selection == .article(key) { errorMessage = error.localizedDescription } }
+        } catch is CancellationError {
+        } catch {
+            if !Task.isCancelled, current == articleGeneration, selection == .article(key) {
+                errorMessage = error.localizedDescription
+            }
+        }
     }
 
     public func observeChanges() async {

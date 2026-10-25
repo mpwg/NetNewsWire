@@ -126,6 +126,74 @@ struct ReaderSessionTests {
         #expect(session.rows.first?.title == "C")
     }
 
+    @Test("Different sidebar and search inputs never share a task identity", arguments: [false, true])
+    func differentQueryInputsHaveDistinctTaskIdentities(separatorCollision: Bool) async throws {
+        let (_, services, feed, _) = try await fixture()
+        let session = ReaderSession(services: services)
+        if separatorCollision {
+            session.sidebarSelection = feed.id.id + "|nested"
+            session.search = "term"
+        }
+        let first = session.queryIdentity
+        session.sidebarSelection = separatorCollision ? feed.id.id : "unread"
+        session.search = separatorCollision ? "nested|term" : ""
+        #expect(session.queryIdentity != first)
+        #expect(Set([first, session.queryIdentity]).count == 2)
+    }
+
+    @Test("The first Unread selection has a new task identity and filters persisted read state")
+    func firstUnreadSelectionFiltersPersistedReadState() async throws {
+        let (store, services, _, articles) = try await fixture()
+        try await store.setStatus([articles[0].id], field: .read, value: true)
+        let session = ReaderSession(services: services)
+        await session.reload()
+        #expect(session.rows.count == 3)
+        let allIdentity = session.queryIdentity
+        session.sidebarSelection = "unread"
+        try #require(session.queryIdentity != allIdentity, "SwiftUI must start a new query task for the first Unread selection.")
+        await session.reload(resetLimit: true)
+        #expect(session.articles.count == 2)
+        #expect(session.rows.count == 2)
+        #expect(session.rows.allSatisfy { $0.unread })
+        #expect(!session.rows.contains { $0.id == .article(articles[0].id) })
+    }
+
+    enum DetailOutcome: CaseIterable, Sendable { case newerSuccess, olderError, cancelled, selectionRoundTrip }
+
+    @Test("Late detail work cannot replace a newer result or revive a cancelled selection",
+          .timeLimit(.minutes(1)), arguments: DetailOutcome.allCases)
+    func lateDetailWorkCannotReplaceCurrentState(outcome: DetailOutcome) async throws {
+        let (store, _, _, articles) = try await fixture()
+        let gate = RequestGate()
+        let replies = DetailReplies(original: articles[0], gate: gate, olderError: outcome == .olderError)
+        let repository = ScriptedRepository(base: store, articleLookup: { try await replies.article($0) },
+                                              query: { try await store.articles($0) })
+        let session = ReaderSession(services: ReaderServices(repository: repository))
+        session.selection = .article(articles[0].id)
+        let old = Task { await session.loadSelectedArticle() }
+        defer { old.cancel(); Task { await gate.open() } }
+        try await gate.waitUntilEntered()
+        switch outcome {
+        case .newerSuccess, .olderError:
+            await session.loadSelectedArticle()
+            #expect(session.selectedArticle?.title == "Newest detail")
+        case .cancelled:
+            old.cancel()
+        case .selectionRoundTrip:
+            session.selection = .article(articles[1].id)
+            session.selection = .article(articles[0].id)
+        }
+        await gate.open()
+        await old.value
+        if outcome == .newerSuccess || outcome == .olderError {
+            #expect(session.selectedArticle?.title == "Newest detail")
+        } else {
+            #expect(session.detailArticle == nil)
+            #expect(session.selectedArticle == nil)
+        }
+        #expect(session.errorMessage == nil)
+    }
+
     @Test("Overlapping database pages do not produce duplicate rows") func overlappingDatabasePagesDoNotProduceDuplicateRows() async throws {
         let (store, _, _, _) = try await fixture(count: 450)
         let repository = ScriptedRepository(base: store) { query in
@@ -203,16 +271,48 @@ private actor QueryGate {
     }
 }
 
+private actor DetailReplies {
+    let original: ArticleSnapshot
+    let gate: RequestGate
+    let olderError: Bool
+    private var calls = 0
+
+    init(original: ArticleSnapshot, gate: RequestGate, olderError: Bool) {
+        self.original = original; self.gate = gate; self.olderError = olderError
+    }
+
+    func article(_ key: ArticleKey) async throws -> ArticleSnapshot? {
+        calls += 1
+        if calls == 1 {
+            // A store query already in flight can finish after its caller is cancelled.
+            let gate = gate
+            try await Task.detached { try await gate.pause() }.value
+            if olderError { throw ReaderError.server(500) }
+            return original
+        }
+        var newest = original
+        newest.title = "Newest detail"
+        return newest
+    }
+}
+
 private actor ScriptedRepository: ReaderRepository {
     let base: any ReaderRepository
     let query: @Sendable (ArticleQuery) async throws -> [ArticleSnapshot]
-    init(base: any ReaderRepository, query: @escaping @Sendable (ArticleQuery) async throws -> [ArticleSnapshot]) { self.base = base; self.query = query }
+    let articleLookup: (@Sendable (ArticleKey) async throws -> ArticleSnapshot?)?
+    init(base: any ReaderRepository, articleLookup: (@Sendable (ArticleKey) async throws -> ArticleSnapshot?)? = nil,
+         query: @escaping @Sendable (ArticleQuery) async throws -> [ArticleSnapshot]) {
+        self.base = base; self.query = query; self.articleLookup = articleLookup
+    }
     func accounts() async throws -> [ReaderAccount] { try await base.accounts() }
     func saveAccount(_ account: ReaderAccount) async throws { try await base.saveAccount(account) }
     func feeds() async throws -> [FeedSnapshot] { try await base.feeds() }
     func folders() async throws -> [FolderSnapshot] { try await base.folders() }
     func articles(_ query: ArticleQuery) async throws -> [ArticleSnapshot] { try await self.query(query) }
-    func article(_ key: ArticleKey) async throws -> ArticleSnapshot? { try await base.article(key) }
+    func article(_ key: ArticleKey) async throws -> ArticleSnapshot? {
+        if let articleLookup { return try await articleLookup(key) }
+        return try await base.article(key)
+    }
     func applyRefresh(_ snapshot: RefreshSnapshot) async throws { try await base.applyRefresh(snapshot) }
     func setStatus(_ keys: [ArticleKey], field: StatusField, value: Bool) async throws { try await base.setStatus(keys, field: field, value: value) }
     func pendingChanges(accountID: UUID) async throws -> [PendingChange] { try await base.pendingChanges(accountID: accountID) }

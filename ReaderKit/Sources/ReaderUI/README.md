@@ -6,6 +6,8 @@ The native Mac image-load scenario now verifies scrolling and account-form inter
 
 Shared SwiftUI views for macOS, iOS and iPadOS 27 and later. Every ReaderWindow owns a ReaderSession with its own selection, search, presentations and query generation. ReaderServices shares only persistence, FreshRSS and content/intelligence services.
 
+The view's query task uses the typed Hashable/Sendable ReaderQueryIdentity, keeping optional sidebar selection and search separate. The initial all-article state and the first Unread selection cannot share a task key, and separator characters cannot create collisions. Selected-article lookups have a separate generation and cancellation guard, including A→B→A transitions and older errors. [Current D evidence](../../../docs/reader/evidence/d-2026-10-25.md) records seven reproduced failures and their repair; native menu/keyboard and broader selection/counter acceptance remain open.
+
 Articles and daily digests remain accessible together. Search, stars and feed navigation expose originals; incomplete or failed summaries never hide unprocessed articles. Opening content changes no read status. Marking a digest read uses exactly the sources of its displayed revision.
 
 The list queries pages of up to 200 articles. Covered originals are filtered while gathering rows; further raw pages load until enough visible articles are available or the store is exhausted. A large deal feed therefore cannot displace ordinary feeds from the first visible page. Selected articles and sources load by account-scoped identity. The footer distinguishes visible entries from loaded originals. Store revision streams invalidate other windows. UI state belongs to MainActor; services own I/O.

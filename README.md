@@ -16,6 +16,8 @@ The added native Mac load scenario proves scrolling/form input during controlled
 
 Development verification now focuses on macOS at the owner's request. Automatic Reader CI runs Mac; manual `coverage: all` preserves the complete matrix for final acceptance. iPhone/iPad revalidation and physical-device prerequisites remain open.
 
+Current D/#49 work fixes query-task identity collisions and late selected-article results/errors, with seven reproduced red cases. Raw native Mac results prove 114 code functions / 180 code executions pass; a fresh UI-only run separately passes all three unchanged methods after the initial runner initialization failure. The MCP inline full-plan 183-pass claim is incorrect. [D evidence](docs/reader/evidence/d-2026-10-25.md) records pending hosted, confirmed menu-action, representative-content and keyboard acceptance. The owner confirmed Mac multi-selection for version one; it remains to implement. #12/#41 stay open.
+
 The following guide describes the original NetNewsWire targets, retained during replacement acceptance.
 
 <img src=Technotes/Images/icon_1024.png height=128 width=128 style="display: block; margin: auto;"> 
