@@ -11,7 +11,7 @@ This follows Mac multi-selection checkpoint c8c133cdc. [Reader Mac CI 4019842453
 | Native input during an asynchronous feed transition | Fulfilled locally on Mac | Native sidebar feed change and search requests are deliberately held at the repository boundary. The last consistent rows/detail remain visible. The actual FreshRSS sheet accepts text, scrolling completes, and the timeline menu/confirmation remains usable before release. |
 | Scroll/multi-selection and stale responses | Fulfilled locally on Mac | The separate native selection test proves Shift-Down/shared read/Down. Controlled ReaderSession tests prove A→B→C rejection. Both use the shipping session/view/store path, with synthetic isolated data. |
 | Full current local plan | Fulfilled | Original raw summary at 14-45-52 confirms 123 code functions plus five UI tests / 200 executions, 24 parameterized functions / 96 cases, zero failures/skips/runtime warnings. |
-| Hosted confirmation | Open | Reader Mac CI for this feed-action checkpoint is pending. The preceding selection checkpoint passes hosted run 40198424536. #12 remains open until the new checkpoint is confirmed. |
+| Hosted confirmation | Fulfilled | [Reader Mac CI 40199383420](https://github.com/mpwg/NetNewsWire/actions/runs/40199383420) passes at 350e32eea: 123 code functions in 20 suites, all five native UI tests, process recovery and runner contracts. #12 is closed as accepted for the Reader replacement. |
 | iPhone/iPad / actual offline / broader accessibility / PCC | Open | Deferred final platform verification and owner-deferred network-off scope remain separate. No claim of physical-device, VoiceOver, PCC or real-server coverage is made by these fixtures. #41 stays open for its iOS scope. |
 | README | Updated | ReaderUI and ReaderPersistence document the confirmed capability, transaction semantics and native/code-test boundary. |
 
@@ -50,3 +50,9 @@ The final full native plan passes **123 Swift Testing functions plus five UI tes
 `/Users/mat/Library/Developer/Xcode/DerivedData/Reader-fuevgxanyutuuihcfejpioljllaa/Logs/Test/Test-Reader-2026.10.25_14-45-52-+0100.xcresult`
 
 This is native functional evidence, not a general latency/energy benchmark. Full D state/counter consistency and final platform acceptance remain open. No legacy code is removed.
+
+## Hosted acceptance and issue scope
+
+Hosted job 121187101467 confirms all 123 Swift Testing functions in 20 suites and all five native UI cases, including delayed-query input/confirmation and keyboard multi-selection. The current [Reader run](https://github.com/mpwg/NetNewsWire/actions/runs/40199383420) and artifact 12601646928 are successful. Runner failure-propagation contracts and the 10,000-article SwiftData SIGKILL/reopen probe also pass.
+
+Every requirement of the Mac-specific #12 replacement contract is now fulfilled: asynchronous ordinary feed transitions, last consistent state/loading, generation rejection, native input/scrolling and retained multi-selection behavior. It is closed with these concrete code/native/hosted references. This does not reaccept or remove the original controllers. #41 remains open for its explicitly deferred iOS scope, and #49 remains open for the remaining state/error/counter and final-platform checks. The separate dynamic Swift CodeQL tracer failure remains tracked in #56; Reader test success is not a repository-wide security-analysis result.
