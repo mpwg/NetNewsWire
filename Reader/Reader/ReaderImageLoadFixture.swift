@@ -100,6 +100,7 @@ private struct ReaderImageLoadCounters: View {
             Text(verbatim: "\(stats.cancelled)").accessibilityIdentifier("imageLoadCancelled")
             Text(verbatim: "\(stats.retries)").accessibilityIdentifier("imageLoadRetries")
             Text(verbatim: "\(stats.maximumActive)").accessibilityIdentifier("imageLoadMaximumActive")
+            Text(verbatim: "\(stats.held)").accessibilityIdentifier("imageLoadHeld")
         }
     }
 }
@@ -110,12 +111,15 @@ nonisolated struct ReaderImageLoadStats: Equatable, Sendable {
     var delivered = 0
     var cancelled = 0
     var retries = 0
+    var held = 0
 }
 
 private actor ReaderImageLoadServer {
     private var stats = ReaderImageLoadStats()
     private var observer: (@MainActor @Sendable (ReaderImageLoadStats) -> Void)?
     private var png: Data?
+    private var deliveredInitialImage = false
+    private var heldResponses: [UUID: AsyncStream<Void>.Continuation] = [:]
 
     func observe(_ observer: @escaping @MainActor @Sendable (ReaderImageLoadStats) -> Void) { self.observer = observer }
 
@@ -148,7 +152,8 @@ private actor ReaderImageLoadServer {
             stats.retries += 1
             return (503, "text/plain", Data())
         case "/favicon.ico":
-            try await Task.sleep(for: .seconds(4))
+            if deliveredInitialImage { try await holdUntilCancelled() }
+            deliveredInitialImage = true
             if png == nil { png = try Self.makePNG() }
             try Task.checkCancellation()
             stats.delivered += 1
@@ -156,6 +161,19 @@ private actor ReaderImageLoadServer {
         default:
             return (404, "text/plain", Data())
         }
+    }
+
+    private func holdUntilCancelled() async throws {
+        try Task.checkCancellation()
+        let id = UUID()
+        let (stream, continuation) = AsyncStream<Void>.makeStream()
+        heldResponses[id] = continuation
+        stats.held += 1
+        await observer?(stats)
+        defer { heldResponses.removeValue(forKey: id); stats.held -= 1 }
+        for await _ in stream { }
+        try Task.checkCancellation()
+        throw ReaderError.invalidResponse
     }
 
     private static func makePNG() throws -> Data {

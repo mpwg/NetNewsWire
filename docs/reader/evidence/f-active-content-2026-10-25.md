@@ -1,6 +1,6 @@
 # F: active article content isolation — 2026-10-25
 
-The owner requires all article images and foreign resources to be blocked, including data images and SVG, and asks for document-only download and text extraction without executing source code. This supersedes the earlier inline-image rendering expectation. It applies to full-text extraction and saved feed-HTML display. Native feed icons remain a separate ImageIO service.
+The owner requires all article images and foreign resources to be blocked, including data images and SVG, and asks for document-only download and text extraction without executing source code. On 2026-10-25 the owner explicitly reconfirmed retaining bundled Readability while blocking all article-supplied code; a JavaScript-free parser replacement is not requested. This supersedes the earlier inline-image rendering expectation. It applies to full-text extraction and saved feed-HTML display. Native feed icons remain a separate ImageIO service.
 
 ## Trust boundaries
 
@@ -11,6 +11,8 @@ The owner requires all article images and foreign resources to be blocked, inclu
 5. The visible document's CSP defaults to none and permits only Reader's exact fixed stylesheet using a SHA-256 hash. Publisher styles remain forbidden even if sanitizer removal regresses. No unsafe-inline permission, image/media source exception, website base URL or local-file base is supplied.
 
 DOMParser alone is insufficient: inert documents can still request images/frames, and reinserting their nodes can activate content. See the [DOMParser reference](https://developer.mozilla.org/en-US/docs/Web/API/DOMParser/parseFromString), [HTML standard](https://html.spec.whatwg.org/dev/dynamic-markup-insertion.html) and [WebKit content-blocking model](https://webkit.org/blog/3476/content-blockers-first-look/). Native rules and CSP remain separate mandatory layers.
+
+The unmodified bundled Readability source has SHA-256 e9330028c8a5a4aa7d75147be2605d520f7f213c7b28474947dc0e9c984e9bed and remains pinned to ab4027a8b37669745016869a37a504727992b2ba. Its DOM writes operate only on the inert source document. A native configuration-identity observation also reports ephemeral shared cookies=false and shared credentials=false; it compares storage objects without reading stored values.
 
 ## Negative runtime evidence
 
@@ -49,6 +51,12 @@ The final shipping-service probe repeats the four original public inputs. Apple 
 Only after that replacement confirmation, Xcode MCP moves unused **JSDOMParser.js** to Trash. Mozilla Readability and its Apache-2.0 license remain unchanged. No fallback, copied archive or replacement parser dependency remains. The temporary navigation alias is removed; tests address the shared native policy directly. ReaderArticleState always uses the protected factory: the unused injection of an arbitrary WebPage is removed. Native build-for-testing and strict lint pass; the focused suites again pass all **103 executions** at 19-39-41. [Post-retirement result](f-active-content-retired-focused-2026-10-25.json). All four public inputs are repeated after retirement with both final source fingerprints. [Post-retirement live metadata](f-active-content-retired-live-2026-10-25.json) · [exact snippet](f-active-content-retired-live-probe-2026-10-25.txt). The cleanup's own hosted confirmation is pending.
 
 Separate [Swift CodeQL 40221467304/job 121253761596](https://github.com/mpwg/NetNewsWire/actions/runs/40221467304/job/121253761596) fails before analysis in preload_tracer/autobuild with exit **139**. The other three language jobs pass. This is neither a completed Swift static-security analysis nor a green repository-wide CI result. No security check is disabled.
+
+## Post-retirement CI failure and controlled image fixture
+
+The cleanup run 40222429269 at 84206902e passes every code contract, bootstrap, recovery, lint and six UI methods, including full text. It fails the existing image-cancellation UI wait: all twelve timed responses have finished by removal, so cancelled=0. The original failed result is preserved. The Debug fixture now holds responses until task cancellation, and the existing UI method observes held entry/exit with unchanged deadlines and required cancellation assertions. The focused native method passes locally. [Exact diagnosis, raw failure, repair and current status](f-active-content-image-gate-2026-10-25.md). Hosted confirmation of this repair remains pending.
+
+The [hosted replacement screenshot](f-active-content-ci-capture-limit-2026-10-25.png) still omits WebKit body pixels despite passing native queries. The inspected local screenshot paints them. No cause is established and hosted capture reliability remains open.
 
 ## Acceptance limits
 

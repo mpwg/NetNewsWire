@@ -123,7 +123,7 @@ final class ReaderSmokeTests: XCTestCase {
         app.buttons["startImageLoad"].click()
         waitForPositiveValue(app.staticTexts["imageLoadDelivered"])
         waitForPositiveValue(app.staticTexts["imageLoadRetries"])
-        waitForPositiveValue(app.staticTexts["imageLoadActive"])
+        waitForPositiveValue(app.staticTexts["imageLoadHeld"])
 
         app.descendants(matching: .any)["readerSidebar"].firstMatch.scroll(byDeltaX: 0, deltaY: -300)
         app.descendants(matching: .any)["readerActions"].firstMatch.click()
@@ -140,7 +140,7 @@ final class ReaderSmokeTests: XCTestCase {
         imageLoad.lifetime = .keepAlways
         add(imageLoad)
 
-        waitForPositiveValue(app.staticTexts["imageLoadActive"])
+        waitForPositiveValue(app.staticTexts["imageLoadHeld"])
         let cancelledBeforeRemoval = try XCTUnwrap(Int(app.staticTexts["imageLoadCancelled"].value as? String ?? ""))
         app.buttons["removeImageLoadFeeds"].click()
         waitForValue(phase, equalTo: "removed")
@@ -149,6 +149,7 @@ final class ReaderSmokeTests: XCTestCase {
         XCTAssertEqual(XCTWaiter.wait(for: [noRows], timeout: 5), .completed)
         waitForValueGreaterThan(app.staticTexts["imageLoadCancelled"], baseline: cancelledBeforeRemoval)
         waitForValue(app.staticTexts["imageLoadActive"], equalTo: "0")
+        waitForValue(app.staticTexts["imageLoadHeld"], equalTo: "0")
         let maximumActive = try XCTUnwrap(Int(app.staticTexts["imageLoadMaximumActive"].value as? String ?? ""))
         XCTAssertLessThanOrEqual(maximumActive, 3)
         let cancelled = try XCTUnwrap(app.staticTexts["imageLoadCancelled"].value as? String)

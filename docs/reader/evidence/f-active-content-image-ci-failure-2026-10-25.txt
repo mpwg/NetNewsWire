@@ -1,0 +1,33 @@
+Attributes: StaticText, 0x79466d0a00, {{679.5, 654.5}, {7.0, 13.0}}, identifier: 'imageLoadCancelled', value: 0
+Element subtree:
+ →StaticText, 0x79466d0a00, {{679.5, 654.5}, {7.0, 13.0}}, identifier: 'imageLoadCancelled', value: 0
+Path to element:
+ →Application, 0x79466d0640, pid: 14083, title: 'Reader'
+  ↳Window (Main), 0x79466d0780, {{24.0, 55.0}, {976.0, 626.0}}, identifier: 'reader-AppWindow-1', title: 'All articles'
+   ↳Group, 0x79466d08c0, {{24.0, 55.0}, {976.0, 626.0}}
+    ↳StaticText, 0x79466d0a00, {{679.5, 654.5}, {7.0, 13.0}}, identifier: 'imageLoadCancelled', value: 0
+Query chain:
+ →Find: Target Application 'eu.mpwg.reader.debug'
+  Output: {
+    Application, 0x79466d0dc0, pid: 14083, title: 'Reader', Disabled
+  }
+  ↪︎Find: Descendants matching type StaticText
+    Output: {
+      StaticText, 0x79466526c0, {{288.0, 55.0}, {279.0, 52.0}}, value: All articles
+      StaticText, 0x79466d3e80, {{595.5, 654.5}, {42.0, 13.0}}, identifier: 'imageLoadPhase', value: removed
+      StaticText, 0x7946634a00, {{645.5, 654.5}, {7.0, 13.0}}, identifier: 'imageLoadActive', value: 0
+      StaticText, 0x7946634640, {{660.5, 654.5}, {11.0, 13.0}}, identifier: 'imageLoadDelivered', value: 12
+      StaticText, 0x7946634780, {{679.5, 654.5}, {7.0, 13.0}}, identifier: 'imageLoadCancelled', value: 0
+      StaticText, 0x7946634b40, {{694.5, 654.5}, {11.0, 13.0}}, identifier: 'imageLoadRetries', value: 12
+      StaticText, 0x7946634c80, {{713.5, 654.5}, {7.0, 13.0}}, identifier: 'imageLoadMaximumActive', value: 3
+      StaticText, 0x79466d30c0, {{386.0, 334.0}, {76.0, 76.5}}, value: No entries
+      StaticText, 0x79466d35c0, {{300.0, 619.0}, {147.0, 13.0}}, identifier: 'timelineCounts', value: Entries: 0 · Loade...
+      StaticText, 0x79466d3980, {{723.5, 302.0}, {118.0, 83.5}}, value: Select an article
+      StaticText, 0x79466d3ac0, {{669.5, 391.5}, {226.0, 39.0}}, value: Articles and daily...
+      StaticText, 0x79466d1b80, {{38.0, 109.5}, {39.0, 14.0}}, label: 'Library'
+      StaticText, 0x79466d2bc0, {{38.0, 237.5}, {166.0, 14.0}}, label: 'FreshRSS · image-load-fixture'
+    }
+    ↪︎Find: Elements matching predicate '"imageLoadCancelled" IN identifiers'
+      Output: {
+        StaticText, 0x7946634780, {{679.5, 654.5}, {7.0, 13.0}}, identifier: 'imageLoadCancelled', value: 0
+      }

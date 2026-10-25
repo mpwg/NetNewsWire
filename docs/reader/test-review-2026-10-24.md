@@ -1,5 +1,7 @@
 # Reader test and infrastructure review — 2026-10-24
 
+Current post-retirement verification: Reader CI 40222429269 at 84206902e passes all 170 code functions and six UI methods, but the existing timed image-fixture cancellation wait fails after all twelve replies have completed. Overall 319 passed / one failed. The Debug fixture now holds replies with observed, cancellation-aware streams; its existing native UI method passes locally with unchanged deadlines/assertions. Exact-source hosted confirmation is pending. [Diagnosis and evidence](evidence/f-active-content-image-gate-2026-10-25.md).
+
 The contract tests remain useful. The original native macOS test setup and its diagnosis needed correction. The native project was created with Apple's Xcode template through Xcode MCP. Original and superseded infrastructure has now been removed on explicit owner instruction.
 
 ## Current F native HTML5 and content isolation — 2026-10-25

@@ -1,5 +1,7 @@
 # Reader acceptance — updated 2026-10-25
 
+Current post-retirement verification: Reader CI 40222429269 at 84206902e passes all 170 code functions and six UI methods, but the existing timed image-fixture cancellation wait fails after all twelve replies have completed. Overall 319 passed / one failed. The Debug fixture now holds replies with observed, cancellation-aware streams; its existing native UI method passes locally with unchanged deadlines/assertions. Exact-source hosted confirmation is pending. [Diagnosis and evidence](evidence/f-active-content-image-gate-2026-10-25.md).
+
 Current owner direction: concentrate development verification on macOS and defer iPhone/iPad revalidation to final acceptance. Push/PR CI runs Mac; manual Reader OS 27 `coverage: all` retains the complete final matrix. Earlier platform results below remain historical evidence for their named checkpoints, not coverage of subsequent changes.
 
 The existing Reader is implemented and partially verified; **full product acceptance remains open**. The active goal continues on `main` under [umbrella #45](https://github.com/mpwg/NetNewsWire/issues/45), packages #46–#56. On 2026-10-25 the owner explicitly authorized immediate legacy deletion, relying on Git history; that supersedes the earlier retirement-after-acceptance timing rule. Source retirement is complete and does not accept unfinished product/platform behavior. See [Reader-only evidence](evidence/k-reader-only-2026-10-25.md).

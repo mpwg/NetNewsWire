@@ -1,0 +1,27 @@
+{
+  "activeTestPlanName": "Reader",
+  "counts": {
+    "expectedFailures": 0,
+    "failed": 0,
+    "notRun": 0,
+    "passed": 1,
+    "skipped": 0,
+    "total": 1
+  },
+  "fullConsoleLogsPath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/test-console-log-2026-10-25T19-53-05+01-00.txt",
+  "fullSummaryPath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/638347E2-6E73-4958-8350-BFA2E035011C.txt",
+  "results": [
+    {
+      "displayName": "testImageLoadKeepsConnectionFormResponsiveAndCancelsRemovedRows()",
+      "errorMessages": [],
+      "identifier": "ReaderSmokeTests/testImageLoadKeepsConnectionFormResponsiveAndCancelsRemovedRows()",
+      "state": "Passed",
+      "targetName": "ReaderUITests"
+    }
+  ],
+  "schemeName": "Reader",
+  "summary": "1 tests: 1 passed, 0 failed, 0 skipped, 0 expected failures, 0 not run",
+  "totalResults": 1,
+  "truncated": false,
+  "xcresultBundlePath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/Test-Reader-2026.10.25_19-53-05-+0100.xcresult"
+}
