@@ -1,0 +1,28 @@
+Native Xcode MCP diagnostic, 2026-10-25, Reader Debug on My Mac.
+Shipping FreshRSSClient and ReaderStore; isolated FreshRSS account Test.
+Separate in-memory stores and ephemeral URLSessions on the same Mac/process.
+The API credential was read from Reader's Keychain after owner permission,
+then held only in memory; no credential/token is printed or journaled.
+
+Native Mac clients with separate stores and sessions: 2
+Initial article counts: 10/10
+A to B real-server read-state propagation: true
+Original read state restored in both clients: true
+Pending revisions after round trip: 0/0
+Separate physical devices exercised: false
+
+The native JSON journal is copied unchanged alongside this report.
+It reaches phase=complete only after both real-server refreshes verify
+restoration and both exact outboxes are empty. The original read flag is
+captured before mutation. On failure, the diagnostic attempts restoration
+and records whether further action is required.
+
+The preceding probe observation timed out at 60 seconds around a Keychain
+prompt and returned no round-trip output. Its helper was inspected rather
+than immediately restarted. After the owner confirmed permission, a fresh
+read-only native refresh observed 10 unread articles and no pending writes.
+That attempt is not counted as accepted round-trip evidence. The journaled
+run above is the accepted current native observation.
+
+This is real Mac/server status evidence, not a Swift Testing execution,
+separate physical-device result, persistent-app UI restart or network-off run.

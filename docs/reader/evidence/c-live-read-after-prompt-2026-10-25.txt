@@ -1,0 +1,17 @@
+Native Xcode MCP read-only diagnostic, 2026-10-25, Reader Debug on My Mac.
+Executed after the owner confirmed the Keychain prompt.
+One new in-memory ReaderStore and shipping FreshRSSClient; no pending outbox.
+No real credential value, token or server status write is printed or changed.
+
+Read-only live account: Test
+Feed count: 1
+Article count: 10
+Unread count: 10
+Read count: 0
+Pending status writes: 0
+
+The preceding two-client probe observation timed out after 60 seconds.
+Its helper remained alive. No completed round-trip output was returned, so
+that attempt is not accepted as proof of status propagation/restoration.
+The current observed server state is recorded above without inferring the
+unobserved intermediate actions. Separate-device/offline acceptance is open.

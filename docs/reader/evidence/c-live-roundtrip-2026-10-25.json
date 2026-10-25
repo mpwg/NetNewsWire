@@ -1,0 +1,21 @@
+{
+  "initialArticleCounts" : [
+    10,
+    10
+  ],
+  "observedByB" : true,
+  "originalRead" : false,
+  "pendingCounts" : [
+    0,
+    0
+  ],
+  "phase" : "complete",
+  "processID" : 46422,
+  "restoredA" : true,
+  "restoredB" : true,
+  "separateDevices" : false,
+  "server" : "feedreader.gehri.stream",
+  "sourceID" : "1792916129287273",
+  "updatedAt" : 1792928724.8943439,
+  "username" : "Test"
+}
