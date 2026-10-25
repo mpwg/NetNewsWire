@@ -91,6 +91,10 @@ private final class LifetimeFixture {
         await gate.open()
         if outcome == .failure {
             await #expect(throws: ReaderError.server(503)) { try await request.value }
+        } else if outcome == .cancelledWindow {
+            await #expect(throws: CancellationError.self) { try await request.value }
+            // The caller has ended; explicitly join the separately owned account work before graph release.
+            try await services.refreshIfNeeded()
         } else { try await request.value }
         #expect(try await images.image(for: account.serverURL.appendingPathComponent("no-icon"), maximumPixelSize: 32) == nil)
         observer.cancel()

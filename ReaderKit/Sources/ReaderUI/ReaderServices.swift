@@ -16,7 +16,9 @@ public final class ReaderServices {
     public let images: FeedImageService
     public let privateCloudComputeConfigured: Bool
     public private(set) var revision = 0
-    @ObservationIgnored private var refreshTask: Task<Void, Error>?
+    @ObservationIgnored private var refreshWaiters: [UUID: CheckedContinuation<Void, any Error>] = [:]
+    @ObservationIgnored private var refreshTask: Task<Void, Never>?
+    var refreshWaiterCount: Int { refreshWaiters.count }
     @ObservationIgnored private var lastSuccessfulRefresh: Date?
 
     public init(repository: any ReaderRepository, credentials: (any CredentialStore)? = nil,
@@ -33,25 +35,55 @@ public final class ReaderServices {
 
     public func didChange() { revision &+= 1 }
 
-    /// Window cancellation does not cancel account work shared with another active window.
+    /// Cancelling a window releases only its waiter; accepted account work remains service-owned.
     public func refreshIfNeeded(force: Bool = false) async throws {
+        try Task.checkCancellation()
         guard let client else { return }
-        if let refreshTask { try await refreshTask.value; return }
-        if !force, let lastSuccessfulRefresh, Date().timeIntervalSince(lastSuccessfulRefresh) < 60 { return }
-        let repository = repository
-        let task = Task {
-            for account in try await repository.accounts() { try await client.refresh(account: account) }
-        }
-        refreshTask = task
+        let id = UUID()
         do {
-            try await task.value
-            lastSuccessfulRefresh = Date()
-            refreshTask = nil
-            didChange()
+            try await withTaskCancellationHandler {
+                try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, any Error>) in
+                    guard !Task.isCancelled else { continuation.resume(throwing: CancellationError()); return }
+                    if refreshTask == nil, !force, let lastSuccessfulRefresh,
+                       Date().timeIntervalSince(lastSuccessfulRefresh) < 60 {
+                        continuation.resume()
+                        return
+                    }
+                    refreshWaiters[id] = continuation
+                    guard refreshTask == nil else { return }
+                    let repository = repository
+                    refreshTask = Task {
+                        do {
+                            for account in try await repository.accounts() { try await client.refresh(account: account) }
+                            finishRefresh(.success(()))
+                        } catch {
+                            finishRefresh(.failure(error))
+                        }
+                    }
+                }
+            } onCancel: {
+                Task { @MainActor [weak self] in self?.cancelRefreshWaiter(id) }
+            }
         } catch {
-            refreshTask = nil
+            try Task.checkCancellation()
             throw error
         }
+        try Task.checkCancellation()
+    }
+
+    private func cancelRefreshWaiter(_ id: UUID) {
+        refreshWaiters.removeValue(forKey: id)?.resume(throwing: CancellationError())
+    }
+
+    private func finishRefresh(_ result: Result<Void, any Error>) {
+        let waiters = refreshWaiters
+        refreshWaiters.removeAll()
+        refreshTask = nil
+        if case .success = result {
+            lastSuccessfulRefresh = Date()
+            didChange()
+        }
+        for continuation in waiters.values { continuation.resume(with: result) }
     }
 }
 

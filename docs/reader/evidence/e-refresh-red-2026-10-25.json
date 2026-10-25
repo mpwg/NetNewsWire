@@ -1,0 +1,77 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "00006040-000A51392100801C",
+        "deviceName" : "My Mac",
+        "modelName" : "MacBook Pro",
+        "osBuildNumber" : "26A434",
+        "osVersion" : "27.0.1",
+        "platform" : "macOS"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 4,
+      "passedTests" : 4,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "Reader · Built with macOS 27.0.1",
+  "expectedFailures" : 0,
+  "failedTests" : 2,
+  "finishTime" : 1792937902.149,
+  "passedTests" : 2,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1792937894.094,
+  "statistics" : [
+    {
+      "subtitle" : "7 test runs",
+      "title" : "3 tests ran with dynamic parameters"
+    }
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "Expectation failed: await waitUntil { completion.outcome != nil }",
+      "targetName" : "ReaderTests",
+      "testIdentifier" : 1,
+      "testIdentifierString" : "AutomaticRefreshTests/alreadyCancelledCallerCannotStartRefresh()",
+      "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AutomaticRefreshTests/alreadyCancelledCallerCannotStartRefresh()",
+      "testName" : "An already-cancelled window cannot start account refresh"
+    },
+    {
+      "failureText" : "Expectation failed: await waitUntil {\n            (cancelled == .second || a.outcome != nil) && (cancelled == .first || b.outcome != nil)\n        }: Cancelled callers must finish while the shared HTTP response is still held.",
+      "targetName" : "ReaderTests",
+      "testIdentifier" : 2,
+      "testIdentifierString" : "AutomaticRefreshTests/cancelledCallersLeaveOwnedRefreshRunning(cancelled:)",
+      "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AutomaticRefreshTests/cancelledCallersLeaveOwnedRefreshRunning(cancelled:)",
+      "testName" : "Cancelled windows stop waiting without cancelling the owned account job"
+    }
+  ],
+  "title" : "Test - Reader",
+  "topInsights" : [
+    {
+      "category" : "Common Failures",
+      "impact" : "50% of failures",
+      "text" : "3 runs of 1 test failed with Expectation failed: await waitUntil {"
+    },
+    {
+      "category" : "Common Failures",
+      "impact" : "50% of failures",
+      "text" : "2 runs of 1 test failed with Expectation failed: fixture.services.refreshWaiterCount == (cancelled == .both ? 0 : 1)"
+    },
+    {
+      "category" : "Common Failures",
+      "impact" : "50% of failures",
+      "text" : "2 runs of 1 test failed with Expectation failed: b.outcome == (cancelled == .first ? .success : .cancelled)"
+    }
+  ],
+  "totalTestCount" : 4
+}
