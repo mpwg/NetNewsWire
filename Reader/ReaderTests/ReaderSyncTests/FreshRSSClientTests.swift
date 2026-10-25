@@ -256,6 +256,172 @@ struct FreshRSSPersistenceTests {
     }
 }
 
+struct FreshRSSMutationTests {
+    enum Operation: CaseIterable, Sendable {
+        case rename, assign, removeAssignment, move
+
+        var fields: [String: [String]] {
+            var result = ["ac": ["edit"], "s": ["feed/1"]]
+            if self == .rename { result["t"] = ["Renamed feed"] }
+            if self == .assign || self == .move { result["a"] = ["user/-/label/New"] }
+            if self == .removeAssignment || self == .move { result["r"] = ["user/-/label/News"] }
+            return result
+        }
+
+        fileprivate func perform(_ fixture: Fixture) async throws {
+            switch self {
+            case .rename:
+                try await fixture.client.renameFeed(account: fixture.account, feedID: "feed/1", title: "Renamed feed")
+            case .assign:
+                try await fixture.client.moveFeed(account: fixture.account, feedID: "feed/1",
+                                                  fromFolderID: nil, toFolderID: "user/-/label/New")
+            case .removeAssignment:
+                try await fixture.client.moveFeed(account: fixture.account, feedID: "feed/1",
+                                                  fromFolderID: "user/-/label/News", toFolderID: nil)
+            case .move:
+                try await fixture.client.moveFeed(account: fixture.account, feedID: "feed/1",
+                                                  fromFolderID: "user/-/label/News", toFolderID: "user/-/label/New")
+            }
+        }
+    }
+
+    enum Failure: CaseIterable, Sendable {
+        case token, http, body
+        var error: ReaderError {
+            switch self {
+            case .token: .server(503)
+            case .http: .server(500)
+            case .body: .invalidResponse
+            }
+        }
+    }
+
+    @Test("Mutation errors preserve the SwiftData tree for every subscription operation",
+          arguments: Operation.allCases, Failure.allCases)
+    func failedMutationsPreserveStoredTree(operation: Operation, failure: Failure) async throws {
+        let store = try ReaderStore(inMemory: true)
+        let fixture = try Fixture(repository: store)
+        try await store.saveAccount(fixture.account)
+        try await fixture.client.refresh(account: fixture.account)
+        let feeds = try await store.feeds()
+        let folders = try await store.folders()
+        let articles = try await store.articles(ArticleQuery(accountID: fixture.account.id))
+        await fixture.client.invalidateCredentials(accountID: fixture.account.id)
+        await fixture.server.setFailure(failure == .token ? .token : failure == .http ? .mutation : .mutationBody)
+        let callsBefore = await fixture.server.calls.count
+        await #expect(throws: failure.error) { try await operation.perform(fixture) }
+        let calls = await Array(fixture.server.calls.dropFirst(callsBefore))
+        let edits = calls.filter { $0.path.hasSuffix("/subscription/edit") }
+        if failure == .token {
+            #expect(calls.filter { $0.path.hasSuffix("/token") }.count == 1)
+            #expect(edits.isEmpty)
+        } else {
+            let edit = try #require(edits.first)
+            #expect(edits.count == 1)
+            #expect(edit.fields.filter { $0.key != "T" } == operation.fields)
+        }
+        #expect(!calls.contains { $0.path.hasSuffix("/subscription/list") })
+        #expect(try await store.feeds() == feeds)
+        #expect(try await store.folders() == folders)
+        #expect(try await store.articles(ArticleQuery(accountID: fixture.account.id)) == articles)
+        #expect(try await store.pendingChanges(accountID: fixture.account.id).isEmpty)
+    }
+}
+
+struct FreshRSSCompletionTests {
+    enum Outcome: CaseIterable, Sendable { case saved, storeFailure, cancelled }
+
+    @Test("Refresh completion includes the persisted snapshot and propagates save failure or cancellation",
+          .timeLimit(.minutes(1)), arguments: Outcome.allCases)
+    func refreshCompletionIncludesPersistence(outcome: Outcome) async throws {
+        let store = try ReaderStore(inMemory: true)
+        let gate = RequestGate()
+        let events = CommitEvents()
+        let repository = CommitGateRepository(store: store, gate: gate, events: events, fail: outcome == .storeFailure)
+        let fixture = try Fixture(repository: repository)
+        try await store.saveAccount(fixture.account)
+        let refresh = Task {
+            try await fixture.client.refresh(account: fixture.account)
+            events.append("refreshReturned")
+        }
+        defer { refresh.cancel(); Task { await gate.open() } }
+        try await gate.waitUntilEntered()
+        #expect(events.values == ["saveEntered"])
+        #expect(try await store.feeds().isEmpty)
+        #expect(try await store.articles(ArticleQuery(accountID: fixture.account.id)).isEmpty)
+        if outcome == .cancelled { refresh.cancel() }
+        await gate.open()
+        switch outcome {
+        case .saved:
+            try await refresh.value
+            #expect(events.values == ["saveEntered", "saved", "refreshReturned"])
+            #expect(try await store.feeds().count == 1)
+            let articles = try await store.articles(ArticleQuery(accountID: fixture.account.id))
+            #expect(Set(articles.map { $0.id.remoteID }) == ["1", "2"])
+            #expect(articles.first { $0.id.remoteID == "1" }?.read == false)
+            #expect(articles.first { $0.id.remoteID == "2" }?.starred == true)
+            #expect(try await store.pendingChanges(accountID: fixture.account.id).isEmpty)
+        case .storeFailure:
+            await #expect(throws: CommitGateRepository.failure) { try await refresh.value }
+        case .cancelled:
+            await #expect(throws: CancellationError.self) { try await refresh.value }
+        }
+        if outcome != .saved {
+            #expect(events.values == ["saveEntered"])
+            #expect(try await store.feeds().isEmpty)
+            #expect(try await store.folders().isEmpty)
+            #expect(try await store.articles(ArticleQuery(accountID: fixture.account.id)).isEmpty)
+        }
+    }
+}
+
+private final class CommitEvents: Sendable {
+    private let state = Mutex<[String]>([])
+    var values: [String] { state.withLock { $0 } }
+    func append(_ event: String) { state.withLock { $0.append(event) } }
+}
+
+private actor CommitGateRepository: ReaderRepository {
+    static let failure = ReaderError.unavailable("Isolated persistence failure.")
+    let store: ReaderStore
+    let gate: RequestGate
+    let events: CommitEvents
+    let fail: Bool
+
+    init(store: ReaderStore, gate: RequestGate, events: CommitEvents, fail: Bool) {
+        self.store = store; self.gate = gate; self.events = events; self.fail = fail
+    }
+
+    func applyRefresh(_ snapshot: RefreshSnapshot) async throws {
+        events.append("saveEntered")
+        try await gate.pause()
+        try Task.checkCancellation()
+        if fail { throw Self.failure }
+        try await store.applyRefresh(snapshot)
+        events.append("saved")
+    }
+
+    func accounts() async throws -> [ReaderAccount] { try await store.accounts() }
+    func saveAccount(_ account: ReaderAccount) async throws { try await store.saveAccount(account) }
+    func feeds() async throws -> [FeedSnapshot] { try await store.feeds() }
+    func folders() async throws -> [FolderSnapshot] { try await store.folders() }
+    func articles(_ query: ArticleQuery) async throws -> [ArticleSnapshot] { try await store.articles(query) }
+    func article(_ key: ArticleKey) async throws -> ArticleSnapshot? { try await store.article(key) }
+    func changes() async -> AsyncStream<UInt64> { await store.changes() }
+    func setStatus(_ keys: [ArticleKey], field: StatusField, value: Bool) async throws {
+        try await store.setStatus(keys, field: field, value: value)
+    }
+    func pendingChanges(accountID: UUID) async throws -> [PendingChange] { try await store.pendingChanges(accountID: accountID) }
+    func acknowledge(_ changes: [PendingChange]) async throws { try await store.acknowledge(changes) }
+    func preferences() async throws -> [FeedPreferences] { try await store.preferences() }
+    func savePreferences(_ preferences: FeedPreferences) async throws { try await store.savePreferences(preferences) }
+    func digests() async throws -> [DigestSnapshot] { try await store.digests() }
+    func saveDigest(_ digest: DigestSnapshot) async throws { try await store.saveDigest(digest) }
+    func updateContent(_ key: ArticleKey, html: String, text: String) async throws {
+        try await store.updateContent(key, html: html, text: text)
+    }
+}
+
 private final class Fixture: @unchecked Sendable {
     let account: ReaderAccount
     let repository = TestRepository()
@@ -365,7 +531,7 @@ struct RequestGateTests {
 }
 
 private actor TestServer {
-    enum Failure { case unread, mutation, writeBody, missingContent, continuationLoop, expiredWriteToken, secondWrite, emptyMemberships, emptyFolders }
+    enum Failure { case unread, token, mutation, mutationBody, writeBody, missingContent, continuationLoop, expiredWriteToken, secondWrite, emptyMemberships, emptyFolders }
     private var failure: Failure?
     private var gate: RequestGate?
     private var unreadGate: RequestGate?
@@ -390,7 +556,11 @@ private actor TestServer {
         }
         calls.append(RequestCall(path: path, query: query, fields: fields, auth: request.value(forHTTPHeaderField: "Authorization")))
         if path.hasSuffix("ClientLogin") { return data("SID=ignored\nAuth=auth==\n") }
-        if path.hasSuffix("/token") { tokenRequests += 1; return data("write-\(tokenRequests)\n") }
+        if path.hasSuffix("/token") {
+            tokenRequests += 1
+            if failure == .token { return data("token unavailable", status: 503) }
+            return data("write-\(tokenRequests)\n")
+        }
         if path.hasSuffix("/subscription/list") {
             let categories = failure == .emptyFolders || failure == .emptyMemberships ? "[]" : "[{\"id\":\"user/-/label/News\"}]"
             return data("{\"subscriptions\":[{\"id\":\"feed/1\",\"title\":\"News\",\"url\":\"https://news.test/feed\",\"htmlUrl\":\"https://news.test\",\"categories\":\(categories)}]}")
