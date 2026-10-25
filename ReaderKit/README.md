@@ -26,7 +26,7 @@ Intelligence preferences and digests stay on the device. FreshRSS subscriptions 
 
 ## Foundation Models
 
-Foundation Models code contracts use an Apple LanguageModel/LanguageModelExecutor fixture with the real structured LanguageModelSession. Runtime budgets, Unicode chunk conservation, native SDK errors, source identities, generated-link rejection and live cloud-consent gates are Swift Testing. The fixture is never a production backend. [I evidence](../docs/reader/evidence/i-generator-2026-10-25.md) records the two reproduced URL-validation failures and current operational limits; actual on-device/PCC quality remains separately required.
+Foundation Models code contracts use an Apple LanguageModel/LanguageModelExecutor fixture with the real structured LanguageModelSession. Runtime budgets, Unicode chunk conservation, native SDK errors, source identities, generated-link rejection and live cloud-consent gates are Swift Testing. The fixture is never a production backend. [I evidence](../docs/reader/evidence/i-generator-2026-10-25.md) records the two reproduced URL-validation failures and current operational limits; actual on-device/PCC quality remains separately required. Actual local observations exposed wrong-language, missing-coverage and repetition problems; language/concision instructions are now explicit, and exact repeated sentences/sections are removed using native sentence boundaries while preserving distinct source identities. Original failed-quality observations remain available; these repairs do not establish broad editorial acceptance.
 
 ## OPML
 

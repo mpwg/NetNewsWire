@@ -29,7 +29,13 @@ The unchanged production checkpoint 9dd69dce8 was run natively through Xcode MCP
 
 The language instruction previously named only a locale tag. It now names the requested language in English, asks for consistent output language, at most two sentences per summary, no repeated claims, and coverage of every source using its actual facts. The locale remains the current locale; the internal session seam accepts an explicit locale for deterministic English/German contracts. Two failing prompt contracts are retained in [red result](i-prompt-red-2026-10-25.json). Both then pass with the full focused generator/digest set: **30 executions / 19 distinct tests**, zero failures/skips/runtime warnings. [Current focused summary](i-prompt-focused-2026-10-25.json). The prompt assertions establish the request sent to the model; they do not prove that a real model will follow it. Current actual inference and regression revalidation remain required after this change.
 
-## Current criteria
+## Real prompt follow-up and exact duplicate removal
+
+[The next actual local run](i-local-after-prompt-2026-10-25.json) uses source fingerprint a6094be826b39743f22cd13303ecb53d9aaa2e27da75b8907a0dba410c18d01d. In this observation all output is English, matching the recorded requested language, and both news sources are covered. The 12,006-token input completes in about 18.5 seconds, but still returns two identical sections, each repeating the same sentence twice. Two controlled native cases reproduce that exact defect, including decimal EUR 29.99: [red result](i-repeat-red-2026-10-25.json).
+
+The generator now uses Apple's NLTokenizer sentence boundaries and removes only exact duplicate sentences. Text without duplicates remains unchanged. It then removes exact duplicate DigestSection values while preserving order; the identity includes title, normalized text and the exact stored source-key array, so equal text from different stored sources remains separate. No semantic merging or invented replacement claims are performed. The two duplicate cases and a distinct-source preservation case pass. The final focused generator/digest set passes **33 executions / 21 distinct tests**, zero failures/skips/runtime warnings, and strict lint. [Current raw summary](i-final-focused-2026-10-25.json). These tests establish literal duplicate handling, not general editorial accuracy.
+
+## Acceptance matrix
 
 | Criterion | Status | Evidence or remaining work |
 |---|---|---|

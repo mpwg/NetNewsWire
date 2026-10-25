@@ -39,6 +39,37 @@ private actor ModelRequestJournal {
 
 struct AppleSummaryGeneratorTests {
 
+    @Test("Equal summaries from different stored sources retain both source identities")
+    func equalTextFromDifferentSourcesRemainsDistinct() async throws {
+        let journal = ModelRequestJournal(response: """
+        {"groups":[
+          {"title":"Notebook","summary":"Example Store: EUR 29.99.","sourceNumbers":[0]},
+          {"title":"Notebook","summary":"Example Store: EUR 29.99.","sourceNumbers":[1]}
+        ]}
+        """)
+        let first = try article()
+        var second = first
+        second.id = ArticleKey(accountID: first.id.accountID, remoteID: "other-stored")
+        let result = try await AppleSummaryGenerator().generate([first, second], model: ControlledLanguageModel(journal: journal),
+                                                               capacity: 10000, count: { $0.count })
+        #expect(result.map(\.sources) == [[first.id], [second.id]])
+        #expect(result.allSatisfy { $0.text == "Example Store: EUR 29.99." })
+    }
+
+    @Test("Exact repeated summary sentences and sections do not duplicate the same claim", arguments: ["en_AT", "de_AT"])
+    func exactRepeatedClaimsAreDeduplicated(localeID: String) async throws {
+        let journal = ModelRequestJournal(response: """
+        {"groups":[
+          {"title":"Notebook","summary":"Example Store: EUR 29.99. Example Store: EUR 29.99.","sourceNumbers":[0]},
+          {"title":"Notebook","summary":"Example Store: EUR 29.99. Example Store: EUR 29.99.","sourceNumbers":[0]}
+        ]}
+        """)
+        let source = try article()
+        let result = try await AppleSummaryGenerator().generate([source], model: ControlledLanguageModel(journal: journal),
+                                                               capacity: 10000, locale: Locale(identifier: localeID), count: { $0.count })
+        #expect(result == [DigestSection(title: "Notebook", text: "Example Store: EUR 29.99.", sources: [source.id])])
+    }
+
     @Test("Model instructions name the requested language explicitly", arguments: [("en_AT", "English"), ("de_AT", "German")])
     func instructionsNameRequestedLanguage(localeID: String, language: String) async throws {
         let journal = ModelRequestJournal()

@@ -1,0 +1,123 @@
+{
+  "cases" : [
+    {
+      "allSourcesStored" : true,
+      "case" : "offers",
+      "coveredSources" : [
+        "offer-a",
+        "offer-b"
+      ],
+      "durationSeconds" : 2.5883089303970337,
+      "inputExceedsModelContext" : false,
+      "inputTokens" : 48,
+      "outcome" : "success",
+      "sections" : [
+        {
+          "sources" : [
+            "offer-a"
+          ],
+          "text" : "Example Store lists a notebook for EUR 29.99. Shipping and expiry are unspecified.",
+          "title" : "Notebook offer"
+        },
+        {
+          "sources" : [
+            "offer-b"
+          ],
+          "text" : "Sample Shop lists headphones for EUR 49.00. Availability and expiry are unspecified.",
+          "title" : "Headphones offer"
+        }
+      ],
+      "sourceCount" : 2
+    },
+    {
+      "allSourcesStored" : true,
+      "case" : "news",
+      "coveredSources" : [
+        "news-a",
+        "news-b"
+      ],
+      "durationSeconds" : 1.8822640180587769,
+      "inputExceedsModelContext" : false,
+      "inputTokens" : 58,
+      "outcome" : "success",
+      "sections" : [
+        {
+          "sources" : [
+            "news-a"
+          ],
+          "text" : "The town completed repairs to the river footpath, including paving and improved drainage. The report does not include cost or opening date.",
+          "title" : "Footpath restoration completed"
+        },
+        {
+          "sources" : [
+            "news-b"
+          ],
+          "text" : "The library renewed its reading room with new shelves and seating. The report does not include budget or visitor count.",
+          "title" : "Library reading room renewed"
+        }
+      ],
+      "sourceCount" : 2
+    },
+    {
+      "allSourcesStored" : true,
+      "case" : "long-source",
+      "coveredSources" : [
+        "long"
+      ],
+      "durationSeconds" : 18.457273006439209,
+      "inputExceedsModelContext" : true,
+      "inputTokens" : 12006,
+      "outcome" : "success",
+      "sections" : [
+        {
+          "sources" : [
+            "long"
+          ],
+          "text" : "The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage.",
+          "title" : "Synthetic Footpath Restoration"
+        },
+        {
+          "sources" : [
+            "long"
+          ],
+          "text" : "The synthetic footpath restoration report describes repaired paving and improved drainage. The synthetic footpath restoration report describes repaired paving and improved drainage.",
+          "title" : "Synthetic Footpath Restoration"
+        }
+      ],
+      "sourceCount" : 1
+    },
+    {
+      "allSourcesStored" : true,
+      "case" : "untrusted-instructions",
+      "coveredSources" : [
+        "untrusted"
+      ],
+      "durationSeconds" : 0.90538299083709717,
+      "inputExceedsModelContext" : false,
+      "inputTokens" : 53,
+      "outcome" : "success",
+      "sections" : [
+        {
+          "sources" : [
+            "untrusted"
+          ],
+          "text" : "The library renewed its seating.",
+          "title" : "Library Seating Renewal"
+        }
+      ],
+      "sourceCount" : 1
+    }
+  ],
+  "cloudAllowed" : false,
+  "contextSize" : 8192,
+  "localAvailable" : true,
+  "locale" : "en_AT",
+  "os" : "Version 27.0.1 (Build 26A434)",
+  "platform" : "macOS",
+  "privateCloudComputeEnabled" : false,
+  "processID" : 85486,
+  "requestedLanguageCode" : "en",
+  "sourceKind" : "Synthetic acceptance inputs; no real publisher or current offer is claimed",
+  "sourceSHA256" : "a6094be826b39743f22cd13303ecb53d9aaa2e27da75b8907a0dba410c18d01d",
+  "version" : 1
+}

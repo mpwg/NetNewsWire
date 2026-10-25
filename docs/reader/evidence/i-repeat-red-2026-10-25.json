@@ -1,0 +1,59 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "00006040-000A51392100801C",
+        "deviceName" : "My Mac",
+        "modelName" : "MacBook Pro",
+        "osBuildNumber" : "26A434",
+        "osVersion" : "27.0.1",
+        "platform" : "macOS"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 2,
+      "passedTests" : 21,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "Reader · Built with macOS 27.0.1",
+  "expectedFailures" : 0,
+  "failedTests" : 1,
+  "finishTime" : 1792958429.38,
+  "passedTests" : 10,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+    {
+      "issueType" : "Runtime Warning",
+      "message" : "Safety guardrails were triggered. If this is unexpected, please use `LanguageModelSession.logFeedbackAttachment(sentiment:issues:desiredOutput:)` to export the feedback attachment and file a feedback report at https://feedbackassistant.apple.com.",
+      "sourceURL" : "file:///Users/mat/code/NetNewsWire/Reader/ReaderTests/ReaderIntelligenceTests/DigestTests.swift"
+    }
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1792958425.6,
+  "statistics" : [
+    {
+      "subtitle" : "17 test runs",
+      "title" : "5 tests ran with dynamic parameters"
+    }
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "Expectation failed: result == [DigestSection(title: \"Notebook\", text: \"Example Store: EUR 29.99.\", sources: [source.id])]\nresult → [ReaderDomain.DigestSection(title: \"Notebook\", text: \"Example Store: EUR 29.99. Example Store: EUR 29.99.\", sources: [ReaderDomain.ArticleKey(accountID: E1F25676-5E25-4621-9C53-63A738C1C566, remoteID: \"stored\")]), ReaderDomain.DigestSection(title: \"Notebook\", text: \"Example Store: EUR 29.99. Example Store: EUR 29.99.\", sources: [ReaderDomain.ArticleKey(accountID: E1F25676-5E25-4621-9C53-63A738C1C566, remoteID: \"stored\")])]\n[DigestSection(title: \"Notebook\", text: \"Example Store: EUR 29.99.\", sources: [source.id])] → [ReaderDomain.DigestSection(title: \"Notebook\", text: \"Example Store: EUR 29.99.\", sources: [ReaderDomain.ArticleKey(accountID: E1F25676-5E25-4621-9C53-63A738C1C566, remoteID: \"stored\")])]",
+      "targetName" : "ReaderTests",
+      "testIdentifier" : 2,
+      "testIdentifierString" : "AppleSummaryGeneratorTests/exactRepeatedClaimsAreDeduplicated(localeID:)",
+      "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/exactRepeatedClaimsAreDeduplicated(localeID:)",
+      "testName" : "Exact repeated summary sentences and sections do not duplicate the same claim"
+    }
+  ],
+  "title" : "Test - Reader",
+  "topInsights" : [
+
+  ],
+  "totalTestCount" : 11
+}

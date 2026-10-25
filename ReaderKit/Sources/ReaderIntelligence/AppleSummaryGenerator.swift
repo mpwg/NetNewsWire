@@ -1,5 +1,6 @@
 import Foundation
 import FoundationModels
+import NaturalLanguage
 import ReaderDomain
 
 @Generable
@@ -125,10 +126,30 @@ public actor AppleSummaryGenerator: SummaryGenerator {
                       !normalizedText.contains("http://"), !normalizedText.contains("https://") else {
                     throw ReaderError.unavailable(String(localized: "The summary contains unsupported numbers or links. Original articles remain available.", bundle: #bundle))
                 }
-                sections.append(DigestSection(title: group.title, text: group.summary, sources: keys))
+                sections.append(DigestSection(title: group.title, text: Self.uniqueSentences(in: group.summary, languageCode: languageCode), sources: keys))
             }
         }
-        return sections
+        var seen: Set<DigestSection> = []
+        return sections.filter { seen.insert($0).inserted }
+    }
+
+    private static func uniqueSentences(in text: String, languageCode: String) -> String {
+        let tokenizer = NLTokenizer(unit: .sentence)
+        tokenizer.string = text
+        tokenizer.setLanguage(NLLanguage(rawValue: languageCode))
+        var seen: Set<String> = []
+        var sentences: [String] = []
+        var removedDuplicate = false
+        tokenizer.enumerateTokens(in: text.startIndex..<text.endIndex) { range, _ in
+            let sentence = String(text[range]).trimmingCharacters(in: .whitespacesAndNewlines)
+            if seen.insert(sentence).inserted {
+                sentences.append(sentence)
+            } else {
+                removedDuplicate = true
+            }
+            return true
+        }
+        return removedDuplicate ? sentences.joined(separator: " ") : text
     }
 
     private static func numbers(in text: String) -> Set<String> {

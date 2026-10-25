@@ -26,7 +26,7 @@ Full product acceptance remains open. Real network-off/restart, final devices/iP
 
 ## Model verification
 
-Foundation Models verification now exercises the shipping structured session through Apple's test-only LanguageModel executor, with source validation, runtime chunk budgets, native error propagation and PCC prerequisite gates. Generated links are rejected in both titles and summaries regardless of HTTP(S) case. [I evidence](docs/reader/evidence/i-generator-2026-10-25.md) separates controlled code contracts from actual inference and still-unavailable PCC acceptance.
+Foundation Models verification now exercises the shipping structured session through Apple's test-only LanguageModel executor, with source validation, runtime chunk budgets, native error propagation and PCC prerequisite gates. Generated links are rejected in both titles and summaries regardless of HTTP(S) case. [I evidence](docs/reader/evidence/i-generator-2026-10-25.md) separates controlled code contracts from actual inference and still-unavailable PCC acceptance. Actual local observations exposed wrong-language, missing-coverage and repetition problems; language/concision instructions are now explicit, and exact repeated sentences/sections are removed using native sentence boundaries while preserving distinct source identities. Original failed-quality observations remain available; these repairs do not establish broad editorial acceptance.
 
 ## OPML acceptance
 
