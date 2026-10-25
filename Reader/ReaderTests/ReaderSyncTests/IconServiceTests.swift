@@ -68,6 +68,15 @@ struct IconServiceTests {
         #expect(try await fixture.service.icon(for: fixture.url("/a")) == nil)
     }
 
+    @Test("Streaming limits apply without Content-Length at chunk boundaries", arguments: [128, 129])
+    func streamedBodiesRespectByteLimitsWithoutDeclaredLength(byteCount: Int) async throws {
+        let fixture = try IconFixture(maximumBytes: 128)
+        let data = Data(repeating: 1, count: byteCount)
+        await fixture.server.setMode(.streamed(data))
+        let result = try await fixture.service.icon(for: fixture.url("/a"))
+        #expect(result == (byteCount <= 128 ? data : nil))
+    }
+
     @Test("Cancelling the final consumer prevents the fallback request", .timeLimit(.minutes(1))) func cancellingTheFinalConsumerPreventsTheFallbackRequest() async throws {
         let fixture = try IconFixture()
         let gate = RequestGate()
@@ -133,6 +142,46 @@ struct FeedImageServiceTests {
         #expect(thumbnail.height > 0 && thumbnail.height <= expected)
     }
 
+    @MainActor
+    @Test("Image services release completed and cancelled jobs", .timeLimit(.minutes(1)), arguments: [false, true])
+    func imageServicesReleaseCompletedAndCancelledJobs(cancelJob: Bool) async throws {
+        let references = try await Self.exerciseImageJob(cancelJob: cancelJob)
+        let deadline = ContinuousClock.now.advanced(by: .seconds(3))
+        while references.icons != nil || references.images != nil || references.transport != nil, ContinuousClock.now < deadline {
+            try await Task.sleep(for: .milliseconds(10))
+        }
+        #expect(references.icons == nil)
+        #expect(references.images == nil)
+        #expect(references.transport == nil)
+    }
+
+    @MainActor
+    private static func exerciseImageJob(cancelJob: Bool) async throws -> WeakImageServices {
+        let fixture = try IconFixture()
+        await fixture.server.setMode(.encoded(try png()))
+        let images = FeedImageService(icons: fixture.service)
+        let references = WeakImageServices(icons: fixture.service, images: images, transport: fixture.session)
+        let gate = RequestGate()
+        defer { Task { await gate.open() } }
+        if cancelJob { await fixture.server.setGate(gate) }
+        let url = try fixture.url(cancelJob ? "/home" : "/a")
+        let request = Task { try await images.image(for: url, maximumPixelSize: 64) }
+        defer { request.cancel() }
+        if cancelJob {
+            try await gate.waitUntilEntered()
+            request.cancel()
+            await gate.open()
+            await #expect {
+                try await request.value
+            } throws: { error in
+                error is CancellationError || (error as? URLError)?.code == .cancelled
+            }
+        } else {
+            #expect(try await request.value != nil)
+        }
+        return references
+    }
+
     private static func png() throws -> Data {
         let context = try #require(CGContext(data: nil, width: 512, height: 256, bitsPerComponent: 8,
                                              bytesPerRow: 0, space: CGColorSpaceCreateDeviceRGB(),
@@ -148,11 +197,21 @@ struct FeedImageServiceTests {
     }
 }
 
+@MainActor
+private final class WeakImageServices {
+    weak var icons: IconService?
+    weak var images: FeedImageService?
+    weak var transport: URLSession?
+    init(icons: IconService, images: FeedImageService, transport: URLSession) {
+        self.icons = icons; self.images = images; self.transport = transport
+    }
+}
+
 private final class IconFixture: @unchecked Sendable {
     let server = IconTestServer()
     let service: IconService
     private let host: String
-    private let session: URLSession
+    let session: URLSession
     init(maximumBytes: Int = 1_048_576, maximumConcurrentRequests: Int = 2) throws {
         host = UUID().uuidString.lowercased() + ".test"
         let configuration = URLSessionConfiguration.ephemeral
@@ -170,10 +229,11 @@ private struct IconResponse: Sendable {
     let status: Int
     let mime: String
     let data: Data
+    var streamed = false
 }
 
 private actor IconTestServer {
-    enum Mode: Equatable, Sendable { case normal, homepageFailure, transientA, wrongType, oversized, encoded(Data) }
+    enum Mode: Equatable, Sendable { case normal, homepageFailure, transientA, wrongType, oversized, encoded(Data), streamed(Data) }
     private var mode: Mode = .normal
     private var gate: RequestGate?
     private var pathGates: [String: RequestGate] = [:]
@@ -196,6 +256,7 @@ private actor IconTestServer {
         if path == "/a.png" {
             switch mode {
             case .encoded(let data): return IconResponse(status: 200, mime: "image/png", data: data)
+            case .streamed(let data): return IconResponse(status: 200, mime: "image/png", data: data, streamed: true)
             case .transientA: return IconResponse(status: 503, mime: "text/plain", data: Data())
             case .wrongType: return IconResponse(status: 200, mime: "text/html", data: Data("<script>bad</script>".utf8))
             case .oversized: return IconResponse(status: 200, mime: "image/png", data: Data(repeating: 0, count: 129))
@@ -223,9 +284,16 @@ private final class IconURLProtocol: URLProtocol, @unchecked Sendable {
                 guard let handler, let url = request.url else { throw ReaderError.invalidResponse }
                 let result = try await handler(request)
                 try Task.checkCancellation()
-                guard let response = HTTPURLResponse(url: url, statusCode: result.status, httpVersion: "HTTP/1.1", headerFields: ["Content-Type": result.mime, "Content-Length": String(result.data.count)]) else { throw ReaderError.invalidResponse }
+                var headers = ["Content-Type": result.mime]
+                if !result.streamed { headers["Content-Length"] = String(result.data.count) }
+                guard let response = HTTPURLResponse(url: url, statusCode: result.status, httpVersion: "HTTP/1.1", headerFields: headers) else { throw ReaderError.invalidResponse }
                 client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
-                client?.urlProtocol(self, didLoad: result.data)
+                if result.streamed {
+                    for start in stride(from: 0, to: result.data.count, by: 64) {
+                        try Task.checkCancellation()
+                        client?.urlProtocol(self, didLoad: result.data.subdata(in: start..<min(start + 64, result.data.count)))
+                    }
+                } else { client?.urlProtocol(self, didLoad: result.data) }
                 client?.urlProtocolDidFinishLoading(self)
             } catch { client?.urlProtocol(self, didFailWithError: error) }
         }

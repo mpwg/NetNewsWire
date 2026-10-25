@@ -1,5 +1,6 @@
 import Foundation
 import ImageIO
+import Synchronization
 import ReaderDomain
 
 /// Coalesces requests per homepage and bounds network concurrency, response sizes and memory.
@@ -138,19 +139,12 @@ public actor IconService {
     private static func fetch(_ url: URL, session: URLSession, maximumBytes: Int, image: Bool) async throws -> (Data, HTTPURLResponse) {
         var request = URLRequest(url: url, timeoutInterval: 20)
         request.setValue(image ? "image/*" : "text/html,application/xhtml+xml", forHTTPHeaderField: "Accept")
-        let (bytes, response) = try await session.bytes(for: request)
-        defer { bytes.task.cancel() }
-        guard let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode) else { throw ReaderError.invalidResponse }
-        let mime = http.mimeType?.lowercased() ?? ""
-        guard image ? mime.hasPrefix("image/") : ["text/html", "application/xhtml+xml"].contains(mime) else { throw ReaderError.invalidResponse }
-        guard http.expectedContentLength <= maximumBytes else { throw ReaderError.unavailable(String(localized: "The icon is too large.", bundle: #bundle)) }
-        var data = Data()
-        for try await byte in bytes {
-            try Task.checkCancellation()
-            guard data.count < maximumBytes else { throw ReaderError.unavailable(String(localized: "The icon is too large.", bundle: #bundle)) }
-            data.append(byte)
-        }
-        return (data, http)
+        let download = BoundedIconDownload(maximumBytes: maximumBytes, image: image)
+        return try await withTaskCancellationHandler {
+            try await withCheckedThrowingContinuation { continuation in
+                download.start(request, session: session, continuation: continuation)
+            }
+        } onCancel: { download.cancel() }
     }
 }
 
@@ -201,6 +195,96 @@ public actor FeedImageService {
             kCGImageSourceShouldCacheImmediately: true
         ]
         return CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary)
+    }
+}
+
+/// Owns one bounded native task and releases its task and continuation on completion.
+private final class BoundedIconDownload: NSObject, URLSessionDataDelegate {
+    typealias Value = (Data, HTTPURLResponse)
+    private struct State {
+        var task: URLSessionDataTask?
+        var continuation: CheckedContinuation<Value, any Error>?
+        var response: HTTPURLResponse?
+        var data = Data()
+        var error: (any Error)?
+        var cancelled = false
+    }
+    private let state = Mutex(State())
+    private let maximumBytes: Int
+    private let image: Bool
+
+    init(maximumBytes: Int, image: Bool) { self.maximumBytes = maximumBytes; self.image = image }
+
+    func start(_ request: URLRequest, session: URLSession, continuation: CheckedContinuation<Value, any Error>) {
+        let task = state.withLock { value -> URLSessionDataTask? in
+            guard !value.cancelled else { return nil }
+            let task = session.dataTask(with: request)
+            task.delegate = self
+            value.task = task
+            value.continuation = continuation
+            return task
+        }
+        if let task { task.resume() } else { continuation.resume(throwing: CancellationError()) }
+    }
+
+    func cancel() {
+        let task = state.withLock { value in value.cancelled = true; return value.task }
+        task?.cancel()
+    }
+
+    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse,
+                    completionHandler: @escaping @Sendable (URLSession.ResponseDisposition) -> Void) {
+        let accepted = state.withLock { value in
+            guard !value.cancelled else { return false }
+            guard let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode) else {
+                value.error = ReaderError.invalidResponse
+                return false
+            }
+            let mime = http.mimeType?.lowercased() ?? ""
+            guard image ? mime.hasPrefix("image/") : ["text/html", "application/xhtml+xml"].contains(mime) else {
+                value.error = ReaderError.invalidResponse
+                return false
+            }
+            guard http.expectedContentLength <= maximumBytes else {
+                value.error = ReaderError.unavailable(String(localized: "The icon is too large.", bundle: #bundle))
+                return false
+            }
+            value.response = http
+            return true
+        }
+        completionHandler(accepted ? .allow : .cancel)
+    }
+
+    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
+        let tooLarge = state.withLock { value in
+            guard !value.cancelled, value.error == nil else { return false }
+            guard data.count <= maximumBytes - value.data.count else {
+                value.error = ReaderError.unavailable(String(localized: "The icon is too large.", bundle: #bundle))
+                return true
+            }
+            value.data.append(data)
+            return false
+        }
+        if tooLarge { dataTask.cancel() }
+    }
+
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: (any Error)?) {
+        let completion = state.withLock { value -> (CheckedContinuation<Value, any Error>?, Result<Value, any Error>) in
+            let result: Result<Value, any Error>
+            if value.cancelled {
+                result = .failure(CancellationError())
+            } else if let failure = value.error ?? error {
+                result = .failure(failure)
+            } else if let response = value.response {
+                result = .success((value.data, response))
+            } else { result = .failure(ReaderError.invalidResponse) }
+            let continuation = value.continuation
+            value.continuation = nil
+            value.task = nil
+            value.data = Data()
+            return (continuation, result)
+        }
+        completion.0?.resume(with: completion.1)
     }
 }
 

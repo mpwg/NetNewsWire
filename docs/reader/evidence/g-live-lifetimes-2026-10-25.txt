@@ -1,0 +1,15 @@
+Native Xcode MCP diagnostic after explicit owner Keychain permission, 2026-10-25.
+Source context: Reader/Reader/ReaderApp.swift, Debug bundle eu.mpwg.reader.debug.
+Isolated account: Test at feedreader.gehri.stream.
+Operations: read stored credential, list stored feeds, load real homepage thumbnail.
+No credential output, credential mutation or server status write.
+
+Stored API credential available: true
+Stored feed count: 1
+Native thumbnail available: true
+Native thumbnail dimensions: 32x32
+
+Retained limitation: the preceding native probe timed out after 60 seconds.
+A read-only process sample located the wait in SecItemCopyMatching / Keychain
+decryption. After the owner allowed access, a fresh native run produced the
+output above. This is not a UI restart or multi-device synchronization result.
