@@ -37,8 +37,8 @@ final class ReaderSmokeTests: XCTestCase {
         XCTAssertTrue(name.waitForExistence(timeout: 5))
         name.click()
         name.typeKey("a", modifierFlags: .command)
-        name.typeText("ReaderExportProbe")
-        XCTAssertEqual(name.value as? String, "ReaderExportProbe")
+        name.typeText("ReaderExportProbe.opml")
+        XCTAssertEqual(name.value as? String, "ReaderExportProbe.opml")
         app.typeKey("g", modifierFlags: [.command, .shift])
         let destination = panel.sheets["GoToWindow"]
         let path = destination.textFields["PathTextField"]
@@ -68,11 +68,10 @@ final class ReaderSmokeTests: XCTestCase {
         XCTAssertEqual(result, .completed)
         XCTAssertEqual(outputs.count, 1)
         let output = try XCTUnwrap(outputs.first)
-        XCTAssertEqual(output.deletingPathExtension().lastPathComponent, "ReaderExportProbe")
-        XCTAssertTrue(["opml", "xml"].contains(output.pathExtension))
         let data = try Data(contentsOf: output)
         XCTAssertFalse(data.isEmpty)
         XCTAssertTrue(String(decoding: data, as: UTF8.self).contains("<opml"))
+        XCTAssertEqual(output.lastPathComponent, "ReaderExportProbe.opml")
     }
 
     func testDelayedTimelineQueryKeepsInputAndFeedMenuResponsive() throws {

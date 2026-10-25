@@ -1,6 +1,6 @@
 # Native Reader application
 
-Native Mac OPML export uses the standard Save panel with user-selected Read/Write access while App Sandbox remains enabled. One genuine system-dialog UI method verifies the chosen directory, actual filename and nonempty OPML output; business rules remain Swift Testing. It accepts OPML/XML extensions supplied by the native panel instead of assuming a shared system preference. New feeds appear only after complete initial refresh, as the owner reconfirmed. [Export criteria and current evidence](../docs/reader/evidence/h-file-export-2026-10-25.md).
+Native Mac OPML export uses the standard Save panel with user-selected Read/Write access while App Sandbox remains enabled. One genuine system-dialog UI method enters a complete filename and verifies the chosen directory, actual filename and nonempty OPML output; business rules remain Swift Testing. It does not assume an automatically supplied extension or a shared system preference. New feeds appear only after complete initial refresh, as the owner reconfirmed. [Export criteria and current evidence](../docs/reader/evidence/h-file-export-2026-10-25.md).
 
 Open `Reader.xcodeproj` in this directory and select the shared Reader scheme. This project was created through Xcode MCP with Apple's multiplatform SwiftUI app template. It links the six existing ReaderKit libraries; the standalone store recovery probe is not an app dependency.
 
