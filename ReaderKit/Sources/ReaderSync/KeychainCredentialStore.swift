@@ -9,6 +9,7 @@ public actor KeychainCredentialStore: CredentialStore {
     public init(service: String = "eu.mpwg.reader.credentials") { self.service = service }
 
     public func password(accountID: UUID) throws -> String? {
+        try Task.checkCancellation()
         var query = baseQuery(accountID)
         query[kSecReturnData] = true
         query[kSecMatchLimit] = kSecMatchLimitOne
@@ -36,6 +37,7 @@ public actor KeychainCredentialStore: CredentialStore {
     }
 
     public func removePassword(accountID: UUID) throws {
+        try Task.checkCancellation()
         let status = SecItemDelete(baseQuery(accountID) as CFDictionary)
         if status != errSecItemNotFound { try check(status) }
     }

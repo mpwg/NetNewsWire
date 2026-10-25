@@ -4,6 +4,8 @@ FreshRSS-only Google-Reader-API client and device-local Keychain credentials. No
 
 `FreshRSSClient(repository:credentials:session:)` owns `refresh(account:)`, `flush(account:)`, and confirmed feed/folder mutations. `KeychainCredentialStore(service:)` stores API passwords under an app-specific service (use the Debug bundle identifier for Debug).
 
+All credential operations check task cancellation before entering Security.framework. A synchronous OS call already in progress completes. A parameterized Swift Testing contract covers cancelled reads, saves and removals using a fresh random test namespace; it never addresses app account credentials.
+
 Every operation is serialized per account across its network suspension points. Refresh applies one authoritative snapshot only after every page and content batch succeeds. It never uses a publication-time `ot` cutoff. Pending read/star changes are sent before refresh and acknowledged using the exact outbox UUIDs; the repository protects newer pending state. Missing requested content, malformed JSON, non-success HTTP, and failed mutations propagate errors. API auth and write tokens renew once on authorization rejection, without logging passwords or tokens.
 
 Code contracts verify that a cancelled refresh sends no authentication request and that cancellation during the first 500-item status batch prevents the next batch while retaining all exact pending revisions. Missing article titles use the package's English source string and compiled German translation; a parameterized resource test verifies both languages explicitly.
