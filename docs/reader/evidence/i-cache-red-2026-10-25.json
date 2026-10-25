@@ -1,0 +1,59 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "00006040-000A51392100801C",
+        "deviceName" : "My Mac",
+        "modelName" : "MacBook Pro",
+        "osBuildNumber" : "26A434",
+        "osVersion" : "27.0.1",
+        "platform" : "macOS"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 4,
+      "passedTests" : 15,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "Reader · Built with macOS 27.0.1",
+  "expectedFailures" : 0,
+  "failedTests" : 1,
+  "finishTime" : 1792959410.414,
+  "passedTests" : 11,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1792959407.179,
+  "statistics" : [
+    {
+      "subtitle" : "9 test runs",
+      "title" : "2 tests ran with dynamic parameters"
+    }
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "Expectation failed: (refreshed.revision == cached.revision) == (kind == 0)\n(refreshed.revision == cached.revision) → true\n(kind == 0) → false",
+      "targetName" : "ReaderTests",
+      "testIdentifier" : 5,
+      "testIdentifierString" : "DigestTests/cachedClaimsRequireValidContentAndSources(kind:)",
+      "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/cachedClaimsRequireValidContentAndSources(kind:)",
+      "testName" : "Cache reuse requires complete nonblank sections bound to stored sources"
+    }
+  ],
+  "title" : "Test - Reader",
+  "topInsights" : [
+    {
+      "category" : "Common Failures",
+      "impact" : "100% of failures",
+      "text" : "4 runs of 1 test failed with Expectation failed: (refreshed.revision == cached.revision) == (kind == 0)"
+    }
+  ],
+  "totalTestCount" : 12
+}

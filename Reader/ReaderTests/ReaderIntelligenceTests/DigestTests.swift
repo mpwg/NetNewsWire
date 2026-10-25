@@ -281,6 +281,28 @@ private actor ControlledGenerator: SummaryGenerator {
 
 struct DigestTests {
 
+    @Test("Cache reuse requires complete nonblank sections bound to stored sources", arguments: [0, 1, 2, 3, 4])
+    func cachedClaimsRequireValidContentAndSources(kind: Int) async throws {
+        let (store, feed, articles) = try await fixture()
+        let coordinator = DigestCoordinator(repository: store, generator: FixtureGenerator())
+        var cached = try #require(try await coordinator.generate(feed: feed).first)
+        switch kind {
+        case 1: cached.sections[0].title = " \t"
+        case 2: cached.sections[0].text = " \n\t"
+        case 3: cached.sections[0].sources = [ArticleKey(accountID: feed.id.accountID, remoteID: "not-stored")]
+        case 4: cached.sections[0].sources = [articles[0].id]
+        default: break
+        }
+        try await store.saveDigest(cached)
+        let refreshed = try #require(try await coordinator.generate(feed: feed).first)
+        #expect((refreshed.revision == cached.revision) == (kind == 0))
+        #expect(refreshed.warning == nil)
+        #expect(refreshed.sections.first?.title == "Offers")
+        #expect(refreshed.sections.first?.text == "Sourced digest")
+        #expect(Set(refreshed.sections.flatMap(\.sources)) == Set(articles.map(\.id)))
+        #expect(try await store.pendingChanges(accountID: feed.id.accountID).isEmpty)
+    }
+
     @Test("Blank model text cannot claim complete source coverage or publish a digest")
     func blankModelTextDoesNotClaimCoverage() async throws {
         let (store, feed, articles) = try await fixture()

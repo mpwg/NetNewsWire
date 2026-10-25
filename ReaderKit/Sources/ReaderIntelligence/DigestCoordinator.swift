@@ -52,10 +52,13 @@ public actor DigestCoordinator {
             guard var sources = days[day] else { continue }
             sources.sort { $0.id.id < $1.id.id }
             let sourceFingerprint = try Self.fingerprint(sources)
+            let allKeys = Set(sources.map(\.id))
             let identifier = feed.id.id + "/" + preferences.timeZoneID + "/" + String(Int(day.timeIntervalSince1970))
             if let cached = existing.first(where: { $0.id == identifier }),
-               Set(cached.sources) == Set(sources.map(\.id)), cached.warning == nil,
-               cached.sourceFingerprint == sourceFingerprint {
+               Set(cached.sources) == allKeys, cached.warning == nil,
+               cached.sourceFingerprint == sourceFingerprint,
+               Self.validGeneratedSections(cached.sections, sources: allKeys),
+               Set(cached.sections.flatMap(\.sources)) == allKeys {
                 result.append(cached); continue
             }
             var warnings: [String] = []
@@ -82,12 +85,7 @@ public actor DigestCoordinator {
                     return current?.mode == .digest && current?.cloudAllowed == true
                 })
             } catch is CancellationError { throw CancellationError() } catch { sections = []; warnings.append(error.localizedDescription) }
-            let allKeys = Set(sources.map(\.id))
-            guard sections.allSatisfy({ section in
-                !section.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
-                !section.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
-                !section.sources.isEmpty && section.sources.allSatisfy(allKeys.contains)
-            }) else { throw ReaderError.invalidResponse }
+            guard Self.validGeneratedSections(sections, sources: allKeys) else { throw ReaderError.invalidResponse }
             let covered = Set(sections.flatMap(\.sources))
             let missing = sources.filter { !covered.contains($0.id) }
             if !missing.isEmpty {
@@ -103,6 +101,14 @@ public actor DigestCoordinator {
             result.append(digest)
         }
         return result
+    }
+
+    private static func validGeneratedSections(_ sections: [DigestSection], sources: Set<ArticleKey>) -> Bool {
+        sections.allSatisfy { section in
+            !section.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+            !section.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+            !section.sources.isEmpty && section.sources.allSatisfy(sources.contains)
+        }
     }
 
     private static func fingerprint(_ articles: [ArticleSnapshot]) throws -> String {
