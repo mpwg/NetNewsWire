@@ -20,6 +20,50 @@ final class ReaderSmokeTests: XCTestCase {
     }
 
     #if os(macOS)
+    func testOPMLExportUsesNativeSavePanel() throws {
+        let app = launchReader(arguments: ["--ui-testing-timeline", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"])
+        waitForValue(app.staticTexts["timelineFixturePhase"], equalTo: "ready", timeout: 10)
+        app.descendants(matching: .any)["readerActions"].firstMatch.click()
+        let export = app.menuItems["Export OPML"]
+        XCTAssertTrue(export.waitForExistence(timeout: 5))
+        export.click()
+        let panel = app.sheets["save-panel"]
+        XCTAssertTrue(panel.waitForExistence(timeout: 10))
+        let directory = FileManager.default.temporaryDirectory
+            .appendingPathComponent("ReaderExport-" + UUID().uuidString, isDirectory: true)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: false)
+        addTeardownBlock { try FileManager.default.removeItem(at: directory) }
+        let name = panel.textFields["saveAsNameTextField"]
+        XCTAssertTrue(name.waitForExistence(timeout: 5))
+        name.click()
+        name.typeKey("a", modifierFlags: .command)
+        name.typeText("ReaderExportProbe")
+        XCTAssertEqual(name.value as? String, "ReaderExportProbe")
+        app.typeKey("g", modifierFlags: [.command, .shift])
+        let destination = panel.sheets["GoToWindow"]
+        let path = destination.textFields["PathTextField"]
+        XCTAssertTrue(path.waitForExistence(timeout: 5))
+        path.typeKey("a", modifierFlags: .command)
+        path.typeText(directory.path)
+        XCTAssertEqual(path.value as? String, directory.path)
+        path.typeKey(XCUIKeyboardKey.return.rawValue, modifierFlags: [])
+        XCTAssertTrue(destination.wait(for: \.exists, toEqual: false, timeout: 5))
+        waitForValue(panel.popUpButtons["where popup"], equalTo: directory.lastPathComponent)
+        let save = panel.buttons["OKButton"]
+        XCTAssertTrue(save.wait(for: \.isEnabled, toEqual: true, timeout: 5))
+        save.click()
+        XCTAssertTrue(panel.wait(for: \.exists, toEqual: false, timeout: 5))
+        let output = directory.appendingPathComponent("ReaderExportProbe.opml")
+        let written = XCTNSPredicateExpectation(
+            predicate: NSPredicate { _, _ in FileManager.default.fileExists(atPath: output.path) },
+            object: nil
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [written], timeout: 10), .completed)
+        let data = try Data(contentsOf: output)
+        XCTAssertFalse(data.isEmpty)
+        XCTAssertTrue(String(decoding: data, as: UTF8.self).contains("<opml"))
+    }
+
     func testDelayedTimelineQueryKeepsInputAndFeedMenuResponsive() throws {
         let app = launchReader(arguments: ["--ui-testing-timeline", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"])
         waitForValue(app.staticTexts["timelineFixturePhase"], equalTo: "ready", timeout: 10)

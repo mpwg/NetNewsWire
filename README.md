@@ -1,5 +1,7 @@
 # Reader
 
+Native Mac OPML file-export follow-up: #53 is reopened pending full current-source confirmation. The prior Read Only user-selected-file capability prevents the Save panel; the same complete native file-write journey passes with Read/Write while App Sandbox remains enabled. One genuine system-dialog UI method is added; business rules remain Swift Testing. The owner reconfirmed that new feeds appear only after complete initial refresh. Earlier H service/server evidence remains valid. [Export evidence](docs/reader/evidence/h-file-export-2026-10-25.md).
+
 A native FreshRSS reader for macOS, iOS and iPadOS 27 or later, built with SwiftUI, SwiftData and Apple's Foundation Models. Each feed can show ordinary articles or a sourced daily digest. Originals stay accessible through feeds, search, stars and digest source links.
 
 Open **Reader/Reader.xcodeproj** in Xcode 27 and select the shared **Reader** scheme. Use Xcode MCP for interactive project changes, builds and tests. The project was created with Apple's multiplatform template; no project, scheme or test-plan generator is used.

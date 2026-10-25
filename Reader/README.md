@@ -1,5 +1,7 @@
 # Native Reader application
 
+Native Mac OPML file-export follow-up: #53 is reopened pending full current-source confirmation. The prior Read Only user-selected-file capability prevents the Save panel; the same complete native file-write journey passes with Read/Write while App Sandbox remains enabled. One genuine system-dialog UI method is added; business rules remain Swift Testing. The owner reconfirmed that new feeds appear only after complete initial refresh. Earlier H service/server evidence remains valid. [Export evidence](../docs/reader/evidence/h-file-export-2026-10-25.md).
+
 Open `Reader.xcodeproj` in this directory and select the shared Reader scheme. This project was created through Xcode MCP with Apple's multiplatform SwiftUI app template. It links the six existing ReaderKit libraries; the standalone store recovery probe is not an app dependency.
 
 ReaderTests is an unhosted Swift Testing code-test target. All code-testable behavior, including connection validation and CI runner failure propagation, belongs here. CI bootstraps the Swift runner contracts directly before trusting the aggregate shell script. ReaderUITests is a small native XCTest/XCUIAutomation target. Apple's automatic scheme test plan discovers both; no generated project, scheme or test-plan script is required. Use Xcode MCP for interactive builds, tests and project changes.
