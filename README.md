@@ -24,6 +24,10 @@ Every app, test and ReaderKit target enables Approachable Concurrency and compil
 
 Full product acceptance remains open. Real network-off/restart, final devices/iPad windows, accessibility, representative model/feed quality, PCC entitlement and distribution retain their explicit requirements. PCC is disabled in the normal build. See [umbrella #45](https://github.com/mpwg/NetNewsWire/issues/45) and [cleanup evidence](docs/reader/evidence/k-reader-only-2026-10-25.md).
 
+## Model verification
+
+Foundation Models verification now exercises the shipping structured session through Apple's test-only LanguageModel executor, with source validation, runtime chunk budgets, native error propagation and PCC prerequisite gates. Generated links are rejected in both titles and summaries regardless of HTTP(S) case. [I evidence](docs/reader/evidence/i-generator-2026-10-25.md) separates controlled code contracts from actual inference and still-unavailable PCC acceptance.
+
 ## OPML acceptance
 
 OPML verification includes actual FreshRSS imports, repeated imports, confirmed folder renames, visible rejection and restoration of the isolated test account. Export follows current category membership while retaining matching imported hierarchy. A folderless repeat preserves an existing assignment. New subscriptions appear only after their complete initial refresh succeeds; confirmed existing feeds can merge import metadata without HTTP. H is accepted for this exercised Mac/server contract: Reader CI 40227398927 passes all 333 executions, including three forced initial-refresh failures. See [H evidence](docs/reader/evidence/h-opml-2026-10-25.md) for the exact scope, owner decisions, original audit distinction and raw evidence. Full product acceptance remains open.

@@ -1,0 +1,55 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "00006040-000A51392100801C",
+        "deviceName" : "My Mac",
+        "modelName" : "MacBook Pro",
+        "osBuildNumber" : "26A434",
+        "osVersion" : "27.0.1",
+        "platform" : "macOS"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 2,
+      "passedTests" : 6,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "Reader · Built with macOS 27.0.1",
+  "expectedFailures" : 0,
+  "failedTests" : 1,
+  "finishTime" : 1792958039.883,
+  "passedTests" : 1,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1792958036.527,
+  "statistics" : [
+    {
+      "subtitle" : "7 test runs",
+      "title" : "1 test ran with dynamic parameters"
+    }
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "Expectation failed: an error was expected but none was thrown and \"[ReaderDomain.DigestSection(title: \"https://invented.test\", text: \"Stored offer\", sources: [ReaderDomain.ArticleKey(accountID: E16A793D-4A59-4690-8037-3DB80B2A785A, remoteID: \"stored\")])]\" was returned: ReaderError.self",
+      "targetName" : "ReaderTests",
+      "testIdentifier" : 1,
+      "testIdentifierString" : "AppleSummaryGeneratorTests/structuredGenerationRejectsUntrustedOutput(response:)",
+      "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/structuredGenerationRejectsUntrustedOutput(response:)",
+      "testName" : "Native structured generation rejects invalid sources, unsupported numbers and model-written links"
+    }
+  ],
+  "title" : "Test - Reader",
+  "topInsights" : [
+
+  ],
+  "totalTestCount" : 2
+}

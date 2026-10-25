@@ -46,7 +46,7 @@ public actor AppleSummaryGenerator: SummaryGenerator {
         }
     }
 
-    private func cloudSummary(_ articles: [ArticleSnapshot], permission: @escaping @Sendable () async throws -> Bool) async throws -> [DigestSection] {
+    func cloudSummary(_ articles: [ArticleSnapshot], permission: @escaping @Sendable () async throws -> Bool) async throws -> [DigestSection] {
         guard privateCloudComputeEnabled else {
             throw ReaderError.unavailable(String(localized: "Apple cloud inference is not configured for this app. Use on-device summaries.", bundle: #bundle))
         }
@@ -60,9 +60,10 @@ public actor AppleSummaryGenerator: SummaryGenerator {
         }
     }
 
-    private func generate<M: LanguageModel>(_ articles: [ArticleSnapshot], model: M, capacity: Int,
-                                            cloudPermission: (@Sendable () async throws -> Bool)? = nil,
-                                            count: (String) async throws -> Int) async throws -> [DigestSection] {
+    // Internal so native Swift Testing can exercise this exact session path with a controlled LanguageModel.
+    func generate<M: LanguageModel>(_ articles: [ArticleSnapshot], model: M, capacity: Int,
+                                    cloudPermission: (@Sendable () async throws -> Bool)? = nil,
+                                    count: (String) async throws -> Int) async throws -> [DigestSection] {
         let instructions = """
         Summarize the supplied feed articles in a few thematic groups.
         Write titles and summaries in the language identified by \(Locale.current.language.maximalIdentifier).
@@ -114,8 +115,10 @@ public actor AppleSummaryGenerator: SummaryGenerator {
                 }
                 let keys = Array(Set(group.sourceNumbers)).sorted().map { articles[$0].id }
                 let sourceText = group.sourceNumbers.map { articles[$0].title + " " + articles[$0].text }.joined(separator: " ")
-                guard Self.numbers(in: group.title + " " + group.summary).isSubset(of: Self.numbers(in: sourceText)),
-                      !group.summary.contains("http://"), !group.summary.contains("https://") else {
+                let generatedText = group.title + " " + group.summary
+                let normalizedText = generatedText.lowercased()
+                guard Self.numbers(in: generatedText).isSubset(of: Self.numbers(in: sourceText)),
+                      !normalizedText.contains("http://"), !normalizedText.contains("https://") else {
                     throw ReaderError.unavailable(String(localized: "The summary contains unsupported numbers or links. Original articles remain available.", bundle: #bundle))
                 }
                 sections.append(DigestSection(title: group.title, text: group.summary, sources: keys))
