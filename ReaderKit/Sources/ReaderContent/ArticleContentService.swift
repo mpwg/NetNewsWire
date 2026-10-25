@@ -284,8 +284,6 @@ public struct ReaderWebNavigationPolicy: WebPage.NavigationDeciding {
     }
 }
 
-typealias InertArticleNavigation = ReaderWebNavigationPolicy
-
 /// Retains at most the article byte limit and cancels only its own native request.
 private final class BoundedArticleDownload: NSObject, URLSessionDataDelegate {
     typealias Value = (Data, HTTPURLResponse)

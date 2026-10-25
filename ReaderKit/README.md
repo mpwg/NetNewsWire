@@ -46,6 +46,6 @@ Current Mac evidence includes native/code/hosted query, menu, selection and coun
 
 ## Attribution
 
-Local extraction uses Mozilla Readability and JSDOMParser pinned to `ab4027a8b37669745016869a37a504727992b2ba`. Unmodified sources and Apache-2.0 license are under `Sources/ReaderContent/Resources/`. Foundation resolves URLs. NetNewsWire's MIT license and copyright notices remain.
+Local extraction uses unmodified Mozilla Readability pinned to `ab4027a8b37669745016869a37a504727992b2ba`. Its source and Apache-2.0 license are under `Sources/ReaderContent/Resources/`. WebKit provides native HTML5 parsing and URL resolution. The superseded JSDOMParser resource was removed after Reader CI confirmed its replacement; Git history retains it. NetNewsWire's MIT license and copyright notices remain.
 
 Work plan: [umbrella #45](https://github.com/mpwg/NetNewsWire/issues/45), packages #46–#56.

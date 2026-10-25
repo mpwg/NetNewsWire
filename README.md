@@ -26,4 +26,4 @@ Full product acceptance remains open. Real network-off/restart, final devices/iP
 
 ## Attribution
 
-This fork retains NetNewsWire's [MIT license and copyright notice](LICENSE). Local extraction uses Mozilla Readability/JSDOMParser with its Apache-2.0 notice in ReaderKit/Sources/ReaderContent/Resources. English is the source language; German belongs in localization resources and explicit translation fixtures.
+This fork retains NetNewsWire's [MIT license and copyright notice](LICENSE). Local extraction uses pinned Mozilla Readability with its Apache-2.0 notice in ReaderKit/Sources/ReaderContent/Resources. English is the source language; German belongs in localization resources and explicit translation fixtures.

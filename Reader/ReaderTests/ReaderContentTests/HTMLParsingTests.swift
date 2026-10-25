@@ -202,7 +202,7 @@ private struct ObservedArticleNavigation: WebPage.NavigationDeciding {
     let events: HTMLNavigationEvents
     @MainActor
     func decidePolicy(for action: WebPage.NavigationAction, preferences: inout WebPage.NavigationPreferences) async -> WKNavigationActionPolicy {
-        let policy = await InertArticleNavigation().decidePolicy(for: action, preferences: &preferences)
+        let policy = await ReaderWebNavigationPolicy().decidePolicy(for: action, preferences: &preferences)
         events.policies.withLock { $0[action.request.url?.absoluteString ?? ""] = policy.rawValue }
         return policy
     }
@@ -213,7 +213,7 @@ private struct HeldArticleNavigation: WebPage.NavigationDeciding {
     @MainActor
     func decidePolicy(for action: WebPage.NavigationAction, preferences: inout WebPage.NavigationPreferences) async -> WKNavigationActionPolicy {
         do { try await gate.pause() } catch { return .cancel }
-        return await InertArticleNavigation().decidePolicy(for: action, preferences: &preferences)
+        return await ReaderWebNavigationPolicy().decidePolicy(for: action, preferences: &preferences)
     }
 }
 

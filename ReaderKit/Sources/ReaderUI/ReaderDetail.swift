@@ -123,10 +123,10 @@ final class ReaderArticleState {
 
     let links: ReaderArticleLinks
 
-    init(page: WebPage? = nil) {
+    init() {
         let links = ReaderArticleLinks()
         self.links = links
-        self.page = page ?? ReaderArticleDocument.makePage(openLink: { [weak links] url in links?.open?(url) })
+        self.page = ReaderArticleDocument.makePage(openLink: { [weak links] url in links?.open?(url) })
     }
 
     func beginExtraction() {

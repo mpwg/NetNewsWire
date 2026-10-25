@@ -1,0 +1,47 @@
+Xcode MCP RunCodeSnippet
+sourceFilePath: ReaderKit/Sources/ReaderContent/ArticleContentService.swift
+purpose: Verify original public documents after unused parser retirement
+The paired JSON records both final production-source fingerprints.
+
+let sources = [
+    ("appleArticle", "https://www.apple.com/newsroom/2025/09/apple-unveils-iphone-17-pro-and-iphone-17-pro-max/", "iPhone 17 Pro"),
+    ("encyclopediaArticle", "https://en.wikipedia.org/wiki/Swift_(programming_language)", "Swift"),
+    ("germanHelpArticle", "https://flamedeerfaq.preisjaeger.at/help/wie-spiele-ich", "Flamedeer"),
+    ("dealIndex", "https://www.preisjaeger.at/", "Deal")
+]
+let configuration = URLSessionConfiguration.ephemeral
+configuration.timeoutIntervalForRequest = 15
+configuration.timeoutIntervalForResource = 25
+configuration.httpShouldSetCookies = false
+configuration.urlCache = nil
+let transport = URLSession(configuration: configuration)
+defer { transport.invalidateAndCancel() }
+let content = ArticleContentService(session: transport)
+var rows: [[String: Any]] = []
+for (kind, raw, marker) in sources {
+    let started = Date()
+    var row: [String: Any] = ["kind": kind, "url": raw]
+    do {
+        let result = try await content.extract(url: URL(string: raw)!)
+        row["outcome"] = "extracted"
+        row["textCharacters"] = result.text.count
+        row["htmlBytes"] = result.html.utf8.count
+        row["expectedMarkerPresent"] = result.text.localizedCaseInsensitiveContains(marker)
+        row["imageElements"] = result.html.components(separatedBy: "<img").count - 1
+        row["links"] = result.html.components(separatedBy: "href=").count - 1
+        row["styleElements"] = result.html.components(separatedBy: "<style").count - 1
+        row["scriptElements"] = result.html.components(separatedBy: "<script").count - 1
+    } catch {
+        row["outcome"] = "error"
+        row["error"] = String(describing: error)
+    }
+    row["durationSeconds"] = Date().timeIntervalSince(started)
+    rows.append(row)
+}
+let report: [String: Any] = ["baseCommit": "20dec3086", "sourceSHA256": "bdac456f70029e734edefb6eaa9cf32584e51a4e2bfd06f7e4f4bd680af85de3", "readerDetailSHA256": "1f337eb041aad30ce300084b84d6d82c4703fbc7d5afd246088066d82163b207", "unusedJSDOMParserRemoved": true, "implementation": "Inert WebKit HTML5 plus bundled Readability and passive HTML copying; all article resources blocked", "runtime": "Native ReaderContent snippet through Xcode MCP on macOS 27.0.1", "storeWrites": false, "accountCredentialsUsed": false, "results": rows]
+do {
+    let data = try JSONSerialization.data(withJSONObject: report, options: [.prettyPrinted, .sortedKeys])
+    let output = FileManager.default.temporaryDirectory.appendingPathComponent("reader-f-active-content-retired-pages-20261025.json")
+    try data.write(to: output, options: .atomic)
+    print("READER_LIVE_PAGES_REPORT=" + output.path)
+} catch { print("READER_LIVE_PAGES_REPORT_ERROR=" + String(describing: error)) }

@@ -1,0 +1,64 @@
+{
+  "accountCredentialsUsed" : false,
+  "baseCommit" : "20dec3086",
+  "implementation" : "Inert WebKit HTML5 plus bundled Readability and passive HTML copying; all article resources blocked",
+  "readerDetailSHA256" : "1f337eb041aad30ce300084b84d6d82c4703fbc7d5afd246088066d82163b207",
+  "results" : [
+    {
+      "durationSeconds" : 1.3590370416641235,
+      "expectedMarkerPresent" : true,
+      "htmlBytes" : 23728,
+      "imageElements" : 0,
+      "kind" : "appleArticle",
+      "links" : 24,
+      "outcome" : "extracted",
+      "scriptElements" : 0,
+      "styleElements" : 0,
+      "textCharacters" : 18820,
+      "url" : "https:\/\/www.apple.com\/newsroom\/2025\/09\/apple-unveils-iphone-17-pro-and-iphone-17-pro-max\/"
+    },
+    {
+      "durationSeconds" : 0.36729896068572998,
+      "expectedMarkerPresent" : true,
+      "htmlBytes" : 341080,
+      "imageElements" : 0,
+      "kind" : "encyclopediaArticle",
+      "links" : 659,
+      "outcome" : "extracted",
+      "scriptElements" : 0,
+      "styleElements" : 0,
+      "textCharacters" : 56360,
+      "url" : "https:\/\/en.wikipedia.org\/wiki\/Swift_(programming_language)"
+    },
+    {
+      "durationSeconds" : 0.32839906215667725,
+      "expectedMarkerPresent" : true,
+      "htmlBytes" : 653,
+      "imageElements" : 0,
+      "kind" : "germanHelpArticle",
+      "links" : 0,
+      "outcome" : "extracted",
+      "scriptElements" : 0,
+      "styleElements" : 0,
+      "textCharacters" : 524,
+      "url" : "https:\/\/flamedeerfaq.preisjaeger.at\/help\/wie-spiele-ich"
+    },
+    {
+      "durationSeconds" : 0.28394997119903564,
+      "expectedMarkerPresent" : true,
+      "htmlBytes" : 4516,
+      "imageElements" : 0,
+      "kind" : "dealIndex",
+      "links" : 5,
+      "outcome" : "extracted",
+      "scriptElements" : 0,
+      "styleElements" : 0,
+      "textCharacters" : 1628,
+      "url" : "https:\/\/www.preisjaeger.at\/"
+    }
+  ],
+  "runtime" : "Native ReaderContent snippet through Xcode MCP on macOS 27.0.1",
+  "sourceSHA256" : "bdac456f70029e734edefb6eaa9cf32584e51a4e2bfd06f7e4f4bd680af85de3",
+  "storeWrites" : false,
+  "unusedJSDOMParserRemoved" : true
+}
