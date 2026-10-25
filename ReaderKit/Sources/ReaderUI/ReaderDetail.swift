@@ -13,6 +13,19 @@ struct ReaderDetail: View {
             } else if let digest = session.selectedDigest {
                 DigestDetailView(session: session, digest: digest)
                     .id(digest.revision)
+            } else if session.timelineSelection.count > 1 {
+                ContentUnavailableView {
+                    Label { Text("Selected entries: \(session.timelineSelection.count)", bundle: #bundle) } icon: { Image(systemName: "checklist") }
+                        .accessibilityIdentifier("selectionSummary")
+                } description: {
+                    Text("Choose an action for the selected entries.", bundle: #bundle)
+                } actions: {
+                    Menu {
+                        TimelineStatusActions(session: session, target: session.statusTarget(for: session.timelineSelection))
+                    } label: {
+                        Text("Selection actions", bundle: #bundle)
+                    }
+                }
             } else {
                 ContentUnavailableView(LocalizedStringResource("Select an article", bundle: .atURL(#bundle.bundleURL)), systemImage: "newspaper",
                                        description: Text("Articles and daily digests remain accessible together.", bundle: #bundle))

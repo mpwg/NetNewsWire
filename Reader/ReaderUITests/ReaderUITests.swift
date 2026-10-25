@@ -21,6 +21,37 @@ final class ReaderSmokeTests: XCTestCase {
     }
 
     #if os(macOS)
+    func testTimelineSupportsKeyboardSelectionAndBulkRead() throws {
+        let app = launchReader(arguments: ["--ui-testing-timeline", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"])
+        waitForValue(app.staticTexts["timelineFixturePhase"], equalTo: "ready", timeout: 10)
+        let first = app.staticTexts["Timeline article 299"].firstMatch
+        XCTAssertTrue(first.waitForExistence(timeout: 10))
+        first.click()
+        app.typeKey(.downArrow, modifierFlags: .shift)
+        let summary = app.descendants(matching: .any)["selectionSummary"].firstMatch
+        XCTAssertTrue(summary.waitForExistence(timeout: 5))
+        waitForValue(summary, equalTo: "Selected entries: 2")
+        let pending = app.staticTexts["timelinePendingReadCount"]
+        waitForValue(pending, equalTo: "0")
+        first.rightClick()
+        let markRead = app.menuItems["Mark read"]
+        XCTAssertTrue(markRead.waitForExistence(timeout: 5))
+        XCTAssertTrue(markRead.isEnabled)
+        let menu = XCTAttachment(screenshot: app.windows.firstMatch.screenshot())
+        menu.name = "Native Mac keyboard multiselection and context menu"
+        menu.lifetime = .keepAlways
+        add(menu)
+        markRead.click()
+        waitForValue(pending, equalTo: "2")
+        XCTAssertTrue(summary.exists)
+        app.typeKey(.downArrow, modifierFlags: [])
+        XCTAssertTrue(summary.wait(for: \.exists, toEqual: false, timeout: 5))
+        let evidence = XCTAttachment(string: "Shift-Down selected two rows; context-menu Mark read queued exactly two read changes; Down restored single selection.")
+        evidence.name = "Native timeline selection and persistent outbox observation"
+        evidence.lifetime = .keepAlways
+        add(evidence)
+    }
+
     func testImageLoadKeepsConnectionFormResponsiveAndCancelsRemovedRows() throws {
         let app = launchReader(arguments: ["--ui-testing-image-load"])
         let phase = app.staticTexts["imageLoadPhase"]

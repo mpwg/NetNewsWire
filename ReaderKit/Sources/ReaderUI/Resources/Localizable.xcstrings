@@ -76,81 +76,6 @@
         }
       }
     },
-    "AI digest · %lld original articles" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "KI-Zusammenfassung · %lld Originalbeitrag"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "KI-Zusammenfassung · %lld Originalbeiträge"
-                }
-              }
-            }
-          }
-        },
-        "en" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "AI digest · %lld original article"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "AI digest · %lld original articles"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "API URL (https://…/api/greader.php)" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "API-Adresse (https://…/api/greader.php)"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "API URL (https://…/api/greader.php)"
-          }
-        }
-      }
-    },
-    "API password" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "API-Passwort"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "API password"
-          }
-        }
-      }
-    },
     "Account" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -202,6 +127,47 @@
         }
       }
     },
+    "AI digest · %lld original articles" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "KI-Zusammenfassung · %lld Originalbeitrag"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "KI-Zusammenfassung · %lld Originalbeiträge"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "AI digest · %lld original article"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "AI digest · %lld original articles"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "All articles" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -249,6 +215,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Allow Apple Private Cloud Compute"
+          }
+        }
+      }
+    },
+    "API password" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "API-Passwort"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "API password"
+          }
+        }
+      }
+    },
+    "API URL (https://…/api/greader.php)" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "API-Adresse (https://…/api/greader.php)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "API URL (https://…/api/greader.php)"
           }
         }
       }
@@ -317,6 +317,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Choose a valid feed URL and an account."
+          }
+        }
+      }
+    },
+    "Choose an action for the selected entries." : {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle eine Aktion für die ausgewählten Einträge."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose an action for the selected entries."
           }
         }
       }
@@ -494,23 +511,6 @@
     "Feed" : {
 
     },
-    "Feed URL" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Feed-Adresse"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Feed URL"
-          }
-        }
-      }
-    },
     "Feed settings" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -524,6 +524,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Feed settings"
+          }
+        }
+      }
+    },
+    "Feed URL" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feed-Adresse"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feed URL"
           }
         }
       }
@@ -1001,6 +1018,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Select an article"
+          }
+        }
+      }
+    },
+    "Selected entries: %lld" : {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ausgewählte Einträge: %lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selected entries: %lld"
+          }
+        }
+      }
+    },
+    "Selection actions" : {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auswahlaktionen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selection actions"
           }
         }
       }

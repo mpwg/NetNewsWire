@@ -12,15 +12,37 @@ public struct ReaderQueryIdentity: Hashable, Sendable {
     }
 }
 
+public struct TimelineStatusTarget: Equatable, Sendable {
+    public let keys: [ArticleKey]
+    public let canStar: Bool
+}
+
 @MainActor @Observable
 public final class ReaderSession {
     public let services: ReaderServices
     public var sidebarSelection: String?
     public var search = ""
-    public var selection: TimelineSelection? {
+    public var timelineSelection: Set<TimelineSelection> = [] {
         didSet {
-            if oldValue != selection { articleGeneration &+= 1 }
-            if case .digest(let id) = selection { displayedDigest = digests.first { $0.id == id } } else { displayedDigest = nil }
+            guard oldValue != timelineSelection else { return }
+            articleGeneration &+= 1
+            preservesSourceSelection = false
+            selectedDigestRevisions = selectedDigestRevisions.filter { timelineSelection.contains(.digest($0.key)) }
+            for case .digest(let id) in timelineSelection where selectedDigestRevisions[id] == nil {
+                selectedDigestRevisions[id] = digests.first { $0.id == id }
+            }
+            if case .digest(let id) = selection {
+                displayedDigest = selectedDigestRevisions[id]
+            } else {
+                displayedDigest = nil
+            }
+        }
+    }
+    public var selection: TimelineSelection? {
+        get { timelineSelection.count == 1 ? timelineSelection.first : nil }
+        set {
+            timelineSelection = newValue.map { [$0] } ?? []
+            preservesSourceSelection = newValue.map { value in !rows.contains { $0.id == value } } ?? false
         }
     }
     public var errorMessage: String?
@@ -41,6 +63,9 @@ public final class ReaderSession {
     public private(set) var detailArticle: ArticleSnapshot?
     public private(set) var displayedDigest: DigestSnapshot?
     public private(set) var digestUnread: [String: Bool] = [:]
+    private var selectedDigestRevisions: [String: DigestSnapshot] = [:]
+    private var preservesSourceSelection = false
+    private var publishedQueryIdentity: ReaderQueryIdentity?
     private var generation = 0
     private var sourceGeneration = 0
     private var articleGeneration = 0
@@ -124,6 +149,12 @@ public final class ReaderSession {
             digestUnread = nextDigestUnread
             canLoadMore = page.count == requestedCount
             rebuildRows()
+            if let publishedQueryIdentity, publishedQueryIdentity != queryID {
+                timelineSelection = []
+            } else if !preservesSourceSelection {
+                timelineSelection.formIntersection(Set(rows.map(\.id)))
+            }
+            publishedQueryIdentity = queryID
             await loadSelectedArticle()
             if let displayedDigest { await loadSources(displayedDigest) }
         } catch is CancellationError {
@@ -165,6 +196,28 @@ public final class ReaderSession {
     public func openLatestDigest() {
         guard case .digest(let id) = selection else { return }
         displayedDigest = digests.first { $0.id == id }
+        selectedDigestRevisions[id] = displayedDigest
+    }
+
+    public func statusTarget(for items: Set<TimelineSelection>) -> TimelineStatusTarget {
+        var keys: Set<ArticleKey> = []
+        var canStar = !items.isEmpty
+        for item in items {
+            switch item {
+            case .article(let key):
+                keys.insert(key)
+            case .digest(let id):
+                canStar = false
+                let digest = selectedDigestRevisions[id] ?? digests.first { $0.id == id }
+                if let digest { keys.formUnion(digest.sources) }
+            }
+        }
+        return TimelineStatusTarget(keys: keys.sorted { $0.id < $1.id }, canStar: canStar)
+    }
+
+    public func setStatus(_ target: TimelineStatusTarget, field: StatusField, value: Bool) async {
+        guard !target.keys.isEmpty, field != .starred || target.canStar else { return }
+        await setStatus(target.keys, field: field, value: value)
     }
 
     public func loadSelectedArticle() async {

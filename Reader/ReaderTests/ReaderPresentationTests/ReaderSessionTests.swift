@@ -158,6 +158,120 @@ struct ReaderSessionTests {
         #expect(!session.rows.contains { $0.id == .article(articles[0].id) })
     }
 
+    @Test("Multiple selections show no arbitrary primary detail and remain window-local")
+    func multipleSelectionsHaveNoArbitraryPrimaryDetail() async throws {
+        let (_, services, _, articles) = try await fixture()
+        let session = ReaderSession(services: services)
+        let otherWindow = ReaderSession(services: services)
+        await session.reload()
+        session.timelineSelection = [.article(articles[0].id)]
+        #expect(session.selection == .article(articles[0].id))
+        session.timelineSelection.insert(.article(articles[1].id))
+        #expect(session.selection == nil)
+        #expect(session.selectedArticle == nil)
+        #expect(otherWindow.timelineSelection.isEmpty)
+        session.timelineSelection.remove(.article(articles[0].id))
+        #expect(session.selectedArticle?.id == articles[1].id)
+        session.selection = .article(articles[2].id)
+        #expect(session.timelineSelection == [.article(articles[2].id)])
+        session.selection = nil
+        #expect(session.timelineSelection.isEmpty)
+    }
+
+    @Test("Selection follows published filters and removes rows that leave the current result", arguments: [false, true])
+    func selectionReconcilesWithPublishedResults(changesQuery: Bool) async throws {
+        let (store, services, _, articles) = try await fixture()
+        let session = ReaderSession(services: services)
+        session.sidebarSelection = "unread"
+        await session.reload()
+        session.timelineSelection = [.article(articles[0].id), .article(articles[1].id)]
+        try await store.setStatus([articles[0].id], field: .read, value: true)
+        if changesQuery { session.search = "Article 1" }
+        await session.reload()
+        #expect(session.timelineSelection == (changesQuery ? [] : [.article(articles[1].id)]))
+        #expect(Set(session.rows.map(\.id)).isSuperset(of: session.timelineSelection))
+    }
+
+    enum BulkAction: CaseIterable, Sendable {
+        case markRead, markUnread, star, unstar
+        var field: StatusField { self == .star || self == .unstar ? .starred : .read }
+        var value: Bool { self == .markRead || self == .star }
+    }
+
+    @Test("Bulk actions commit only the captured selected article keys", arguments: BulkAction.allCases)
+    func bulkActionsUseCapturedSelection(action: BulkAction) async throws {
+        let (store, services, feed, articles) = try await fixture()
+        try await store.setStatus(articles.map(\.id), field: action.field, value: !action.value)
+        let session = ReaderSession(services: services)
+        await session.reload()
+        session.timelineSelection = [.article(articles[0].id), .article(articles[1].id)]
+        let target = session.statusTarget(for: session.timelineSelection)
+        session.timelineSelection = [.article(articles[2].id)]
+        await session.setStatus(target, field: action.field, value: action.value)
+        let saved = try await store.articles(ArticleQuery())
+        for article in saved {
+            let value = action.field == .read ? article.read : article.starred
+            #expect(value == (article.id == articles[2].id ? !action.value : action.value))
+        }
+        let pending = try await store.pendingChanges(accountID: feed.id.accountID)
+        #expect(pending.count == 3)
+        #expect(session.errorMessage == nil)
+    }
+
+    @Test("Mixed digest selection freezes source revisions, deduplicates keys and rejects star actions")
+    func mixedSelectionPreservesDigestRevision() async throws {
+        let (store, services, feed, articles) = try await fixture()
+        try await store.savePreferences(FeedPreferences(id: feed.id, mode: .digest))
+        let original = DigestSnapshot(id: "day", feed: feed.id, day: Date(), timeZoneID: "Europe/Vienna",
+                                      sections: [], sources: [articles[0].id])
+        try await store.saveDigest(original)
+        let session = ReaderSession(services: services)
+        session.sidebarSelection = feed.id.id
+        await session.reload()
+        session.timelineSelection = [.digest(original.id), .article(articles[0].id)]
+        var updated = original
+        updated.revision = UUID()
+        updated.sources = articles.map(\.id)
+        try await store.saveDigest(updated)
+        await session.reload()
+        session.timelineSelection.insert(.article(articles[1].id))
+        let target = session.statusTarget(for: session.timelineSelection)
+        #expect(Set(target.keys) == Set([articles[0].id, articles[1].id]))
+        #expect(target.keys.count == 2)
+        #expect(!target.canStar)
+        await session.setStatus(target, field: .starred, value: true)
+        #expect(try await store.pendingChanges(accountID: feed.id.accountID).isEmpty)
+        await session.setStatus(target, field: .read, value: true)
+        #expect(try await store.articles(ArticleQuery(unreadOnly: true)).map(\.id) == [articles[2].id])
+        session.timelineSelection = [.digest(original.id)]
+        #expect(session.selectedDigest?.revision == original.revision)
+        session.openLatestDigest()
+        #expect(session.statusTarget(for: session.timelineSelection).keys.count == 3)
+    }
+
+    @Test("Preparing selection actions performs no repository lookups")
+    func selectionActionPreparationDoesNotQueryArticles() async throws {
+        let (store, _, _, articles) = try await fixture()
+        let lookups = SessionLookupCount()
+        let repository = ScriptedRepository(base: store, articleLookup: { key in
+            await lookups.record()
+            return try await store.article(key)
+        }, query: { query in
+            await lookups.record()
+            return try await store.articles(query)
+        })
+        let session = ReaderSession(services: ReaderServices(repository: repository))
+        await session.reload()
+        let before = await lookups.count
+        session.timelineSelection = [.article(articles[0].id), .article(articles[1].id)]
+        for _ in 0..<20 {
+            let target = session.statusTarget(for: session.timelineSelection)
+            #expect(target.keys.count == 2)
+            #expect(target.canStar)
+        }
+        #expect(await lookups.count == before)
+    }
+
     enum DetailOutcome: CaseIterable, Sendable { case newerSuccess, olderError, cancelled, selectionRoundTrip }
 
     @Test("Late detail work cannot replace a newer result or revive a cancelled selection",
@@ -243,6 +357,11 @@ struct ReaderSessionTests {
         #expect(session.rows.contains { $0.id == .article(oldest.id) })
         #expect(session.rows.count == 2)
     }
+}
+
+private actor SessionLookupCount {
+    private(set) var count = 0
+    func record() { count += 1 }
 }
 
 private actor QueryGate {

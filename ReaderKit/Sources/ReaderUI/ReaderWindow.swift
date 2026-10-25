@@ -234,18 +234,51 @@ private struct ReaderFeedIcon: View {
 private struct ReaderTimeline: View {
     @Bindable var session: ReaderSession
 
-    var body: some View {
-        List(selection: $session.selection) {
+    private var timelineList: some View {
+        #if os(macOS)
+        List(selection: $session.timelineSelection) { timelineRows }
+        #else
+        List(selection: $session.selection) { timelineRows }
+        #endif
+    }
+
+    private var timelineRows: some View {
+        Group {
             ForEach(session.rows) { row in
-                NavigationLink(value: row.id) {
-                    TimelineRowView(title: row.title, subtitle: row.subtitle, unread: row.unread,
-                                    starred: row.starred, isDigest: row.isDigest, date: row.date)
-                }
-                    .tag(row.id)
+                #if os(macOS)
+                rowContent(row).tag(row.id)
+                #else
+                NavigationLink(value: row.id) { rowContent(row) }.tag(row.id)
+                #endif
             }
             if session.canLoadMore {
                 Button(LocalizedStringResource("Load more articles", bundle: .atURL(#bundle.bundleURL))) { Task { await session.loadMore() } }
                     .disabled(session.loading)
+            }
+        }
+    }
+
+    private func rowContent(_ row: TimelineRow) -> some View {
+        TimelineRowView(title: row.title, subtitle: row.subtitle, unread: row.unread,
+                        starred: row.starred, isDigest: row.isDigest, date: row.date)
+    }
+
+    var body: some View {
+        timelineList
+        .accessibilityIdentifier("readerTimeline")
+        .contextMenu(forSelectionType: TimelineSelection.self) { items in
+            if !items.isEmpty {
+                TimelineStatusActions(session: session, target: session.statusTarget(for: items))
+            }
+        }
+        .toolbar {
+            if !session.timelineSelection.isEmpty {
+                Menu {
+                    TimelineStatusActions(session: session, target: session.statusTarget(for: session.timelineSelection))
+                } label: {
+                    Label { Text("Selection actions", bundle: #bundle) } icon: { Image(systemName: "checklist") }
+                }
+                .accessibilityIdentifier("selectionActions")
             }
         }
         .navigationTitle(session.title)
@@ -266,6 +299,31 @@ private struct ReaderTimeline: View {
                                        systemImage: session.search.isEmpty ? "tray" : "magnifyingglass")
             }
         }
+    }
+}
+
+struct TimelineStatusActions: View {
+    var session: ReaderSession
+    let target: TimelineStatusTarget
+
+    var body: some View {
+        Button { Task { await session.setStatus(target, field: .read, value: true) } } label: {
+            Label { Text("Mark read", bundle: #bundle) } icon: { Image(systemName: "checkmark.circle") }
+        }
+        .disabled(target.keys.isEmpty)
+        Button { Task { await session.setStatus(target, field: .read, value: false) } } label: {
+            Label { Text("Mark unread", bundle: #bundle) } icon: { Image(systemName: "envelope.badge") }
+        }
+        .disabled(target.keys.isEmpty)
+        Divider()
+        Button { Task { await session.setStatus(target, field: .starred, value: true) } } label: {
+            Label { Text("Star", bundle: #bundle) } icon: { Image(systemName: "star") }
+        }
+        .disabled(!target.canStar)
+        Button { Task { await session.setStatus(target, field: .starred, value: false) } } label: {
+            Label { Text("Remove star", bundle: #bundle) } icon: { Image(systemName: "star.slash") }
+        }
+        .disabled(!target.canStar)
     }
 }
 
