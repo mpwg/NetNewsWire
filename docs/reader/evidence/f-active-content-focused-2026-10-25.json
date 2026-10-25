@@ -1,0 +1,721 @@
+{
+  "activeTestPlanName": "Reader",
+  "counts": {
+    "expectedFailures": 0,
+    "failed": 0,
+    "notRun": 0,
+    "passed": 103,
+    "skipped": 0,
+    "total": 103
+  },
+  "fullConsoleLogsPath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/test-console-log-2026-10-25T19-22-14+01-00.txt",
+  "fullSummaryPath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/5C71DEDF-990B-4F87-AC6F-7A9035133D03.txt",
+  "message": "Results truncated to 100 of 103 tests. Failed tests shown first. Full logs available at /var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/5C71DEDF-990B-4F87-AC6F-7A9035133D03.txt.",
+  "results": [
+    {
+      "displayName": "0",
+      "errorMessages": [],
+      "identifier": "HTMLParsingTests/ordinaryHTML5FormsRemainReadable(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "1",
+      "errorMessages": [],
+      "identifier": "HTMLParsingTests/ordinaryHTML5FormsRemainReadable(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "2",
+      "errorMessages": [],
+      "identifier": "HTMLParsingTests/ordinaryHTML5FormsRemainReadable(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "3",
+      "errorMessages": [],
+      "identifier": "HTMLParsingTests/ordinaryHTML5FormsRemainReadable(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "4",
+      "errorMessages": [],
+      "identifier": "HTMLParsingTests/ordinaryHTML5FormsRemainReadable(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Extraction page scripts stay disabled without relying on CSP",
+      "errorMessages": [],
+      "identifier": "HTMLIsolationTests/pageScriptsStayDisabledWithoutCSP()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Inert extraction blocks resources and preserves the trusted source base",
+      "errorMessages": [],
+      "identifier": "HTMLIsolationTests/resourcesStayBlockedAndBaseStaysTrusted()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "The extraction navigation policy rejects an otherwise loadable external request",
+      "errorMessages": [],
+      "identifier": "HTMLIsolationTests/externalNavigationCannotLeaveTheLocalDocument()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".success",
+      "errorMessages": [],
+      "identifier": "HTMLLifetimeTests/nativeExtractionGraphsRelease(outcome:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".empty",
+      "errorMessages": [],
+      "identifier": "HTMLLifetimeTests/nativeExtractionGraphsRelease(outcome:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".cancelledBeforeLoad",
+      "errorMessages": [],
+      "identifier": "HTMLLifetimeTests/nativeExtractionGraphsRelease(outcome:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".cancelledDuringNavigation",
+      "errorMessages": [],
+      "identifier": "HTMLLifetimeTests/nativeExtractionGraphsRelease(outcome:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "The real HTTP transport downloads only the document while all article subresources remain blocked",
+      "errorMessages": [],
+      "identifier": "HTMLHTTPIsolationTests/extractionRequestsOnlyTheHTMLDocument()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "false",
+      "errorMessages": [],
+      "identifier": "HTMLHTTPIsolationTests/boundedHTTPRedirects(loop:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "true",
+      "errorMessages": [],
+      "identifier": "HTMLHTTPIsolationTests/boundedHTTPRedirects(loop:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "The shipping WebPage loads saved HTML without executing page scripts",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/savedHTMLLoadsWithoutPageScripts()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Page script policy stays disabled independently of the document CSP",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/scriptPolicyDoesNotDependOnDocumentCSP()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"<script>document.body.dataset.executed='yes'</script>\"",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/savedPlainTextRemainsLiteral(text:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"A & B <em>literal</em>\"",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/savedPlainTextRemainsLiteral(text:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"Café EUR 2.99\nSecond line\"",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/savedPlainTextRemainsLiteral(text:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "0",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/malformedSavedMarkupRenders(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "1",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/malformedSavedMarkupRenders(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "2",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/malformedSavedMarkupRenders(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "0",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/activeArticleContentIsRemoved(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "1",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/activeArticleContentIsRemoved(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "2",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/activeArticleContentIsRemoved(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "3",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/activeArticleContentIsRemoved(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "4",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/activeArticleContentIsRemoved(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "5",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/activeArticleContentIsRemoved(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Native content rules block resource loads independently of the document CSP",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/nativeRulesBlockResourcesWithoutCSP()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "The document CSP accepts only Reader's exact style even if sanitization is bypassed",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/cspRejectsPublisherStyleIndependently()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"javascript:alert(1)\"",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/unsafeArticleLinksHaveNoDestination(destination:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"data:text/html,hello\"",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/unsafeArticleLinksHaveNoDestination(destination:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"file:///etc/hosts\"",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/unsafeArticleLinksHaveNoDestination(destination:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"blob:https://example.invalid/id\"",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/unsafeArticleLinksHaveNoDestination(destination:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"mailto:reader@example.invalid\"",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/unsafeArticleLinksHaveNoDestination(destination:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"https://user:secret@example.invalid/\"",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/unsafeArticleLinksHaveNoDestination(destination:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"about:srcdoc\"",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/unsafeArticleLinksHaveNoDestination(destination:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "A safe link is routed outside the article without navigating its WebPage",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/safeLinksUseTheExternalHandler()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".success",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/nativePageGraphsRelease(outcome:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".failure",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/nativePageGraphsRelease(outcome:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".cancelled",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/nativePageGraphsRelease(outcome:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".success",
+      "errorMessages": [],
+      "identifier": "ReaderArticleViewTests/removingHostedArticleReleasesItsGraph(outcome:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".failure",
+      "errorMessages": [],
+      "identifier": "ReaderArticleViewTests/removingHostedArticleReleasesItsGraph(outcome:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".empty",
+      "errorMessages": [],
+      "identifier": "ReaderArticleViewTests/removingHostedArticleReleasesItsGraph(outcome:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".cancelled",
+      "errorMessages": [],
+      "identifier": "ReaderArticleViewTests/removingHostedArticleReleasesItsGraph(outcome:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "OPML round trips preserve homepages and folders",
+      "errorMessages": [],
+      "identifier": "ContentTests/opmlRoundTripsPreserveHomepagesAndFolders()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"<opml><body>\"",
+      "errorMessages": [],
+      "identifier": "ContentTests/invalidOPMLIsRejected(xml:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"<rss/>\"",
+      "errorMessages": [],
+      "identifier": "ContentTests/invalidOPMLIsRejected(xml:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"<opml><body><outline xmlUrl='file:///private'/></body></opml>\"",
+      "errorMessages": [],
+      "identifier": "ContentTests/invalidOPMLIsRejected(xml:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Nested folders with matching names remain distinct during export",
+      "errorMessages": [],
+      "identifier": "ContentTests/nestedFoldersWithMatchingNamesRemainDistinctDuringExport()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "0",
+      "errorMessages": [],
+      "identifier": "ContentTests/completeFragmentsGainDocumentStructure(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "1",
+      "errorMessages": [],
+      "identifier": "ContentTests/completeFragmentsGainDocumentStructure(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "2",
+      "errorMessages": [],
+      "identifier": "ContentTests/completeFragmentsGainDocumentStructure(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "3",
+      "errorMessages": [],
+      "identifier": "ContentTests/completeFragmentsGainDocumentStructure(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"<html><body></body></html>\"",
+      "errorMessages": [],
+      "identifier": "ContentTests/contentWithoutArticleTextReportsUnavailable(html:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"<html><body><script>const hiddenText = \"Script is not article text\";</script><style>body { color: red }</style></body></html>\"",
+      "errorMessages": [],
+      "identifier": "ContentTests/contentWithoutArticleTextReportsUnavailable(html:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"<html><body><img src=\"reader-resource://blocked/image\"></body></html>\"",
+      "errorMessages": [],
+      "identifier": "ContentTests/contentWithoutArticleTextReportsUnavailable(html:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Full text is extracted without executing page scripts",
+      "errorMessages": [],
+      "identifier": "ContentTests/fullTextIsExtractedWithoutExecutingPageScripts()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "HTTP 403 remains an explicit full-text error",
+      "errorMessages": [],
+      "identifier": "ContentNetworkingTests/http403RemainsAnExplicitFullTextError()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Network timeouts propagate to the caller",
+      "errorMessages": [],
+      "identifier": "ContentNetworkingTests/networkTimeoutsPropagateToTheCaller()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "The same URL returns updated content after a source change",
+      "errorMessages": [],
+      "identifier": "ContentNetworkingTests/theSameURLReturnsUpdatedContentAfterASourceChange()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Extracted full text resolves relative links against the document URL",
+      "errorMessages": [],
+      "identifier": "ContentNetworkingTests/extractedFullTextResolvesRelativeLinksAgainstTheDocumentURL()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Oversized HTML responses are rejected before extraction",
+      "errorMessages": [],
+      "identifier": "ContentNetworkingTests/oversizedHTMLResponsesAreRejectedBeforeExtraction()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"application/javascript\"",
+      "errorMessages": [],
+      "identifier": "ContentNetworkingTests/nonHTMLContentIsRejected(mimeType:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"text/css\"",
+      "errorMessages": [],
+      "identifier": "ContentNetworkingTests/nonHTMLContentIsRejected(mimeType:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"image/svg+xml\"",
+      "errorMessages": [],
+      "identifier": "ContentNetworkingTests/nonHTMLContentIsRejected(mimeType:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"application/pdf\"",
+      "errorMessages": [],
+      "identifier": "ContentNetworkingTests/nonHTMLContentIsRejected(mimeType:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"application/octet-stream\"",
+      "errorMessages": [],
+      "identifier": "ContentNetworkingTests/nonHTMLContentIsRejected(mimeType:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"text/html\"",
+      "errorMessages": [],
+      "identifier": "ContentNetworkingTests/htmlContentTypesAreAccepted(mimeType:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"application/xhtml+xml\"",
+      "errorMessages": [],
+      "identifier": "ContentNetworkingTests/htmlContentTypesAreAccepted(mimeType:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"file:///etc/hosts\"",
+      "errorMessages": [],
+      "identifier": "ContentNetworkingTests/invalidSourceURLsStartNoRequests(source:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"data:text/html,hello\"",
+      "errorMessages": [],
+      "identifier": "ContentNetworkingTests/invalidSourceURLsStartNoRequests(source:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"javascript:alert(1)\"",
+      "errorMessages": [],
+      "identifier": "ContentNetworkingTests/invalidSourceURLsStartNoRequests(source:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"https://user:secret@example.invalid/\"",
+      "errorMessages": [],
+      "identifier": "ContentNetworkingTests/invalidSourceURLsStartNoRequests(source:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".forbidden",
+      "errorMessages": [],
+      "identifier": "ContentStreamingTests/rejectedDownloadsEndBeforeServerCompletion(rejection:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".declaredOversized",
+      "errorMessages": [],
+      "identifier": "ContentStreamingTests/rejectedDownloadsEndBeforeServerCompletion(rejection:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".unknownOversized",
+      "errorMessages": [],
+      "identifier": "ContentStreamingTests/rejectedDownloadsEndBeforeServerCompletion(rejection:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".underreportedOversized",
+      "errorMessages": [],
+      "identifier": "ContentStreamingTests/rejectedDownloadsEndBeforeServerCompletion(rejection:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "An exactly four-million-byte streamed article remains extractable",
+      "errorMessages": [],
+      "identifier": "ContentStreamingTests/exactStreamedLimitRemainsExtractable()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "false",
+      "errorMessages": [],
+      "identifier": "ContentStreamingTests/cancellationEndsBeforeServerCompletion(afterBody:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "true",
+      "errorMessages": [],
+      "identifier": "ContentStreamingTests/cancellationEndsBeforeServerCompletion(afterBody:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Cancelling queued extraction preserves both owners and the next available slot",
+      "errorMessages": [],
+      "identifier": "ContentStreamingTests/queuedCancellationPreservesOwnersAndCapacity()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".successInB",
+      "errorMessages": [],
+      "identifier": "ReaderExtractionTests/oldExtractionCannotPublishAcrossSelections(outcome:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".failureInB",
+      "errorMessages": [],
+      "identifier": "ReaderExtractionTests/oldExtractionCannotPublishAcrossSelections(outcome:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".successAfterRoundTrip",
+      "errorMessages": [],
+      "identifier": "ReaderExtractionTests/oldExtractionCannotPublishAcrossSelections(outcome:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".failureAfterRoundTrip",
+      "errorMessages": [],
+      "identifier": "ReaderExtractionTests/oldExtractionCannotPublishAcrossSelections(outcome:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "false",
+      "errorMessages": [],
+      "identifier": "ReaderExtractionTests/olderRequestCannotReplaceNewerExtraction(fails:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "true",
+      "errorMessages": [],
+      "identifier": "ReaderExtractionTests/olderRequestCannotReplaceNewerExtraction(fails:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "A newer failed request supersedes an older successful request",
+      "errorMessages": [],
+      "identifier": "ReaderExtractionTests/newerFailureSupersedesOldSuccess()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "false",
+      "errorMessages": [],
+      "identifier": "ReaderExtractionTests/currentExtractionPublishesItsOwnOutcome(fails:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "true",
+      "errorMessages": [],
+      "identifier": "ReaderExtractionTests/currentExtractionPublishesItsOwnOutcome(fails:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "A detail lookup for the same selection does not invalidate extraction",
+      "errorMessages": [],
+      "identifier": "ReaderExtractionTests/sameSelectionLookupDoesNotInvalidateExtraction()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "A full-text failure belongs to its selection and a new request clears it",
+      "errorMessages": [],
+      "identifier": "ReaderExtractionTests/fullTextFailureFollowsSelectionAndRetry()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "false",
+      "errorMessages": [],
+      "identifier": "ReaderExtractionTests/parsedOutcomeCannotPublishAfterAnotherArticle(fails:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "true",
+      "errorMessages": [],
+      "identifier": "ReaderExtractionTests/parsedOutcomeCannotPublishAfterAnotherArticle(fails:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".beforeRequest",
+      "errorMessages": [],
+      "identifier": "ReaderExtractionTests/cancelledExtractionHasNoSideEffects(point:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".whileLoading",
+      "errorMessages": [],
+      "identifier": "ReaderExtractionTests/cancelledExtractionHasNoSideEffects(point:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".afterParsing",
+      "errorMessages": [],
+      "identifier": "ReaderExtractionTests/cancelledExtractionHasNoSideEffects(point:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".success",
+      "errorMessages": [],
+      "identifier": "ReaderExtractionTests/extractionGraphsRelease(outcome:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    }
+  ],
+  "schemeName": "Reader",
+  "summary": "103 tests: 103 passed, 0 failed, 0 skipped, 0 expected failures, 0 not run",
+  "totalResults": 103,
+  "truncated": true,
+  "xcresultBundlePath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/Test-Reader-2026.10.25_19-22-14-+0100.xcresult"
+}

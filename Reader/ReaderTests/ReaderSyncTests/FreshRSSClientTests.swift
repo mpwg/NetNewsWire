@@ -836,9 +836,12 @@ private actor TestServer {
 
 final class MockURLProtocol: URLProtocol, @unchecked Sendable {
     typealias Handler = @Sendable (URLRequest) async throws -> (Int, Data)
-    private static let handlers = Mutex<[String: Handler]>([:])
+    private struct Route: Sendable { var handler: Handler; var mimeType: String? }
+    private static let handlers = Mutex<[String: Route]>([:])
     private let runningTask = Mutex<Task<Void, Never>?>(nil)
-    static func register(host: String, handler: @escaping Handler) { handlers.withLock { $0[host] = handler } }
+    static func register(host: String, mimeType: String? = nil, handler: @escaping Handler) {
+        handlers.withLock { $0[host] = Route(handler: handler, mimeType: mimeType) }
+    }
     static func unregister(host: String) { handlers.withLock { $0[host] = nil } }
     override static func canInit(with request: URLRequest) -> Bool { true }
     override static func canonicalRequest(for request: URLRequest) -> URLRequest { request }
@@ -861,9 +864,10 @@ final class MockURLProtocol: URLProtocol, @unchecked Sendable {
         let task = Task { @Sendable [self, handler, capturedRequest] in
             do {
                 guard let handler, let url = capturedRequest.url else { throw ReaderError.invalidResponse }
-                let (status, data) = try await handler(capturedRequest)
+                let (status, data) = try await handler.handler(capturedRequest)
                 try Task.checkCancellation()
-                guard let response = HTTPURLResponse(url: url, statusCode: status, httpVersion: "HTTP/1.1", headerFields: nil) else {
+                guard let response = HTTPURLResponse(url: url, statusCode: status, httpVersion: "HTTP/1.1",
+                                                     headerFields: handler.mimeType.map { ["Content-Type": $0] }) else {
                     throw ReaderError.invalidResponse
                 }
                 client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)

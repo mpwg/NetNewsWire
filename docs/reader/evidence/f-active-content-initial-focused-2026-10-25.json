@@ -1,0 +1,212 @@
+{
+  "activeTestPlanName": "Reader",
+  "counts": {
+    "expectedFailures": 0,
+    "failed": 1,
+    "notRun": 0,
+    "passed": 26,
+    "skipped": 0,
+    "total": 27
+  },
+  "fullConsoleLogsPath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/test-console-log-2026-10-25T19-14-49+01-00.txt",
+  "fullSummaryPath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/343849D4-725F-40B6-A6E1-C8519F71B64F.txt",
+  "results": [
+    {
+      "displayName": "Inert extraction blocks resources and preserves the trusted source base",
+      "errorMessages": [
+        "Reader/ReaderTests/ReaderContentTests/HTMLParsingTests.swift:63 HTMLIsolationTests/resourcesStayBlockedAndBaseStaysTrusted(): Expectation failed: resources.requests.withLock { $0.isEmpty }: Native subresource blocking must work without a CSP.",
+        "Reader/ReaderTests/ReaderContentTests/HTMLParsingTests.swift:84 HTMLIsolationTests/resourcesStayBlockedAndBaseStaysTrusted(): Expectation failed: resources.requests.withLock { $0.isEmpty }"
+      ],
+      "identifier": "HTMLIsolationTests/resourcesStayBlockedAndBaseStaysTrusted()",
+      "state": "Failed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "0",
+      "errorMessages": [],
+      "identifier": "HTMLParsingTests/ordinaryHTML5FormsRemainReadable(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "1",
+      "errorMessages": [],
+      "identifier": "HTMLParsingTests/ordinaryHTML5FormsRemainReadable(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "2",
+      "errorMessages": [],
+      "identifier": "HTMLParsingTests/ordinaryHTML5FormsRemainReadable(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "3",
+      "errorMessages": [],
+      "identifier": "HTMLParsingTests/ordinaryHTML5FormsRemainReadable(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "4",
+      "errorMessages": [],
+      "identifier": "HTMLParsingTests/ordinaryHTML5FormsRemainReadable(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Extraction page scripts stay disabled without relying on CSP",
+      "errorMessages": [],
+      "identifier": "HTMLIsolationTests/pageScriptsStayDisabledWithoutCSP()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "The extraction navigation policy rejects an otherwise loadable external request",
+      "errorMessages": [],
+      "identifier": "HTMLIsolationTests/externalNavigationCannotLeaveTheLocalDocument()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".success",
+      "errorMessages": [],
+      "identifier": "HTMLLifetimeTests/nativeExtractionGraphsRelease(outcome:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".empty",
+      "errorMessages": [],
+      "identifier": "HTMLLifetimeTests/nativeExtractionGraphsRelease(outcome:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".cancelledBeforeLoad",
+      "errorMessages": [],
+      "identifier": "HTMLLifetimeTests/nativeExtractionGraphsRelease(outcome:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".cancelledDuringNavigation",
+      "errorMessages": [],
+      "identifier": "HTMLLifetimeTests/nativeExtractionGraphsRelease(outcome:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "The shipping WebPage loads saved HTML without executing page scripts",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/savedHTMLLoadsWithoutPageScripts()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Page script policy stays disabled independently of the document CSP",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/scriptPolicyDoesNotDependOnDocumentCSP()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"<script>document.body.dataset.executed='yes'</script>\"",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/savedPlainTextRemainsLiteral(text:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"A & B <em>literal</em>\"",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/savedPlainTextRemainsLiteral(text:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"Café EUR 2.99\nSecond line\"",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/savedPlainTextRemainsLiteral(text:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "0",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/malformedSavedMarkupRenders(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "1",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/malformedSavedMarkupRenders(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "2",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/malformedSavedMarkupRenders(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".success",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/nativePageGraphsRelease(outcome:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".failure",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/nativePageGraphsRelease(outcome:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".cancelled",
+      "errorMessages": [],
+      "identifier": "ReaderWebPageTests/nativePageGraphsRelease(outcome:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".success",
+      "errorMessages": [],
+      "identifier": "ReaderArticleViewTests/removingHostedArticleReleasesItsGraph(outcome:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".failure",
+      "errorMessages": [],
+      "identifier": "ReaderArticleViewTests/removingHostedArticleReleasesItsGraph(outcome:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".empty",
+      "errorMessages": [],
+      "identifier": "ReaderArticleViewTests/removingHostedArticleReleasesItsGraph(outcome:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".cancelled",
+      "errorMessages": [],
+      "identifier": "ReaderArticleViewTests/removingHostedArticleReleasesItsGraph(outcome:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    }
+  ],
+  "schemeName": "Reader",
+  "summary": "27 tests: 26 passed, 1 failed, 0 skipped, 0 expected failures, 0 not run",
+  "totalResults": 27,
+  "truncated": false,
+  "xcresultBundlePath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/Test-Reader-2026.10.25_19-14-49-+0100.xcresult"
+}

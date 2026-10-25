@@ -45,9 +45,9 @@ struct ContentTests {
         if kind != 3 { #expect(result.html.contains("https://fragment.reader.invalid/offer")) }
     }
 
-    @Test("Unrecoverable malformed HTML returns an unavailable-content error", .timeLimit(.minutes(1)),
-          arguments: ["<html><body><article><p>Unfinished content", "<html><body></body></html>"])
-    func unrecoverableMarkupReportsUnavailable(html: String) async throws {
+    @Test("Documents without article text report unavailable content", .timeLimit(.minutes(1)),
+          arguments: ["<html><body></body></html>", "<html><body><script>const hiddenText = \"Script is not article text\";</script><style>body { color: red }</style></body></html>", "<html><body><img src=\"reader-resource://blocked/image\"></body></html>"])
+    func contentWithoutArticleTextReportsUnavailable(html: String) async throws {
         let content = ArticleContentService()
         await #expect {
             try await content.extract(html: html, baseURL: #require(URL(string: "https://malformed.reader.invalid/source")))

@@ -11,7 +11,7 @@ import ReaderPersistence
 
 @MainActor
 struct ReaderArticleViewTests {
-    enum Outcome: CaseIterable, Sendable { case success, failure, malformed, cancelled }
+    enum Outcome: CaseIterable, Sendable { case success, failure, empty, cancelled }
 
     @Test("Removing the actual hosted article view ends extraction and releases its graph",
           .timeLimit(.minutes(1)), arguments: Outcome.allCases)
@@ -49,7 +49,7 @@ struct ReaderArticleViewTests {
             #expect(reader.extracting)
         } else {
             #expect(try await waitUntil { !reader.extracting })
-            if outcome == .failure || outcome == .malformed {
+            if outcome == .failure || outcome == .empty {
                 #expect(fixture.session.fullTextError != nil)
                 if outcome == .failure { #expect(fixture.session.fullTextError == ReaderError.server(403).localizedDescription) }
                 let saved = try await reader.page.callJavaScript("return document.body.textContent;") as? String
@@ -132,7 +132,7 @@ private final class ArticleViewFixture {
         services = ReaderServices(repository: store, content: content)
         session = ReaderSession(services: services)
         let server = server
-        MockURLProtocol.register(host: host) { _ in try await server.response() }
+        MockURLProtocol.register(host: host, mimeType: "text/html; charset=utf-8") { _ in try await server.response() }
         await session.reload()
         session.selection = .article(article.id)
     }
@@ -160,7 +160,7 @@ private actor ArticleViewServer {
             }
         }
         if outcome == .failure { return (403, Data("Access denied".utf8)) }
-        if outcome == .malformed { return (200, Data("<html><body><article><p>Unfinished content".utf8)) }
+        if outcome == .empty { return (200, Data("<html><body></body></html>".utf8)) }
         let text = String(repeating: "Extracted native article with representative content. ", count: 40)
         return (200, Data(("<article><h1>Extracted native article</h1><p>" + text + "</p></article>").utf8))
     }

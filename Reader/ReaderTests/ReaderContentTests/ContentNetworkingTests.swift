@@ -1,7 +1,7 @@
 import Foundation
 import Synchronization
 import Testing
-import ReaderContent
+@testable import ReaderContent
 import ReaderDomain
 
 struct ContentNetworkingTests {
@@ -49,6 +49,30 @@ struct ContentNetworkingTests {
         #expect(await fixture.server.requestCount == 1)
     }
 
+    @Test("Non-HTML content is rejected before native parsing",
+          arguments: ["application/javascript", "text/css", "image/svg+xml", "application/pdf", "application/octet-stream"])
+    func nonHTMLContentIsRejected(mimeType: String) async throws {
+        let fixture = try ContentNetworkFixture()
+        await fixture.server.setResponse(status: 200, data: Self.article(marker: "Wrong content type"), mimeType: mimeType)
+        await #expect(throws: ReaderError.invalidResponse) { try await fixture.service.extract(url: fixture.url) }
+        #expect(await fixture.server.requestCount == 1)
+    }
+
+    @Test("HTML and XHTML remain accepted", arguments: ["text/html", "application/xhtml+xml"])
+    func htmlContentTypesAreAccepted(mimeType: String) async throws {
+        let fixture = try ContentNetworkFixture()
+        await fixture.server.setResponse(status: 200, data: Self.article(marker: "Accepted content type"), mimeType: mimeType)
+        #expect(try await fixture.service.extract(url: fixture.url).text.contains("Accepted content type"))
+    }
+
+    @Test("Unsupported source URLs cannot start HTTP",
+          arguments: ["file:///etc/hosts", "data:text/html,hello", "javascript:alert(1)", "https://user:secret@example.invalid/"])
+    func invalidSourceURLsStartNoRequests(source: String) async throws {
+        let fixture = try ContentNetworkFixture()
+        await #expect(throws: ReaderError.invalidURL) { try await fixture.service.extract(url: #require(URL(string: source))) }
+        #expect(await fixture.server.requestCount == 0)
+    }
+
     private static func article(marker: String) -> Data {
         let text = String(repeating: "\(marker): Fresh apples cost EUR 2.99 at the retailer today. ", count: 50)
         return Data("<html><head><title>\(marker)</title></head><body><article><h1>\(marker)</h1><p>\(text)</p><p><a href='/offers/reader'>View offer</a></p></article></body></html>".utf8)
@@ -84,6 +108,7 @@ private final class ContentNetworkFixture: @unchecked Sendable {
 private struct ContentScriptResponse: Sendable {
     let status: Int
     let data: Data
+    var mimeType = "text/html; charset=utf-8"
 }
 
 private actor ContentScriptServer {
@@ -91,8 +116,8 @@ private actor ContentScriptServer {
     private var timeout = false
     var requestCount = 0
 
-    func setResponse(status: Int, data: Data) {
-        response = ContentScriptResponse(status: status, data: data)
+    func setResponse(status: Int, data: Data, mimeType: String = "text/html; charset=utf-8") {
+        response = ContentScriptResponse(status: status, data: data, mimeType: mimeType)
         timeout = false
     }
 
@@ -123,7 +148,7 @@ private final class ContentScriptURLProtocol: URLProtocol, @unchecked Sendable {
                 guard let handler, let url = request.url else { throw ReaderError.invalidResponse }
                 let result = try await handler(request)
                 try Task.checkCancellation()
-                guard let response = HTTPURLResponse(url: url, statusCode: result.status, httpVersion: "HTTP/1.1", headerFields: ["Content-Type": "text/html; charset=utf-8", "Content-Length": String(result.data.count)]) else {
+                guard let response = HTTPURLResponse(url: url, statusCode: result.status, httpVersion: "HTTP/1.1", headerFields: ["Content-Type": result.mimeType, "Content-Length": String(result.data.count)]) else {
                     throw ReaderError.invalidResponse
                 }
                 client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
@@ -192,6 +217,55 @@ struct ContentStreamingTests {
         return graph
     }
 
+    @Test("Cancelling queued extraction preserves both owners and the next available slot", .timeLimit(.minutes(1)))
+    func queuedCancellationPreservesOwnersAndCapacity() async throws {
+        let fixture = try ContentStreamFixture(rejection: nil)
+        let service = fixture.service
+        let firstURL = fixture.url
+        let secondURL = firstURL.appendingPathComponent("second")
+        let thirdURL = firstURL.appendingPathComponent("third")
+        let secondPlan = ContentStreamPlan(rejection: nil), thirdPlan = ContentStreamPlan(rejection: nil)
+        ContentStreamURLProtocol.plans.withLock { $0[secondURL.absoluteString] = secondPlan; $0[thirdURL.absoluteString] = thirdPlan }
+        defer {
+            ContentStreamURLProtocol.plans.withLock { $0[secondURL.absoluteString] = nil; $0[thirdURL.absoluteString] = nil }
+            Task { await fixture.plan.headerGate.open(); await fixture.plan.endGate.open(); await secondPlan.headerGate.open(); await secondPlan.endGate.open() }
+        }
+        let first = Task { try await service.extract(url: firstURL) }
+        let second = Task { try await service.extract(url: secondURL) }
+        defer { first.cancel(); second.cancel() }
+        try await fixture.plan.headerGate.waitUntilEntered()
+        try await secondPlan.headerGate.waitUntilEntered()
+        let cancelled = Mutex(false)
+        let third = Task {
+            do { _ = try await service.extract(url: thirdURL) } catch {
+                if error is CancellationError { cancelled.withLock { $0 = true } }
+                throw error
+            }
+        }
+        defer { third.cancel() }
+        try #require(try await waitUntil { await service.waitingExtractionCount == 1 })
+        #expect(thirdPlan.progress.withLock { $0.requests } == 0)
+        third.cancel()
+        try #require(try await waitUntil { cancelled.withLock { $0 } })
+        await #expect(throws: CancellationError.self) { try await third.value }
+        #expect(await service.waitingExtractionCount == 0)
+        #expect(!fixture.plan.progress.withLock { $0.stopped })
+        #expect(!secondPlan.progress.withLock { $0.stopped })
+        await fixture.plan.headerGate.open()
+        await fixture.plan.endGate.open()
+        #expect(try await first.value.text.contains("An article at the exact download limit"))
+        let next = Task { try await service.extract(url: thirdURL) }
+        defer { next.cancel() }
+        try await thirdPlan.headerGate.waitUntilEntered()
+        #expect(thirdPlan.progress.withLock { $0.requests } == 1)
+        #expect(!secondPlan.progress.withLock { $0.stopped })
+        next.cancel()
+        await #expect(throws: CancellationError.self) { try await next.value }
+        second.cancel()
+        await #expect(throws: CancellationError.self) { try await second.value }
+        #expect(await service.waitingExtractionCount == 0)
+    }
+
     private func exerciseRejection(_ rejection: Rejection) async throws -> WeakContentStreamGraph {
         let fixture = try ContentStreamFixture(rejection: rejection)
         let graph = WeakContentStreamGraph(fixture)
@@ -219,9 +293,9 @@ struct ContentStreamingTests {
         return graph
     }
 
-    private func waitUntil(_ condition: () -> Bool) async throws -> Bool {
+    private func waitUntil(_ condition: () async -> Bool) async throws -> Bool {
         let deadline = ContinuousClock.now.advanced(by: .seconds(3))
-        while !condition() {
+        while !(await condition()) {
             if ContinuousClock.now >= deadline { return false }
             try await Task.sleep(for: .milliseconds(10))
         }
@@ -253,7 +327,7 @@ private final class ContentStreamFixture: Sendable {
 }
 
 private final class ContentStreamPlan: Sendable {
-    struct Progress { var bytes = 0; var stopped = false; var finished = false }
+    struct Progress { var bytes = 0; var requests = 0; var stopped = false; var finished = false }
     let progress = Mutex(Progress())
     let headerGate = RequestGate()
     let endGate = RequestGate()
@@ -293,6 +367,7 @@ private final class ContentStreamURLProtocol: URLProtocol, @unchecked Sendable {
             return
         }
         state.withLock { $0.plan = plan }
+        plan.progress.withLock { $0.requests += 1 }
         let task = Task { @Sendable [self, plan, url] in
             do {
                 let response = try #require(HTTPURLResponse(url: url, statusCode: plan.status, httpVersion: "HTTP/1.1", headerFields: plan.headers))

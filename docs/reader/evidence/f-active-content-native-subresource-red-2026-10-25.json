@@ -1,0 +1,30 @@
+{
+  "activeTestPlanName": "Reader",
+  "counts": {
+    "expectedFailures": 0,
+    "failed": 1,
+    "notRun": 0,
+    "passed": 0,
+    "skipped": 0,
+    "total": 1
+  },
+  "fullConsoleLogsPath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/test-console-log-2026-10-25T19-15-04+01-00.txt",
+  "fullSummaryPath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/67119B4E-2829-473E-9BFA-DC66F6E6395A.txt",
+  "results": [
+    {
+      "displayName": "Inert extraction blocks resources and preserves the trusted source base",
+      "errorMessages": [
+        "Reader/ReaderTests/ReaderContentTests/HTMLParsingTests.swift:63 HTMLIsolationTests/resourcesStayBlockedAndBaseStaysTrusted(): Expectation failed: resources.requests.withLock { $0.isEmpty }: Unexpected raw resource requests: reader-resource://blocked/raw-image",
+        "Reader/ReaderTests/ReaderContentTests/HTMLParsingTests.swift:84 HTMLIsolationTests/resourcesStayBlockedAndBaseStaysTrusted(): Expectation failed: resources.requests.withLock { $0.isEmpty }"
+      ],
+      "identifier": "HTMLIsolationTests/resourcesStayBlockedAndBaseStaysTrusted()",
+      "state": "Failed",
+      "targetName": "ReaderTests"
+    }
+  ],
+  "schemeName": "Reader",
+  "summary": "1 tests: 0 passed, 1 failed, 0 skipped, 0 expected failures, 0 not run",
+  "totalResults": 1,
+  "truncated": false,
+  "xcresultBundlePath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/Test-Reader-2026.10.25_19-15-04-+0100.xcresult"
+}

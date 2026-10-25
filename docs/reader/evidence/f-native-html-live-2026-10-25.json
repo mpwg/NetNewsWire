@@ -1,0 +1,58 @@
+{
+  "accountCredentialsUsed" : false,
+  "baseCommit" : "7d21e07ac",
+  "implementation" : "Native WebKit plus Mozilla Readability",
+  "results" : [
+    {
+      "durationSeconds" : 1.4047809839248657,
+      "expectedMarkerPresent" : true,
+      "htmlBytes" : 27191,
+      "imageElements" : 0,
+      "kind" : "appleArticle",
+      "links" : 24,
+      "outcome" : "extracted",
+      "scriptElements" : 0,
+      "textCharacters" : 18820,
+      "url" : "https:\/\/www.apple.com\/newsroom\/2025\/09\/apple-unveils-iphone-17-pro-and-iphone-17-pro-max\/"
+    },
+    {
+      "durationSeconds" : 0.33931005001068115,
+      "expectedMarkerPresent" : true,
+      "htmlBytes" : 428866,
+      "imageElements" : 5,
+      "kind" : "encyclopediaArticle",
+      "links" : 659,
+      "outcome" : "extracted",
+      "scriptElements" : 0,
+      "textCharacters" : 56249,
+      "url" : "https:\/\/en.wikipedia.org\/wiki\/Swift_(programming_language)"
+    },
+    {
+      "durationSeconds" : 0.28830504417419434,
+      "expectedMarkerPresent" : true,
+      "htmlBytes" : 661,
+      "imageElements" : 0,
+      "kind" : "germanHelpArticle",
+      "links" : 0,
+      "outcome" : "extracted",
+      "scriptElements" : 0,
+      "textCharacters" : 524,
+      "url" : "https:\/\/flamedeerfaq.preisjaeger.at\/help\/wie-spiele-ich"
+    },
+    {
+      "durationSeconds" : 0.53099095821380615,
+      "expectedMarkerPresent" : true,
+      "htmlBytes" : 18058,
+      "imageElements" : 0,
+      "kind" : "dealIndex",
+      "links" : 5,
+      "outcome" : "extracted",
+      "scriptElements" : 0,
+      "textCharacters" : 1628,
+      "url" : "https:\/\/www.preisjaeger.at\/"
+    }
+  ],
+  "runtime" : "Native ReaderContent snippet through Xcode MCP on macOS 27.0.1",
+  "sourceSHA256" : "ef2d4645f24e22734cccabd0e7b0eec65a23e91e89b85290622d6d8f4c7b6712",
+  "storeWrites" : false
+}

@@ -1,0 +1,30 @@
+{
+  "activeTestPlanName": "Reader",
+  "counts": {
+    "expectedFailures": 0,
+    "failed": 1,
+    "notRun": 0,
+    "passed": 0,
+    "skipped": 0,
+    "total": 1
+  },
+  "fullConsoleLogsPath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/test-console-log-2026-10-25T19-21-18+01-00.txt",
+  "fullSummaryPath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/4BDD0DE6-1A7A-4619-9EE4-6C30650DFA4F.txt",
+  "results": [
+    {
+      "displayName": "The document CSP accepts only Reader's exact style even if sanitization is bypassed",
+      "errorMessages": [
+        "Reader/ReaderTests/ReaderPresentationTests/ReaderWebPageTests.swift:155 ReaderWebPageTests/cspRejectsPublisherStyleIndependently(): Expectation failed: try await page.callJavaScript(\"return getComputedStyle(document.body).fontSize;\") as? String == \"17px\"",
+        "Reader/ReaderTests/ReaderPresentationTests/ReaderWebPageTests.swift:156 ReaderWebPageTests/cspRejectsPublisherStyleIndependently(): Expectation failed: try await page.callJavaScript(\"return getComputedStyle(document.querySelector('p')).fontSize;\") as? String == \"17px\""
+      ],
+      "identifier": "ReaderWebPageTests/cspRejectsPublisherStyleIndependently()",
+      "state": "Failed",
+      "targetName": "ReaderTests"
+    }
+  ],
+  "schemeName": "Reader",
+  "summary": "1 tests: 0 passed, 1 failed, 0 skipped, 0 expected failures, 0 not run",
+  "totalResults": 1,
+  "truncated": false,
+  "xcresultBundlePath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/Test-Reader-2026.10.25_19-21-18-+0100.xcresult"
+}

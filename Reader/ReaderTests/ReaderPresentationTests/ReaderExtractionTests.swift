@@ -277,7 +277,7 @@ private final class ExtractionFixture {
         session = ReaderSession(services: services)
         server = ExtractionServer(gate: gate, failFirst: failFirst, failSecond: failSecond)
         let server = server
-        MockURLProtocol.register(host: host) { try await server.respond($0) }
+        MockURLProtocol.register(host: host, mimeType: "text/html; charset=utf-8") { try await server.respond($0) }
         await session.reload()
         session.selection = .article(a.id)
     }

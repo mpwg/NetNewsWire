@@ -1,0 +1,52 @@
+# F: active article content isolation — 2026-10-25
+
+The owner requires all article images and foreign resources to be blocked, including data images and SVG, and asks for document-only download and text extraction without executing source code. This supersedes the earlier inline-image rendering expectation. It applies to full-text extraction and saved feed-HTML display. Native feed icons remain a separate ImageIO service.
+
+## Trust boundaries
+
+1. URLSession downloads the main HTTP(S) HTML/XHTML document with a 4,000,000-byte Reader-owned payload limit. Unsupported MIME types and source schemes/embedded credentials fail; redirects are limited to five, with HTTPS downgrade rejected. The default session is ephemeral, stores no cookies, bypasses its URL cache and has request/resource timeouts. HTTP 403 and transport errors remain explicit.
+2. WebKit loads only an empty Reader-owned about:blank document. The downloaded HTML is passed as a JavaScript argument into the native DOMParser with text/html; no downloaded string becomes program source and no source document is loaded or attached. Bundled, pinned Mozilla Readability runs in the isolated default client world. **This uses trusted JavaScript; it does not disable the JavaScript engine altogether.** Source script elements/events remain disabled and inert.
+3. Extraction output and every saved article pass through a fresh inert parse and an explicit allowlist that constructs new passive HTML elements and text nodes. It never reuses source nodes. Scripts, styles/style attributes, event attributes, images, SVG/MathML, frames, forms, media, objects, active/custom elements and publisher metadata are removed or safely unwrapped. Image alternative text may remain. Only validated HTTP(S) and local-fragment anchor destinations survive.
+4. Before permitting navigation, WebKit's user-content controller receives a compiled block-all WKContentRuleList. Rule preparation is required before parsing and errors abort processing. Both factories reset the controller, clear extension access, use an ephemeral website store, disable content JavaScript and subresource loading, and deny sensors/AirPlay. Navigation preferences reassert the script restriction. Only about:blank and its fragments can load; explicit safe link actions route outside the article. The scene supplies OpenURLAction through a weak relay. Link previews and back/forward gestures are disabled.
+5. The visible document's CSP defaults to none and permits only Reader's exact fixed stylesheet using a SHA-256 hash. Publisher styles remain forbidden even if sanitizer removal regresses. No unsafe-inline permission, image/media source exception, website base URL or local-file base is supplied.
+
+DOMParser alone is insufficient: inert documents can still request images/frames, and reinserting their nodes can activate content. See the [DOMParser reference](https://developer.mozilla.org/en-US/docs/Web/API/DOMParser/parseFromString), [HTML standard](https://html.spec.whatwg.org/dev/dynamic-markup-insertion.html) and [WebKit content-blocking model](https://webkit.org/blog/3476/content-blockers-first-look/). Native rules and CSP remain separate mandatory layers.
+
+## Negative runtime evidence
+
+These use Swift Testing with actual WebKit documents and native transport, not source-string assertions or additional UI automation.
+
+- A no-CSP positive script control executes. Protected pages reassert disabled content JavaScript and discard pre-existing injected user scripts.
+- The SDK's loadsSubresources=false **alone fails** a registered-scheme image canary: reader-resource://blocked/raw-image is requested. [Preserved failure](f-active-content-native-subresource-red-2026-10-25.json). It is retained as an extra setting, never accepted as the sole resource boundary.
+- The compiled native block-all rule passes the same resource canary without CSP, including when the configuration explicitly allows subresource loading. A separate unrestricted page first reaches the handler. Removing the native rule makes the negative case fail. [Mutation failure](f-active-content-rule-mutation-red-2026-10-25.json).
+- The CSP test deliberately bypasses sanitization with foreign style elements/attributes. An unprotected control applies them; the protected document keeps both body/paragraph at Reader's 17px. Removing the CSP makes both checks fail. [Mutation failure](f-active-content-csp-mutation-red-2026-10-25.json). An initial positive-control expectation confused inline-important specificity; it was corrected to 77px, without weakening the protected assertions.
+- Six malicious saved-content cases verify the actual active DOM has no unsafe elements/attributes, source marker execution or animations; foreign CSS cannot change Reader's font. Seven unsafe anchor destinations lose href; a safe relative link reaches the external handler while location stays about:blank.
+- A real loopback NWListener HTTP server first receives /image from an unrestricted WebPage, proving it is reachable. The shipping ArticleContentService then requests **only /article**, despite that document's script, CSS/import/background, image, frame, object and media references. Rendering malicious saved feed HTML adds **zero requests**. Real HTTP redirects preserve document-only loading; a redirect loop stops after five hops/six responses. The initial fixture wrongly read the listener's zero port before ready; it now observes native readiness.
+- HTML/XHTML success, five rejected MIME types, four invalid source URLs, exact byte/stream limits, stale publication, cancellation and weak graph release remain covered. Shared URLProtocol fixtures now explicitly declare HTML where the shipping content service is used; no MIME check is disabled to make them pass.
+- The final focused run passes **103 executions**, with no failures/skips. [Raw focused result](f-active-content-focused-2026-10-25.json). The full current Mac run and hosted confirmation are recorded below when available.
+
+## Full local plan and live documents
+
+The final My Mac plan at 19-22-40 passes **170 Swift Testing functions / 313 code executions plus seven unchanged native UI methods / 320 total executions**. The authoritative original result reports 177 distinct tests, 53 parameterized functions / 196 cases, no failures/skips/runtime warnings. [Original summary](f-active-content-local-summary-2026-10-25.json) · [MCP result](f-active-content-full-2026-10-25.json). Strict SwiftLint and native build-for-testing pass. No new UI method was added for this matrix. Its [actual local screenshot](f-active-content-local-saved-content-2026-10-25.png) visibly paints the saved article body and warning; it was inspected after exporting the original native result's attachment.
+
+The final shipping-service probe repeats the four original public inputs. Apple returns 18,820 text characters, Wikipedia 56,360, German help 524 and the Preisjaeger index 1,628. All expected markers remain; all four extracted outputs contain zero script, style and image elements. [Metadata and both production-source fingerprints](f-active-content-live-2026-10-25.json) · [exact native snippet](f-active-content-live-probe-2026-10-25.txt). Output counts are compatibility observations; the separate runtime controls prove restrictions. No complete article bodies are committed. The index is not deal/feed/model quality acceptance. Hosted confirmation and subsequent unused-parser retirement are pending.
+
+| Criterion | Status | Evidence or limit |
+|---|---|---|
+| Main HTML only; no source subresource requests | Fulfilled on exercised Mac | Native HTTP positive control followed by only /article during extraction and zero extra display requests; registered-scheme and rule mutation controls. |
+| No source scripts, event code or publisher CSS activated | Fulfilled on exercised Mac | Inert input, separate no-CSP script/injection controls, actual DOM/computed styles/animations and CSP mutation failure. |
+| All article images/media/frames/forms removed | Fulfilled on exercised Mac | Six active-content cases, malformed saved-image cases, zero image elements on four live outputs. |
+| Safe links and local page boundary | Fulfilled on exercised Mac | Seven rejected protocols/credentials; actual external-handler delivery with unchanged about:blank location; preserved allow-all navigation mutation. |
+| Cancellation, limits and release | Fulfilled on exercised Mac | Stream/queue/request matrix, native page outcomes and all nine hosted-component weak references. |
+| Current local full plan and README | Fulfilled | All 320 executions pass; root, native app, ReaderKit and ReaderUI guides updated. |
+| Exact-source hosted confirmation and resource retirement | Open | Reader CI must confirm this replacement before deleting unused JSDOMParser. |
+| Final product/platform acceptance | Open | Requirements below remain independent. |
+
+## Acceptance limits
+
+This is a scoped defense against executing or loading article-supplied active content. It is not an absolute proof against unknown WebKit/OS vulnerabilities, total-process memory exhaustion, CPU/energy abuse or every possible malformed-input mutation. Both parsers retain the input/element bounds; those bounds are not whole-process memory guarantees.
+
+Trusted bundled Readability/Reader parser JavaScript and Reader's fixed stylesheet still run. Only foreign content is forbidden. A literally JavaScript-free extraction architecture would require replacing Readability; that is not claimed by this implementation. The owner selected WebKit plus Readability, and no additional HTML-parser dependency was introduced.
+
+F/#51 and mapped #33/#34 remain open for their full product/platform criteria. Real Mac network-off/restart is owner-deferred. iPhone/iPad, physical signing, accessibility, hosted WebKit pixel capture, separate-device FreshRSS, model/editorial quality, PCC and broader memory/energy acceptance remain independent.
+

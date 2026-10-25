@@ -1,0 +1,721 @@
+{
+  "activeTestPlanName": "Reader",
+  "counts": {
+    "expectedFailures": 0,
+    "failed": 0,
+    "notRun": 0,
+    "passed": 320,
+    "skipped": 0,
+    "total": 320
+  },
+  "fullConsoleLogsPath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunAllTests/test-console-log-2026-10-25T19-22-40+01-00.txt",
+  "fullSummaryPath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunAllTests/E60A25D1-025D-4BCE-8ECA-523F706F7F7E.txt",
+  "message": "Results truncated to 100 of 320 tests. Failed tests shown first. Full logs available at /var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunAllTests/E60A25D1-025D-4BCE-8ECA-523F706F7F7E.txt.",
+  "results": [
+    {
+      "displayName": "false",
+      "errorMessages": [],
+      "identifier": "AutomaticRefreshTests/callersJoinActiveRefreshBeforeDebounce(forceJoiner:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "true",
+      "errorMessages": [],
+      "identifier": "AutomaticRefreshTests/callersJoinActiveRefreshBeforeDebounce(forceJoiner:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".first",
+      "errorMessages": [],
+      "identifier": "AutomaticRefreshTests/cancelledCallersLeaveOwnedRefreshRunning(cancelled:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".second",
+      "errorMessages": [],
+      "identifier": "AutomaticRefreshTests/cancelledCallersLeaveOwnedRefreshRunning(cancelled:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".both",
+      "errorMessages": [],
+      "identifier": "AutomaticRefreshTests/cancelledCallersLeaveOwnedRefreshRunning(cancelled:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "false",
+      "errorMessages": [],
+      "identifier": "AutomaticRefreshTests/sharedFailureReleasesCallersAndPermitsRetry(forceJoiner:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "true",
+      "errorMessages": [],
+      "identifier": "AutomaticRefreshTests/sharedFailureReleasesCallersAndPermitsRetry(forceJoiner:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "An already-cancelled window cannot start account refresh",
+      "errorMessages": [],
+      "identifier": "AutomaticRefreshTests/alreadyCancelledCallerCannotStartRefresh()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "HTTP 403 remains an explicit full-text error",
+      "errorMessages": [],
+      "identifier": "ContentNetworkingTests/http403RemainsAnExplicitFullTextError()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Network timeouts propagate to the caller",
+      "errorMessages": [],
+      "identifier": "ContentNetworkingTests/networkTimeoutsPropagateToTheCaller()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "The same URL returns updated content after a source change",
+      "errorMessages": [],
+      "identifier": "ContentNetworkingTests/theSameURLReturnsUpdatedContentAfterASourceChange()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Extracted full text resolves relative links against the document URL",
+      "errorMessages": [],
+      "identifier": "ContentNetworkingTests/extractedFullTextResolvesRelativeLinksAgainstTheDocumentURL()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Oversized HTML responses are rejected before extraction",
+      "errorMessages": [],
+      "identifier": "ContentNetworkingTests/oversizedHTMLResponsesAreRejectedBeforeExtraction()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"application/javascript\"",
+      "errorMessages": [],
+      "identifier": "ContentNetworkingTests/nonHTMLContentIsRejected(mimeType:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"text/css\"",
+      "errorMessages": [],
+      "identifier": "ContentNetworkingTests/nonHTMLContentIsRejected(mimeType:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"image/svg+xml\"",
+      "errorMessages": [],
+      "identifier": "ContentNetworkingTests/nonHTMLContentIsRejected(mimeType:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"application/pdf\"",
+      "errorMessages": [],
+      "identifier": "ContentNetworkingTests/nonHTMLContentIsRejected(mimeType:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"application/octet-stream\"",
+      "errorMessages": [],
+      "identifier": "ContentNetworkingTests/nonHTMLContentIsRejected(mimeType:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"text/html\"",
+      "errorMessages": [],
+      "identifier": "ContentNetworkingTests/htmlContentTypesAreAccepted(mimeType:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"application/xhtml+xml\"",
+      "errorMessages": [],
+      "identifier": "ContentNetworkingTests/htmlContentTypesAreAccepted(mimeType:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"file:///etc/hosts\"",
+      "errorMessages": [],
+      "identifier": "ContentNetworkingTests/invalidSourceURLsStartNoRequests(source:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"data:text/html,hello\"",
+      "errorMessages": [],
+      "identifier": "ContentNetworkingTests/invalidSourceURLsStartNoRequests(source:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"javascript:alert(1)\"",
+      "errorMessages": [],
+      "identifier": "ContentNetworkingTests/invalidSourceURLsStartNoRequests(source:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"https://user:secret@example.invalid/\"",
+      "errorMessages": [],
+      "identifier": "ContentNetworkingTests/invalidSourceURLsStartNoRequests(source:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".forbidden",
+      "errorMessages": [],
+      "identifier": "ContentStreamingTests/rejectedDownloadsEndBeforeServerCompletion(rejection:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".declaredOversized",
+      "errorMessages": [],
+      "identifier": "ContentStreamingTests/rejectedDownloadsEndBeforeServerCompletion(rejection:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".unknownOversized",
+      "errorMessages": [],
+      "identifier": "ContentStreamingTests/rejectedDownloadsEndBeforeServerCompletion(rejection:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".underreportedOversized",
+      "errorMessages": [],
+      "identifier": "ContentStreamingTests/rejectedDownloadsEndBeforeServerCompletion(rejection:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "An exactly four-million-byte streamed article remains extractable",
+      "errorMessages": [],
+      "identifier": "ContentStreamingTests/exactStreamedLimitRemainsExtractable()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "false",
+      "errorMessages": [],
+      "identifier": "ContentStreamingTests/cancellationEndsBeforeServerCompletion(afterBody:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "true",
+      "errorMessages": [],
+      "identifier": "ContentStreamingTests/cancellationEndsBeforeServerCompletion(afterBody:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Cancelling queued extraction preserves both owners and the next available slot",
+      "errorMessages": [],
+      "identifier": "ContentStreamingTests/queuedCancellationPreservesOwnersAndCapacity()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "OPML round trips preserve homepages and folders",
+      "errorMessages": [],
+      "identifier": "ContentTests/opmlRoundTripsPreserveHomepagesAndFolders()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"<opml><body>\"",
+      "errorMessages": [],
+      "identifier": "ContentTests/invalidOPMLIsRejected(xml:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"<rss/>\"",
+      "errorMessages": [],
+      "identifier": "ContentTests/invalidOPMLIsRejected(xml:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"<opml><body><outline xmlUrl='file:///private'/></body></opml>\"",
+      "errorMessages": [],
+      "identifier": "ContentTests/invalidOPMLIsRejected(xml:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Nested folders with matching names remain distinct during export",
+      "errorMessages": [],
+      "identifier": "ContentTests/nestedFoldersWithMatchingNamesRemainDistinctDuringExport()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "0",
+      "errorMessages": [],
+      "identifier": "ContentTests/completeFragmentsGainDocumentStructure(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "1",
+      "errorMessages": [],
+      "identifier": "ContentTests/completeFragmentsGainDocumentStructure(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "2",
+      "errorMessages": [],
+      "identifier": "ContentTests/completeFragmentsGainDocumentStructure(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "3",
+      "errorMessages": [],
+      "identifier": "ContentTests/completeFragmentsGainDocumentStructure(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"<html><body></body></html>\"",
+      "errorMessages": [],
+      "identifier": "ContentTests/contentWithoutArticleTextReportsUnavailable(html:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"<html><body><script>const hiddenText = \"Script is not article text\";</script><style>body { color: red }</style></body></html>\"",
+      "errorMessages": [],
+      "identifier": "ContentTests/contentWithoutArticleTextReportsUnavailable(html:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"<html><body><img src=\"reader-resource://blocked/image\"></body></html>\"",
+      "errorMessages": [],
+      "identifier": "ContentTests/contentWithoutArticleTextReportsUnavailable(html:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Full text is extracted without executing page scripts",
+      "errorMessages": [],
+      "identifier": "ContentTests/fullTextIsExtractedWithoutExecutingPageScripts()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "A generator gate fails promptly when generation never starts",
+      "errorMessages": [],
+      "identifier": "DigestTests/generatorGateFailsWhenGenerationNeverStarts()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Cancelling generation releases the generator gate",
+      "errorMessages": [],
+      "identifier": "DigestTests/cancellingGenerationReleasesGeneratorGate()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "All sources remain accessible when model coverage is incomplete",
+      "errorMessages": [],
+      "identifier": "DigestTests/allSourcesRemainAccessibleWhenModelCoverageIsIncomplete()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Marking a digest read applies only to the displayed revision",
+      "errorMessages": [],
+      "identifier": "DigestTests/markingADigestReadAppliesOnlyToTheDisplayedRevision()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Invalid model source references are not saved",
+      "errorMessages": [],
+      "identifier": "DigestTests/invalidModelSourceReferencesAreNotSaved()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Changed source text regenerates a digest",
+      "errorMessages": [],
+      "identifier": "DigestTests/changedSourceTextRegeneratesADigest()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Revoked cloud consent applies to ongoing work",
+      "errorMessages": [],
+      "identifier": "DigestTests/revokedCloudConsentAppliesToOngoingWork()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Model responses for changed sources are not saved",
+      "errorMessages": [],
+      "identifier": "DigestTests/modelResponsesForChangedSourcesAreNotSaved()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Cancelling a window task does not cancel the owned digest job",
+      "errorMessages": [],
+      "identifier": "DigestTests/cancellingAWindowTaskDoesNotCancelTheOwnedDigestJob()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Thumbnails use display pixel bounds and share encoded requests",
+      "errorMessages": [],
+      "identifier": "FeedImageServiceTests/thumbnailsUsePixelBoundsAndShareEncodedRequests()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Malformed image data remains retryable after decoding fails",
+      "errorMessages": [],
+      "identifier": "FeedImageServiceTests/malformedImageDataRemainsRetryableAfterDecodingFails()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "0",
+      "errorMessages": [],
+      "identifier": "FeedImageServiceTests/thumbnailDimensionsStayBounded(requestedPixels:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "-1",
+      "errorMessages": [],
+      "identifier": "FeedImageServiceTests/thumbnailDimensionsStayBounded(requestedPixels:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "9223372036854775807",
+      "errorMessages": [],
+      "identifier": "FeedImageServiceTests/thumbnailDimensionsStayBounded(requestedPixels:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "false",
+      "errorMessages": [],
+      "identifier": "FeedImageServiceTests/imageServicesReleaseCompletedAndCancelledJobs(cancelJob:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "true",
+      "errorMessages": [],
+      "identifier": "FeedImageServiceTests/imageServicesReleaseCompletedAndCancelledJobs(cancelJob:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"0\"",
+      "errorMessages": [],
+      "identifier": "FreshRSSClientTests/articleIdentifiersSurviveReaderAPIEncoding(id:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"1\"",
+      "errorMessages": [],
+      "identifier": "FreshRSSClientTests/articleIdentifiersSurviveReaderAPIEncoding(id:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"9223372036854775807\"",
+      "errorMessages": [],
+      "identifier": "FreshRSSClientTests/articleIdentifiersSurviveReaderAPIEncoding(id:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"-9223372036854775808\"",
+      "errorMessages": [],
+      "identifier": "FreshRSSClientTests/articleIdentifiersSurviveReaderAPIEncoding(id:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"-1\"",
+      "errorMessages": [],
+      "identifier": "FreshRSSClientTests/articleIdentifiersSurviveReaderAPIEncoding(id:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Installation subdirectories and explicit API paths are preserved",
+      "errorMessages": [],
+      "identifier": "FreshRSSClientTests/installationSubdirectoriesAndExplicitAPIPathsArePreserved()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Refresh waits for every page and retains old publication dates",
+      "errorMessages": [],
+      "identifier": "FreshRSSClientTests/refreshWaitsForEveryPageAndRetainsOldPublicationDates()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Failed unread requests leave the local snapshot unchanged",
+      "errorMessages": [],
+      "identifier": "FreshRSSClientTests/failedUnreadRequestsLeaveTheLocalSnapshotUnchanged()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "HTTP success with an error body does not acknowledge status changes",
+      "errorMessages": [],
+      "identifier": "FreshRSSClientTests/httpSuccessWithAnErrorBodyDoesNotAcknowledgeStatusChanges()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Rejected renames are not committed as local successes",
+      "errorMessages": [],
+      "identifier": "FreshRSSClientTests/rejectedRenamesAreNotCommittedAsLocalSuccesses()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Missing article content prevents incomplete commits",
+      "errorMessages": [],
+      "identifier": "FreshRSSClientTests/missingArticleContentPreventsIncompleteCommits()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Repeated pagination tokens fail instead of looping forever",
+      "errorMessages": [],
+      "identifier": "FreshRSSClientTests/repeatedPaginationTokensFailInsteadOfLoopingForever()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Expired write tokens are renewed once",
+      "errorMessages": [],
+      "identifier": "FreshRSSClientTests/expiredWriteTokensAreRenewedOnce()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Overlapping sends acknowledge only their own revisions",
+      "errorMessages": [],
+      "identifier": "FreshRSSClientTests/overlappingSendsAcknowledgeOnlyTheirOwnRevisions()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"en\", \"Untitled\"",
+      "errorMessages": [],
+      "identifier": "FreshRSSClientTests/untitledArticleTitlesUseRequestedLanguage(localeID:expected:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"de\", \"Ohne Titel\"",
+      "errorMessages": [],
+      "identifier": "FreshRSSClientTests/untitledArticleTitlesUseRequestedLanguage(localeID:expected:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Already cancelled refreshes send no authentication request",
+      "errorMessages": [],
+      "identifier": "FreshRSSClientTests/alreadyCancelledRefreshesSendNoAuthenticationRequest()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Cancelling a status batch prevents the next batch and preserves pending revisions",
+      "errorMessages": [],
+      "identifier": "FreshRSSClientTests/cancellingStatusBatchPreventsNextBatchAndPreservesPendingRevisions()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Empty authoritative folder lists are propagated",
+      "errorMessages": [],
+      "identifier": "FreshRSSClientTests/emptyAuthoritativeFolderListsArePropagated()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".saved",
+      "errorMessages": [],
+      "identifier": "FreshRSSCompletionTests/refreshCompletionIncludesPersistence(outcome:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".storeFailure",
+      "errorMessages": [],
+      "identifier": "FreshRSSCompletionTests/refreshCompletionIncludesPersistence(outcome:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".cancelled",
+      "errorMessages": [],
+      "identifier": "FreshRSSCompletionTests/refreshCompletionIncludesPersistence(outcome:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".rename, .token",
+      "errorMessages": [],
+      "identifier": "FreshRSSMutationTests/failedMutationsPreserveStoredTree(operation:failure:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".rename, .http",
+      "errorMessages": [],
+      "identifier": "FreshRSSMutationTests/failedMutationsPreserveStoredTree(operation:failure:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".rename, .body",
+      "errorMessages": [],
+      "identifier": "FreshRSSMutationTests/failedMutationsPreserveStoredTree(operation:failure:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".assign, .token",
+      "errorMessages": [],
+      "identifier": "FreshRSSMutationTests/failedMutationsPreserveStoredTree(operation:failure:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".assign, .http",
+      "errorMessages": [],
+      "identifier": "FreshRSSMutationTests/failedMutationsPreserveStoredTree(operation:failure:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".assign, .body",
+      "errorMessages": [],
+      "identifier": "FreshRSSMutationTests/failedMutationsPreserveStoredTree(operation:failure:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".removeAssignment, .token",
+      "errorMessages": [],
+      "identifier": "FreshRSSMutationTests/failedMutationsPreserveStoredTree(operation:failure:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".removeAssignment, .http",
+      "errorMessages": [],
+      "identifier": "FreshRSSMutationTests/failedMutationsPreserveStoredTree(operation:failure:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".removeAssignment, .body",
+      "errorMessages": [],
+      "identifier": "FreshRSSMutationTests/failedMutationsPreserveStoredTree(operation:failure:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".move, .token",
+      "errorMessages": [],
+      "identifier": "FreshRSSMutationTests/failedMutationsPreserveStoredTree(operation:failure:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".move, .http",
+      "errorMessages": [],
+      "identifier": "FreshRSSMutationTests/failedMutationsPreserveStoredTree(operation:failure:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".move, .body",
+      "errorMessages": [],
+      "identifier": "FreshRSSMutationTests/failedMutationsPreserveStoredTree(operation:failure:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Late status acknowledgement preserves a newer SwiftData revision",
+      "errorMessages": [],
+      "identifier": "FreshRSSPersistenceTests/lateAcknowledgementPreservesNewerStoredRevision()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".statusSend",
+      "errorMessages": [],
+      "identifier": "FreshRSSPersistenceTests/failedSyncPreservesStoredUnreadAndRetries(stage:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".unreadRetrieval",
+      "errorMessages": [],
+      "identifier": "FreshRSSPersistenceTests/failedSyncPreservesStoredUnreadAndRetries(stage:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Empty memberships and folder deletion reach the stored root feed",
+      "errorMessages": [],
+      "identifier": "FreshRSSPersistenceTests/authoritativeEmptyFoldersUpdateStoredMemberships()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": ".refresh, true",
+      "errorMessages": [],
+      "identifier": "FreshRSSQueueTests/cancelledQueuedOperationsDoNotWaitForOwner(operation:alreadyCancelled:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    }
+  ],
+  "schemeName": "Reader",
+  "summary": "320 tests: 320 passed, 0 failed, 0 skipped, 0 expected failures, 0 not run",
+  "totalResults": 320,
+  "truncated": true,
+  "xcresultBundlePath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunAllTests/Test-Reader-2026.10.25_19-22-40-+0100.xcresult"
+}

@@ -1,0 +1,46 @@
+Xcode MCP RunCodeSnippet
+sourceFilePath: ReaderKit/Sources/ReaderContent/ArticleContentService.swift
+purpose: Observe shipping native HTML extraction on the original public inputs
+Historical checkpoint before the owner's stricter image/resource policy; source SHA-256 matches the paired JSON.
+
+let sources = [
+    ("appleArticle", "https://www.apple.com/newsroom/2025/09/apple-unveils-iphone-17-pro-and-iphone-17-pro-max/", "iPhone 17 Pro"),
+    ("encyclopediaArticle", "https://en.wikipedia.org/wiki/Swift_(programming_language)", "Swift"),
+    ("germanHelpArticle", "https://flamedeerfaq.preisjaeger.at/help/wie-spiele-ich", "Flamedeer"),
+    ("dealIndex", "https://www.preisjaeger.at/", "Deal")
+]
+let configuration = URLSessionConfiguration.ephemeral
+configuration.timeoutIntervalForRequest = 15
+configuration.timeoutIntervalForResource = 25
+configuration.httpShouldSetCookies = false
+configuration.urlCache = nil
+let transport = URLSession(configuration: configuration)
+defer { transport.invalidateAndCancel() }
+let content = ArticleContentService(session: transport)
+var rows: [[String: Any]] = []
+for (kind, raw, marker) in sources {
+    let started = Date()
+    var row: [String: Any] = ["kind": kind, "url": raw]
+    do {
+        let result = try await content.extract(url: URL(string: raw)!)
+        row["outcome"] = "extracted"
+        row["textCharacters"] = result.text.count
+        row["htmlBytes"] = result.html.utf8.count
+        row["expectedMarkerPresent"] = result.text.localizedCaseInsensitiveContains(marker)
+        row["imageElements"] = result.html.components(separatedBy: "<img").count - 1
+        row["links"] = result.html.components(separatedBy: "href=").count - 1
+        row["scriptElements"] = result.html.components(separatedBy: "<script").count - 1
+    } catch {
+        row["outcome"] = "error"
+        row["error"] = String(describing: error)
+    }
+    row["durationSeconds"] = Date().timeIntervalSince(started)
+    rows.append(row)
+}
+let report: [String: Any] = ["baseCommit": "7d21e07ac", "sourceSHA256": "ef2d4645f24e22734cccabd0e7b0eec65a23e91e89b85290622d6d8f4c7b6712", "implementation": "Native WebKit plus Mozilla Readability", "runtime": "Native ReaderContent snippet through Xcode MCP on macOS 27.0.1", "storeWrites": false, "accountCredentialsUsed": false, "results": rows]
+do {
+    let data = try JSONSerialization.data(withJSONObject: report, options: [.prettyPrinted, .sortedKeys])
+    let output = FileManager.default.temporaryDirectory.appendingPathComponent("reader-f-native-html-pages-20261025.json")
+    try data.write(to: output, options: .atomic)
+    print("READER_LIVE_PAGES_REPORT=" + output.path)
+} catch { print("READER_LIVE_PAGES_REPORT_ERROR=" + String(describing: error)) }

@@ -2,6 +2,8 @@ import SwiftUI
 import Observation
 import WebKit
 import ReaderDomain
+import ReaderContent
+import CryptoKit
 
 struct ReaderDetail: View {
     var session: ReaderSession
@@ -40,6 +42,7 @@ struct ArticleDetailView: View {
     var session: ReaderSession
     let article: ArticleSnapshot
     @State private var reader: ReaderArticleState
+    @Environment(\.openURL) private var openURL
 
     init(session: ReaderSession, article: ArticleSnapshot, reader: ReaderArticleState = ReaderArticleState()) {
         self.session = session
@@ -60,7 +63,7 @@ struct ArticleDetailView: View {
                     Button(article.starred ? LocalizedStringResource("Remove star", bundle: .atURL(#bundle.bundleURL)) : LocalizedStringResource("Star", bundle: .atURL(#bundle.bundleURL)), systemImage: article.starred ? "star.fill" : "star") {
                         Task { await session.setStatus([article.id], field: .starred, value: !article.starred) }
                     }
-                    if let url = article.url { Link("Original", destination: url) }
+                    if let url = article.url, ReaderWebContentPolicy.permitsExternalLink(url) { Link("Original", destination: url) }
                     Menu(LocalizedStringResource("Article", bundle: .atURL(#bundle.bundleURL)), systemImage: "ellipsis") {
                         Button(LocalizedStringResource("Load full text", bundle: .atURL(#bundle.bundleURL)), systemImage: "doc.text.magnifyingglass") {
                             reader.beginExtraction()
@@ -86,6 +89,8 @@ struct ArticleDetailView: View {
             .padding()
             Divider()
             WebView(reader.page)
+                .webViewLinkPreviews(.disabled)
+                .webViewBackForwardNavigationGestures(.disabled)
                 .task(id: article.html + article.text) { await loadHTML() }
         }
         .task(id: request) {
@@ -93,13 +98,13 @@ struct ArticleDetailView: View {
             defer { if reader.extractionRequest == request { reader.extracting = false } }
             await session.extract(article)
         }
-        .onDisappear { reader.page.stopLoading() }
+        .onAppear { reader.links.open = { [openURL] url in openURL(url) } }
+        .onDisappear { reader.links.open = nil; reader.page.stopLoading() }
     }
 
     private func loadHTML() async {
-        let html = ReaderArticleDocument.html(for: article)
         do {
-            for try await _ in reader.page.load(html: html, baseURL: article.url ?? URL(fileURLWithPath: "/")) { }
+            try await ReaderArticleDocument.load(article, into: reader.page)
         } catch is CancellationError {
         } catch {
             if !Task.isCancelled, session.selection == .article(article.id) {
@@ -116,7 +121,13 @@ final class ReaderArticleState {
     var extracting = false
     var extractionRequest: UUID?
 
-    init(page: WebPage = ReaderArticleDocument.makePage()) { self.page = page }
+    let links: ReaderArticleLinks
+
+    init(page: WebPage? = nil) {
+        let links = ReaderArticleLinks()
+        self.links = links
+        self.page = page ?? ReaderArticleDocument.makePage(openLink: { [weak links] url in links?.open?(url) })
+    }
 
     func beginExtraction() {
         extracting = true
@@ -124,22 +135,43 @@ final class ReaderArticleState {
     }
 }
 
-/// Shared document construction and WebKit policy for the shipping article view.
+@MainActor
+final class ReaderArticleLinks {
+    var open: ((URL) -> Void)?
+}
+
+/// Only sanitized passive article markup reaches the visible document.
 enum ReaderArticleDocument {
+    private static let style = ":root{color-scheme:light dark}body{font:17px -apple-system;line-height:1.6;max-width:48rem;margin:auto;padding:1.2rem;overflow-wrap:anywhere}pre{white-space:pre-wrap}a{color:LinkText}"
+
     @MainActor
-    static func makePage(configuration: WebPage.Configuration = WebPage.Configuration()) -> WebPage {
-        var configuration = configuration
-        configuration.defaultNavigationPreferences.allowsContentJavaScript = false
-        return WebPage(configuration: configuration)
+    static func makePage(configuration: WebPage.Configuration = WebPage.Configuration(), openLink: ((URL) -> Void)? = nil) -> WebPage {
+        let configuration = ReaderWebContentPolicy.configuration(configuration)
+        return WebPage(configuration: configuration,
+                       navigationDecider: ReaderWebNavigationPolicy(openLink: openLink, controller: configuration.userContentController))
     }
 
-    static func html(for article: ArticleSnapshot) -> String {
-        let content = article.html.isEmpty ? "<pre>\(escape(article.text))</pre>" : article.html
+    @MainActor
+    static func load(_ article: ArticleSnapshot, into page: WebPage) async throws {
+        let source = article.html.isEmpty ? "<pre>\(escape(article.text))</pre>" : article.html
+        let safeContent = try await ReaderWebContentPolicy.sanitizedHTML(source, baseURL: article.url, page: page)
+        try Task.checkCancellation()
+        try await withTaskCancellationHandler {
+            for try await _ in page.load(html: html(safeContent: safeContent)) { try Task.checkCancellation() }
+            try Task.checkCancellation()
+        } onCancel: {
+            Task { @MainActor [weak page] in page?.stopLoading() }
+        }
+    }
+
+    static func html(safeContent: String) -> String {
+        let styleHash = Data(SHA256.hash(data: Data(style.utf8))).base64EncodedString()
         return """
-        <!doctype html><html><head><meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src https: data:; style-src 'unsafe-inline'; media-src https:;">
-        <style>:root{color-scheme:light dark}body{font:17px -apple-system;line-height:1.6;max-width:48rem;margin:auto;padding:1.2rem;overflow-wrap:anywhere}img,video{max-width:100%;height:auto}pre{white-space:pre-wrap}a{color:LinkText}</style>
-        </head><body>\(content)</body></html>
+        <!doctype html><html><head>
+        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'sha256-\(styleHash)'; style-src-attr 'none'; form-action 'none'; base-uri 'none'">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>\(style)</style>
+        </head><body>\(safeContent)</body></html>
         """
     }
 
