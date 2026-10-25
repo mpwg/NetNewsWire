@@ -26,3 +26,9 @@ The five remaining native UI methods cover automatic first-window creation and s
 - Hosted verification of the changed single Reader workflow is pending at this checkpoint; the workflow retains strict lint, direct Swift runner contracts, the complete native plan and process recovery. Automatic testing remains Mac-first; manual all-platform coverage remains available.
 
 Source retirement is fulfilled. K/#56 remains open for actual platform/accessibility/offline acceptance, representative load/energy/distribution and unresolved Swift CodeQL analysis. Final iPhone/iPad, PCC entitlement and model/feed quality requirements are unchanged. The deferred real Mac network-off run is not re-requested.
+
+## Separate CodeQL result
+
+At e61b2fa26, [CodeQL run 40204058261](https://github.com/mpwg/NetNewsWire/actions/runs/40204058261) fails outside Reader tests. Its [Swift job 121201115860](https://github.com/mpwg/NetNewsWire/actions/runs/40204058261/job/121201115860) again exits 139 in preload_tracer/autobuild before analysis. This failure is intermittent: the earlier Swift job 121190509088 in run 40200513521 at 410887e7c completed analysis successfully. Source cleanup is not evidence of fixing or causing the tracer crash.
+
+The first cleanup run also retains a stale Ruby matrix entry; job 121201115930 fails with no Ruby source, as expected after original tooling removal. GitHub's automatic default-setup language configuration subsequently excludes Ruby (observed updated_at=2026-10-25T14:49:52Z). No security check was manually disabled or narrowed. The next run must confirm that automatic update. Reader test/lint success does not imply repository-wide security-analysis success.
