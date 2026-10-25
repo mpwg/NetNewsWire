@@ -1,0 +1,67 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "814fe6edfeb3892d8276062449d0705f55dfa033",
+        "deviceName" : "My Mac",
+        "modelName" : "Virtual Machine",
+        "osBuildNumber" : "26A434",
+        "osVersion" : "27.0.1",
+        "platform" : "macOS"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 2,
+      "passedTests" : 267,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "Reader · Built with macOS 27.0.1",
+  "expectedFailures" : 0,
+  "failedTests" : 2,
+  "finishTime" : 1792945876.543,
+  "passedTests" : 156,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1792945590.168,
+  "statistics" : [
+    {
+      "subtitle" : "154 test runs",
+      "title" : "43 tests ran with dynamic parameters"
+    }
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "Not hittable: Button, {{-72.0, 110.0}, {45.0, 16.0}}, label: 'Unread'",
+      "targetName" : "ReaderUITests",
+      "testIdentifier" : 154,
+      "testIdentifierString" : "ReaderSmokeTests/testDelayedTimelineQueryKeepsInputAndFeedMenuResponsive()",
+      "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testDelayedTimelineQueryKeepsInputAndFeedMenuResponsive",
+      "testName" : "testDelayedTimelineQueryKeepsInputAndFeedMenuResponsive()"
+    },
+    {
+      "failureText" : "XCTAssertTrue failed",
+      "targetName" : "ReaderUITests",
+      "testIdentifier" : 158,
+      "testIdentifierString" : "ReaderSmokeTests/testWindowSearchAndSelectionSurviveClosingAnotherWindow()",
+      "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testWindowSearchAndSelectionSurviveClosingAnotherWindow",
+      "testName" : "testWindowSearchAndSelectionSurviveClosingAnotherWindow()"
+    }
+  ],
+  "title" : "Test - Reader",
+  "topInsights" : [
+    {
+      "category" : "Longest Test Runs",
+      "impact" : "45% of duration",
+      "text" : "6 longest test runs with outlier durations exceeding 0.90s (three standard deviations)"
+    }
+  ],
+  "totalTestCount" : 158
+}

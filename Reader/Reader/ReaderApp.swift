@@ -41,6 +41,12 @@ struct ReaderApplication: App {
             }
         }
         .defaultSize(width: 1200, height: 800)
+        #if os(macOS)
+        .defaultWindowPlacement { _, context in
+            let available = context.defaultDisplay.visibleRect.insetBy(dx: 24, dy: 24)
+            return WindowPlacement(size: CGSize(width: min(1200, available.width), height: min(800, available.height)))
+        }
+        #endif
     }
 }
 

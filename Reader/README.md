@@ -20,4 +20,6 @@ The Mac window scenario reuses `--ui-testing-timeline` and verifies separate sea
 
 Layout follows the available window and system safe areas. Article rendering uses WebView/WebPage with content JavaScript disabled. Physical-device, iPad multiwindow, VoiceOver, Dynamic Type, keyboard, RTL and sustained-load checks require separate evidence.
 
+New Mac windows request up to 1200×800 points, capped to their SwiftUI placement context's visible display rectangle with room at the edges. This keeps sidebar and title-bar controls on smaller displays. The system retains normal user resizing, placement and state restoration; no global screen lookup or UI-test-only geometry override is used.
+
 The Mac-only full-text UI fixture uses both `--ui-testing` and `--ui-testing-content` in Debug. Two synthetic saved articles use an injected URLProtocol transport: A holds its request until cancellation; B returns HTTP 403. One native scenario selects A, starts extraction through the real menu, selects B and requires A's transport cancellation. It then verifies B's actual alert, localized saved-content warning and readable WebKit heading. Its state/error variants, parsing, stale delivery and weak graph release belong to Swift Testing. No account client, Keychain or external server is involved. [F rendering evidence](../docs/reader/evidence/f-rendering-2026-10-25.md).

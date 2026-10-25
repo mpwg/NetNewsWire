@@ -1,0 +1,10 @@
+Source commit: a9a2c7b272a68f132b81c4219d1b99d0fd967053
+Run: https://github.com/mpwg/NetNewsWire/actions/runs/40211531653
+Swift job: https://github.com/mpwg/NetNewsWire/actions/runs/40211531653/job/121223603838
+Retrieved with the GitHub workflow-job-log connector on 2026-10-25.
+Python, JavaScript/TypeScript and Actions jobs pass. Swift fails in Autobuild; analysis is skipped.
+No check is disabled. This is separate from the Reader test workflow.
+
+2026-10-25T16:25:13.5676470Z [2026-10-25 16:25:13] [ERROR] Spawned process exited abnormally (code 139; tried to run: [/Users/runner/work/_temp/5a5cfea9-433b-4484-9305-e6c085a16091/codeql/tools/osx64/preload_tracer, /Users/runner/work/_temp/5a5cfea9-433b-4484-9305-e6c085a16091/codeql/swift/tools/autobuild.sh])
+2026-10-25T16:25:13.5779410Z A fatal error occurred: Exit status 139 from command: [/Users/runner/work/_temp/5a5cfea9-433b-4484-9305-e6c085a16091/codeql/swift/tools/autobuild.sh]
+2026-10-25T16:25:13.6496720Z ##[error]We were unable to automatically build your code. Please replace the call to the autobuild action with your custom build steps. We were unable to automatically build your code. Please change the build mode for this language to manual and specify build steps for your project. See https://docs.github.com/en/code-security/code-scanning/troubleshooting-code-scanning/automatic-build-failed for more information. Encountered a fatal error while running "/Users/runner/work/_temp/5a5cfea9-433b-4484-9305-e6c085a16091/codeql/codeql database trace-command --use-build-mode --working-dir /Users/runner/work/NetNewsWire/NetNewsWire /Users/runner/work/_temp/codeql_databases/swift". Exit code was 2 and error was: A fatal error occurred: Exit status 139 from command: [/Users/runner/work/_temp/5a5cfea9-433b-4484-9305-e6c085a16091/codeql/swift/tools/autobuild.sh]. See the logs for more details.

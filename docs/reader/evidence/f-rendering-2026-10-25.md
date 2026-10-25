@@ -33,6 +33,16 @@ The first attempt selected a Touch Bar OK button. [Query failure](f-native-app-q
 
 This is an actual application-window screenshot. Experimental NSView cache captures omitted or retained compositor layers; they were rejected, their recording helper removed, and they are not acceptance evidence.
 
+## Initial hosted run and small-display correction
+
+[Reader CI 40211531923](https://github.com/mpwg/NetNewsWire/actions/runs/40211531923) at a9a2c7b27 passes all 151 Swift Testing functions in 25 suites, runner bootstrap, 10,000-article recovery and strict lint. Five UI methods pass, including the new extraction scenario; two existing UI methods fail. This is a failed overall Reader run: [raw summary](f-first-ci-native-2026-10-25.json), 267 passed / two failed executions.
+
+The delayed-query scenario cannot hit Unread at x=-72; the window scenario cannot hit the first window's close button. The captured native app image shows the 1200-point initial window clipped on the runner's 1024-point display, including its left sidebar/title-bar area:
+
+![Initial hosted Reader window clipped on the smaller display](f-first-ci-clipped-window-2026-10-25.png)
+
+The follow-up caps new Mac windows to the SwiftUI placement context's visible display rectangle, leaving edge space, while retaining the preferred maximum 1200×800 size and normal user restoration/resizing. It uses defaultWindowPlacement and context.defaultDisplay, following Apple's current SDK documentation; no global screen lookup or test-only geometry override is added. The UI assertions remain intact. Native build-for-testing and strict lint pass; both affected UI scenarios pass through Xcode MCP at 17-33-43, [raw summary](f-window-placement-native-2026-10-25.json). Fresh hosted revalidation on the smaller display is pending. This geometry correction requires actual native window evidence, rather than a unit test that repeats its size calculation.
+
 ## Criterion matrix
 
 | Criterion | Status | Evidence and boundary |
@@ -46,4 +56,6 @@ This is an actual application-window screenshot. Experimental NSView cache captu
 | Final platforms and accessibility | Open | iPhone/iPad, physical-device signing and broad accessibility remain deferred/unavailable. |
 | README, matrix and hosted confirmation | Open for hosted run | Reader, ReaderKit, ReaderUI and root guides, matrix, handoff and test review are updated. Local checks pass; exact-head Reader CI must still confirm this checkpoint. |
 
-F and #33/#34 remain open for their deferred criteria. Native Mac lifetime/rendering evidence is now present; previous native-gap statements describe the earlier extraction-only checkpoint. Keep separate Swift CodeQL/tracer failures visible under K and do not treat Reader test success as complete repository CI acceptance.
+F and #33/#34 remain open for their deferred criteria. Native Mac lifetime/rendering evidence is now present; previous native-gap statements describe the earlier extraction-only checkpoint.
+
+Separate [CodeQL run 40211531653, Swift job 121223603838](https://github.com/mpwg/NetNewsWire/actions/runs/40211531653/job/121223603838) fails in Autobuild with preload_tracer exit 139 before analysis. Python, JavaScript/TypeScript and Actions jobs pass. [Exact current error excerpt](f-codeql-2026-10-25.txt). K retains this failure; no check is disabled and Reader test success is not complete repository CI acceptance.
