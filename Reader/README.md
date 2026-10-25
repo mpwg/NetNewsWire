@@ -4,6 +4,8 @@ Open `Reader.xcodeproj` in this directory and select the shared Reader scheme. T
 
 ReaderTests is an unhosted Swift Testing code-test target. ReaderUITests is a small native XCTest/XCUIAutomation target. Apple's automatic scheme test plan discovers both; no generated project, scheme or test-plan script is required. Use Xcode MCP for interactive builds, tests and project changes.
 
+The shared Reader scheme launches Debug by default. Profiling and archiving use Release. Temporary Release checks must restore and save the Debug launch configuration through Xcode afterward.
+
 Every native target enables Swift 6, complete concurrency checking, Approachable Concurrency and Swift/C-family warnings as errors. ReaderKit applies the equivalent package settings to every target. Debug and Release use separate bundle IDs and storage namespaces. See the [Reader guide](../ReaderKit/README.md) for account setup, architecture and acceptance limits.
 
 The UI smoke launch uses `--ui-testing` with an isolated in-memory store. It requires no personal account. The first Mac window must appear automatically, without Command-N. Selection, search, sheets and query generations belong to each scene; repository and account services are shared.
