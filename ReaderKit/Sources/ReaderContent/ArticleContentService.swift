@@ -1,5 +1,6 @@
 import Foundation
 import JavaScriptCore
+import Synchronization
 import ReaderDomain
 
 public struct ExtractedContent: Hashable, Sendable {
@@ -24,10 +25,14 @@ public actor ArticleContentService: ArticleContentExtracting {
 
     public func extract(url: URL) async throws -> ExtractedContent {
         guard ["https", "http"].contains(url.scheme?.lowercased() ?? "") else { throw ReaderError.invalidURL }
-        let (data, response) = try await session.data(from: url)
         try Task.checkCancellation()
-        guard let response = response as? HTTPURLResponse else { throw ReaderError.invalidResponse }
-        guard (200..<300).contains(response.statusCode) else { throw ReaderError.server(response.statusCode) }
+        let download = BoundedArticleDownload(maximumBytes: 4_000_000)
+        let (data, response) = try await withTaskCancellationHandler {
+            try await withCheckedThrowingContinuation { continuation in
+                download.start(URLRequest(url: url), session: session, continuation: continuation)
+            }
+        } onCancel: { download.cancel() }
+        try Task.checkCancellation()
         guard data.count <= 4_000_000,
               let html = String(data: data, encoding: .utf8) ?? String(data: data, encoding: .isoLatin1) else {
             throw ReaderError.invalidResponse
@@ -88,5 +93,93 @@ public actor ArticleContentService: ArticleContentExtracting {
         guard !text.isEmpty else { throw ReaderError.unavailable(String(localized: "No article text was found on this page.", bundle: #bundle)) }
         try Task.checkCancellation()
         return ExtractedContent(html: result.html, text: text)
+    }
+}
+
+/// Retains at most the article byte limit and cancels only its own native request.
+private final class BoundedArticleDownload: NSObject, URLSessionDataDelegate {
+    typealias Value = (Data, HTTPURLResponse)
+    private struct State {
+        var task: URLSessionDataTask?
+        var continuation: CheckedContinuation<Value, any Error>?
+        var response: HTTPURLResponse?
+        var data = Data()
+        var error: (any Error)?
+        var cancelled = false
+    }
+    private let state = Mutex(State())
+    private let maximumBytes: Int
+
+    init(maximumBytes: Int) { self.maximumBytes = maximumBytes }
+
+    func start(_ request: URLRequest, session: URLSession, continuation: CheckedContinuation<Value, any Error>) {
+        let task = state.withLock { value -> URLSessionDataTask? in
+            guard !value.cancelled else { return nil }
+            let task = session.dataTask(with: request)
+            task.delegate = self
+            value.task = task
+            value.continuation = continuation
+            return task
+        }
+        if let task { task.resume() } else { continuation.resume(throwing: CancellationError()) }
+    }
+
+    func cancel() {
+        let task = state.withLock { value in value.cancelled = true; return value.task }
+        task?.cancel()
+    }
+
+    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse,
+                    completionHandler: @escaping @Sendable (URLSession.ResponseDisposition) -> Void) {
+        let accepted = state.withLock { value in
+            guard !value.cancelled else { return false }
+            guard let http = response as? HTTPURLResponse else {
+                value.error = ReaderError.invalidResponse
+                return false
+            }
+            guard (200..<300).contains(http.statusCode) else {
+                value.error = ReaderError.server(http.statusCode)
+                return false
+            }
+            guard http.expectedContentLength <= maximumBytes else {
+                value.error = ReaderError.invalidResponse
+                return false
+            }
+            value.response = http
+            return true
+        }
+        completionHandler(accepted ? .allow : .cancel)
+    }
+
+    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
+        let overflow = state.withLock { value in
+            guard !value.cancelled, value.error == nil else { return false }
+            guard data.count <= maximumBytes - value.data.count else {
+                value.error = ReaderError.invalidResponse
+                return true
+            }
+            value.data.append(data)
+            return false
+        }
+        if overflow { dataTask.cancel() }
+    }
+
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: (any Error)?) {
+        let completion = state.withLock { value -> (CheckedContinuation<Value, any Error>?, Result<Value, any Error>) in
+            let result: Result<Value, any Error>
+            if value.cancelled {
+                result = .failure(CancellationError())
+            } else if let failure = value.error ?? error {
+                result = .failure(failure)
+            } else if let response = value.response {
+                result = .success((value.data, response))
+            } else { result = .failure(ReaderError.invalidResponse) }
+            let continuation = value.continuation
+            value.continuation = nil
+            value.task = nil
+            value.data = Data()
+            return (continuation, result)
+        }
+        completion.0?.resume(with: completion.1)
     }
 }

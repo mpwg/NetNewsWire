@@ -1,0 +1,59 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "00006040-000A51392100801C",
+        "deviceName" : "My Mac",
+        "modelName" : "MacBook Pro",
+        "osBuildNumber" : "26A434",
+        "osVersion" : "27.0.1",
+        "platform" : "macOS"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 1,
+      "passedTests" : 36,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "Reader · Built with macOS 27.0.1",
+  "expectedFailures" : 0,
+  "failedTests" : 1,
+  "finishTime" : 1792947393.067,
+  "passedTests" : 17,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1792947385.322,
+  "statistics" : [
+    {
+      "subtitle" : "28 test runs",
+      "title" : "9 tests ran with dynamic parameters"
+    }
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "Expectation failed: try await waitUntil {\n                    (try? await reader.page.callJavaScript(\"return document.body && document.body.textContent.includes('Extracted native article');\")) as? Bool == true\n                }",
+      "targetName" : "ReaderTests",
+      "testIdentifier" : 1,
+      "testIdentifierString" : "ReaderArticleViewTests/removingHostedArticleReleasesItsGraph(outcome:)",
+      "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/ReaderArticleViewTests/removingHostedArticleReleasesItsGraph(outcome:)",
+      "testName" : "Removing the actual hosted article view ends extraction and releases its graph"
+    }
+  ],
+  "title" : "Test - Reader",
+  "topInsights" : [
+    {
+      "category" : "Longest Test Runs",
+      "impact" : "18% of duration",
+      "text" : "1 longest test run with outlier durations exceeding 4.08s (three standard deviations)"
+    }
+  ],
+  "totalTestCount" : 18
+}

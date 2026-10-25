@@ -2,7 +2,11 @@
 
 The contract tests remain useful. The original native macOS test setup and its diagnosis needed correction. The native project was created with Apple's Xcode template through Xcode MCP. Original and superseded infrastructure has now been removed on explicit owner instruction.
 
-## Current test boundaries and native F checkpoint — 2026-10-25
+## Current F streaming checkpoint — 2026-10-25
+
+Three new Swift Testing functions / seven executions prove early rejection/cancellation independently of EOF, including absent/inaccurate length headers, exact 4,000,000-byte success and graph release. Four red executions distinguish the old buffered implementation from the repaired task-specific delegate. The full local Mac plan now passes 154 code functions / 269 executions plus seven unchanged UI methods / 276 total. No new UI method tests this I/O logic. A transient native component DOM timeout is preserved; the stable host now observes session updates instead of reinstalling the root, without changing production rendering or its wait. [Streaming evidence and exact red/green results](evidence/f-streaming-2026-10-25.md). Hosted confirmation is pending.
+
+## Test boundaries and preceding native F checkpoint — 2026-10-25
 
 The owner's rule is to use Swift Testing for everything that does not require app UI automation. A test using a real framework is not automatically a UI test. Keep pure unit tests small, test service/store contracts with isolated integrations, and host native components directly when that proves their lifecycle. Reserve XCUIAutomation for actual app input, focus, windows and visible controls; do not repeat state/error matrices there.
 

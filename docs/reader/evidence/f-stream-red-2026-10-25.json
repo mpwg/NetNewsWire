@@ -1,0 +1,59 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "00006040-000A51392100801C",
+        "deviceName" : "My Mac",
+        "modelName" : "MacBook Pro",
+        "osBuildNumber" : "26A434",
+        "osVersion" : "27.0.1",
+        "platform" : "macOS"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 4,
+      "passedTests" : 1,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "Reader · Built with macOS 27.0.1",
+  "expectedFailures" : 0,
+  "failedTests" : 1,
+  "finishTime" : 1792947341.974,
+  "passedTests" : 1,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1792947336.986,
+  "statistics" : [
+    {
+      "subtitle" : "4 test runs",
+      "title" : "1 test ran with dynamic parameters"
+    }
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "Expectation failed: try await waitUntil { completed.withLock { $0 } }: Download must settle while the server's completion gate stays closed.",
+      "targetName" : "ReaderTests",
+      "testIdentifier" : 2,
+      "testIdentifierString" : "ContentStreamingTests/rejectedDownloadsEndBeforeServerCompletion(rejection:)",
+      "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/ContentStreamingTests/rejectedDownloadsEndBeforeServerCompletion(rejection:)",
+      "testName" : "Rejected headers and streamed overflow cancel before the server finishes"
+    }
+  ],
+  "title" : "Test - Reader",
+  "topInsights" : [
+    {
+      "category" : "Common Failures",
+      "impact" : "100% of failures",
+      "text" : "4 runs of 1 test failed with Expectation failed: try await waitUntil { completed.withLock { $0 } }: Download must settle while the server's completion gate stays closed."
+    }
+  ],
+  "totalTestCount" : 2
+}

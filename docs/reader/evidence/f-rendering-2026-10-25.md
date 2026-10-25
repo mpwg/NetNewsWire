@@ -1,5 +1,7 @@
 # F / #51: native WebKit and article component evidence — 2026-10-25
 
+The subsequent [bounded-download checkpoint](f-streaming-2026-10-25.md) replaces the response-buffering limit described here. It also makes the component harness observe production-like session updates, preserving the later transient DOM timeout as evidence without claiming a diagnosed rendering defect.
+
 This continues the [extraction publication checkpoint](f-extraction-2026-10-25.md) on the existing native Reader. Interactive authoring, builds and test execution use Xcode MCP. MacBook Pro arm64, macOS 27.0.1 (26A434), Xcode 27.1 / Swift 6.4, My Mac Debug. No physical-device or actual network-off result is implied.
 
 ## Test boundaries

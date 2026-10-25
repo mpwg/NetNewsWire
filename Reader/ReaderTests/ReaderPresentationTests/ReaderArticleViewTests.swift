@@ -24,7 +24,7 @@ struct ReaderArticleViewTests {
         _ = NSApplication.shared
         let fixture = try await ArticleViewFixture(outcome: outcome)
         let reader = ReaderArticleState()
-        let host = NSHostingView(rootView: AnyView(ArticleDetailView(session: fixture.session, article: fixture.article, reader: reader)))
+        let host = NSHostingView(rootView: AnyView(ArticleViewHost(session: fixture.session, reader: reader)))
         let window = NSWindow(contentRect: NSRect(x: 40, y: 40, width: 960, height: 640),
                               styleMask: [.titled, .closable], backing: .buffered, defer: false)
         window.isReleasedWhenClosed = false
@@ -62,7 +62,6 @@ struct ReaderArticleViewTests {
                 #expect(fixture.session.selection == .article(fixture.article.id))
                 let current = try #require(fixture.session.selectedArticle)
                 #expect(current.text.contains("Extracted native article"))
-                host.rootView = AnyView(ArticleDetailView(session: fixture.session, article: current, reader: reader))
                 #expect(try await waitUntil {
                     (try? await reader.page.callJavaScript("return document.body && document.body.textContent.includes('Extracted native article');")) as? Bool == true
                 })
@@ -89,6 +88,16 @@ struct ReaderArticleViewTests {
             try await Task.sleep(for: .milliseconds(10))
         }
         return true
+    }
+}
+
+private struct ArticleViewHost: View {
+    let session: ReaderSession
+    let reader: ReaderArticleState
+    var body: some View {
+        if let article = session.selectedArticle {
+            ArticleDetailView(session: session, article: article, reader: reader).id(article.id)
+        }
     }
 }
 
