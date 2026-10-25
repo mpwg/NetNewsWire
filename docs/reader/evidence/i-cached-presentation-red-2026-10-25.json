@@ -1,0 +1,64 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "00006040-000A51392100801C",
+        "deviceName" : "My Mac",
+        "modelName" : "MacBook Pro",
+        "osBuildNumber" : "26A434",
+        "osVersion" : "27.0.1",
+        "platform" : "macOS"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 10,
+      "passedTests" : 37,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "Reader · Built with macOS 27.0.1",
+  "expectedFailures" : 0,
+  "failedTests" : 1,
+  "finishTime" : 1792959753.783,
+  "passedTests" : 21,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1792959749.514,
+  "statistics" : [
+    {
+      "subtitle" : "32 test runs",
+      "title" : "7 tests ran with dynamic parameters"
+    }
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "Expectation failed: session.digests.isEmpty\nsession.digests → [ReaderDomain.DigestSnapshot(id: \"cached\", revision: 98A9DC62-F33C-4877-AC55-9256B4561390, feed: ReaderDomain.FeedKey(accountID: 9B0948CF-4775-4382-B27F-C186378F403E, remoteID: \"feed/1\"), day: 2026-10-25 20:22:33 +0000, timeZoneID: \"Europe/Vienna\", sections: [ReaderDomain.DigestSection(title: \"Summary\", text: \"Sourced content\", sources: [ReaderDomain.ArticleKey(accountID: 9B0948CF-4775-4382-B27F-C186378F403E, remoteID: \"not-stored\")])], sources: [ReaderDomain.ArticleKey(accountID: 9B0948CF-4775-4382-B27F-C186378F403E, remoteID: \"0\"), ReaderDomain.ArticleKey(accountID: 9B0948CF-4775-4382-B27F-C186378F403E, remoteID: \"1\"), ReaderDomain.ArticleKey(accountID: 9B0948CF-4775-4382-B27F-C186378F403E, remoteID: \"2\")], warning: nil, generatedAt: 2026-10-25 20:22:33 +0000, sourceFingerprint: \"\")]\nisEmpty → false",
+      "targetName" : "ReaderTests",
+      "testIdentifier" : 17,
+      "testIdentifierString" : "ReaderSessionTests/invalidCachedClaimsCannotHideOriginals(kind:sidebar:)",
+      "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/ReaderSessionTests/invalidCachedClaimsCannotHideOriginals(kind:sidebar:)",
+      "testName" : "Startup publishes valid summaries or warned originals and withholds invalid cached claims"
+    }
+  ],
+  "title" : "Test - Reader",
+  "topInsights" : [
+    {
+      "category" : "Common Failures",
+      "impact" : "100% of failures",
+      "text" : "10 runs of 1 test failed with Expectation failed: session.errorMessage != nil"
+    },
+    {
+      "category" : "Longest Test Runs",
+      "impact" : "5% of duration",
+      "text" : "1 longest test run with outlier durations exceeding 0.22s (three standard deviations)"
+    }
+  ],
+  "totalTestCount" : 22
+}

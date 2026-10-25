@@ -111,7 +111,8 @@ public final class ReaderSession {
             let nextFeeds = try await repository.feeds()
             let nextFolders = try await repository.folders()
             let nextPreferences = try await repository.preferences()
-            let nextDigests = try await repository.digests()
+            let storedDigests = try await repository.digests()
+            let nextDigests = storedDigests.filter(\.hasDisplayableContent)
             let selected = nextFeeds.first { $0.id.id == sidebarSelection }
             let folder = nextFolders.first { $0.id == sidebarSelection }
             var query = ArticleQuery(accountID: folder?.accountID, feed: selected?.id, unreadOnly: sidebarSelection == "unread",
@@ -146,6 +147,7 @@ public final class ReaderSession {
                 }
             }
             guard !Task.isCancelled, current == generation, queryID == queryIdentity else { return }
+            if nextDigests.count != storedDigests.count { errorMessage = ReaderError.invalidResponse.localizedDescription }
             accounts = nextAccounts
             feeds = nextFeeds
             folders = nextFolders

@@ -6,6 +6,46 @@ import ReaderPersistence
 
 @MainActor
 struct ReaderSessionTests {
+
+    @Test("Startup publishes valid summaries or warned originals and withholds invalid cached claims",
+          arguments: [0, 1, 2, 3, 4, 5, 6], ["all", "unread"])
+    func invalidCachedClaimsCannotHideOriginals(kind: Int, sidebar: String) async throws {
+        let (store, services, feed, articles) = try await fixture()
+        let keys = articles.map(\.id)
+        var digest = DigestSnapshot(id: "cached", feed: feed.id, day: Date(), timeZoneID: "Europe/Vienna",
+                                    sections: [DigestSection(title: "Summary", text: "Sourced content", sources: keys)], sources: keys)
+        switch kind {
+        case 1:
+            digest.sections = [DigestSection(title: "Other original articles", text: "", sources: keys)]
+            digest.warning = "Summary unavailable."
+        case 2: digest.sections[0].title = " \t"
+        case 3: digest.sections[0].text = " \n\t"
+        case 4: digest.sections[0].sources = [ArticleKey(accountID: feed.id.accountID, remoteID: "not-stored")]
+        case 5: digest.sections[0].sources = [keys[0]]
+        case 6: digest.sections = []
+        default: break
+        }
+        try await store.saveDigest(digest)
+        try await store.savePreferences(FeedPreferences(id: feed.id, mode: .digest))
+        let session = ReaderSession(services: services)
+        session.sidebarSelection = sidebar
+        await session.reload()
+        if kind <= 1 {
+            #expect(session.digests.map(\.id) == [digest.id])
+            #expect(session.rows.map(\.id) == [.digest(digest.id)])
+            #expect(session.errorMessage == nil)
+        } else {
+            #expect(session.digests.isEmpty)
+            #expect(Set(session.rows.map(\.id)) == Set(keys.map(TimelineSelection.article)))
+            #expect(session.errorMessage != nil)
+        }
+        #expect(try await store.articles(ArticleQuery(unreadOnly: true)).count == articles.count)
+        #expect(try await store.pendingChanges(accountID: feed.id.accountID).isEmpty)
+    }
+    private func summarySections(_ keys: [ArticleKey]) -> [DigestSection] {
+        [DigestSection(title: "Fixture summary", text: "Sourced fixture content", sources: keys)]
+    }
+
     private func fixture(count: Int = 3) async throws -> (ReaderStore, ReaderServices, FeedSnapshot, [ArticleSnapshot]) {
         let store = try ReaderStore(inMemory: true)
         let account = ReaderAccount(serverURL: try #require(URL(string: "https://example.test/api/greader.php")), username: "reader")
@@ -66,7 +106,7 @@ struct ReaderSessionTests {
     @Test("Opening a digest does not change original article status") func openingADigestDoesNotChangeOriginalArticleStatus() async throws {
         let (store, services, feed, articles) = try await fixture()
         let digest = DigestSnapshot(id: "day", feed: feed.id, day: Date(), timeZoneID: "Europe/Vienna",
-                                    sections: [], sources: articles.map(\.id))
+                                    sections: summarySections(articles.map(\.id)), sources: articles.map(\.id))
         try await store.saveDigest(digest)
         let session = ReaderSession(services: services)
         await session.reload()
@@ -80,7 +120,7 @@ struct ReaderSessionTests {
         let (store, services, feed, articles) = try await fixture()
         try await store.savePreferences(FeedPreferences(id: feed.id, mode: .digest))
         let digest = DigestSnapshot(id: "day", feed: feed.id, day: Date(), timeZoneID: "Europe/Vienna",
-                                    sections: [], sources: [articles[0].id])
+                                    sections: summarySections([articles[0].id]), sources: [articles[0].id])
         try await store.saveDigest(digest)
         let session = ReaderSession(services: services)
         await session.reload()
@@ -93,7 +133,7 @@ struct ReaderSessionTests {
     func sourcesOutsideTheLoadedPageRemainAccessible(changesQuery: Bool) async throws {
         let (store, services, feed, articles) = try await fixture(count: 350)
         let digest = DigestSnapshot(id: "day", feed: feed.id, day: Date(), timeZoneID: "Europe/Vienna",
-                                    sections: [], sources: articles.map(\.id))
+                                    sections: summarySections(articles.map(\.id)), sources: articles.map(\.id))
         try await store.saveDigest(digest)
         let session = ReaderSession(services: services)
         await session.reload()
@@ -121,9 +161,10 @@ struct ReaderSessionTests {
     @Test("Marking the displayed revision read leaves new sources unread") func markingTheDisplayedRevisionReadLeavesNewSourcesUnread() async throws {
         let (store, services, feed, articles) = try await fixture()
         let displayed = DigestSnapshot(id: "day", feed: feed.id, day: Date(), timeZoneID: "Europe/Vienna",
-                                       sections: [], sources: [articles[0].id])
+                                       sections: summarySections([articles[0].id]), sources: [articles[0].id])
         var updated = displayed
         updated.sources = articles.map(\.id)
+        updated.sections = summarySections(updated.sources)
         updated.revision = UUID()
         try await store.saveDigest(updated)
         let session = ReaderSession(services: services)
@@ -238,7 +279,7 @@ struct ReaderSessionTests {
         let (store, services, feed, articles) = try await fixture()
         try await store.savePreferences(FeedPreferences(id: feed.id, mode: .digest))
         let digest = DigestSnapshot(id: "day", feed: feed.id, day: Date(), timeZoneID: "Europe/Vienna",
-                                    sections: [], sources: [articles[0].id, articles[1].id])
+                                    sections: summarySections([articles[0].id, articles[1].id]), sources: [articles[0].id, articles[1].id])
         try await store.saveDigest(digest)
         let session = ReaderSession(services: services)
         session.sidebarSelection = "all"
@@ -415,7 +456,7 @@ struct ReaderSessionTests {
         let (store, services, feed, articles) = try await fixture()
         try await store.savePreferences(FeedPreferences(id: feed.id, mode: .digest))
         let original = DigestSnapshot(id: "day", feed: feed.id, day: Date(), timeZoneID: "Europe/Vienna",
-                                      sections: [], sources: [articles[0].id])
+                                      sections: summarySections([articles[0].id]), sources: [articles[0].id])
         try await store.saveDigest(original)
         let session = ReaderSession(services: services)
         session.sidebarSelection = feed.id.id
@@ -424,6 +465,7 @@ struct ReaderSessionTests {
         var updated = original
         updated.revision = UUID()
         updated.sources = articles.map(\.id)
+        updated.sections = summarySections(updated.sources)
         try await store.saveDigest(updated)
         await session.reload()
         session.timelineSelection.insert(.article(articles[1].id))
@@ -519,7 +561,7 @@ struct ReaderSessionTests {
 
     @Test("Refresh replaces the displayed digest revision only on request") func refreshReplacesTheDisplayedDigestRevisionOnlyOnRequest() async throws {
         let (store, services, feed, articles) = try await fixture()
-        let original = DigestSnapshot(id: "day", feed: feed.id, day: Date(), timeZoneID: "Europe/Vienna", sections: [], sources: [articles[0].id])
+        let original = DigestSnapshot(id: "day", feed: feed.id, day: Date(), timeZoneID: "Europe/Vienna", sections: summarySections([articles[0].id]), sources: [articles[0].id])
         try await store.saveDigest(original)
         let session = ReaderSession(services: services)
         await session.reload()
@@ -527,6 +569,7 @@ struct ReaderSessionTests {
         var updated = original
         updated.revision = UUID()
         updated.sources = articles.map(\.id)
+        updated.sections = summarySections(updated.sources)
         try await store.saveDigest(updated)
         await session.reload()
         #expect(session.selectedDigest?.revision == original.revision)
@@ -545,7 +588,7 @@ struct ReaderSessionTests {
         try await store.applyRefresh(RefreshSnapshot(accountID: feed.id.accountID, feeds: [feed, normal], folders: [], articles: input,
                                                     unreadIDs: Set(input.map(\.id.remoteID)), starredIDs: []))
         try await store.savePreferences(FeedPreferences(id: feed.id, mode: .digest))
-        try await store.saveDigest(DigestSnapshot(id: "day", feed: feed.id, day: Date(), timeZoneID: "Europe/Vienna", sections: [],
+        try await store.saveDigest(DigestSnapshot(id: "day", feed: feed.id, day: Date(), timeZoneID: "Europe/Vienna", sections: summarySections(Array(articles.dropFirst().map(\.id))),
                                                   sources: Array(articles.dropFirst().map(\.id))))
         let session = ReaderSession(services: services)
         await session.reload()

@@ -57,8 +57,7 @@ public actor DigestCoordinator {
             if let cached = existing.first(where: { $0.id == identifier }),
                Set(cached.sources) == allKeys, cached.warning == nil,
                cached.sourceFingerprint == sourceFingerprint,
-               Self.validGeneratedSections(cached.sections, sources: allKeys),
-               Set(cached.sections.flatMap(\.sources)) == allKeys {
+               cached.hasDisplayableContent {
                 result.append(cached); continue
             }
             var warnings: [String] = []
@@ -104,11 +103,7 @@ public actor DigestCoordinator {
     }
 
     private static func validGeneratedSections(_ sections: [DigestSection], sources: Set<ArticleKey>) -> Bool {
-        sections.allSatisfy { section in
-            !section.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
-            !section.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
-            !section.sources.isEmpty && section.sources.allSatisfy(sources.contains)
-        }
+        sections.allSatisfy { $0.hasValidContent(referencing: sources) }
     }
 
     private static func fingerprint(_ articles: [ArticleSnapshot]) throws -> String {

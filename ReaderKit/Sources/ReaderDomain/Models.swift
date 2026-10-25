@@ -125,6 +125,13 @@ public struct DigestSection: Hashable, Codable, Sendable {
     public var text: String
     public var sources: [ArticleKey]
     public init(title: String, text: String, sources: [ArticleKey]) { self.title = title; self.text = text; self.sources = sources }
+
+    /// Structural content and reference checks; this does not attest the model's factual accuracy.
+    public func hasValidContent(referencing sourceKeys: Set<ArticleKey>, allowingOriginalsOnly: Bool = false) -> Bool {
+        !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+        !sources.isEmpty && sources.allSatisfy(sourceKeys.contains) &&
+        (!text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || (allowingOriginalsOnly && text.isEmpty))
+    }
 }
 
 public struct DigestSnapshot: Identifiable, Hashable, Codable, Sendable {
@@ -143,6 +150,16 @@ public struct DigestSnapshot: Identifiable, Hashable, Codable, Sendable {
         self.id = id; self.revision = revision; self.feed = feed; self.day = day; self.timeZoneID = timeZoneID
         self.sections = sections; self.sources = sources; self.warning = warning; self.generatedAt = generatedAt
         self.sourceFingerprint = sourceFingerprint
+    }
+
+    /// Originals-only sections require a visible warning; every original must remain referenced.
+    public var hasDisplayableContent: Bool {
+        let sourceKeys = Set(sources)
+        guard !sourceKeys.isEmpty, sourceKeys.count == sources.count,
+              sourceKeys.allSatisfy({ $0.accountID == feed.accountID }) else { return false }
+        let allowsOriginalsOnly = warning?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
+        return sections.allSatisfy { $0.hasValidContent(referencing: sourceKeys, allowingOriginalsOnly: allowsOriginalsOnly) } &&
+            Set(sections.flatMap(\.sources)) == sourceKeys
     }
 }
 
