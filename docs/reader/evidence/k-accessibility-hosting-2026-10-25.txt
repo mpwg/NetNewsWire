@@ -1,0 +1,43 @@
+Element has no description
+This element is missing useful accessibility information.
+type=XCUIElementType(rawValue: 3)
+identifier=
+label=
+frame=(217.0, 221.0, 220.0, 800.0)
+Attributes: Group, 0x7b2ee4e440, {{217.0, 221.0}, {220.0, 800.0}}, Disabled
+Element subtree:
+ →Group, 0x7b2ee4e440, {{217.0, 221.0}, {220.0, 800.0}}, Disabled
+    StaticText, 0x7b2ee4ea80, {{282.2, 558.5}, {89.5, 73.0}}, value: Deine Feeds
+    StaticText, 0x7b2ee4e300, {{243.5, 637.5}, {167.0, 59.0}}, value: Verbinde FreshRSS,...
+    Button, 0x7b2ee4e800, {{254.0, 714.5}, {146.5, 24.0}}, identifier: 'connectFreshRSS', label: 'FreshRSS verbinden'
+    ScrollView, 0x7b2ee4ebc0, {{217.0, 273.0}, {220.0, 748.0}}, Disabled
+      Outline, 0x7b2ee4ed00, {{216.0, 272.0}, {222.0, 750.0}}, identifier: 'readerSidebar', label: 'Seitenleiste'
+        OutlineRow, 0x7b2ee4ee40, {{217.0, 273.0}, {220.0, 19.0}}, Disabled
+          Cell, 0x7b2ee4ef80, {{227.0, 273.0}, {200.0, 19.0}}, Keyboard Focused
+            Group, 0x7b2ee4f0c0, {{231.0, 273.0}, {204.0, 19.0}}, Disabled
+              StaticText, 0x7b2ee4f200, {{231.0, 275.5}, {55.0, 14.0}}, label: 'Bibliothek'
+        OutlineRow, 0x7b2ee4f340, {{217.0, 292.0}, {220.0, 32.0}}, Disabled
+          Cell, 0x7b2ee4f480, {{227.0, 292.0}, {200.0, 32.0}}, Keyboard Focused
+            Button, 0x7b2ee4f5c0, {{233.0, 300.0}, {64.5, 16.0}}, label: 'Ungelesen'
+        OutlineRow, 0x7b2ee4f700, {{217.0, 324.0}, {220.0, 32.0}}, Disabled
+          Cell, 0x7b2ee4f840, {{227.0, 324.0}, {200.0, 32.0}}, Keyboard Focused
+            Button, 0x7b2ee4f980, {{233.0, 332.0}, {65.0, 16.0}}, label: 'Alle Artikel'
+        OutlineRow, 0x7b2ee4fac0, {{217.0, 356.0}, {220.0, 32.0}}, Disabled
+          Cell, 0x7b2ee4fc00, {{227.0, 356.0}, {200.0, 32.0}}, Keyboard Focused
+            Button, 0x7b2ee4fd40, {{233.0, 364.0}, {50.5, 16.0}}, label: 'Markiert'
+        TableColumn, 0x7b2ee4fe80, {{227.0, 273.0}, {200.0, 748.0}}, identifier: 'ListColumn', Disabled
+Path to element:
+ →Application, 0x7b2ee4cf00, pid: 30305, title: 'Reader', Disabled
+  ↳Window (Main), 0x7b2ee4e940, {{217.0, 221.0}, {1200.0, 800.0}}, identifier: 'reader-AppWindow-1', title: 'Alle Artikel', Disabled
+   ↳Group, 0x7b2ee4e6c0, {{217.0, 221.0}, {1200.0, 800.0}}, label: 'Reader', Disabled
+    ↳SplitGroup, 0x7b2ee4e1c0, {{217.0, 221.0}, {1200.0, 800.0}}, identifier: 'reader-AppWindow-1, SidebarNavigationSplitView', Disabled
+     ↳Group, 0x7b2ee4e440, {{217.0, 221.0}, {220.0, 800.0}}, Disabled
+Query chain:
+ →Find: Target Application 'eu.mpwg.reader.debug'
+  Output: {
+    Application, 0x7b2e87e800, pid: 30305, title: 'Reader', Disabled
+  }
+  ↪︎Find: Descendant with identity binding to AX element pid: 30305, token: YXYAAAAAAABvY29jQAAAAAAAAAA=
+    Output: {
+      Group, 0x7b2e87ed00, {{217.0, 221.0}, {220.0, 800.0}}, Disabled
+    }

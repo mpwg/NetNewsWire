@@ -3,6 +3,9 @@ import UniformTypeIdentifiers
 import ReaderDomain
 import ReaderContent
 import ReaderSync
+#if os(macOS)
+import AppKit
+#endif
 
 public struct ReaderWindow: View {
     private let services: ReaderServices
@@ -37,6 +40,9 @@ public struct ReaderWindow: View {
             ReaderDetail(session: session)
         }
         .navigationSplitViewStyle(.balanced)
+        #if os(macOS)
+        .background { ReaderWindowAccessibility().allowsHitTesting(false).accessibilityHidden(true) }
+        #endif
         .toolbar {
             ToolbarItemGroup {
                 Button(LocalizedStringResource("Refresh", bundle: .atURL(#bundle.bundleURL)), systemImage: "arrow.clockwise") { Task { await session.refresh() } }
@@ -374,6 +380,33 @@ private struct TimelineRowView: View {
         .padding(.vertical, 5)
     }
 }
+
+#if os(macOS)
+struct ReaderWindowAccessibility: NSViewRepresentable {
+    func makeNSView(context: Context) -> NSView {
+        let anchor = ReaderWindowAccessibilityAnchor()
+        anchor.setAccessibilityElement(false)
+        return anchor
+    }
+
+    func updateNSView(_ nsView: NSView, context: Context) {
+        (nsView as? ReaderWindowAccessibilityAnchor)?.labelWindowContent()
+    }
+}
+
+private final class ReaderWindowAccessibilityAnchor: NSView {
+    override func viewDidMoveToWindow() {
+        super.viewDidMoveToWindow()
+        labelWindowContent()
+    }
+
+    func labelWindowContent() {
+        guard let content = window?.contentView, content.accessibilityLabel()?.isEmpty ?? true else { return }
+        // Name the native hosting container while preserving every SwiftUI child.
+        content.setAccessibilityLabel("Reader")
+    }
+}
+#endif
 
 struct ReaderOPMLFile: FileDocument {
     static let contentType = UTType(importedAs: "org.opml.opml", conformingTo: .xml)

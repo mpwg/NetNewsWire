@@ -1,0 +1,21 @@
+Temporary native XCTest diagnostic helper. Invoke before opening the connection form and again while it is open. Every finding remains a failure; do not use this as accepted accessibility evidence.
+
+    #if os(macOS)
+    private func auditAccessibility(of app: XCUIApplication) throws {
+        let previousContinuation = continueAfterFailure
+        continueAfterFailure = true
+        defer { continueAfterFailure = previousContinuation }
+        try app.performAccessibilityAudit(for: [.contrast, .elementDetection, .hitRegion,
+                                                 .sufficientElementDescription, .parentChild, .action]) { issue in
+            var details = "auditType=\(issue.auditType.rawValue)\n" + issue.compactDescription + "\n" + issue.detailedDescription
+            if let element = issue.element {
+                details += "\ntype=\(element.elementType)\nidentifier=\(element.identifier)\nlabel=\(element.label)\nframe=\(element.frame)\n\(element.debugDescription)"
+            }
+            let attachment = XCTAttachment(string: details)
+            attachment.name = "Native accessibility issue"
+            attachment.lifetime = .keepAlways
+            self.add(attachment)
+            return false
+        }
+    }
+    #endif

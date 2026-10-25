@@ -55,6 +55,9 @@ struct AccountConnectionView: View {
             }
         }
         .frame(idealWidth: 500, idealHeight: 440)
+        #if os(macOS)
+        .background { ReaderWindowAccessibility().allowsHitTesting(false).accessibilityHidden(true) }
+        #endif
     }
 }
 

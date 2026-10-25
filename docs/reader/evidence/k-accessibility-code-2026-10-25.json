@@ -1,0 +1,41 @@
+{
+  "activeTestPlanName": "Reader",
+  "counts": {
+    "expectedFailures": 0,
+    "failed": 0,
+    "notRun": 0,
+    "passed": 3,
+    "skipped": 0,
+    "total": 3
+  },
+  "fullConsoleLogsPath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/test-console-log-2026-10-25T23-39-49+01-00.txt",
+  "fullSummaryPath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/A7F0137C-77EC-4204-8979-2C4E7F3F2580.txt",
+  "results": [
+    {
+      "displayName": "nil",
+      "errorMessages": [],
+      "identifier": "ReaderAccessibilityTests/hostingLabelsPreserveWindowOwnership(initialLabel:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"\"",
+      "errorMessages": [],
+      "identifier": "ReaderAccessibilityTests/hostingLabelsPreserveWindowOwnership(initialLabel:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"Existing container\"",
+      "errorMessages": [],
+      "identifier": "ReaderAccessibilityTests/hostingLabelsPreserveWindowOwnership(initialLabel:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    }
+  ],
+  "schemeName": "Reader",
+  "summary": "3 tests: 3 passed, 0 failed, 0 skipped, 0 expected failures, 0 not run",
+  "totalResults": 3,
+  "truncated": false,
+  "xcresultBundlePath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/Test-Reader-2026.10.25_23-39-49-+0100.xcresult"
+}
