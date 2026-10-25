@@ -23,6 +23,32 @@ final class ReaderSmokeTests: XCTestCase {
     }
 
     #if os(macOS)
+    func testLoadedTimelineScrollingMetrics() throws {
+        let app = launchReader(arguments: ["--ui-testing-load", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"])
+        waitForValue(app.staticTexts["loadFixturePhase"], equalTo: "ready", timeout: 30)
+        waitForValue(app.staticTexts["loadFixtureCounts"], equalTo: "10000 articles · 100 feeds · 10 folders")
+        let timeline = app.outlines["readerTimeline"]
+        let first = timeline.staticTexts["Load article 0"].firstMatch
+        XCTAssertTrue(first.waitForExistence(timeout: 10))
+        XCTAssertTrue(first.wait(for: \.isHittable, toEqual: true, timeout: 5))
+        timeline.scroll(byDeltaX: 0, deltaY: -500)
+        XCTAssertFalse(first.isHittable)
+        timeline.scroll(byDeltaX: 0, deltaY: 500)
+        XCTAssertTrue(first.wait(for: \.isHittable, toEqual: true, timeout: 5))
+
+        let options = XCTMeasureOptions()
+        options.iterationCount = 5
+        measure(metrics: [XCTClockMetric(), XCTCPUMetric(application: app), XCTMemoryMetric(application: app)], options: options) {
+            timeline.scroll(byDeltaX: 0, deltaY: -500)
+            timeline.scroll(byDeltaX: 0, deltaY: 500)
+        }
+        XCTAssertTrue(first.wait(for: \.isHittable, toEqual: true, timeout: 5))
+        let attachment = XCTAttachment(screenshot: app.windows.firstMatch.screenshot())
+        attachment.name = "Native loaded timeline after measured scrolling"
+        attachment.lifetime = .keepAlways
+        add(attachment)
+    }
+
     func testOPMLExportUsesNativeSavePanel() throws {
         let app = launchReader(arguments: ["--ui-testing-timeline", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"])
         waitForValue(app.staticTexts["timelineFixturePhase"], equalTo: "ready", timeout: 10)
