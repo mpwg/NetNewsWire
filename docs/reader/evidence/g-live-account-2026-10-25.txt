@@ -1,0 +1,6 @@
+Diagnostic bundle: eu.mpwg.reader.debug
+Matching acceptance accounts: 1
+Keychain credential available: true
+Pending status changes: 0
+Fresh native refresh: 1 feeds, 10 articles
+Native thumbnail: 32x32
