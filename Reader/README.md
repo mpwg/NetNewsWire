@@ -1,6 +1,6 @@
 # Native Reader application
 
-The next Mac-only UI method uses the public XCUIVoiceOverService to capture actual current/forward/backward speech and restore the prior enabled state. Native build and strict lint pass; hosted execution is pending. This is one necessary assistive-technology interaction case, not a replacement for the full VoiceOver journey or code contracts. [Scope and current limits](../docs/reader/evidence/k-accessibility-navigation-2026-10-26.md).
+The native VoiceOver method captures actual speech and a disabled restored state, but its first hosted run fails a wrong window-name assumption; a subsequent window method loses testmanagerd connectivity. The correction explicitly focuses the native outline and requires its actual counter/timeline utterances. Native build/strict lint pass; fresh full verification is pending. This is one assistive-service case with native-click setup, not a complete VoiceOver-only journey. [Raw failures and current scope](../docs/reader/evidence/k-accessibility-navigation-2026-10-26.md).
 
 The existing scrolling method also gains app-targeted XCTHitchMetric and pre/post native window/outline CGRect attachments outside the measured interval. Native build/strict lint pass; actual samples remain pending separately from the current VoiceOver checkpoint. These diagnostics add no UI method and do not accept representative smoothness or energy from compilation.
 

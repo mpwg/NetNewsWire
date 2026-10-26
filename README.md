@@ -1,6 +1,6 @@
 # Reader
 
-A new Mac-only native VoiceOver speech/focus test is compiled through Xcode MCP using Apple's public XCUIVoiceOverService. It is not yet executed or accepted; the normal local Reader remains untouched for the pending owner journey. [Candidate scope and prerequisites](docs/reader/evidence/k-accessibility-navigation-2026-10-26.md).
+The first native VoiceOver run captures actual Reader timeline/counter utterances and restores the disabled state, but fails a wrong window-name assumption; the following window method also loses testmanagerd connectivity. A focused-outline setup and exact Reader-utterance correction compile through Xcode MCP and await fresh complete verification. The full VoiceOver journey remains open and the local Reader is untouched. [Raw failure, speech, restoration and correction](docs/reader/evidence/k-accessibility-navigation-2026-10-26.md).
 
 The next source also adds app-targeted XCTHitchMetric and native geometry attachments to the existing scrolling case. Build/strict lint pass; actual samples remain unverified. No extra UI method is added. [Measurement boundaries](docs/reader/evidence/k-load-preparation-2026-10-26.md).
 

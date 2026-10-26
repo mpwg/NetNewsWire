@@ -48,6 +48,10 @@ final class ReaderSmokeTests: XCTestCase {
         }
         XCTAssertTrue(voiceOver.isEnabled)
         let app = launchReader(arguments: ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"])
+        let timeline = app.outlines["readerTimeline"]
+        XCTAssertTrue(timeline.wait(for: \.isHittable, toEqual: true, timeout: 5))
+        XCTAssertEqual(timeline.label, "All articles")
+        timeline.click()
         let current = try voiceOver.currentSpeech().utterance
         let forward = try voiceOver.moveForward().utterance
         let backward = try voiceOver.moveBackward().utterance
@@ -58,9 +62,8 @@ final class ReaderSmokeTests: XCTestCase {
         add(journal)
         XCTAssertTrue(speech.allSatisfy { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty })
         XCTAssertGreaterThan(Set(speech).count, 1)
-        XCTAssertTrue(speech.contains { phrase in
-            ["Reader", "Library", "FreshRSS"].contains { phrase.localizedCaseInsensitiveContains($0) }
-        })
+        XCTAssertTrue(forward.contains("Entries: 0 · Loaded originals: 0"))
+        XCTAssertTrue(backward.localizedCaseInsensitiveContains("All articles"))
         let window = XCTAttachment(screenshot: app.windows.firstMatch.screenshot())
         window.name = "Native Reader during actual VoiceOver focus navigation"
         window.lifetime = .keepAlways

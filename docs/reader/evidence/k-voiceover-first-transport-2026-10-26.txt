@@ -1,0 +1,3 @@
+00:39:00.600 xcodebuild[49686:117924] Socket transport for DTX-layer communication disconnected.
+00:39:00.607 xcodebuild[49686:117924] <XCTDaemonControlSession: 0x76b1c894a0> lost connection to daemon
+00:39:00.626 xcodebuild[49686:117916] XPC connection for control was invalidated.

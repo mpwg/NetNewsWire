@@ -1,14 +1,30 @@
 # K: native navigation roles and section heading — 2026-10-26
 
-## Native VoiceOver service candidate — compiled, not yet executed
+## Native VoiceOver service — first execution failed, focused correction pending
 
 Apple's public [XCUIVoiceOverService](https://developer.apple.com/documentation/xcuiautomation/xcuivoiceoverservice) provides enable/disable, focus movement and actual [utterance output](https://developer.apple.com/documentation/xcuiautomation/xcuivoiceoverservice/output/utterance). The official documentation metadata lists macOS 27.0; a temporary type/property probe builds successfully with the installed Mac SDK through Xcode MCP at 01:24:43. The probe is replaced by one concrete Mac-only native UI method, testVoiceOverAnnouncesReaderAndMovesFocus.
 
 The method records the initial state, enables VoiceOver only when needed, launches the isolated empty Reader with English app localization, captures current/forward/backward utterances and requires nonempty, changing speech that names Reader/Library/FreshRSS. It retains the actual utterances and a window-only screenshot. It registers XCTest teardown to restore a previously disabled service, including on test failure; an explicit disabled-state assertion and retained restoration attachment check that postcondition. A restoration error is not suppressed. No AppleScript, private selector, caption-panel scraping or accessibility-label substitution is used.
 
-Xcode MCP build-for-testing at 01:26:43 and strict lint pass. Discovery reports 208 enabled tests, zero disabled. Actual service enablement, speech, focus movement and restoration are **unverified** until a hosted native run executes this new method. The full menu/library/timeline/article journey, populated-screen and full accessibility acceptance remain open regardless of this smoke result. Existing audit findings are unchanged and unfiltered.
+Xcode MCP build-for-testing at 01:26:43 and strict lint pass. Discovery reports 208 enabled tests, zero disabled. The first hosted execution is recorded below; it does not pass the full method or plan. The full menu/library/timeline/article journey, populated-screen and full accessibility acceptance remain open regardless of this smoke result. Existing audit findings are unchanged and unfiltered.
 
 The previous DeviceInteraction result remains valid only for that interface: it offers no native Mac target. That does not exclude this separate XCTest API. No local tests run or VoiceOver state changes during the pending owner journey; normal Reader PID 53387 stays alive. The existing 332d7f97d documentation-receipt CI is allowed to finish before this new source is pushed.
+
+### First actual service result at 69f14a8c3
+
+[Reader CI 40249789414](https://github.com/mpwg/NetNewsWire/actions/runs/40249789414), job 121338966189, fails. The [unaltered native summary](k-voiceover-first-ci-red-2026-10-26.json) records 403 passed executions and two failures, zero skips: all 395 code executions and eight UI methods pass; the new VoiceOver assertion fails and the following window method loses testmanagerd connectivity. Lint, runner propagation and recovery pass.
+
+The [initial state](k-voiceover-first-initial-state-2026-10-26.txt) is disabled; enablement and nonempty/changing actual speech checks pass. The [retained utterances](k-voiceover-first-speech-2026-10-26.txt) are:
+
+- Current: Finder Desktop group has keyboard focus
+- Forward: Entries: 0 · Loaded originals: 0
+- Backward: All articles empty  table
+
+The failed assumption is that those three utterances must include the proper name Reader/Library/FreshRSS. The actual forward/backward output already names the shipping Reader counter and timeline. The initial utterance still names Finder; it is not claimed as a fresh Reader announcement. [Restoration output](k-voiceover-first-restored-state-2026-10-26.txt) confirms disabled again and the explicit teardown assertion passes.
+
+The [scoped transport log](k-voiceover-first-transport-2026-10-26.txt) independently records a DTX/control-session disconnect at 00:39:00; the subsequent window method reports Lost connection to testmanagerd and the runner restarts. The cause is **unproved**. It is not suppressed, renamed as a passing test, or attributed to restoration without evidence. No exported matching crash report establishes a crash cause.
+
+The correction explicitly establishes initial keyboard focus with a native click on the hittable All articles outline, then requires VoiceOver's actual forward counter and backward timeline utterances. The click is setup, not a claim of a VoiceOver-only journey. Initial-state capture, nonempty/changing speech, registered restore/assertion and the subsequent window method remain. No deadline, tolerance, ordering, skip or expected failure is changed. Xcode MCP build-for-testing at 01:43:30 and strict lint pass; a fresh complete hosted run must prove both this method and the following window method. The same next source includes the separately compiled hitch/geometry diagnostic; neither is credited with runtime acceptance yet.
 
 ## Current result
 
