@@ -56,6 +56,7 @@ private func modelInstructions(_ request: LanguageModelExecutorGenerationRequest
 private struct CapturedModelSource: Decodable {
     let sourceNumber: Int
     let text: String
+    let articleNumbers: [Int]?
 }
 
 private func modelJSON(_ value: [String: Any]) throws -> String {
@@ -219,6 +220,7 @@ struct AppleSummaryGeneratorTests {
         #expect(requests.count == 3)
         let consolidation = try JSONDecoder().decode([CapturedModelSource].self, from: Data(modelPrompt(try #require(requests.last)).utf8))
         #expect(consolidation.count == 1)
+        #expect(consolidation.first?.articleNumbers == [0, 1])
     }
 
     @Test("Exact repeated summary sentences and sections do not duplicate the same claim", arguments: ["en_AT", "de_AT"])
@@ -421,15 +423,48 @@ struct AppleSummaryGeneratorTests {
         #expect(await journal.requests.count == 1)
     }
 
-    @Test("Consolidation cannot omit a supplied fact packet")
-    func consolidationRequiresCompleteCoverage() async throws {
-        let sources = try distinctSources(count: 2)
+    @Test("Selecting key statements cannot omit an original article", arguments: [false, true])
+    func consolidationRequiresCompleteCoverage(foreignAccount: Bool) async throws {
+        var sources = try distinctSources(count: 2)
+        if foreignAccount {
+            sources[1].id = ArticleKey(accountID: UUID(), remoteID: sources[0].id.remoteID)
+        }
         let journal = ModelRequestJournal(response: #"{"groups":[{"title":"Notes","summary":"A sourced summary.","sourceNumbers":[0]}]}"#)
         await #expect(throws: ReaderError.self) {
             try await AppleSummaryGenerator().generate(sources, model: ControlledLanguageModel(journal: journal),
                                                       capacity: 10000, count: { $0.count })
         }
         #expect(await journal.requests.count == 3)
+    }
+
+    @Test("Key-statement selection may omit a fragment but cannot borrow its price", arguments: [false, true])
+    func selectedFragmentsKeepArticleCoverageAndNumericBounds(unsupportedPrice: Bool) async throws {
+        var source = try article()
+        source.text = String(repeating: "Relevant background context. ", count: 300)
+            + String(repeating: "Other conditions cost EUR 9999. ", count: 150)
+        let journal = ModelRequestJournal(consolidation: { prompt in
+            let inputs = try JSONDecoder().decode([CapturedModelSource].self, from: Data(prompt.utf8))
+            #expect(inputs.count > 1)
+            #expect(inputs.allSatisfy { $0.articleNumbers == [0] })
+            #expect(inputs.first?.text.contains("9999") == false)
+            #expect(inputs.dropFirst().contains { $0.text.contains("9999") })
+            return try modelJSON(["groups": [[
+                "title": "Context", "summary": unsupportedPrice ? "EUR 9999." : "Relevant background context.",
+                "sourceNumbers": [0]
+            ]]])
+        })
+        let generator = AppleSummaryGenerator()
+        if unsupportedPrice {
+            await #expect(throws: ReaderError.self) {
+                try await generator.generate([source], model: ControlledLanguageModel(journal: journal),
+                                             capacity: 8000, count: { $0.count })
+            }
+        } else {
+            let result = try await generator.generate([source], model: ControlledLanguageModel(journal: journal),
+                                                      capacity: 8000, count: { $0.count })
+            #expect(result == [DigestSection(title: "Context", text: "Relevant background context.", sources: [source.id])])
+        }
+        #expect(await journal.requests.filter { modelPrompt($0).first == "{" }.count > 1)
     }
 
     @Test("Packet indices and other packets cannot justify generated prices", arguments: ["0", "10.00"])
@@ -465,11 +500,11 @@ struct AppleSummaryGeneratorTests {
             let inputs = try JSONDecoder().decode([CapturedModelSource].self, from: Data(modelPrompt(request).utf8))
             #expect((1...32).contains(inputs.count))
             let requiredLine = try #require(modelInstructions(request).components(separatedBy: "\n").first {
-                $0.hasPrefix("Required sourceNumbers: ")
+                $0.hasPrefix("Required articles: ")
             })
-            let encodedReferences = requiredLine.replacingOccurrences(of: "Required sourceNumbers: ", with: "")
+            let encodedReferences = requiredLine.replacingOccurrences(of: "Required articles: ", with: "")
             let required = try JSONDecoder().decode([Int].self, from: Data(encodedReferences.utf8))
-            #expect(required == inputs.map(\.sourceNumber))
+            #expect(required == Set(inputs.flatMap { $0.articleNumbers ?? [] }).sorted())
         }
     }
 
@@ -571,7 +606,7 @@ private actor ControlledGenerator: SummaryGenerator {
 }
 
 struct DigestTests {
-    @Test("Unchanged valid caches from source-only and first-stage policies are regenerated", arguments: ["", "reader-source-facts-consolidation-v1\n", "reader-source-facts-consolidation-v2\n"])
+    @Test("Unchanged valid caches from source-only and first-stage policies are regenerated", arguments: ["", "reader-source-facts-consolidation-v1\n", "reader-source-facts-consolidation-v2\n", "reader-source-facts-consolidation-v3\n"])
     func previousGenerationCacheIsRegenerated(policyPrefix: String) async throws {
         let (store, feed, articles) = try await fixture()
         let coordinator = DigestCoordinator(repository: store, generator: FixtureGenerator())
