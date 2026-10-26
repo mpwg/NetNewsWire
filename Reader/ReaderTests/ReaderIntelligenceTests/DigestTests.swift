@@ -204,7 +204,7 @@ struct SourceNumberReferenceTests {
     }
 
     @Test("Source namespace collisions and numbers outside the packet are rejected", arguments: [
-        "⟦readerNumber:0:0⟧", "⟦readerNumber", "EUR 9999", "29,99"
+        "⟦readerNumber:0:0⟧", "⟦readerNumber", "EUR 9999", "29,99", "⟦", "⟧"
     ])
     func sourceReferencesCannotBeForged(text: String) {
         #expect(throws: ReaderError.invalidResponse) {
@@ -214,7 +214,8 @@ struct SourceNumberReferenceTests {
     }
 
     @Test("Unknown, malformed and uncited packet references never restore", arguments: [
-        "⟦readerNumber:0:99⟧", "⟦readerNumber:0:0", "⟦readerNumber:00:0⟧", "⟦readerNumber:1:0⟧"
+        "⟦readerNumber:0:99⟧", "⟦readerNumber:0:0", "⟦readerNumber:00:0⟧", "⟦readerNumber:1:0⟧",
+        "⟦0:0⟧", "⟦readerNumber:0:0⟧⟧", "⟧"
     ])
     func invalidNumericReferencesFailClosed(text: String) throws {
         let first = try SourceNumberReferences(packetNumber: 0, text: "EUR 29.99")

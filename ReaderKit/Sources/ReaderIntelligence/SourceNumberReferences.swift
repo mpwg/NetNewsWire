@@ -3,13 +3,12 @@ import ReaderDomain
 
 /// Reader restores exact source literals; the model never supplies replacement values.
 struct SourceNumberReferences: Sendable {
-    private static let reservedStart = "⟦readerNumber"
     let packetNumber: Int
     private let literalToMarker: [String: String]
     private let markerToLiteral: [String: String]
 
     init(packetNumber: Int, text: String) throws {
-        guard packetNumber >= 0, !text.contains(Self.reservedStart) else { throw ReaderError.invalidResponse }
+        guard packetNumber >= 0, !text.contains("⟦"), !text.contains("⟧") else { throw ReaderError.invalidResponse }
         self.packetNumber = packetNumber
         var forward: [String: String] = [:]
         var reverse: [String: String] = [:]
@@ -25,7 +24,7 @@ struct SourceNumberReferences: Sendable {
     }
 
     func masked(_ text: String) throws -> String {
-        guard !text.contains(Self.reservedStart) else { throw ReaderError.invalidResponse }
+        guard !text.contains("⟦"), !text.contains("⟧") else { throw ReaderError.invalidResponse }
         var result = ""
         var cursor = text.startIndex
         for match in text.matches(of: /[0-9]+(?:[.,][0-9]+)*/) {
@@ -51,7 +50,7 @@ struct SourceNumberReferences: Sendable {
             cursor = match.range.upperBound
         }
         result += text[cursor...]
-        guard !result.contains(reservedStart) else { throw ReaderError.invalidResponse }
+        guard !result.contains("⟦"), !result.contains("⟧") else { throw ReaderError.invalidResponse }
         return result
     }
 }
