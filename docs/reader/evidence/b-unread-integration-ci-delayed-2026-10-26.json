@@ -1,0 +1,956 @@
+{
+  "testIdentifier" : "ReaderSmokeTests/testDelayedTimelineQueryKeepsInputAndFeedMenuResponsive()",
+  "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testDelayedTimelineQueryKeepsInputAndFeedMenuResponsive",
+  "testName" : "testDelayedTimelineQueryKeepsInputAndFeedMenuResponsive()",
+  "testRuns" : [
+    {
+      "activities" : [
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Screen Recording 2026-10-26 at 05.33.48 AM.mp4",
+              "payloadId" : "0~P-aUUAttpZwx_Iomrj0KIpDAMkg09g3khP2sSNGn5egqlLP5zBCUyVodeD-Dy2zK22rC6UfM_Mug-Hx2C1y-KQ==",
+              "timestamp" : 1792989228.433,
+              "uuid" : "74489936-CD4C-4BC0-ABFD-3C70983308CB"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989228.433,
+              "title" : "kXCTAttachmentScreenRecording"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792989228.357,
+          "title" : "Start Test at 2026-10-26 04:33:48.357"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792989228.455,
+          "title" : "Set Up"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989228.47,
+                  "title" : "Terminate eu.mpwg.reader.debug:32923"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989230.318,
+                  "title" : "Wait for accessibility to load"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989231.027,
+                  "title" : "Setting up automation session"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989231.048,
+                  "title" : "Wait for eu.mpwg.reader.debug to idle"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989228.469,
+              "title" : "Launch eu.mpwg.reader.debug"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792989228.46,
+          "title" : "Open eu.mpwg.reader.debug"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989232.057,
+                  "title" : "Checking existence of `Window (First Match)`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989232.056,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object Window (First Match)`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792989231.052,
+          "title" : "Waiting 10.0s for Window (First Match) to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792989232.081,
+          "title" : "Get number of matches for: Descendants matching type Window"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792989233.585,
+          "title" : "Get number of matches for: Descendants matching type Window"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "XCUITest window setup_0_4B000EE1-9BF8-43BE-B6D4-8CF3897E0D66.txt",
+              "payloadId" : "0~pQADtM1fsLg5gLb30CxAjOi1j7lLpKoLChkIOkUw2RbN-PNhdhqTHpzNnHuMDuKXkC02IhsreRiXBJU5XYK30g==",
+              "timestamp" : 1792989234.693,
+              "uuid" : "B238D660-AC10-4E14-977D-3C61A69802D9"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989234.693,
+              "title" : "XCUITest window setup"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792989234.693,
+          "title" : "Added attachment named 'XCUITest window setup'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989235.699,
+              "title" : "Find the \"timelineFixturePhase\" StaticText"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792989235.699,
+          "title" : "Checking `Expect predicate `value == \"ready\"` for object \"timelineFixturePhase\" StaticText`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989238.006,
+                  "title" : "Checking existence of `\"Timeline article 299\" StaticText`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989238.005,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Timeline article 299\" StaticText`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792989236.981,
+          "title" : "Waiting 10.0s for \"Timeline article 299\" StaticText to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Synthesized Event 2026-10-26 at 05.33.58 AM",
+              "payloadId" : "0~Fo4ooK1QBA0GoQN1GAPnegALPAhYq-kdlZcF4upOEWpcr2Q2-xt9eoXzseMjWdkCdyfw0Py5k6M6GliOmwr0YQ==",
+              "timestamp" : 1792989238.837,
+              "uuid" : "6CB2EC18-A58D-4331-9334-AB4232289728"
+            }
+          ],
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989238.091,
+              "title" : "Wait for eu.mpwg.reader.debug to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989238.093,
+              "title" : "Find the \"Timeline article 299\" StaticText"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989238.166,
+              "title" : "Check for interrupting elements affecting \"Timeline article 299\" StaticText"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "attachments" : [
+                {
+                  "lifetime" : "deleteOnSuccess",
+                  "name" : "Synthesized Event 2026-10-26 at 05.33.58 AM",
+                  "payloadId" : "0~Fo4ooK1QBA0GoQN1GAPnegALPAhYq-kdlZcF4upOEWpcr2Q2-xt9eoXzseMjWdkCdyfw0Py5k6M6GliOmwr0YQ==",
+                  "timestamp" : 1792989238.837,
+                  "uuid" : "6CB2EC18-A58D-4331-9334-AB4232289728"
+                }
+              ],
+              "childActivities" : [
+                {
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989238.837,
+                  "title" : "kXCTAttachmentLegacySynthesizedEvent"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989238.189,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989238.837,
+              "title" : "Wait for eu.mpwg.reader.debug to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792989238.091,
+          "title" : "Click \"Timeline article 299\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Synthesized Event 2026-10-26 at 05.34.00 AM",
+              "payloadId" : "0~jSSzo224rPhypXM8bTgtCguGM-denSXlp9j5IIyTw8yILFKDuzFdcb334LkKi7mLZ8B53CZGp6u8H5NmGOUqKg==",
+              "timestamp" : 1792989240.442,
+              "uuid" : "C9D4233F-B8D9-46D2-BE3E-FD6A83E89539"
+            }
+          ],
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989238.844,
+              "title" : "Wait for eu.mpwg.reader.debug to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989238.95,
+              "title" : "Find the \"holdTimelineQueries\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989239.947,
+              "title" : "Check for interrupting elements affecting \"holdTimelineQueries\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "attachments" : [
+                {
+                  "lifetime" : "deleteOnSuccess",
+                  "name" : "Synthesized Event 2026-10-26 at 05.34.00 AM",
+                  "payloadId" : "0~jSSzo224rPhypXM8bTgtCguGM-denSXlp9j5IIyTw8yILFKDuzFdcb334LkKi7mLZ8B53CZGp6u8H5NmGOUqKg==",
+                  "timestamp" : 1792989240.442,
+                  "uuid" : "C9D4233F-B8D9-46D2-BE3E-FD6A83E89539"
+                }
+              ],
+              "childActivities" : [
+                {
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989240.442,
+                  "title" : "kXCTAttachmentLegacySynthesizedEvent"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989239.989,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989240.443,
+              "title" : "Wait for eu.mpwg.reader.debug to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792989238.844,
+          "title" : "Click \"holdTimelineQueries\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Synthesized Event 2026-10-26 at 05.34.02 AM",
+              "payloadId" : "0~NO6rnaPzCyj1Zmmt9UvgRLL4DI8Az2nsnAh8Dm3Aw0EEnIbfigYeDXhbzVXOrqyfZXjeJo5DlzcKKrdgqoJ25Q==",
+              "timestamp" : 1792989242.094,
+              "uuid" : "CA4F1546-0C62-4D1A-94D0-9BE9D9F5F614"
+            }
+          ],
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989240.445,
+              "title" : "Wait for eu.mpwg.reader.debug to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989240.446,
+              "title" : "Find the \"Timeline fixture\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989241.563,
+              "title" : "Check for interrupting elements affecting \"feedRow-955566D2-6260-4525-872F-6B0FEAC38460/timeline\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "attachments" : [
+                {
+                  "lifetime" : "deleteOnSuccess",
+                  "name" : "Synthesized Event 2026-10-26 at 05.34.02 AM",
+                  "payloadId" : "0~NO6rnaPzCyj1Zmmt9UvgRLL4DI8Az2nsnAh8Dm3Aw0EEnIbfigYeDXhbzVXOrqyfZXjeJo5DlzcKKrdgqoJ25Q==",
+                  "timestamp" : 1792989242.094,
+                  "uuid" : "CA4F1546-0C62-4D1A-94D0-9BE9D9F5F614"
+                }
+              ],
+              "childActivities" : [
+                {
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989242.094,
+                  "title" : "kXCTAttachmentLegacySynthesizedEvent"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989241.593,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989242.094,
+              "title" : "Wait for eu.mpwg.reader.debug to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792989240.445,
+          "title" : "Click \"Timeline fixture\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Debug description for `\"timelineHeldQueries\" StaticText`_0_74607386-DD55-49B2-817D-5B8224CEDBDC.txt",
+              "payloadId" : "0~9Rv-T_5maw39Hvgu_KushczSBJlmJCEOEFSr1LqWrgW6xmpy_0kcTG3E7HTt3F0xRgvnK-e4y5KUJpGSeXLa8A==",
+              "timestamp" : 1792989246.262,
+              "uuid" : "49B71F8A-46F9-457F-98F6-635828F3B59D"
+            },
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "UI Snapshot 2026-10-26 at 05.34.06 AM",
+              "payloadId" : "0~9yseZU6YxVydpdHNFnLF1Tfc15SQcZ_fUAPY-JNtmNaV4h8Uh1bjSyZM_nE2w1MR9ECYjYXNmmeOGNGH4FToUw==",
+              "timestamp" : 1792989246.263,
+              "uuid" : "E75D2604-50A6-40B3-8C0D-0CEE51105C5A"
+            }
+          ],
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989243.114,
+              "title" : "Find the \"timelineHeldQueries\" StaticText"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989244.562,
+                  "title" : "Requesting snapshot of accessibility hierarchy for app with pid 33307"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989245.44,
+                  "title" : "Find: Descendants matching type StaticText"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989245.448,
+                  "title" : "Find: Elements matching predicate '\"timelineHeldQueries\" IN identifiers'"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "childActivities" : [
+                    {
+                      "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                      "isAssociatedWithFailure" : false,
+                      "startTime" : 1792989245.471,
+                      "title" : "Using snapshot previously cached by application"
+                    }
+                  ],
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989245.47,
+                  "title" : "Requesting snapshot of accessibility hierarchy for app with pid 33307"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989245.471,
+                  "title" : "Find: Descendants matching type StaticText"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "childActivities" : [
+                    {
+                      "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                      "isAssociatedWithFailure" : false,
+                      "startTime" : 1792989245.498,
+                      "title" : "Using snapshot previously cached by application"
+                    }
+                  ],
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989245.497,
+                  "title" : "Requesting snapshot of accessibility hierarchy for app with pid 33307"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989244.53,
+              "title" : "Capturing element debug description"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989246.262,
+              "title" : "Debug description for `\"timelineHeldQueries\" StaticText`"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989246.263,
+              "title" : "kXCTAttachmentLegacySnapshot"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792989243.113,
+          "title" : "Checking `Expect predicate `BLOCKPREDICATE(0x7ae565f6f0)` for object \"timelineHeldQueries\" StaticText`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Debug description for `\"timelineHeldQueries\" StaticText`_0_E60368AD-C428-450A-80E4-C0F90F53790C.txt",
+              "payloadId" : "0~064I9peDHFPOCoa-B60hcROwyMMglqu6jPI6pod23t6i6toP7_4Wh0C9L1YEovNMFpaKY4dNs9aD7DUShSsgZw==",
+              "timestamp" : 1792989249.756,
+              "uuid" : "513F02BC-208D-4CB5-81D7-8AA46C35D3E5"
+            },
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "UI Snapshot 2026-10-26 at 05.34.09 AM",
+              "payloadId" : "0~9yseZU6YxVydpdHNFnLF1Tfc15SQcZ_fUAPY-JNtmNaV4h8Uh1bjSyZM_nE2w1MR9ECYjYXNmmeOGNGH4FToUw==",
+              "timestamp" : 1792989249.757,
+              "uuid" : "6E2C30C2-91A9-49CF-BD73-963E023543C4"
+            }
+          ],
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989247.196,
+              "title" : "Find the \"timelineHeldQueries\" StaticText"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989248.124,
+                  "title" : "Requesting snapshot of accessibility hierarchy for app with pid 33307"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989248.906,
+                  "title" : "Find: Descendants matching type StaticText"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989248.914,
+                  "title" : "Find: Elements matching predicate '\"timelineHeldQueries\" IN identifiers'"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "childActivities" : [
+                    {
+                      "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                      "isAssociatedWithFailure" : false,
+                      "startTime" : 1792989248.934,
+                      "title" : "Using snapshot previously cached by application"
+                    }
+                  ],
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989248.934,
+                  "title" : "Requesting snapshot of accessibility hierarchy for app with pid 33307"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989248.935,
+                  "title" : "Find: Descendants matching type StaticText"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "childActivities" : [
+                    {
+                      "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                      "isAssociatedWithFailure" : false,
+                      "startTime" : 1792989248.961,
+                      "title" : "Using snapshot previously cached by application"
+                    }
+                  ],
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989248.96,
+                  "title" : "Requesting snapshot of accessibility hierarchy for app with pid 33307"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989248.097,
+              "title" : "Capturing element debug description"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989249.756,
+              "title" : "Debug description for `\"timelineHeldQueries\" StaticText`"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989249.757,
+              "title" : "kXCTAttachmentLegacySnapshot"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792989247.194,
+          "title" : "Checking `Expect predicate `BLOCKPREDICATE(0x7ae565f6f0)` for object \"timelineHeldQueries\" StaticText`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Debug description for `\"timelineHeldQueries\" StaticText`_0_7C8DA596-4755-4946-A367-8FB80644ED11.txt",
+              "payloadId" : "0~dMGx2d5lfPNEGS3eh8S3b7Gx74ux0N4A0obKREy1CD3ebxQx2Y2qk3ws02pxfOddH1Ejgk88KU4f_D3hxpN_Kg==",
+              "timestamp" : 1792989253.136,
+              "uuid" : "97B1447C-1E29-4E1E-83D9-76E93A61DD92"
+            },
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "UI Snapshot 2026-10-26 at 05.34.13 AM",
+              "payloadId" : "0~9yseZU6YxVydpdHNFnLF1Tfc15SQcZ_fUAPY-JNtmNaV4h8Uh1bjSyZM_nE2w1MR9ECYjYXNmmeOGNGH4FToUw==",
+              "timestamp" : 1792989253.137,
+              "uuid" : "33841636-ADBD-4102-96DB-A7692BE93972"
+            }
+          ],
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989250.155,
+              "title" : "Find the \"timelineHeldQueries\" StaticText"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989251.271,
+                  "title" : "Requesting snapshot of accessibility hierarchy for app with pid 33307"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989252.236,
+                  "title" : "Find: Descendants matching type StaticText"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989252.244,
+                  "title" : "Find: Elements matching predicate '\"timelineHeldQueries\" IN identifiers'"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "childActivities" : [
+                    {
+                      "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                      "isAssociatedWithFailure" : false,
+                      "startTime" : 1792989252.265,
+                      "title" : "Using snapshot previously cached by application"
+                    }
+                  ],
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989252.264,
+                  "title" : "Requesting snapshot of accessibility hierarchy for app with pid 33307"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989252.265,
+                  "title" : "Find: Descendants matching type StaticText"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "childActivities" : [
+                    {
+                      "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                      "isAssociatedWithFailure" : false,
+                      "startTime" : 1792989252.292,
+                      "title" : "Using snapshot previously cached by application"
+                    }
+                  ],
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989252.291,
+                  "title" : "Requesting snapshot of accessibility hierarchy for app with pid 33307"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989251.243,
+              "title" : "Capturing element debug description"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989253.136,
+              "title" : "Debug description for `\"timelineHeldQueries\" StaticText`"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989253.137,
+              "title" : "kXCTAttachmentLegacySnapshot"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792989250.154,
+          "title" : "Checking `Expect predicate `BLOCKPREDICATE(0x7ae565f6f0)` for object \"timelineHeldQueries\" StaticText`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Debug description for `\"timelineHeldQueries\" StaticText`_0_F0324EA7-A5FB-4034-87D3-23996EED67CA.txt",
+              "payloadId" : "0~FodVejFPll8ZgZ4QJ_FI7IvcSngpSLpFvwEeJOJC0ARdh0I8-eeNjKVhJ3jUhnBdhafl_UWUOp2MQ1ycnUhH-w==",
+              "timestamp" : 1792989257.011,
+              "uuid" : "C022AB28-E9F4-465A-A054-00AF37D4C070"
+            },
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "UI Snapshot 2026-10-26 at 05.34.17 AM",
+              "payloadId" : "0~9yseZU6YxVydpdHNFnLF1Tfc15SQcZ_fUAPY-JNtmNaV4h8Uh1bjSyZM_nE2w1MR9ECYjYXNmmeOGNGH4FToUw==",
+              "timestamp" : 1792989257.011,
+              "uuid" : "0988777D-C526-4FE9-81D4-996E68EFD4C7"
+            }
+          ],
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989254.122,
+              "title" : "Find the \"timelineHeldQueries\" StaticText"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989255.36,
+                  "title" : "Requesting snapshot of accessibility hierarchy for app with pid 33307"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989256.204,
+                  "title" : "Find: Descendants matching type StaticText"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989256.212,
+                  "title" : "Find: Elements matching predicate '\"timelineHeldQueries\" IN identifiers'"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "childActivities" : [
+                    {
+                      "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                      "isAssociatedWithFailure" : false,
+                      "startTime" : 1792989256.232,
+                      "title" : "Using snapshot previously cached by application"
+                    }
+                  ],
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989256.231,
+                  "title" : "Requesting snapshot of accessibility hierarchy for app with pid 33307"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989256.233,
+                  "title" : "Find: Descendants matching type StaticText"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "childActivities" : [
+                    {
+                      "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                      "isAssociatedWithFailure" : false,
+                      "startTime" : 1792989256.258,
+                      "title" : "Using snapshot previously cached by application"
+                    }
+                  ],
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989256.258,
+                  "title" : "Requesting snapshot of accessibility hierarchy for app with pid 33307"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989255.333,
+              "title" : "Capturing element debug description"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989257.011,
+              "title" : "Debug description for `\"timelineHeldQueries\" StaticText`"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989257.011,
+              "title" : "kXCTAttachmentLegacySnapshot"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792989254.12,
+          "title" : "Checking `Expect predicate `BLOCKPREDICATE(0x7ae565f6f0)` for object \"timelineHeldQueries\" StaticText`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Debug description for `\"timelineHeldQueries\" StaticText`_0_82DE03ED-1613-4B80-ADB5-7BC73477CB71.txt",
+              "payloadId" : "0~av8CzCnRVzNUE8BMmuqVg5Vaf4qP0t-MD1K8JqlqpmMWbIyceBn9kIMWpUBMQi0RGwrScLuy41OOAjL6fVmvCg==",
+              "timestamp" : 1792989259.665,
+              "uuid" : "39C59927-898F-4379-985D-88FC389E7A8A"
+            },
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "UI Snapshot 2026-10-26 at 05.34.19 AM",
+              "payloadId" : "0~9yseZU6YxVydpdHNFnLF1Tfc15SQcZ_fUAPY-JNtmNaV4h8Uh1bjSyZM_nE2w1MR9ECYjYXNmmeOGNGH4FToUw==",
+              "timestamp" : 1792989259.665,
+              "uuid" : "763ACB0D-190B-4D1F-81E9-9A333254CCD5"
+            }
+          ],
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989257.122,
+              "title" : "Find the \"timelineHeldQueries\" StaticText"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989258.044,
+                  "title" : "Requesting snapshot of accessibility hierarchy for app with pid 33307"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989258.806,
+                  "title" : "Find: Descendants matching type StaticText"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989258.814,
+                  "title" : "Find: Elements matching predicate '\"timelineHeldQueries\" IN identifiers'"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "childActivities" : [
+                    {
+                      "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                      "isAssociatedWithFailure" : false,
+                      "startTime" : 1792989258.834,
+                      "title" : "Using snapshot previously cached by application"
+                    }
+                  ],
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989258.833,
+                  "title" : "Requesting snapshot of accessibility hierarchy for app with pid 33307"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989258.835,
+                  "title" : "Find: Descendants matching type StaticText"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "childActivities" : [
+                    {
+                      "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                      "isAssociatedWithFailure" : false,
+                      "startTime" : 1792989258.863,
+                      "title" : "Using snapshot previously cached by application"
+                    }
+                  ],
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989258.863,
+                  "title" : "Requesting snapshot of accessibility hierarchy for app with pid 33307"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989258.017,
+              "title" : "Capturing element debug description"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989259.665,
+              "title" : "Debug description for `\"timelineHeldQueries\" StaticText`"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989259.665,
+              "title" : "kXCTAttachmentLegacySnapshot"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792989257.121,
+          "title" : "Checking `Expect predicate `BLOCKPREDICATE(0x7ae565f6f0)` for object \"timelineHeldQueries\" StaticText`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Debug description for `\"timelineHeldQueries\" StaticText`_0_877C8B2A-B63A-4C89-A90B-A381ADB63E7A.txt",
+              "payloadId" : "0~qUPb0VGDaY_9KxA9kfeWWkuydzsS15khQbX5pCM86i2VGg-SvG2DiBKYaRbq38K8TlLfFVMOJGOLWsVQMi6MsA==",
+              "timestamp" : 1792989262.362,
+              "uuid" : "BFD31580-634E-4114-B624-A423BF1B3A5E"
+            },
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "UI Snapshot 2026-10-26 at 05.34.22 AM",
+              "payloadId" : "0~9yseZU6YxVydpdHNFnLF1Tfc15SQcZ_fUAPY-JNtmNaV4h8Uh1bjSyZM_nE2w1MR9ECYjYXNmmeOGNGH4FToUw==",
+              "timestamp" : 1792989262.362,
+              "uuid" : "3F283ADC-7FE0-46F1-A646-5BE7D6A37E92"
+            }
+          ],
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989260.099,
+              "title" : "Find the \"timelineHeldQueries\" StaticText"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989261.329,
+                  "title" : "Requesting snapshot of accessibility hierarchy for app with pid 33307"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989262.353,
+                  "title" : "Requesting snapshot of accessibility hierarchy for app with pid 33307"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792989262.358,
+                  "title" : "Requesting snapshot of accessibility hierarchy for app with pid 33307"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989261.301,
+              "title" : "Capturing element debug description"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989262.362,
+              "title" : "Debug description for `\"timelineHeldQueries\" StaticText`"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792989262.362,
+              "title" : "kXCTAttachmentLegacySnapshot"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792989260.098,
+          "title" : "Checking `Expect predicate `BLOCKPREDICATE(0x7ae565f6f0)` for object \"timelineHeldQueries\" StaticText`"
+        },
+        {
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "title" : ""
+            }
+          ],
+          "isAssociatedWithFailure" : true,
+          "startTime" : 1792989262.364,
+          "title" : "XCTAssertEqual failed: (\"XCTWaiterResult(rawValue: 2)\") is not equal to (\"XCTWaiterResult(rawValue: 1)\")"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792989262.696,
+          "title" : "Tear Down"
+        }
+      ],
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "fdaaf6416459220d9641a3b4082fc13fab99303a",
+        "deviceName" : "My Mac",
+        "modelName" : "Virtual Machine",
+        "osBuildNumber" : "26A434",
+        "osVersion" : "27.0.1",
+        "platform" : "macOS"
+      },
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ]
+}

@@ -375,14 +375,18 @@ final class ReaderSmokeTests: XCTestCase {
                        file: file, line: line)
     }
 
-    private func waitForPositiveValue(_ element: XCUIElement, timeout: TimeInterval = 20) {
-        waitForValueGreaterThan(element, baseline: 0, timeout: timeout)
+    private func waitForPositiveValue(_ element: XCUIElement, timeout: TimeInterval = 20,
+                                      file: StaticString = #filePath, line: UInt = #line) {
+        waitForValueGreaterThan(element, baseline: 0, timeout: timeout, file: file, line: line)
     }
 
-    private func waitForValueGreaterThan(_ element: XCUIElement, baseline: Int, timeout: TimeInterval = 5) {
+    private func waitForValueGreaterThan(_ element: XCUIElement, baseline: Int, timeout: TimeInterval = 5,
+                                         file: StaticString = #filePath, line: UInt = #line) {
         let predicate = NSPredicate { _, _ in (Int(element.value as? String ?? "") ?? -1) > baseline }
         let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
-        XCTAssertEqual(XCTWaiter.wait(for: [expectation], timeout: timeout), .completed)
+        XCTAssertEqual(XCTWaiter.wait(for: [expectation], timeout: timeout), .completed,
+                       "Expected value greater than \(baseline); observed \(element.exists ? String(describing: element.value) : "unavailable element")",
+                       file: file, line: line)
     }
 
     func testArticleRemovalCancelsExtractionAndBlockedPageKeepsSavedContent() throws {

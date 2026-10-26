@@ -165,11 +165,12 @@ private struct ReaderSidebar: View {
     var body: some View {
         List(selection: $session.sidebarSelection) {
             Section {
-                NavigationLink(LocalizedStringResource("Unread", bundle: .atURL(#bundle.bundleURL)), value: "unread").tag("unread")
+                NavigationLink(LocalizedStringResource("Unread", bundle: .atURL(#bundle.bundleURL)), value: "unread")
                     .accessibilityAddTraits(.isButton)
                     .accessibilityIdentifier("readerUnread")
                     .badge(session.unreadCounts.total)
                     .accessibilityValue(unreadValue(session.unreadCounts.total))
+                    .tag("unread")
                 NavigationLink(LocalizedStringResource("All articles", bundle: .atURL(#bundle.bundleURL)), value: "all").tag("all")
                     .accessibilityAddTraits(.isButton)
                     .accessibilityIdentifier("readerAllArticles")
@@ -250,7 +251,6 @@ private struct ReaderSidebar: View {
                 }
             }
         }
-            .tag(feed.id.id)
             .badge(session.unreadCounts.byFeed[feed.id, default: 0])
             .accessibilityValue(unreadValue(session.unreadCounts.byFeed[feed.id, default: 0]))
             .accessibilityAddTraits(.isButton)
@@ -263,6 +263,7 @@ private struct ReaderSidebar: View {
                 Button(LocalizedStringResource("Feed settings", bundle: .atURL(#bundle.bundleURL)), systemImage: "slider.horizontal.3") { edit(feed) }
                 Button(LocalizedStringResource("Unsubscribe", bundle: .atURL(#bundle.bundleURL)), systemImage: "minus.circle", role: .destructive) { remove(feed) }
             }
+            .tag(feed.id.id)
     }
 }
 

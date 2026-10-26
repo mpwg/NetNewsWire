@@ -1,0 +1,92 @@
+[
+  {
+    "children": [
+      {
+        "duration": "0,00017s",
+        "durationInSeconds": 0.00017213821411132812,
+        "name": "false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/IdentityTests/unreadCountsPreserveAccountAndFolderIdentity(includesCounts:)?args=fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,000084s",
+        "durationInSeconds": 0.00008368492126464844,
+        "name": "true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/IdentityTests/unreadCountsPreserveAccountAndFolderIdentity(includesCounts:)?args=b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "0,00013s",
+    "durationInSeconds": 0.00012791156768798828,
+    "name": "Hierarchical counts deduplicate memberships and retain orphan originals",
+    "nodeIdentifier": "IdentityTests/unreadCountsPreserveAccountAndFolderIdentity(includesCounts:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/IdentityTests/unreadCountsPreserveAccountAndFolderIdentity(includesCounts:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "children": [
+      {
+        "duration": "0,12s",
+        "durationInSeconds": 0.11972999572753906,
+        "name": "false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderSessionTests/unreadCountsFollowCommittedDeletion(searchHasNoResults:)?args=fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,11s",
+        "durationInSeconds": 0.11285114288330078,
+        "name": "true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderSessionTests/unreadCountsFollowCommittedDeletion(searchHasNoResults:)?args=b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "0,12s",
+    "durationInSeconds": 0.11629056930541992,
+    "name": "Unread totals remain complete across pages, search, accounts and pure deletion",
+    "nodeIdentifier": "ReaderSessionTests/unreadCountsFollowCommittedDeletion(searchHasNoResults:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderSessionTests/unreadCountsFollowCommittedDeletion(searchHasNoResults:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "children": [
+      {
+        "duration": "0,099s",
+        "durationInSeconds": 0.0994260311126709,
+        "name": "false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderSessionTests/unreadCountsRejectMixedRevisions(failingRead:)?args=fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,13s",
+        "durationInSeconds": 0.12526297569274902,
+        "name": "true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderSessionTests/unreadCountsRejectMixedRevisions(failingRead:)?args=b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "0,11s",
+    "durationInSeconds": 0.11234450340270996,
+    "name": "A commit during a count read cannot publish mixed data or an obsolete error",
+    "nodeIdentifier": "ReaderSessionTests/unreadCountsRejectMixedRevisions(failingRead:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderSessionTests/unreadCountsRejectMixedRevisions(failingRead:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "0,17s",
+    "durationInSeconds": 0.16544198989868164,
+    "name": "Committed deletion automatically refreshes timeline and complete counters",
+    "nodeIdentifier": "ReaderSessionTests/observedDeletionRefreshesTimelineAndCounts()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderSessionTests/observedDeletionRefreshesTimelineAndCounts()",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  }
+]

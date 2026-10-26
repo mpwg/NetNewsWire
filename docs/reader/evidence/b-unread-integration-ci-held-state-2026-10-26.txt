@@ -1,0 +1,12 @@
+Attributes: StaticText, 0x7ae4aad400, {{652.5, 654.5}, {7.0, 13.0}}, identifier: 'timelineHeldQueries', value: 0
+Element subtree:
+ →StaticText, 0x7ae4aad400, {{652.5, 654.5}, {7.0, 13.0}}, identifier: 'timelineHeldQueries', value: 0
+Path to element:
+ →Application, 0x7ae4aacb40, pid: 33307, title: 'Reader'
+  ↳Window (Main), 0x7ae4aacc80, {{24.0, 55.0}, {976.0, 626.0}}, identifier: 'reader-AppWindow-1', title: 'All articles'
+   ↳Group, 0x7ae4aacdc0, {{24.0, 55.0}, {976.0, 626.0}}, label: 'Reader'
+    ↳StaticText, 0x7ae4aad400, {{652.5, 654.5}, {7.0, 13.0}}, identifier: 'timelineHeldQueries', value: 0
+Query chain:
+ →Find: Target Application 'eu.mpwg.reader.debug'
+  ↪︎Find: Descendants matching type StaticText
+    ↪︎Find: Elements matching predicate '"timelineHeldQueries" IN identifiers'

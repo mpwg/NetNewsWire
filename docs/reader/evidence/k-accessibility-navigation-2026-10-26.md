@@ -1,5 +1,7 @@
 # K: native navigation roles and section heading — 2026-10-26
 
+Latest integration result: Reader CI 40269389260 at ffe3c2442 passes all 414 code executions and eight native methods, but fails delayed feed-query entry and VoiceOver title traversal. VoiceOver entry clips the first title; twenty forward outputs repeat the timeline footer. Initially disabled mode is restored to disabled; no matching native crash report is collected. This is not evidence of an engine/service repair or a demonstrated cause. [Original summary, state attachments and scope](b-unread-counts-2026-10-26.md#integration-result-and-native-regression). The pending selection-tag candidate keeps the VoiceOver expectations and deadlines unchanged and needs fresh runtime proof.
+
 ## Corrected complete-title case passes at 43829790a
 
 [Reader CI 40265223444](https://github.com/mpwg/NetNewsWire/actions/runs/40265223444) passes **412 executions (402 code and ten native UI)**, 209 distinct tests, zero failures/skips and one deliberate model-guardrail warning. [Unaltered full summary](b-canonical-ci-summary-2026-10-26.json). The extra code cases concern mapped identity audit #29; the native UI suite remains ten methods.
