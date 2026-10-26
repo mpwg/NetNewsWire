@@ -1,0 +1,20 @@
+[
+  {
+    "duration": "0,48s",
+    "durationInSeconds": 0.47769713401794434,
+    "name": "Unread totals include every page and preserve account isolation",
+    "nodeIdentifier": "ReaderStoreTests/unreadCountsStayCompleteAcrossPagesAndAccounts()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderStoreTests/unreadCountsStayCompleteAcrossPagesAndAccounts()",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "0,0047s",
+    "durationInSeconds": 0.0046961307525634766,
+    "name": "Cancelled unread-count queries preserve the store",
+    "nodeIdentifier": "ReaderStoreTests/cancelledUnreadCountQueriesDoNotMutateState()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderStoreTests/cancelledUnreadCountQueriesDoNotMutateState()",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  }
+]

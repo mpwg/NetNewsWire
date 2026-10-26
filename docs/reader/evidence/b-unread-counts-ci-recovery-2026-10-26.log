@@ -1,0 +1,4 @@
+CoreData: debug: WAL checkpoint: Database did checkpoint. Log size: 1526 checkpointed: 1526
+Recovered complete unread count: 9999.
+Unread count before pure deletion: 1.
+Recovery passed: 10000 articles, exact outbox, rollback and deletion-only refreshes.
