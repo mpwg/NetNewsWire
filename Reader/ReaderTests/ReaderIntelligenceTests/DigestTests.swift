@@ -98,7 +98,14 @@ private actor ModelRequestJournal {
                 defer { nextFact += 1 }
                 return factResponses[nextFact]
             }
-            return try modelJSON(["excerpts": [String(source.text.prefix(128))]])
+            let prefix = String(source.text.prefix(128))
+            let excerpt: String
+            if source.text.count > 128, let boundary = prefix.lastIndex(where: \.isWhitespace) {
+                excerpt = String(prefix[..<boundary]).trimmingCharacters(in: .whitespacesAndNewlines)
+            } else {
+                excerpt = prefix
+            }
+            return try modelJSON(["excerpts": [excerpt]])
         }
         if let consolidation { return try consolidation(prompt) }
         if let response { return response }
@@ -107,6 +114,17 @@ private actor ModelRequestJournal {
 }
 
 struct SourceFactValidationTests {
+    // Explicit multilingual literal-source fixtures, not translated UI strings.
+    @Test("Source quotations reject partial ASCII tokens and decimals while retaining exact Unicode", arguments: [
+        ("29.99", "EUR 129.99", false), ("29", "EUR 29.99", false), ("99", "EUR 29.99", false),
+        ("SAVE5", "Code SAVE50", false), ("EUR 29.99", "EUR 29.99.", true),
+        ("29.99 EUR", "商店の価格は29.99 EUR。", true), ("Cafe\u{301}", "Cafe\u{301} offer", true),
+        ("Café", "Cafe\u{301} offer", false), ("29.99", "EUR 129.99; EUR 29.99.", true), ("", "Source", false)
+    ])
+    func quotationsNeedExactTokenBoundaries(value: String, source: String, valid: Bool) {
+        #expect(SourceQuotationMatching.contains(value, in: source) == valid)
+    }
+
     @Test("Numeric citation syntax must occur in the cited source, not merely share its digits", arguments: [
         ("A claim [1].", "Model 1.", true),
         ("A claim [ 1 ].", "Model 1.", true),
@@ -158,6 +176,20 @@ private actor GenerationTraceJournal {
 }
 
 struct AppleSummaryGeneratorTests {
+    @Test("Native extraction rejects prices and coupons clipped from longer source literals", arguments: [
+        ("29.99", "129.99"), ("SAVE5", "SAVE50")
+    ])
+    func partialSourceQuotesStopBeforeConsolidation(quote: String, original: String) async throws {
+        var source = try article()
+        source.text = "The source literal is " + original + "."
+        let journal = ModelRequestJournal(factResponses: [try modelJSON(["excerpts": [quote]])])
+        await #expect(throws: ReaderError.invalidResponse) {
+            try await AppleSummaryGenerator().generate(
+                [source], model: ControlledLanguageModel(journal: journal), capacity: 10000, count: { $0.count })
+        }
+        #expect(await journal.requests.count == 1)
+    }
+
     @Test("Actual native output rejects invented bracket references while preserving copied bracket data", arguments: [false, true])
     func nativeNumericCitationsUseActualCitedText(copied: Bool) async throws {
         var source = try article()
@@ -666,7 +698,7 @@ private actor ControlledGenerator: SummaryGenerator {
 }
 
 struct DigestTests {
-    @Test("Unchanged caches from earlier generation and validation policies are regenerated", arguments: ["", "reader-source-facts-consolidation-v1\n", "reader-source-facts-consolidation-v2\n", "reader-source-facts-consolidation-v3\n", "reader-source-facts-consolidation-v4\n", "reader-source-facts-consolidation-v5\n", "reader-source-facts-consolidation-v6\n"])
+    @Test("Unchanged caches from earlier generation and validation policies are regenerated", arguments: ["", "reader-source-facts-consolidation-v1\n", "reader-source-facts-consolidation-v2\n", "reader-source-facts-consolidation-v3\n", "reader-source-facts-consolidation-v4\n", "reader-source-facts-consolidation-v5\n", "reader-source-facts-consolidation-v6\n", "reader-source-facts-consolidation-v7\n", "reader-source-facts-consolidation-v8\n", "reader-source-facts-consolidation-v9\n"])
     func previousGenerationCacheIsRegenerated(policyPrefix: String) async throws {
         let (store, feed, articles) = try await fixture()
         let coordinator = DigestCoordinator(repository: store, generator: FixtureGenerator())
@@ -735,7 +767,7 @@ struct DigestTests {
         #expect(await journal.requests.count == articles.count + 1)
     }
 
-    @Test("Cache reuse requires complete nonblank sections and source-owned facts", arguments: 0..<10)
+    @Test("Cache reuse requires complete nonblank sections and source-owned facts", arguments: 0..<11)
     func cachedClaimsRequireValidContentAndSources(kind: Int) async throws {
         let (store, feed, articles) = try await fixture()
         let coordinator = DigestCoordinator(repository: store, generator: FixtureGenerator())
@@ -750,6 +782,7 @@ struct DigestTests {
         case 7: cached.sections[0].sourceFacts = [DigestSourceFacts(source: articles[0].id, excerpts: ["Invented terms."])]
         case 8: cached.sections[0].sourceFacts = [DigestSourceFacts(source: articles[0].id, excerpts: [articles[1].title])]
         case 9: cached.sections[0].sourceFacts = [DigestSourceFacts(source: articles[0].id, excerpts: [])]
+        case 10: cached.sections[0].sourceFacts = [DigestSourceFacts(source: articles[0].id, excerpts: ["ffer"])]
         default: break
         }
         try await store.saveDigest(cached)

@@ -10,6 +10,39 @@ private struct GeneratedFacts {
     var excerpts: [String]
 }
 
+/// Exact source spelling plus ASCII-token and decimal boundaries; not semantic entailment.
+enum SourceQuotationMatching {
+    static func contains(_ value: String, in source: String) -> Bool {
+        guard let first = value.first, let last = value.last else { return false }
+        var cursor = source.startIndex
+        while cursor < source.endIndex,
+              let range = source.range(of: value, options: .literal, range: cursor..<source.endIndex) {
+            let before = range.lowerBound > source.startIndex ? source.index(before: range.lowerBound) : nil
+            let after = range.upperBound < source.endIndex ? range.upperBound : nil
+            let leftWord = before.map { asciiWord(source[$0]) && asciiWord(first) } ?? false
+            let rightWord = after.map { asciiWord(source[$0]) && asciiWord(last) } ?? false
+            let leftNumber = before.map { index in
+                guard first.isNumber, ".,".contains(source[index]),
+                      index > source.startIndex else { return false }
+                return source[source.index(before: index)].isNumber
+            } ?? false
+            let rightNumber = after.map { index in
+                guard last.isNumber, ".,".contains(source[index]) else { return false }
+                let next = source.index(after: index)
+                return next < source.endIndex && source[next].isNumber
+            } ?? false
+            if !leftWord && !rightWord && !leftNumber && !rightNumber { return true }
+            cursor = source.index(after: range.lowerBound)
+        }
+        return false
+    }
+
+    private static func asciiWord(_ character: Character) -> Bool {
+        guard character.unicodeScalars.count == 1, let value = character.unicodeScalars.first?.value else { return false }
+        return (48...57).contains(value) || (65...90).contains(value) || (97...122).contains(value) || value == 95
+    }
+}
+
 enum SourceFactValidation {
     static func hasUnownedNumericCitation(in text: String, source: String) -> Bool {
         text.matches(of: /\[\s*[0-9]+(?:\s*[,;–-]\s*[0-9]+)*\s*\]/).contains {
@@ -22,7 +55,7 @@ enum SourceFactValidation {
         var seen: Set<String> = []
         return try excerpts.compactMap { excerpt in
             let text = excerpt.trimmingCharacters(in: .whitespacesAndNewlines)
-            guard !text.isEmpty, fragment.contains(text) else { throw ReaderError.invalidResponse }
+            guard !text.isEmpty, SourceQuotationMatching.contains(text, in: fragment) else { throw ReaderError.invalidResponse }
             return seen.insert(text).inserted ? text : nil
         }
     }

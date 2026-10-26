@@ -1,0 +1,88 @@
+{
+  "date": "2026-10-26",
+  "adopted": false,
+  "sourceCommit": "acf4ee29088af43554c7df716543be39fbc41e58",
+  "sourceManifest": [
+    {
+      "path": "ReaderKit/Sources/ReaderIntelligence/AppleSummaryGenerator.swift",
+      "sha256": "7f9fc8f6ce2be77197ca42bccafd89cda3133c1a2d23d4a325020855a800ba6c"
+    },
+    {
+      "path": "ReaderKit/Sources/ReaderIntelligence/DigestCoordinator.swift",
+      "sha256": "bf9a5ae98253f3512f03e192ae769ce2e81bc77d156af7f15b4f7379ad9c14d2"
+    },
+    {
+      "path": "ReaderKit/Sources/ReaderDomain/Models.swift",
+      "sha256": "40fe862c7918d002a1dcbce07e8aced6ae56cc52d3d1b2fde059171c8b507a1d"
+    },
+    {
+      "path": "ReaderKit/Probes/ReaderInferenceProbe/Probe.swift",
+      "sha256": "8d0a2c1fcdcb5293fb619a6873eb5741e0c166321343d58a3464a803ac527632"
+    }
+  ],
+  "protocol": "Four frozen configurations, one on-device invocation each, no retry, no PCC or transport.",
+  "observations": [
+    {
+      "configuration": "six",
+      "inputSHA256": "104495438e1768ad323ea91ecb02bf0fd70dd9ad1c18f639db3d4069f05c7bf8",
+      "reportSHA256": "737c50c307aec013800e33207cbffc0e43054c622bfdf7a0d85b6805232c035d",
+      "error": "ReaderDomain.ReaderError.invalidResponse",
+      "elapsedSeconds": 12.193579542,
+      "sections": 0,
+      "missingSourceCount": 6,
+      "stages": [
+        "facts"
+      ],
+      "rejectedFieldCounts": {
+        "conditions": 2,
+        "product": 1
+      }
+    },
+    {
+      "configuration": "pair-1",
+      "inputSHA256": "ccf83b34996dbd2cec898a47b568078172c4947fd02b135219472a74c4523501",
+      "reportSHA256": "f092247678009d3bb3d292aeaed29f23d5b21c9aeb2279973de2b1322825cb1f",
+      "error": "ReaderDomain.ReaderError.invalidResponse",
+      "elapsedSeconds": 8.017220166,
+      "sections": 0,
+      "missingSourceCount": 2,
+      "stages": [
+        "facts"
+      ],
+      "rejectedFieldCounts": {
+        "conditions": 4,
+        "product": 1
+      }
+    },
+    {
+      "configuration": "pair-2",
+      "inputSHA256": "dec8b262f8bd48b1a58ffdeefb9a2db24cd0978232cb9f7dc72860124b490b22",
+      "reportSHA256": "e321cba92a895ba514ad9e0b0b75ba7ef042ffc9667f0f972436d2ec92bafe86",
+      "error": "ReaderDomain.ReaderError.invalidResponse",
+      "elapsedSeconds": 6.447862667,
+      "sections": 0,
+      "missingSourceCount": 2,
+      "stages": [
+        "facts"
+      ],
+      "rejectedFieldCounts": {
+        "conditions": 4
+      }
+    },
+    {
+      "configuration": "pair-3",
+      "inputSHA256": "e05318eb4f82f452cc48eaa7239f9cf888e899310c990a86da260fa139410555",
+      "reportSHA256": "e26e43cdc6f5492969bb6964a10da2e5a72ea20fd1327dbb09e7732691d58b2a",
+      "error": "ReaderDomain.ReaderError.invalidResponse",
+      "elapsedSeconds": 5.238007125,
+      "sections": 0,
+      "missingSourceCount": 2,
+      "stages": [
+        "facts"
+      ],
+      "rejectedFieldCounts": {
+        "conditions": 6
+      }
+    }
+  ]
+}
