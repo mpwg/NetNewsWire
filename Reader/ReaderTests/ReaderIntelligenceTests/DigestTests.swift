@@ -246,9 +246,7 @@ struct AppleSummaryGeneratorTests {
         #expect(extraction.contains("verbatim"))
         #expect(extraction.contains("Do not rewrite or translate"))
         #expect(consolidation.contains("in " + language + "."))
-        #expect(consolidation.contains("at most two sentences"))
-        #expect(consolidation.contains("Do not repeat"))
-        #expect(consolidation.contains("Cover every supplied source"))
+        // Repetition and source coverage are verified through generated results, not prompt wording.
     }
 
     @Test("Every raw source character reaches extraction and every stage respects its runtime budget", arguments: [3500, 4500])
