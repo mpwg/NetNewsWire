@@ -16,6 +16,18 @@ final class ReaderLoadFixture {
 
     init(store: ReaderStore) { self.store = store }
 
+    /// Runs only after native measurements; unchanged status sets isolate subscription deletion.
+    func removeFolderFeed() async {
+        guard phase == "ready" else { return }
+        do {
+            var snapshot = try ReaderLoadScenario.make().snapshot
+            snapshot.feeds.removeAll { $0.id.remoteID == "feed/20" }
+            snapshot.articles = []
+            try await store.applyRefresh(snapshot)
+            phase = "removed"
+        } catch { phase = "failed: \(error.localizedDescription)" }
+    }
+
     func prepare() async {
         guard !prepared else { return }
         prepared = true
@@ -39,6 +51,8 @@ struct ReaderLoadPanel: View {
             Text(verbatim: fixture.phase).accessibilityIdentifier("loadFixturePhase")
             Text(verbatim: "\(fixture.articleCount) articles · \(fixture.feedCount) feeds · \(fixture.folderCount) folders")
                 .accessibilityIdentifier("loadFixtureCounts")
+            Button { Task { await fixture.removeFolderFeed() } } label: { Text(verbatim: "Remove folder feed") }
+                .accessibilityIdentifier("removeLoadFolderFeed")
         }
         .font(.caption)
         .padding(8)

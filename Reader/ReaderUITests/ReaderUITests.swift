@@ -128,6 +128,37 @@ final class ReaderSmokeTests: XCTestCase {
         attachment.name = "Native loaded timeline after measured scrolling"
         attachment.lifetime = .keepAlways
         add(attachment)
+
+        // These assertions check actual native counter wiring; aggregation matrices remain code tests.
+        let sidebar = app.outlines["readerSidebar"]
+        waitForValue(sidebar.buttons["Unread"], equalTo: "Unread: 7,500")
+        waitForValue(sidebar.buttons["Load feed 0"], equalTo: "Unread: 75")
+        let accountCount = app.staticTexts["accountUnreadCount-00000000-0000-0000-0000-000000000045"]
+        waitForValue(accountCount, equalTo: "7,500")
+        sidebar.scroll(byDeltaX: 0, deltaY: -800)
+        waitForValue(sidebar.buttons["Load folder 0"], equalTo: "Unread: 600")
+        let counters = XCTAttachment(screenshot: app.windows.firstMatch.screenshot())
+        counters.name = "Native complete library, account, feed and folder unread counts"
+        counters.lifetime = .keepAlways
+        add(counters)
+
+        let search = app.searchFields.firstMatch
+        search.click()
+        search.typeText("Load article 120.")
+        waitForValue(app.staticTexts["timelineCounts"], equalTo: "Entries: 1 · Loaded originals: 1")
+        XCTAssertTrue(timeline.staticTexts["Load article 120"].exists)
+        app.buttons["removeLoadFolderFeed"].click()
+        waitForValue(app.staticTexts["loadFixturePhase"], equalTo: "removed")
+        waitForValue(app.staticTexts["timelineCounts"], equalTo: "Entries: 0 · Loaded originals: 0")
+        XCTAssertFalse(timeline.staticTexts["Load article 120"].exists)
+        waitForValue(sidebar.buttons["Unread"], equalTo: "Unread: 7,430")
+        waitForValue(accountCount, equalTo: "7,430")
+        waitForValue(sidebar.buttons["Load folder 0"], equalTo: "Unread: 525")
+        XCTAssertFalse(sidebar.buttons["Load feed 20"].exists)
+        let deletion = XCTAttachment(screenshot: app.windows.firstMatch.screenshot())
+        deletion.name = "Native timeline and complete counts after pure subscription deletion"
+        deletion.lifetime = .keepAlways
+        add(deletion)
     }
 
     func testOPMLExportUsesNativeSavePanel() throws {
@@ -192,6 +223,8 @@ final class ReaderSmokeTests: XCTestCase {
         first.click()
         app.buttons["holdTimelineQueries"].click()
         app.outlines["readerSidebar"].buttons["Timeline fixture"].click()
+        waitForValue(app.outlines["readerSidebar"].buttons["Unread"], equalTo: "Unread: 300")
+        waitForValue(app.outlines["readerSidebar"].buttons["Timeline fixture"], equalTo: "Unread: 300")
         waitForPositiveValue(app.staticTexts["timelineHeldQueries"])
         let search = app.searchFields.firstMatch
         search.click()
@@ -234,6 +267,7 @@ final class ReaderSmokeTests: XCTestCase {
         app.buttons["confirmFeedRead"].click()
         waitForValue(app.staticTexts["timelineFeedReadCalls"], equalTo: "1")
         waitForValue(app.staticTexts["timelinePendingReadCount"], equalTo: "300")
+        waitForValue(app.outlines["readerSidebar"].buttons["Unread"], equalTo: "Unread: 300")
         waitForPositiveValue(app.staticTexts["timelineHeldQueries"])
         let evidence = XCTAttachment(string: "Native form input and scrolling completed while a timeline query was held; menu and cancelled confirmation left lookup count=\(before), feedReadCalls=0, pending=0. Confirmation called feed read once and queued all 300 unread rows beyond the 200-row page.")
         evidence.name = "Delayed native query and confirmed feed action"
@@ -243,6 +277,8 @@ final class ReaderSmokeTests: XCTestCase {
         waitForValue(app.staticTexts["timelineHeldQueries"], equalTo: "0")
         app.outlines["readerSidebar"].buttons["Unread"].click()
         waitForValue(app.staticTexts["timelineCounts"], equalTo: "Entries: 0 · Loaded originals: 0")
+        waitForValue(app.outlines["readerSidebar"].buttons["Unread"], equalTo: "Unread: 0")
+        waitForValue(app.outlines["readerSidebar"].buttons["Timeline fixture"], equalTo: "Unread: 0")
         XCTAssertFalse(app.staticTexts["Timeline article 299"].exists)
         let filtered = XCTAttachment(string: "After all 300 read commits, the native Unread filter shows Entries: 0 · Loaded originals: 0 and clears the previous article detail.")
         filtered.name = "Native unread counts after confirmed feed read"

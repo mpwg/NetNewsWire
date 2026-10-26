@@ -51,6 +51,8 @@ struct ReaderLoadScenarioTests {
             try #require(session.errorMessage == nil)
             #expect(session.feeds.count == scenario.snapshot.feeds.count)
             #expect(session.folders.count == scenario.snapshot.folders.count)
+            #expect(session.unreadCounts.total == scenario.snapshot.unreadIDs.count)
+            #expect(session.unreadCounts.byAccount == [scenario.account.id: scenario.snapshot.unreadIDs.count])
             #expect(session.articles.map(\.id) == Array(query.sources.prefix(200)).map(\.id), "First page: \(query.name)")
             #expect(session.rows.count == min(200, query.sources.count))
             if query.sources.count > 200 {
@@ -67,6 +69,28 @@ struct ReaderLoadScenarioTests {
         let report = LoadTimingReport(articleCount: articleCount, operations: timings)
         let data = try JSONEncoder().encode(report)
         Attachment.record(data, named: "Synthetic load session timings - \(articleCount) articles.json")
+        // Keep fixture arithmetic and deletion semantics in code; UI checks only the native wiring.
+        let removedFeed = "feed/20"
+        var deletion = scenario.snapshot
+        deletion.feeds.removeAll { $0.id.remoteID == removedFeed }
+        deletion.articles = []
+        try await store.applyRefresh(deletion)
+        session.sidebarSelection = "unread"
+        session.search = "Load article 120."
+        await session.reload(resetLimit: true)
+        let retainedUnread = originals.filter { !$0.read && ($0.feedID != removedFeed || $0.starred) }
+        let remainingFolderFeeds = Set(deletion.feeds.filter { $0.folderIDs.contains(folder.remoteID) }.map(\.id.remoteID))
+        let expectedFolderUnread = retainedUnread.filter { remainingFolderFeeds.contains($0.feedID) }.count
+        #expect(session.articles.isEmpty)
+        #expect(session.rows.isEmpty)
+        #expect(session.unreadCounts.total == retainedUnread.count)
+        #expect(session.unreadCounts.byAccount == [scenario.account.id: retainedUnread.count])
+        #expect(session.unreadCounts.byFolder[folder.id] == expectedFolderUnread)
+        if articleCount == 10_000 {
+            #expect(retainedUnread.count == 7_430)
+            #expect(expectedFolderUnread == 525)
+        }
+
     }
 
     private static func milliseconds(_ duration: Duration) -> Double {

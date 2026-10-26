@@ -211,6 +211,7 @@ private struct ReaderSidebar: View {
                         Text(account.name + " · " + account.username)
                         Spacer()
                         Text(session.unreadCounts.byAccount[account.id, default: 0], format: .number)
+                            .accessibilityIdentifier("accountUnreadCount-\(account.id.uuidString)")
                             .accessibilityLabel(unreadValue(session.unreadCounts.byAccount[account.id, default: 0]))
                     }
                 }
@@ -234,7 +235,7 @@ private struct ReaderSidebar: View {
     }
 
     private func unreadValue(_ count: Int) -> Text {
-        Text("Unread: \(count)", bundle: #bundle, comment: "Unread original article count for a library, account, folder or feed.")
+        Text("Unread: \(count, format: .number)", bundle: #bundle, comment: "Unread original article count for a library, account, folder or feed.")
     }
 
     private func feedRow(_ feed: FeedSnapshot) -> some View {
