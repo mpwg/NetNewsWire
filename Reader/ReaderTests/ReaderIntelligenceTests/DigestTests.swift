@@ -113,6 +113,67 @@ private actor ModelRequestJournal {
     }
 }
 
+@Suite(.serialized)
+struct LiteralSchemaDiagnostics {
+    @Test("Native model output is complete for small and larger literal schemas",
+          .enabled(if: SystemLanguageModel.default.isAvailable),
+          arguments: [(false, false), (false, true), (true, false), (true, true)])
+    func nativeSchemaShape(largeCatalog: Bool, responseLimit: Bool) async throws {
+        try await inspectSchema(largeCatalog: largeCatalog, responseLimit: responseLimit, quoted: true)
+    }
+
+    @Test("Native model output with unquoted literals",
+          .enabled(if: SystemLanguageModel.default.isAvailable),
+          arguments: [(false, false), (false, true), (true, false), (true, true)])
+    func nativeSchemaWithoutQuotes(largeCatalog: Bool, responseLimit: Bool) async throws {
+        try await inspectSchema(largeCatalog: largeCatalog, responseLimit: responseLimit, quoted: false)
+    }
+
+    private func inspectSchema(largeCatalog: Bool, responseLimit: Bool, quoted: Bool) async throws {
+        let model = SystemLanguageModel.default
+        let condition = quoted ? "Code \"SAVE\" required." : "Code SAVE required."
+        var choices = ["Luma lamp", "Example Store", "EUR 29.99", condition, "pickup only"]
+        if largeCatalog { choices += (0..<180).map { "Synthetic option \($0)" } }
+        let literal = DynamicGenerationSchema(name: "OriginalLiteral", anyOf: choices)
+        let value = DynamicGenerationSchema(referenceTo: "OriginalLiteral")
+        let offer = DynamicGenerationSchema(name: "Offer", representNilExplicitlyInGeneratedContent: true, properties: [
+            .init(name: "product", schema: value),
+            .init(name: "merchant", schema: value, isOptional: true),
+            .init(name: "price", schema: value, isOptional: true),
+            .init(name: "conditions", schema: DynamicGenerationSchema(arrayOf: value, minimumElements: 0, maximumElements: 8))
+        ])
+        let root = DynamicGenerationSchema(name: "Facts", properties: [
+            .init(name: "offers", schema: DynamicGenerationSchema(arrayOf: DynamicGenerationSchema(referenceTo: "Offer"),
+                                                                  minimumElements: 0, maximumElements: 8)),
+            .init(name: "excerpts", schema: DynamicGenerationSchema(arrayOf: value, minimumElements: 0, maximumElements: 8))
+        ])
+        let schema = try GenerationSchema(root: root, dependencies: [literal, offer])
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.sortedKeys]
+        let schemaText = String(decoding: try encoder.encode(schema), as: UTF8.self)
+        let instructions = "Extract the offer. Select exact literals. Preserve both conditions."
+        let prompt = "Example Store sells the Luma lamp for EUR 29.99. " + condition + " Pickup only."
+        let tokenEstimate = try await model.tokenCount(for: instructions + prompt + schemaText)
+        print("SCHEMA_DIAGNOSTIC large=\(largeCatalog) limited=\(responseLimit) choices=\(choices.count) inputTokens=\(tokenEstimate)")
+        let session = LanguageModelSession(model: model, instructions: instructions)
+        let response = try await session.respond(to: prompt, schema: schema,
+                                                options: GenerationOptions(samplingMode: .greedy,
+                                                                           maximumResponseTokens: responseLimit ? 1200 : nil),
+                                                contextOptions: ContextOptions(includeSchemaInPrompt: true))
+        let data = Data(response.content.jsonString.utf8)
+        let object = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
+        let offers = try #require(object["offers"] as? [[String: Any]])
+        let excerpts = try #require(object["excerpts"] as? [String])
+        print("SCHEMA_DIAGNOSTIC_RESULT large=\(largeCatalog) limited=\(responseLimit) offers=\(offers.count) excerpts=\(excerpts.count)")
+        let first = try #require(offers.first)
+        #expect(first["product"] as? String == "Luma lamp")
+        #expect(first["merchant"] as? String == "Example Store")
+        #expect(first["price"] as? String == "EUR 29.99")
+        let conditions = try #require(first["conditions"] as? [String])
+        #expect(Set(conditions).isSuperset(of: [condition, "pickup only"]))
+    }
+}
+
 struct SourceFactValidationTests {
     // Explicit multilingual literal-source fixtures, not translated UI strings.
     @Test("Source quotations reject partial ASCII tokens and decimals while retaining exact Unicode", arguments: [

@@ -1,0 +1,59 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "00006040-000A51392100801C",
+        "deviceName" : "My Mac",
+        "modelName" : "MacBook Pro",
+        "osBuildNumber" : "26B123",
+        "osVersion" : "27.2",
+        "platform" : "macOS"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 4,
+      "passedTests" : 0,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "Reader · Built with macOS 27.2",
+  "expectedFailures" : 0,
+  "failedTests" : 1,
+  "finishTime" : 1793044257.623,
+  "passedTests" : 0,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1793044235.931,
+  "statistics" : [
+    {
+      "subtitle" : "4 test runs",
+      "title" : "1 test ran with dynamic parameters"
+    }
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "Caught error: Encountered content that cannot be completed into valid JSON\nText: {\"offers\": [{\"product\": \"Luma lamp\", \"merchant\": \"Example Store\", \"price\": \"EUR 29.99\", \"conditions\": [\"Code \"SAVE\" required.\",",
+      "targetName" : "ReaderTests",
+      "testIdentifier" : 1,
+      "testIdentifierString" : "LiteralSchemaDiagnostics/nativeSchemaShape(largeCatalog:responseLimit:)",
+      "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/LiteralSchemaDiagnostics/nativeSchemaShape(largeCatalog:responseLimit:)",
+      "testName" : "Native model output is complete for small and larger literal schemas"
+    }
+  ],
+  "title" : "Test - Reader",
+  "topInsights" : [
+    {
+      "category" : "Common Failures",
+      "impact" : "100% of failures",
+      "text" : "4 runs of 1 test failed with Caught error: Encountered content that cannot be completed into valid JSON"
+    }
+  ],
+  "totalTestCount" : 1
+}

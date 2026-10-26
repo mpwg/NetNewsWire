@@ -1,0 +1,127 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "00006040-000A51392100801C",
+      "deviceName" : "My Mac",
+      "modelName" : "MacBook Pro",
+      "osBuildNumber" : "26B123",
+      "osVersion" : "27.2",
+      "platform" : "macOS"
+    }
+  ],
+  "testNodes" : [
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "children" : [
+                {
+                  "children" : [
+                    {
+                      "children" : [
+                        {
+                          "name" : "Caught error: Encountered content that cannot be completed into valid JSON\nText: {\"offers\": [{\"product\": \"Luma lamp\", \"merchant\": \"Example Store\", \"price\": \"EUR 29.99\", \"conditions\": [\"Code \"SAVE\" required.\",",
+                          "nodeType" : "Failure Message",
+                          "sourceLocation" : {
+                            "filePath" : "/Users/mat/code/NetNewsWire/Reader/ReaderTests/ReaderIntelligenceTests/DigestTests.swift",
+                            "lineNumber" : 118
+                          }
+                        }
+                      ],
+                      "duration" : "2s",
+                      "durationInSeconds" : 2.0262699127197266,
+                      "name" : "false, false",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/LiteralSchemaDiagnostics/nativeSchemaShape(largeCatalog:responseLimit:)?args=2cb9cd7a6e5c6b9715ab5cf29594cc7e9ac403a4b11f069b25cc08d470e85e8c",
+                      "nodeType" : "Arguments",
+                      "result" : "Failed"
+                    },
+                    {
+                      "children" : [
+                        {
+                          "name" : "Caught error: Encountered content that cannot be completed into valid JSON\nText: {\"offers\": [{\"product\": \"Luma lamp\", \"merchant\": \"Example Store\", \"price\": \"EUR 29.99\", \"conditions\": [\"Code \"SAVE\" required.\",",
+                          "nodeType" : "Failure Message",
+                          "sourceLocation" : {
+                            "filePath" : "/Users/mat/code/NetNewsWire/Reader/ReaderTests/ReaderIntelligenceTests/DigestTests.swift",
+                            "lineNumber" : 118
+                          }
+                        }
+                      ],
+                      "duration" : "1s",
+                      "durationInSeconds" : 1.4819958209991455,
+                      "name" : "false, true",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/LiteralSchemaDiagnostics/nativeSchemaShape(largeCatalog:responseLimit:)?args=fb81853b6da15e1c6b215c7d5bbdc041502ac5845645d53117102670260da0f9",
+                      "nodeType" : "Arguments",
+                      "result" : "Failed"
+                    },
+                    {
+                      "children" : [
+                        {
+                          "name" : "Caught error: Encountered content that cannot be completed into valid JSON\nText: {\"offers\": [{\"product\": \"Luma lamp\", \"merchant\": \"Example Store\", \"price\": \"EUR 29.99\", \"conditions\": [\"Code \"SAVE\" required.\",",
+                          "nodeType" : "Failure Message",
+                          "sourceLocation" : {
+                            "filePath" : "/Users/mat/code/NetNewsWire/Reader/ReaderTests/ReaderIntelligenceTests/DigestTests.swift",
+                            "lineNumber" : 118
+                          }
+                        }
+                      ],
+                      "duration" : "8s",
+                      "durationInSeconds" : 8.761217832565308,
+                      "name" : "true, false",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/LiteralSchemaDiagnostics/nativeSchemaShape(largeCatalog:responseLimit:)?args=c597e9971e116a16e33e49d9c3ca3bd8c92cc910f859de3e71f24df7c80048bc",
+                      "nodeType" : "Arguments",
+                      "result" : "Failed"
+                    },
+                    {
+                      "children" : [
+                        {
+                          "name" : "Caught error: Encountered content that cannot be completed into valid JSON\nText: {\"offers\": [{\"product\": \"Luma lamp\", \"merchant\": \"Example Store\", \"price\": \"EUR 29.99\", \"conditions\": [\"Code \"SAVE\" required.\",",
+                          "nodeType" : "Failure Message",
+                          "sourceLocation" : {
+                            "filePath" : "/Users/mat/code/NetNewsWire/Reader/ReaderTests/ReaderIntelligenceTests/DigestTests.swift",
+                            "lineNumber" : 118
+                          }
+                        }
+                      ],
+                      "duration" : "8s",
+                      "durationInSeconds" : 8.632346868515015,
+                      "name" : "true, true",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/LiteralSchemaDiagnostics/nativeSchemaShape(largeCatalog:responseLimit:)?args=cf9b5ecf10f3e4cdc87754898380ed1d707ec4f70d44d7606755a90c603de577",
+                      "nodeType" : "Arguments",
+                      "result" : "Failed"
+                    }
+                  ],
+                  "duration" : "5s",
+                  "durationInSeconds" : 5.225457608699799,
+                  "name" : "Native model output is complete for small and larger literal schemas",
+                  "nodeIdentifier" : "LiteralSchemaDiagnostics/nativeSchemaShape(largeCatalog:responseLimit:)",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/LiteralSchemaDiagnostics/nativeSchemaShape(largeCatalog:responseLimit:)",
+                  "nodeType" : "Test Case",
+                  "result" : "Failed"
+                }
+              ],
+              "name" : "LiteralSchemaDiagnostics",
+              "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/LiteralSchemaDiagnostics",
+              "nodeType" : "Test Suite",
+              "result" : "Failed"
+            }
+          ],
+          "name" : "ReaderTests",
+          "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests",
+          "nodeType" : "Unit test bundle",
+          "result" : "Failed"
+        }
+      ],
+      "name" : "Reader",
+      "nodeType" : "Test Plan",
+      "result" : "Failed"
+    }
+  ],
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Test Scheme Action"
+    }
+  ]
+}
