@@ -92,6 +92,19 @@ public actor ReaderStore: ReaderRepository {
             .map { try decoder.decode(FolderSnapshot.self, from: $0.payload) }
     }
 
+    /// Complete account-bound unread totals, independent of any timeline page or search.
+    public func unreadCounts() throws -> [FeedKey: Int] {
+        try Task.checkCancellation()
+        var descriptor = FetchDescriptor<ArticleRecord>(predicate: #Predicate { !$0.read })
+        descriptor.propertiesToFetch = [\.accountID, \.feedID]
+        var counts: [FeedKey: Int] = [:]
+        try context.enumerate(descriptor, batchSize: 500) { article in
+            try Task.checkCancellation()
+            counts[FeedKey(accountID: article.accountID, remoteID: article.feedID), default: 0] += 1
+        }
+        return counts
+    }
+
     public func articles(_ query: ArticleQuery) throws -> [ArticleSnapshot] {
         if query.folderID != nil, query.accountID == nil { throw ReaderError.invalidResponse }
         guard query.limit > 0 else { return [] }

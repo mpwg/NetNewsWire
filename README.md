@@ -29,6 +29,8 @@ Full product acceptance remains open. Real network-off/restart, final devices/iP
 
 ## Current verification
 
+The #26 count-query checkpoint adds complete account-bound unread totals without loading timeline pages. The native process probe passes 9,999 recovered unread articles and a pure-deletion count change from one to zero. New code tests compile; protocol/session/sidebar integration and fresh CI are still open. [Current source, proof and remaining scope](docs/reader/evidence/b-unread-counts-2026-10-26.md).
+
 An expanded standalone retention probe passes 10,000 articles, actual SIGKILL and two new processes with another subscription retained and a star protected independently of pending/digest data. [Exact results and open #40 status/presentation criteria](docs/reader/evidence/b-star-retention-2026-10-26.md).
 
 The canonical article-identity contract for #29 is accepted on the exercised Mac boundary at 43829790a: all eight complete-version store/session cases pass, including warmed cache, detail and search. Reader CI 40265223444 passes 412 executions (402 code, ten UI), zero failures/skips and one deliberate model-guardrail warning. The corrected VoiceOver table case obtains complete titles 298/297 and restores the initially disabled mode; broader journeys and the old daemon fault remain open. Later #40 source requires separate hosted confirmation. [Canonical criteria and raw result](docs/reader/evidence/b-canonical-identity-2026-10-26.md) · [actual speech/state/window evidence](docs/reader/evidence/k-accessibility-navigation-2026-10-26.md).

@@ -86,21 +86,28 @@ enum ReaderStoreRecoveryProbe {
         try require(try await store.accounts() == [state.account], "Account missing after restart.")
         try require(try await allArticles(store, accountID: state.account.id).count == state.articleCount, "Articles missing after restart.")
         try require(try await store.article(state.canonical.id) == state.canonical, "The canonical version contains mixed fields.")
+        let unreadCounts = try await store.unreadCounts()
+        try require(unreadCounts == [state.feed.id: state.articleCount - 1], "Unread counts omit articles beyond a timeline page.")
+        print("Recovered complete unread count: \(unreadCounts.values.reduce(0, +)).")
         let changedKey = ArticleKey(accountID: state.account.id, remoteID: "0")
         let changed = try await store.article(changedKey)
         try require(changed?.read == true && changed?.starred == true, "Local status or rollback was lost.")
         try await verifyMetadata(store, state: state)
 
         try await store.applyRefresh(RefreshSnapshot(accountID: state.account.id, feeds: [state.feed, state.remainingFeed], folders: [], articles: [],
-                                                    unreadIDs: ["0"], starredIDs: ["3"]))
+                                                    unreadIDs: ["0", "4"], starredIDs: ["3"]))
         try await store.acknowledge([state.staleRead])
         let protected = try await store.article(changedKey)
         try require(protected?.read == true && protected?.starred == true, "Remote response overwrote pending status.")
         try await verifyMetadata(store, state: state)
 
+        let beforeDeletion = try await store.unreadCounts()
+        try require(beforeDeletion == [state.feed.id: 1], "The pure-deletion case has no unread article to remove.")
+        print("Unread count before pure deletion: \(beforeDeletion.values.reduce(0, +)).")
+        // Article 4 remains unread in the authoritative status set while its feed is removed.
         // A different subscription remains; star 3 has no pending writes or digest reference.
         try await store.applyRefresh(RefreshSnapshot(accountID: state.account.id, feeds: [state.remainingFeed], folders: [], articles: [],
-                                                    unreadIDs: [], starredIDs: []))
+                                                    unreadIDs: ["4"], starredIDs: []))
         try await verifyRetained(store, state: state)
     }
 
@@ -108,6 +115,7 @@ enum ReaderStoreRecoveryProbe {
         let articles = try await allArticles(store, accountID: state.account.id)
         try require(Set(articles.map(\.id.remoteID)) == ["0", "1", "3"], "Deletion or source retention is incorrect.")
         try require(try await store.feeds() == [state.remainingFeed], "The remaining subscription set is incorrect.")
+        try require(try await store.unreadCounts().isEmpty, "Unread counts remain stale after deletion and status reconciliation.")
         let starred = try await store.articles(ArticleQuery(starredOnly: true))
         try require(Set(starred.map(\.id.remoteID)) == ["0", "3"], "Starred article is inaccessible after unsubscribing.")
         let independentStar = try await store.article(ArticleKey(accountID: state.account.id, remoteID: "3"))
@@ -126,7 +134,8 @@ enum ReaderStoreRecoveryProbe {
                                 subscribedFeedIDs: try await store.feeds().map(\.id.remoteID).sorted(),
                                 readStatus: Dictionary(uniqueKeysWithValues: articles.map { ($0.id.remoteID, $0.read) }),
                                 pendingRevisions: pending.count,
-                                independentStarHasPendingChange: pending.contains { $0.article.remoteID == "3" })
+                                independentStarHasPendingChange: pending.contains { $0.article.remoteID == "3" },
+                                unreadTotal: try await store.unreadCounts().values.reduce(0, +))
     }
 
     private static func verifyMetadata(_ store: ReaderStore, state: RecoveryState) async throws {
@@ -169,6 +178,7 @@ private struct RetentionReceipt: Codable {
     let readStatus: [String: Bool]
     let pendingRevisions: Int
     let independentStarHasPendingChange: Bool
+    let unreadTotal: Int
 }
 
 private struct ProbeFailure: Error, CustomStringConvertible {

@@ -29,6 +29,65 @@ struct ReaderStoreTests {
                         articles: articles, unreadIDs: unread, starredIDs: starred)
     }
 
+    @Test("Unread totals include every page and preserve account isolation", .timeLimit(.minutes(1)))
+    func unreadCountsStayCompleteAcrossPagesAndAccounts() async throws {
+        let store = try ReaderStore(inMemory: true)
+        #expect(try await store.unreadCounts().isEmpty)
+        let secondFeed = FeedSnapshot(id: FeedKey(accountID: accountID, remoteID: "feed/2"),
+                                      title: "Second feed", url: fixtureURL)
+        let firstArticles = (0..<1_005).map { article(String($0)) }
+        let secondArticles = (0..<200).map { index in
+            ArticleSnapshot(id: ArticleKey(accountID: accountID, remoteID: "second/\(index)"),
+                            feedID: secondFeed.id.remoteID, title: "Second article")
+        }
+        let readArticles = (0..<5).map { article("read/\($0)") }
+        let unread = Set((firstArticles + secondArticles).map(\.id.remoteID))
+        try await store.applyRefresh(refresh(articles: firstArticles + secondArticles + readArticles,
+                                             feeds: [feed, secondFeed], unread: unread))
+        let foreignAccountID = UUID()
+        let foreignFeed = FeedSnapshot(id: FeedKey(accountID: foreignAccountID, remoteID: feed.id.remoteID),
+                                       title: "Foreign feed", url: fixtureURL)
+        let foreignArticles = (0..<3).map { index in
+            ArticleSnapshot(id: ArticleKey(accountID: foreignAccountID, remoteID: String(index)),
+                            feedID: foreignFeed.id.remoteID, title: "Foreign article")
+        }
+        try await store.applyRefresh(RefreshSnapshot(accountID: foreignAccountID, feeds: [foreignFeed], folders: [],
+                                                    articles: foreignArticles,
+                                                    unreadIDs: Set(foreignArticles.map(\.id.remoteID)), starredIDs: []))
+        func currentRevision() async throws -> UInt64 {
+            let stream = await store.changes()
+            var iterator = stream.makeAsyncIterator()
+            return try #require(await iterator.next())
+        }
+        let before = try await currentRevision()
+        #expect(try await store.articles(ArticleQuery()).count == 200)
+        #expect(try await store.articles(ArticleQuery(limit: 10_000)).count == 1_000)
+        #expect(try await store.unreadCounts() == [feed.id: 1_005, secondFeed.id: 200, foreignFeed.id: 3])
+        #expect(try await currentRevision() == before)
+        #expect(try await store.pendingChanges(accountID: accountID).isEmpty)
+
+        try await store.setStatus([firstArticles[0].id], field: .read, value: true)
+        #expect(try await store.unreadCounts() == [feed.id: 1_004, secondFeed.id: 200, foreignFeed.id: 3])
+        try await store.applyRefresh(refresh(articles: [], feeds: [feed], unread: unread))
+        #expect(try await store.unreadCounts() == [feed.id: 1_004, foreignFeed.id: 3])
+        #expect(try await store.article(secondArticles[0].id) == nil)
+        #expect(try await currentRevision() == before + 2)
+        #expect(try await store.pendingChanges(accountID: accountID).count == 1)
+    }
+
+    @Test("Cancelled unread-count queries preserve the store")
+    func cancelledUnreadCountQueriesDoNotMutateState() async throws {
+        let store = try ReaderStore(inMemory: true)
+        try await store.applyRefresh(refresh(articles: [article()]))
+        let query = Task {
+            withUnsafeCurrentTask { $0?.cancel() }
+            return try await store.unreadCounts()
+        }
+        await #expect(throws: CancellationError.self) { try await query.value }
+        #expect(try await store.unreadCounts() == [feed.id: 1])
+        #expect(try await store.pendingChanges(accountID: accountID).isEmpty)
+    }
+
     @Test("Old acknowledgements leave newer changes pending") func oldAcknowledgementsLeaveNewerChangesPending() async throws {
         let store = try ReaderStore(inMemory: true)
         let original = article()
