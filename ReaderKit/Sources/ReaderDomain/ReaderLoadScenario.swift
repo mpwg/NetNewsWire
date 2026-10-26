@@ -6,7 +6,7 @@ public struct ReaderLoadScenario: Sendable {
     public let account: ReaderAccount
     public let snapshot: RefreshSnapshot
 
-    public static func make(articleCount: Int = 10_000) throws -> ReaderLoadScenario {
+    public static func make(articleCount: Int = 10_000, referenceDate: Date = .now) throws -> ReaderLoadScenario {
         guard articleCount > 0, articleCount <= 10_000,
               let accountID = UUID(uuidString: "00000000-0000-0000-0000-000000000045"),
               let serverURL = URL(string: "https://load.reader.invalid") else { throw ReaderError.invalidResponse }
@@ -24,6 +24,8 @@ public struct ReaderLoadScenario: Sendable {
         var unread: Set<String> = []
         var starred: Set<String> = []
         articles.reserveCapacity(articleCount)
+        // Keep the native deletion subject older than the audit's 30-day boundary.
+        let newestArrival = referenceDate.addingTimeInterval(-31 * 24 * 60 * 60)
         for index in 0..<articleCount {
             let feedIndex = index % feeds.count
             let localIndex = index / feeds.count
@@ -32,7 +34,7 @@ public struct ReaderLoadScenario: Sendable {
             let isStarred = (localIndex * 3 + feedIndex * 7) % 17 == 0
             let title = "Load article \(index)"
             let text = "\(title). \(paragraph)" + (index % 37 == 0 ? " Search marker: load-needle." : "")
-            let date = Date(timeIntervalSince1970: 1_792_800_000 - Double(index) * 60)
+            let date = newestArrival.addingTimeInterval(-Double(index) * 60)
             articles.append(ArticleSnapshot(id: ArticleKey(accountID: accountID, remoteID: remoteID),
                                             feedID: feeds[feedIndex].id.remoteID, title: title,
                                             html: "<article><h1>\(title)</h1><p>\(text)</p></article>", text: text,

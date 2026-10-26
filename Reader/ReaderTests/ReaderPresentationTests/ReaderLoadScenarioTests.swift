@@ -7,10 +7,11 @@ import ReaderUI
 
 @MainActor
 struct ReaderLoadScenarioTests {
-    @Test("The synthetic load survives storage and shipping query/pagination transitions",
+    @Test("Stored load preserves paging and 31-day-old deletion with unchanged surviving originals",
           arguments: [1_000, 10_000])
     func loadScenarioPreservesStoredCoverage(articleCount: Int) async throws {
-        let scenario = try ReaderLoadScenario.make(articleCount: articleCount)
+        let referenceDate = Date(timeIntervalSince1970: 1_792_800_000)
+        let scenario = try ReaderLoadScenario.make(articleCount: articleCount, referenceDate: referenceDate)
         let store = try ReaderStore(inMemory: true)
         try await store.saveAccount(scenario.account)
         let clock = ContinuousClock()
@@ -71,6 +72,12 @@ struct ReaderLoadScenarioTests {
         Attachment.record(data, named: "Synthetic load session timings - \(articleCount) articles.json")
         // Keep fixture arithmetic and deletion semantics in code; UI checks only the native wiring.
         let removedFeed = "feed/20"
+        let subject = try #require(originals.first { $0.id.remoteID == "item/120" })
+        let subjectAge = referenceDate.timeIntervalSince(subject.dateArrived)
+        #expect(subject.feedID == removedFeed)
+        #expect(!subject.read && !subject.starred)
+        #expect(subjectAge >= 31 * 24 * 60 * 60 && subjectAge < 32 * 24 * 60 * 60)
+        let expectedSurvivors = originals.filter { $0.feedID != removedFeed || $0.starred }
         var deletion = scenario.snapshot
         deletion.feeds.removeAll { $0.id.remoteID == removedFeed }
         deletion.articles = []
@@ -86,6 +93,16 @@ struct ReaderLoadScenarioTests {
         #expect(session.unreadCounts.total == retainedUnread.count)
         #expect(session.unreadCounts.byAccount == [scenario.account.id: retainedUnread.count])
         #expect(session.unreadCounts.byFolder[folder.id] == expectedFolderUnread)
+        #expect(try await store.article(subject.id) == nil)
+        var survivors: [ArticleSnapshot] = []
+        while survivors.count < expectedSurvivors.count {
+            let page = try await store.articles(ArticleQuery(offset: survivors.count, limit: 1_000))
+            if page.isEmpty { break }
+            survivors.append(contentsOf: page)
+        }
+        let unchangedRemainingContent = survivors.elementsEqual(expectedSurvivors)
+        #expect(unchangedRemainingContent, "Every surviving original must keep its whole pre-deletion snapshot.")
+        #expect(try await store.pendingChanges(accountID: scenario.account.id).isEmpty)
         if articleCount == 10_000 {
             #expect(retainedUnread.count == 7_430)
             #expect(expectedFolderUnread == 525)

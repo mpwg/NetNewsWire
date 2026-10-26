@@ -148,6 +148,10 @@ final class ReaderSmokeTests: XCTestCase {
         search.typeText("Load article 120.")
         waitForValue(app.staticTexts["timelineCounts"], equalTo: "Entries: 1 · Loaded originals: 1")
         XCTAssertTrue(timeline.staticTexts["Load article 120"].exists)
+        let subject = XCTAttachment(screenshot: app.windows.firstMatch.screenshot())
+        subject.name = "Native 31-day-old unread original before pure subscription deletion"
+        subject.lifetime = .keepAlways
+        add(subject)
         app.buttons["removeLoadFolderFeed"].click()
         waitForValue(app.staticTexts["loadFixturePhase"], equalTo: "removed")
         waitForValue(app.staticTexts["timelineCounts"], equalTo: "Entries: 0 · Loaded originals: 0")
