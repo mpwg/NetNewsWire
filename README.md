@@ -39,6 +39,9 @@ Native VoiceOver has both named passing runs and retained failures; full menu/fo
 
 ## Model verification
 
+A reversible encoded-label v13 candidate on `codex/reader-encoded-offers` passes151 controlled code executions and four synthetic quoted-literal model controls, but the fixed six-source group fails compactness and field roles after nearly five minutes. The candidate is not integrated; complete acceptance remains open. [Candidate scope and receipts](docs/reader/evidence/i-encoded-offers-v13-2026-10-26.md).
+
+
 A native synthetic diagnostic reproduces malformed JSON for an exact schema choice containing double quotes in four combinations; unquoted controls pass. This identifies a specific failure boundary, not semantic acceptance or a universal framework defect. [Results and constraints](docs/reader/evidence/i-dynamic-schema-quotes-2026-10-26.md).
 
 
