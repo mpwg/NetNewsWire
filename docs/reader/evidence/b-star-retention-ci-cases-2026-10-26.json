@@ -1,0 +1,56 @@
+[
+  {
+    "children": [
+      {
+        "duration": "0,017s",
+        "durationInSeconds": 0.017400741577148438,
+        "name": "false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderSessionTests/starredPresentationRetainsUnsubscribedOriginals(keepsOtherSubscription:)?args=fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,018s",
+        "durationInSeconds": 0.018464088439941406,
+        "name": "true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderSessionTests/starredPresentationRetainsUnsubscribedOriginals(keepsOtherSubscription:)?args=b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "0,018s",
+    "durationInSeconds": 0.017932415008544922,
+    "name": "Starred presentation retains unsubscribed originals and clears removed selection",
+    "nodeIdentifier": "ReaderSessionTests/starredPresentationRetainsUnsubscribedOriginals(keepsOtherSubscription:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderSessionTests/starredPresentationRetainsUnsubscribedOriginals(keepsOtherSubscription:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "children": [
+      {
+        "duration": "0,0094s",
+        "durationInSeconds": 0.00939488410949707,
+        "name": "false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderStoreTests/unsubscribingRetainsStarsAndRemovesUnprotectedArticles(keepsOtherSubscription:)?args=fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,011s",
+        "durationInSeconds": 0.010771036148071289,
+        "name": "true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderStoreTests/unsubscribingRetainsStarsAndRemovesUnprotectedArticles(keepsOtherSubscription:)?args=b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "0,01s",
+    "durationInSeconds": 0.01008296012878418,
+    "name": "Unsubscribing retains independent stars with or without other subscriptions",
+    "nodeIdentifier": "ReaderStoreTests/unsubscribingRetainsStarsAndRemovesUnprotectedArticles(keepsOtherSubscription:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderStoreTests/unsubscribingRetainsStarsAndRemovesUnprotectedArticles(keepsOtherSubscription:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  }
+]
