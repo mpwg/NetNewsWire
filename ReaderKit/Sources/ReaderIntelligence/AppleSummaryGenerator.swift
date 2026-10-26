@@ -16,16 +16,6 @@ private struct GeneratedOffer: Encodable {
     var conditions: [String]
 }
 
-@Generable
-private struct GeneratedFacts {
-    @Guide(description: "One record per distinct offer, with its own product, merchant, price and all purchase conditions. Empty for non-offer news.",
-           .maximumCount(8))
-    var offers: [GeneratedOffer]
-    @Guide(description: "For non-offer news, one to eight exact source spans. For offers leave empty; populate offers instead.",
-           .maximumCount(8))
-    var excerpts: [String]
-}
-
 /// Exact source spelling plus ASCII-token and decimal boundaries; not semantic entailment.
 enum SourceQuotationMatching {
     static func contains(_ value: String, in source: String) -> Bool {
@@ -184,7 +174,7 @@ public actor AppleSummaryGenerator: SummaryGenerator {
         let factInstructions = """
         Extract source-bound facts from the supplied JSON source fragment.
         For offers, fill the offers array with separate product/merchant/price/conditions records; leave excerpts empty.
-        Use short exact source spans for every field. Do not rewrite spelling, punctuation, currency or coupon codes.
+        Choose each field from the supplied exact source literals. Do not rewrite spelling, punctuation, currency or coupon codes.
         Keep each product's own merchant, price and required coupon together. Do not swap terms between offers.
         Read through the end for eligibility, exclusions, expiry, shipping and condition of goods; retain every supplied purchase restriction.
         Prices of qualifying purchases are conditions, not the offer's own price. Never substitute comparison prices.
@@ -217,34 +207,54 @@ public actor AppleSummaryGenerator: SummaryGenerator {
         for (index, article) in articles.enumerated() {
             let source = article.text.isEmpty ? article.title : article.title + "\n" + article.text
             guard !source.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { throw ReaderError.invalidResponse }
-            let fragments = try await split(source, budget: factBudget, format: { try Self.sourcePrompt(index: index, text: $0) }, count: count)
+            let fragments = try await split(source, budget: factBudget, format: { fragment in
+                let catalog = SourceLiteralCatalog(fragment: fragment, original: source)
+                guard !catalog.choices.isEmpty else { throw Self.contextBudgetError() }
+                let schema = try Self.literalFactsSchema(catalog)
+                return try Self.sourcePrompt(index: index, text: fragment) + Self.schemaText(schema)
+            }, count: count)
             for fragment in fragments {
                 try await checkRequestPermission(cloudPermission)
+                let catalog = SourceLiteralCatalog(fragment: fragment, original: source)
+                let schema = try Self.literalFactsSchema(catalog)
                 let session = LanguageModelSession(model: model, instructions: factInstructions)
-                let response = try await session.respond(to: Self.sourcePrompt(index: index, text: fragment), generating: GeneratedFacts.self,
-                                                        options: GenerationOptions(maximumResponseTokens: 1200))
+                let response = try await session.respond(to: Self.sourcePrompt(index: index, text: fragment), schema: schema,
+                                                        options: GenerationOptions(maximumResponseTokens: 1200),
+                                                        contextOptions: ContextOptions(includeSchemaInPrompt: true))
                 try Task.checkCancellation()
                 if let trace {
                     await trace(SummaryGenerationTrace(stage: "facts", prompt: try Self.sourcePrompt(index: index, text: fragment),
                                                        response: response.rawContent.jsonString, instructions: factInstructions))
                     try Task.checkCancellation()
                 }
-                guard response.content.offers.count <= 8 else { throw ReaderError.invalidResponse }
-                let offers = try response.content.offers.map { value in
-                    try SourceOfferValidation.validate(DigestOfferFact(
-                        product: value.product, merchant: value.merchant, price: value.price, conditions: value.conditions
-                    ), in: fragment)
+                let generatedOffers: [GeneratedOffer]
+                let generatedExcerpts: [String]
+                do {
+                    generatedOffers = try response.content.value([GeneratedOffer].self, forProperty: "offers")
+                    generatedExcerpts = try response.content.value([String].self, forProperty: "excerpts")
+                } catch {
+                    throw ReaderError.invalidResponse
+                }
+                guard generatedOffers.count <= 8 else { throw ReaderError.invalidResponse }
+                let offers = try generatedOffers.map { value in
+                    let offer = DigestOfferFact(product: value.product, merchant: value.merchant,
+                                                price: value.price, conditions: value.conditions)
+                    guard offer.quotedValues.allSatisfy(catalog.choices.contains) else { throw ReaderError.invalidResponse }
+                    _ = try SourceOfferValidation.validate(offer, in: fragment)
+                    return try SourceOfferValidation.validate(offer, in: source)
                 }
                 let excerpts: [String]
                 let evidenceText: String
                 if offers.isEmpty {
-                    excerpts = try SourceFactValidation.excerpts(response.content.excerpts, in: fragment)
+                    guard generatedExcerpts.allSatisfy(catalog.choices.contains) else { throw ReaderError.invalidResponse }
+                    let fragmentExcerpts = try SourceFactValidation.excerpts(generatedExcerpts, in: fragment)
+                    excerpts = try SourceFactValidation.excerpts(fragmentExcerpts, in: source)
                     evidenceText = excerpts.joined(separator: "\n")
                 } else {
                     var seen: Set<String> = []
                     excerpts = offers.flatMap(\.quotedValues).filter { seen.insert($0).inserted }
                     // Model input contains source fields, never Reader-generated UUIDs.
-                    evidenceText = String(decoding: try JSONEncoder().encode(response.content.offers), as: UTF8.self)
+                    evidenceText = String(decoding: try JSONEncoder().encode(generatedOffers), as: UTF8.self)
                 }
                 for offer in offers where !(originalOffers[index] ?? []).contains(where: { $0.hasSameFields(as: offer) }) {
                     originalOffers[index, default: []].append(offer)
@@ -316,8 +326,18 @@ public actor AppleSummaryGenerator: SummaryGenerator {
             } else {
                 guard part.count > 1 else { throw Self.contextBudgetError() }
                 let middle = part.index(part.startIndex, offsetBy: part.count / 2)
-                pending.append(String(part[middle...]))
-                pending.append(String(part[..<middle]))
+                let before = part[..<middle].lastIndex(where: \.isWhitespace)
+                let after = part[middle...].firstIndex(where: \.isWhitespace)
+                let boundary: String.Index
+                if let before, before > part.startIndex {
+                    boundary = part.index(after: before)
+                } else if let after, part.index(after: after) < part.endIndex {
+                    boundary = part.index(after: after)
+                } else {
+                    boundary = middle
+                }
+                pending.append(String(part[boundary...]))
+                pending.append(String(part[..<boundary]))
             }
         }
         return fragments
@@ -367,6 +387,34 @@ public actor AppleSummaryGenerator: SummaryGenerator {
     private static func consolidationInstructions(_ base: String, evidence: [SummaryEvidence]) -> String {
         let articles = Set(evidence.flatMap(\.sourceNumbers)).sorted().map(String.init).joined(separator: ",")
         return base + "\nAvailable articles: [" + articles + "]\nCite only supporting packet sourceNumbers actually used."
+    }
+
+    static func literalFactsSchema(_ catalog: SourceLiteralCatalog) throws -> GenerationSchema {
+        guard !catalog.choices.isEmpty else { throw ReaderError.invalidResponse }
+        let literal = DynamicGenerationSchema(name: "OriginalLiteral", anyOf: catalog.choices)
+        let value = DynamicGenerationSchema(referenceTo: "OriginalLiteral")
+        let offer = DynamicGenerationSchema(name: "Offer", representNilExplicitlyInGeneratedContent: true, properties: [
+            .init(name: "product", description: "Short product or benefit name.", schema: value),
+            .init(name: "merchant", description: "Supplying merchant or null if unknown.", schema: value, isOptional: true),
+            .init(name: "price", description: "Offered price or discount, not comparison price; null if unknown.",
+                  schema: value, isOptional: true),
+            .init(name: "conditions", description: "Required coupons, eligibility and restrictions.",
+                  schema: DynamicGenerationSchema(arrayOf: value, minimumElements: 0, maximumElements: 8))
+        ])
+        let root = DynamicGenerationSchema(name: "Facts", properties: [
+            .init(name: "offers", description: "Separate offers with their own terms.",
+                  schema: DynamicGenerationSchema(arrayOf: DynamicGenerationSchema(referenceTo: "Offer"),
+                                                  minimumElements: 0, maximumElements: 8)),
+            .init(name: "excerpts", description: "Only for non-offer news.",
+                  schema: DynamicGenerationSchema(arrayOf: value, minimumElements: 0, maximumElements: 8))
+        ])
+        return try GenerationSchema(root: root, dependencies: [literal, offer])
+    }
+
+    private static func schemaText(_ schema: GenerationSchema) throws -> String {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.sortedKeys]
+        return String(decoding: try encoder.encode(schema), as: UTF8.self)
     }
 
     private static func sourcePrompt(index: Int, text: String) throws -> String {

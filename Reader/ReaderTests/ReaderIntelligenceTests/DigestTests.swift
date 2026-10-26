@@ -113,6 +113,54 @@ private actor ModelRequestJournal {
     }
 }
 
+struct SourceLiteralCatalogTests {
+    @Test("Literal choices retain original spelling and protect token and decimal boundaries")
+    func choicesComeFromTheOriginal() throws {
+        let original = "Example Store: Luma lamp costs EUR 129.99; use SAVE50; pickup only."
+        let catalog = SourceLiteralCatalog(fragment: original, original: original)
+        #expect(catalog.choices.contains("Example Store"))
+        #expect(catalog.choices.contains("Luma lamp"))
+        #expect(catalog.choices.contains("EUR 129.99"))
+        #expect(catalog.choices.contains("SAVE50"))
+        #expect(catalog.choices.contains("pickup only"))
+        #expect(!catalog.choices.contains("29.99"))
+        #expect(!catalog.choices.contains("SAVE5"))
+        #expect(catalog.choices.allSatisfy { SourceQuotationMatching.contains($0, in: original) })
+        #expect(Set(catalog.choices).count == catalog.choices.count)
+        let schema = try AppleSummaryGenerator.literalFactsSchema(catalog)
+        let encoded = String(decoding: try JSONEncoder().encode(schema), as: UTF8.self)
+        #expect(encoded.contains("SAVE50"))
+        #expect(encoded.contains("129.99"))
+    }
+
+    @Test("The candidate catalog includes distinct offer terms")
+    func catalogIncludesTwoOffers() {
+        let source = "Example Store offers the Luma lamp for EUR 29.99. Code SAVE5 required; pickup only. Other Store offers the Vela kettle for EUR 44.90; online only."
+        let catalog = SourceLiteralCatalog(fragment: source, original: source)
+        for expected in ["Example Store", "Luma lamp", "EUR 29.99", "Code SAVE5 required",
+                         "pickup only", "Other Store", "Vela kettle", "EUR 44.90", "online only"] {
+            #expect(catalog.choices.contains(expected), "Missing literal: \(expected)")
+        }
+    }
+
+    @Test("A source split cannot authorize a clipped word or decimal")
+    func fragmentCannotInventSourceBoundaries() {
+        let original = "Special code SAVE50 costs EUR 129.99."
+        let fragment = "SAVE5"
+        let catalog = SourceLiteralCatalog(fragment: fragment, original: original)
+        #expect(catalog.choices.isEmpty)
+        #expect(throws: ReaderError.invalidResponse) { try AppleSummaryGenerator.literalFactsSchema(catalog) }
+    }
+
+    @Test("Original Unicode spelling survives catalog construction")
+    func unicodeSpellingStaysLiteral() {
+        let source = "Cafe\u{301} 店舗: １２９円; coupon SAVE50."
+        let catalog = SourceLiteralCatalog(fragment: source, original: source)
+        #expect(catalog.choices.contains { $0.unicodeScalars.elementsEqual("Cafe\u{301}".unicodeScalars) })
+        #expect(catalog.choices.allSatisfy { SourceQuotationMatching.contains($0, in: source) })
+    }
+}
+
 struct SourceOfferValidationTests {
     @Test("Partial-only numeric or identifier matches cannot become an extracted offer", arguments: [
         ("29.99", "Luma lamp costs EUR 129.99."),
@@ -272,7 +320,7 @@ struct AppleSummaryGeneratorTests {
             return #"{"groups":[{"title":"Offers","summary":"Luma lamp: EUR 29.99; SAVE5 required, pickup only. Vela kettle: EUR 44.90, online only.","sourceNumbers":[0]}]}"#
         })
         let sections = try await AppleSummaryGenerator().generate(
-            [source], model: ControlledLanguageModel(journal: journal), capacity: 10000, count: { $0.count })
+            [source], model: ControlledLanguageModel(journal: journal), capacity: 100000, count: { $0.count })
         let facts = try #require(sections.first?.sourceFacts?.first)
         let offers = try #require(facts.offers)
         #expect(facts.source == source.id)
@@ -460,7 +508,7 @@ struct AppleSummaryGeneratorTests {
         #expect(result.first?.sourceFacts?.first?.source == source.id)
     }
 
-    @Test("Every raw source character reaches extraction and every stage respects its runtime budget", arguments: [3500, 4500])
+    @Test("Every raw source character reaches extraction and every stage respects its runtime budget", arguments: [8000, 12000])
     func longSourceChunksPreserveContent(capacity: Int) async throws {
         let journal = ModelRequestJournal()
         var source = try article()
@@ -479,7 +527,15 @@ struct AppleSummaryGeneratorTests {
                 consolidations += 1
             }
             #expect(!prompt.isEmpty)
-            #expect(prompt.count <= capacity - modelInstructions(request).count - 2000)
+            if let schema = request.schema,
+               (try? JSONDecoder().decode(CapturedModelSource.self, from: Data(prompt.utf8))) != nil {
+                let encoder = JSONEncoder()
+                encoder.outputFormatting = [.sortedKeys]
+                let schemaText = String(decoding: try encoder.encode(schema), as: UTF8.self)
+                #expect((prompt + schemaText).count <= capacity - modelInstructions(request).count - 2000)
+            } else {
+                #expect(prompt.count <= capacity - modelInstructions(request).count - 2000)
+            }
             #expect(request.enabledToolDefinitions.isEmpty)
             #expect(request.schema != nil)
             #expect(request.generationOptions.maximumResponseTokens == 1200)
@@ -534,7 +590,7 @@ struct AppleSummaryGeneratorTests {
         source.text = String(repeating: "Long source material ", count: 200)
         await #expect(throws: ReaderError.self) {
             try await AppleSummaryGenerator().generate([source], model: ControlledLanguageModel(journal: journal),
-                                                      capacity: 4000, cloudPermission: { await journal.requests.isEmpty },
+                                                      capacity: 8000, cloudPermission: { await journal.requests.isEmpty },
                                                       count: { $0.count })
         }
         #expect(await journal.requests.count == 1)
@@ -628,7 +684,7 @@ struct AppleSummaryGeneratorTests {
         let journal = ModelRequestJournal(factResponses: [try modelJSON(["offers": [], "excerpts": ["Other Store costs EUR 10.00."]])])
         await #expect(throws: ReaderError.self) {
             try await AppleSummaryGenerator().generate([source], model: ControlledLanguageModel(journal: journal),
-                                                      capacity: laterFragment ? 4000 : 10000, count: { $0.count })
+                                                      capacity: laterFragment ? 8000 : 10000, count: { $0.count })
         }
         #expect(await journal.requests.count == 1)
     }
@@ -748,24 +804,34 @@ struct AppleSummaryGeneratorTests {
 
     @Test("Nonshrinking consolidation fails within a bounded first reduction", .timeLimit(.minutes(1)))
     func nonshrinkingConsolidationDoesNotLoop() async throws {
-        var sources = try distinctSources(count: 8)
+        var sources = try distinctSources(count: 40)
         for index in sources.indices { sources[index].text = String(repeating: "Source evidence words ", count: 20) }
         let journal = ModelRequestJournal(consolidation: { prompt in
             let inputs = try JSONDecoder().decode([CapturedModelSource].self, from: Data(prompt.utf8))
             let label = String(try #require(inputs.first).text.prefix(20))
             let groups = ["Alpha", "Beta", "Gamma", "Delta"].map {
                 ["title": $0 + " " + label,
-                 "summary": String(repeating: "Source evidence words ", count: 8) + ".",
+                 "summary": String(repeating: "Source evidence words ", count: 40) + ".",
                  "sourceNumbers": inputs.map(\.sourceNumber)] as [String: Any]
             }
             return try modelJSON(["groups": groups])
         })
         await #expect(throws: ReaderError.self) {
             try await AppleSummaryGenerator().generate(sources, model: ControlledLanguageModel(journal: journal),
-                                                      capacity: 4000, count: { $0.count })
+                                                      capacity: 10000, count: { $0.count })
         }
-        let count = await journal.requests.count
-        #expect(count > 8 && count <= 16)
+        let requests = await journal.requests
+        let facts = requests.filter { modelPrompt($0).first == "{" }
+        let consolidations = try requests.filter { modelPrompt($0).first == "[" }.map {
+            try JSONDecoder().decode([CapturedModelSource].self, from: Data(modelPrompt($0).utf8))
+        }
+        #expect(facts.count >= sources.count)
+        #expect(!consolidations.isEmpty)
+        #expect(consolidations.count <= facts.count)
+        #expect(consolidations.flatMap { $0 }.allSatisfy { input in
+            !["Alpha ", "Beta ", "Gamma ", "Delta "].contains { input.text.hasPrefix($0) }
+        })
+        #expect(requests.count == facts.count + consolidations.count)
     }
 
     private func distinctSources(count: Int) throws -> [ArticleSnapshot] {
@@ -832,7 +898,7 @@ private actor ControlledGenerator: SummaryGenerator {
 }
 
 struct DigestTests {
-    @Test("Unchanged caches from earlier generation and validation policies are regenerated", arguments: ["", "reader-source-facts-consolidation-v1\n", "reader-source-facts-consolidation-v2\n", "reader-source-facts-consolidation-v3\n", "reader-source-facts-consolidation-v4\n", "reader-source-facts-consolidation-v5\n", "reader-source-facts-consolidation-v6\n", "reader-source-facts-consolidation-v7\n", "reader-source-facts-consolidation-v8\n"])
+    @Test("Unchanged caches from earlier generation and validation policies are regenerated", arguments: ["", "reader-source-facts-consolidation-v1\n", "reader-source-facts-consolidation-v2\n", "reader-source-facts-consolidation-v3\n", "reader-source-facts-consolidation-v4\n", "reader-source-facts-consolidation-v5\n", "reader-source-facts-consolidation-v6\n", "reader-source-facts-consolidation-v7\n", "reader-source-facts-consolidation-v8\n", "reader-source-facts-consolidation-v9\n", "reader-source-facts-consolidation-v10\n", "reader-source-facts-consolidation-v11\n"])
     func previousGenerationCacheIsRegenerated(policyPrefix: String) async throws {
         let (store, feed, articles) = try await fixture()
         let coordinator = DigestCoordinator(repository: store, generator: FixtureGenerator())

@@ -1,0 +1,1578 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "00006040-000A51392100801C",
+      "deviceName" : "My Mac",
+      "modelName" : "MacBook Pro",
+      "osBuildNumber" : "26B123",
+      "osVersion" : "27.2",
+      "platform" : "macOS"
+    }
+  ],
+  "testNodes" : [
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "children" : [
+                {
+                  "duration" : "0,06s",
+                  "durationInSeconds" : 0.06044888496398926,
+                  "name" : "Blank model text cannot claim complete source coverage or publish a digest",
+                  "nodeIdentifier" : "DigestTests/blankModelTextDoesNotClaimCoverage()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/blankModelTextDoesNotClaimCoverage()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0,097s",
+                  "durationInSeconds" : 0.09703803062438965,
+                  "name" : "Selected native model prose retains every original without changing stored articles",
+                  "nodeIdentifier" : "DigestTests/selectedModelStatementsPreserveAllOriginalLinks()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/selectedModelStatementsPreserveAllOriginalLinks()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0,076s",
+                  "durationInSeconds" : 0.07629179954528809,
+                  "name" : "Model responses for changed sources are not saved",
+                  "nodeIdentifier" : "DigestTests/modelResponsesForChangedSourcesAreNotSaved()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/modelResponsesForChangedSourcesAreNotSaved()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0,072s",
+                  "durationInSeconds" : 0.07167506217956543,
+                  "name" : "Marking a digest read applies only to the displayed revision",
+                  "nodeIdentifier" : "DigestTests/markingADigestReadAppliesOnlyToTheDisplayedRevision()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/markingADigestReadAppliesOnlyToTheDisplayedRevision()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0,067s",
+                  "durationInSeconds" : 0.06655001640319824,
+                  "name" : "Changed source text regenerates a digest",
+                  "nodeIdentifier" : "DigestTests/changedSourceTextRegeneratesADigest()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/changedSourceTextRegeneratesADigest()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0,053s",
+                  "durationInSeconds" : 0.05337190628051758,
+                  "name" : "Invalid model source references are not saved",
+                  "nodeIdentifier" : "DigestTests/invalidModelSourceReferencesAreNotSaved()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/invalidModelSourceReferencesAreNotSaved()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "children" : [
+                    {
+                      "duration" : "0,055s",
+                      "durationInSeconds" : 0.05530285835266113,
+                      "name" : "0",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/modelFailuresPreserveWarningsAndOriginals(kind:)?args=5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,054s",
+                      "durationInSeconds" : 0.053872108459472656,
+                      "name" : "1",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/modelFailuresPreserveWarningsAndOriginals(kind:)?args=6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,055s",
+                      "durationInSeconds" : 0.05487394332885742,
+                      "name" : "2",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/modelFailuresPreserveWarningsAndOriginals(kind:)?args=d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,052s",
+                      "durationInSeconds" : 0.05231499671936035,
+                      "name" : "3",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/modelFailuresPreserveWarningsAndOriginals(kind:)?args=4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    }
+                  ],
+                  "duration" : "0,054s",
+                  "durationInSeconds" : 0.05409097671508789,
+                  "name" : "Model failures keep their native warning and every unread original",
+                  "nodeIdentifier" : "DigestTests/modelFailuresPreserveWarningsAndOriginals(kind:)",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/modelFailuresPreserveWarningsAndOriginals(kind:)",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0,053s",
+                  "durationInSeconds" : 0.05267024040222168,
+                  "name" : "A generator cannot publish source facts that do not occur in their own originals",
+                  "nodeIdentifier" : "DigestTests/fabricatedSourceFactsAreNotPublished()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/fabricatedSourceFactsAreNotPublished()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "children" : [
+                    {
+                      "duration" : "0,054s",
+                      "durationInSeconds" : 0.05430793762207031,
+                      "name" : "\"\"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/previousGenerationCacheIsRegenerated(policyPrefix:)?args=12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,049s",
+                      "durationInSeconds" : 0.04860329627990723,
+                      "name" : "\"reader-source-facts-consolidation-v1 \"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/previousGenerationCacheIsRegenerated(policyPrefix:)?args=d3e33ddf4eb96ad41bdc03871d138e996c142871993fbd5e65aa2a64c0ee0070",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,048s",
+                      "durationInSeconds" : 0.047972917556762695,
+                      "name" : "\"reader-source-facts-consolidation-v2 \"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/previousGenerationCacheIsRegenerated(policyPrefix:)?args=cb3cd90e30fcb26f66b52a1b9a333d7ca6ddea8d51914284fd06d9521dc0c4ff",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,048s",
+                      "durationInSeconds" : 0.04813098907470703,
+                      "name" : "\"reader-source-facts-consolidation-v3 \"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/previousGenerationCacheIsRegenerated(policyPrefix:)?args=9220bc19121a8af249ef054bc104798c1c164ed4b32ff0f00fd714eee4118bd7",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,048s",
+                      "durationInSeconds" : 0.0481259822845459,
+                      "name" : "\"reader-source-facts-consolidation-v4 \"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/previousGenerationCacheIsRegenerated(policyPrefix:)?args=80e901f6c8276927b1432beeffcef4de5d28d3593a93f7fa45c5b9eff376b710",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,048s",
+                      "durationInSeconds" : 0.04804396629333496,
+                      "name" : "\"reader-source-facts-consolidation-v5 \"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/previousGenerationCacheIsRegenerated(policyPrefix:)?args=29f5221018acc13c4031422cbe1595adb0473e04b6f4142e2afcf6e5bf3e8e79",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,048s",
+                      "durationInSeconds" : 0.04754900932312012,
+                      "name" : "\"reader-source-facts-consolidation-v6 \"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/previousGenerationCacheIsRegenerated(policyPrefix:)?args=1d9da073d77ef8d5b9467f6c800f31eae825110b36801b31a2d3de1653638b8c",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,049s",
+                      "durationInSeconds" : 0.04876399040222168,
+                      "name" : "\"reader-source-facts-consolidation-v7 \"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/previousGenerationCacheIsRegenerated(policyPrefix:)?args=f6c91e7dd3877c6a5ec7509730de92aa69fe75107c1aa543b4d047ed1db37800",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,049s",
+                      "durationInSeconds" : 0.04871392250061035,
+                      "name" : "\"reader-source-facts-consolidation-v8 \"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/previousGenerationCacheIsRegenerated(policyPrefix:)?args=dfb76ebc170525a9c3db2fea9078f906a4076577e97d8e7dac4d5aefa4028d92",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,048s",
+                      "durationInSeconds" : 0.04841208457946777,
+                      "name" : "\"reader-source-facts-consolidation-v9 \"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/previousGenerationCacheIsRegenerated(policyPrefix:)?args=39b12a5dde7ae9b646b1bf7f685f57b9d321048de3fa87f5aed4736bbd0f0d62",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,047s",
+                      "durationInSeconds" : 0.047322988510131836,
+                      "name" : "\"reader-source-facts-consolidation-v10 \"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/previousGenerationCacheIsRegenerated(policyPrefix:)?args=d98df5bfd43d3d0565f1f8985fb677072ac182b01f2e53522358c84b3b6a839a",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,047s",
+                      "durationInSeconds" : 0.04668617248535156,
+                      "name" : "\"reader-source-facts-consolidation-v11 \"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/previousGenerationCacheIsRegenerated(policyPrefix:)?args=3d590a08515d6931d27cfd678a1b408e579f45ed5019728886b222952ccac880",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    }
+                  ],
+                  "duration" : "0,049s",
+                  "durationInSeconds" : 0.04855277140935262,
+                  "name" : "Unchanged caches from earlier generation and validation policies are regenerated",
+                  "nodeIdentifier" : "DigestTests/previousGenerationCacheIsRegenerated(policyPrefix:)",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/previousGenerationCacheIsRegenerated(policyPrefix:)",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0,063s",
+                  "durationInSeconds" : 0.06344008445739746,
+                  "name" : "All sources remain accessible when model coverage is incomplete",
+                  "nodeIdentifier" : "DigestTests/allSourcesRemainAccessibleWhenModelCoverageIsIncomplete()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/allSourcesRemainAccessibleWhenModelCoverageIsIncomplete()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "children" : [
+                    {
+                      "duration" : "0,066s",
+                      "durationInSeconds" : 0.06559181213378906,
+                      "name" : "false",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/stagedFailuresPreserveOriginalsAndOutbox(invalidOutput:)?args=fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,066s",
+                      "durationInSeconds" : 0.06613874435424805,
+                      "name" : "true",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/stagedFailuresPreserveOriginalsAndOutbox(invalidOutput:)?args=b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    }
+                  ],
+                  "duration" : "0,066s",
+                  "durationInSeconds" : 0.06586527824401855,
+                  "name" : "A late staged failure keeps warned originals and cannot change their stored state",
+                  "nodeIdentifier" : "DigestTests/stagedFailuresPreserveOriginalsAndOutbox(invalidOutput:)",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/stagedFailuresPreserveOriginalsAndOutbox(invalidOutput:)",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0,042s",
+                  "durationInSeconds" : 0.04155588150024414,
+                  "name" : "Cancelling generation releases the generator gate",
+                  "nodeIdentifier" : "DigestTests/cancellingGenerationReleasesGeneratorGate()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/cancellingGenerationReleasesGeneratorGate()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0,032s",
+                  "durationInSeconds" : 0.03237414360046387,
+                  "name" : "A generator gate fails promptly when generation never starts",
+                  "nodeIdentifier" : "DigestTests/generatorGateFailsWhenGenerationNeverStarts()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/generatorGateFailsWhenGenerationNeverStarts()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "children" : [
+                    {
+                      "duration" : "0,042s",
+                      "durationInSeconds" : 0.04178118705749512,
+                      "name" : "0",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/cachedClaimsRequireValidContentAndSources(kind:)?args=5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,041s",
+                      "durationInSeconds" : 0.041242122650146484,
+                      "name" : "1",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/cachedClaimsRequireValidContentAndSources(kind:)?args=6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,042s",
+                      "durationInSeconds" : 0.04185009002685547,
+                      "name" : "2",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/cachedClaimsRequireValidContentAndSources(kind:)?args=d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,041s",
+                      "durationInSeconds" : 0.04068875312805176,
+                      "name" : "3",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/cachedClaimsRequireValidContentAndSources(kind:)?args=4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,04s",
+                      "durationInSeconds" : 0.04029417037963867,
+                      "name" : "4",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/cachedClaimsRequireValidContentAndSources(kind:)?args=4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,04s",
+                      "durationInSeconds" : 0.04022955894470215,
+                      "name" : "5",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/cachedClaimsRequireValidContentAndSources(kind:)?args=ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,039s",
+                      "durationInSeconds" : 0.0389707088470459,
+                      "name" : "6",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/cachedClaimsRequireValidContentAndSources(kind:)?args=e7f6c011776e8db7cd330b54174fd76f7d0216b612387a5ffcfb81e6f0919683",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,039s",
+                      "durationInSeconds" : 0.03878307342529297,
+                      "name" : "7",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/cachedClaimsRequireValidContentAndSources(kind:)?args=7902699be42c8a8e46fbbb4501726517e86b22c56a189f7625a6da49081b2451",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,04s",
+                      "durationInSeconds" : 0.03961992263793945,
+                      "name" : "8",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/cachedClaimsRequireValidContentAndSources(kind:)?args=2c624232cdd221771294dfbb310aca000a0df6ac8b66b696d90ef06fdefb64a3",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,038s",
+                      "durationInSeconds" : 0.037973642349243164,
+                      "name" : "9",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/cachedClaimsRequireValidContentAndSources(kind:)?args=19581e27de7ced00ff1ce50b2047e7a567c76b1cbaebabe5ef03f7c3017bb5b7",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,037s",
+                      "durationInSeconds" : 0.037255048751831055,
+                      "name" : "10",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/cachedClaimsRequireValidContentAndSources(kind:)?args=4a44dc15364204a80fe80e9039455cc1608281820fe2b24f1e5233ade6af1dd5",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,037s",
+                      "durationInSeconds" : 0.03743290901184082,
+                      "name" : "11",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/cachedClaimsRequireValidContentAndSources(kind:)?args=4fc82b26aecb47d2868c4efbe3581732a3e7cbcc6c2efb32062c08170a05eeb8",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    }
+                  ],
+                  "duration" : "0,04s",
+                  "durationInSeconds" : 0.03967676560084025,
+                  "name" : "Cache reuse requires complete nonblank sections and source-owned facts",
+                  "nodeIdentifier" : "DigestTests/cachedClaimsRequireValidContentAndSources(kind:)",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/cachedClaimsRequireValidContentAndSources(kind:)",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0,042s",
+                  "durationInSeconds" : 0.04200100898742676,
+                  "name" : "Revoked cloud consent applies to ongoing work",
+                  "nodeIdentifier" : "DigestTests/revokedCloudConsentAppliesToOngoingWork()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/revokedCloudConsentAppliesToOngoingWork()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0,04s",
+                  "durationInSeconds" : 0.04019665718078613,
+                  "name" : "Cancelling a window task does not cancel the owned digest job",
+                  "nodeIdentifier" : "DigestTests/cancellingAWindowTaskDoesNotCancelTheOwnedDigestJob()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests/cancellingAWindowTaskDoesNotCancelTheOwnedDigestJob()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "DigestTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/DigestTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "children" : [
+                    {
+                      "duration" : "0,00013s",
+                      "durationInSeconds" : 0.00013303756713867188,
+                      "name" : "\"A notebook from Example Store costs EUR 29.99.\", \"Example Store costs EUR 29.99.\"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceFactValidationTests/excerptsRemainVerbatim(fragment:excerpt:)?args=541690e3127a0238ccf3916a179112fa5fdc567a7cb021f39f0c288c6ad659cc",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,00015s",
+                      "durationInSeconds" : 0.00014591217041015625,
+                      "name" : "\"Bei Beispielmarkt kostet es EUR 29,99.\", \"Beispielmarkt kostet es EUR 29,99.\"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceFactValidationTests/excerptsRemainVerbatim(fragment:excerpt:)?args=e198205ce69fc60b3e8404186add29621dbda32151d46aa83d1b7ae89682a786",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,00045s",
+                      "durationInSeconds" : 0.0004458427429199219,
+                      "name" : "\"Café offer 🧪 costs EUR 2.99.\", \"Café offer 🧪\"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceFactValidationTests/excerptsRemainVerbatim(fragment:excerpt:)?args=08a41de93fdb4344c8fd011d1ef10ab49537f0bf465c41a0554dea3609b92670",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,000046s",
+                      "durationInSeconds" : 4.6253204345703125e-05,
+                      "name" : "\"Café offer costs EUR 2.99.\", \"Café offer\"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceFactValidationTests/excerptsRemainVerbatim(fragment:excerpt:)?args=9bf93f87508cd57a6f29e98d87a96cb0b21fd8dccb2e49bbf5b8a41267d5ebd6",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,0002s",
+                      "durationInSeconds" : 0.00020170211791992188,
+                      "name" : "\"商店の価格は 29.99 EUR。\", \"29.99 EUR\"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceFactValidationTests/excerptsRemainVerbatim(fragment:excerpt:)?args=9c18c788a49da52913f2eb06985958640d2b78f5901e3e64890298213be4db22",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    }
+                  ],
+                  "duration" : "0,00019s",
+                  "durationInSeconds" : 0.000194549560546875,
+                  "name" : "Source excerpts preserve Unicode, merchant names and numeric punctuation",
+                  "nodeIdentifier" : "SourceFactValidationTests/excerptsRemainVerbatim(fragment:excerpt:)",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceFactValidationTests/excerptsRemainVerbatim(fragment:excerpt:)",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "children" : [
+                    {
+                      "duration" : "0,00078s",
+                      "durationInSeconds" : 0.0007758140563964844,
+                      "name" : "[\" \\n\\t\"]",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceFactValidationTests/invalidExcerptsAreRejected(excerpts:)?args=0df7c8ebd7ad181390430ab2305125da48d478922015997b73b2210abe8b2368",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,00058s",
+                      "durationInSeconds" : 0.0005829334259033203,
+                      "name" : "[\"\"]",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceFactValidationTests/invalidExcerptsAreRejected(excerpts:)?args=055539df4a0b804c58caf46c0cd2941af10d64c1395ddd8e50b5f55d945841e6",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,00015s",
+                      "durationInSeconds" : 0.00015211105346679688,
+                      "name" : "[\"A notebook\", \"A notebook\", \"A notebook\", \"A notebook\", \"A notebook\", \"A notebook\", \"A notebook\", \"A notebook\", \"A notebook\"]",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceFactValidationTests/invalidExcerptsAreRejected(excerpts:)?args=f3309f0b91fbb63146d38beead0d2b97623a5d927631c15d1a9e3afbfcd96c2e",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,00011s",
+                      "durationInSeconds" : 0.00010991096496582031,
+                      "name" : "[\"A notebook\", \"An invented fact\"]",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceFactValidationTests/invalidExcerptsAreRejected(excerpts:)?args=b3a6a031f068039b7da236ab2b6bad174cb861b9317e41d8952898d5880f5332",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,000047s",
+                      "durationInSeconds" : 4.7206878662109375e-05,
+                      "name" : "[\"EUR 999\"]",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceFactValidationTests/invalidExcerptsAreRejected(excerpts:)?args=3aa59855598ee8e01e85be990bde70f3ce12cfbc5f3ff3b24fa3a2c70cc2ce3d",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,00015s",
+                      "durationInSeconds" : 0.0001513957977294922,
+                      "name" : "[\"Example Shop costs EUR 29.99.\"]",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceFactValidationTests/invalidExcerptsAreRejected(excerpts:)?args=c542fa23a894660aa7ccc6afd5eac904f03b65f29fe2d8a5c1f2c4ae074afa26",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,000092s",
+                      "durationInSeconds" : 9.202957153320312e-05,
+                      "name" : "[\"Example Store costs EUR 29,99.\"]",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceFactValidationTests/invalidExcerptsAreRejected(excerpts:)?args=ed462c2dbb07837e513fcc3b31f24f0c56e3d213836fe95c021df1d32f826d22",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,00053s",
+                      "durationInSeconds" : 0.0005292892456054688,
+                      "name" : "[]",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceFactValidationTests/invalidExcerptsAreRejected(excerpts:)?args=4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    }
+                  ],
+                  "duration" : "0,00031s",
+                  "durationInSeconds" : 0.0003050863742828369,
+                  "name" : "Empty, fabricated, reformatted and excessive source excerpts are rejected",
+                  "nodeIdentifier" : "SourceFactValidationTests/invalidExcerptsAreRejected(excerpts:)",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceFactValidationTests/invalidExcerptsAreRejected(excerpts:)",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0,00013s",
+                  "durationInSeconds" : 0.00012803077697753906,
+                  "name" : "The bounded fact set retains its original order",
+                  "nodeIdentifier" : "SourceFactValidationTests/maximumFactSetKeepsItsOrder()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceFactValidationTests/maximumFactSetKeepsItsOrder()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "children" : [
+                    {
+                      "duration" : "0,00017s",
+                      "durationInSeconds" : 0.0001697540283203125,
+                      "name" : "\"29.99 EUR\", \"商店の価格は29.99 EUR。\", true",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceFactValidationTests/quotationsNeedExactTokenBoundaries(value:source:valid:)?args=bfb41e209ae35b143af77387a62809b486d8dc6af062133942663d91bb5e9d5d",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,00022s",
+                      "durationInSeconds" : 0.0002200603485107422,
+                      "name" : "\"29.99\", \"EUR 129.99\", false",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceFactValidationTests/quotationsNeedExactTokenBoundaries(value:source:valid:)?args=5b8d7111803088892f51057878cd2dcfad0e8af98d8e0d3f61c1f28a0e347a09",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,000088s",
+                      "durationInSeconds" : 8.797645568847656e-05,
+                      "name" : "\"29\", \"EUR 29.99\", false",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceFactValidationTests/quotationsNeedExactTokenBoundaries(value:source:valid:)?args=6affb13ee2227068317976be0728dcf79d761d4c0427adb9c6a166bd7d1915a7",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,000051s",
+                      "durationInSeconds" : 5.125999450683594e-05,
+                      "name" : "\"99\", \"EUR 29.99\", false",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceFactValidationTests/quotationsNeedExactTokenBoundaries(value:source:valid:)?args=ff29139fcdd771865fd988fc69dbd42f70176327a55a16b76782758d9839665c",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,000043s",
+                      "durationInSeconds" : 4.291534423828125e-05,
+                      "name" : "\"Café\", \"Café offer\", false",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceFactValidationTests/quotationsNeedExactTokenBoundaries(value:source:valid:)?args=81a4507d9891ed970b913e8e3a40fb99b599ccf4c5dbd9f9999b5b3a6e493c86",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,00017s",
+                      "durationInSeconds" : 0.00017404556274414062,
+                      "name" : "\"Café\", \"Café offer\", true",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceFactValidationTests/quotationsNeedExactTokenBoundaries(value:source:valid:)?args=6db370d7d95a4d52124b8a38f1aec2ed92b5529a91d3288dc75e4209731ebd75",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,00011s",
+                      "durationInSeconds" : 0.00011301040649414062,
+                      "name" : "\"EUR 29.99\", \"EUR 29.99.\", true",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceFactValidationTests/quotationsNeedExactTokenBoundaries(value:source:valid:)?args=24b5d8429c8a38b29226b0851e78bb0c550b5c016bacc93c0e92a9dad7b2fc85",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,00015s",
+                      "durationInSeconds" : 0.00015497207641601562,
+                      "name" : "\"SAVE5\", \"Code SAVE50\", false",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceFactValidationTests/quotationsNeedExactTokenBoundaries(value:source:valid:)?args=1759d85a53d155120de43edf66156ed21fbc5f769bebafa4addc26d93cd0412e",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    }
+                  ],
+                  "duration" : "0,00013s",
+                  "durationInSeconds" : 0.00012674927711486816,
+                  "name" : "Source quotation matching rejects partial ASCII tokens and decimals while retaining exact Unicode",
+                  "nodeIdentifier" : "SourceFactValidationTests/quotationsNeedExactTokenBoundaries(value:source:valid:)",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceFactValidationTests/quotationsNeedExactTokenBoundaries(value:source:valid:)",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "children" : [
+                    {
+                      "duration" : "0,00036s",
+                      "durationInSeconds" : 0.0003638267517089844,
+                      "name" : "\"A claim [ 1 ].\", \"Model 1.\", true",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceFactValidationTests/numericCitationsNeedLiteralSourceSupport(text:source:unsupported:)?args=054b02998f44f0832f30610259b8d7fdda3df671672c9e8526243903102d76ab",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,0003s",
+                      "durationInSeconds" : 0.00030303001403808594,
+                      "name" : "\"A claim [1–2].\", \"Models 1 and 2.\", true",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceFactValidationTests/numericCitationsNeedLiteralSourceSupport(text:source:unsupported:)?args=d9d4f217b795165790dd195c1ae2efa8e021ba7874de4f99bd9af6e687d454d1",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,00027s",
+                      "durationInSeconds" : 0.00026798248291015625,
+                      "name" : "\"A claim [1, 2].\", \"Models 1 and 2.\", true",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceFactValidationTests/numericCitationsNeedLiteralSourceSupport(text:source:unsupported:)?args=20af9e25b4c23aa92f5ee6a6f3b026fcaea45248dd04692cf0f796d1960470ea",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,00042s",
+                      "durationInSeconds" : 0.0004248619079589844,
+                      "name" : "\"A claim [1].\", \"Model 1.\", true",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceFactValidationTests/numericCitationsNeedLiteralSourceSupport(text:source:unsupported:)?args=3c3d8278f8f2dc0ad5e748389d7bb4f9bf4eef3fae7e193e97bc4a3145d74ac1",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,00024s",
+                      "durationInSeconds" : 0.00023794174194335938,
+                      "name" : "\"Array [1] is retained.\", \"Array [1] is source data.\", false",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceFactValidationTests/numericCitationsNeedLiteralSourceSupport(text:source:unsupported:)?args=ede328d763acd18d1c3f2071a65d7d55dc337241cb46d4c70b6e152ec3d1f4f1",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,0001s",
+                      "durationInSeconds" : 0.0001010894775390625,
+                      "name" : "\"Year (2026) is retained.\", \"Year 2026.\", false",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceFactValidationTests/numericCitationsNeedLiteralSourceSupport(text:source:unsupported:)?args=78bc011dcd8dc9fe50482db991e0fa394b9e7167399b69b3ca7069e12015a759",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    }
+                  ],
+                  "duration" : "0,00028s",
+                  "durationInSeconds" : 0.00028312206268310547,
+                  "name" : "Numeric citation syntax must occur in the cited source, not merely share its digits",
+                  "nodeIdentifier" : "SourceFactValidationTests/numericCitationsNeedLiteralSourceSupport(text:source:unsupported:)",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceFactValidationTests/numericCitationsNeedLiteralSourceSupport(text:source:unsupported:)",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "SourceFactValidationTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceFactValidationTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "children" : [
+                    {
+                      "duration" : "0,00013s",
+                      "durationInSeconds" : 0.0001342296600341797,
+                      "name" : "\"29.99\", \"Luma lamp costs EUR 129.99.\"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceOfferValidationTests/partialSourceValuesAreRejected(value:source:)?args=fe89f32b62e910eafc5d255907392b66cd1a11a99758e7cda2e422ae90853596",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,00013s",
+                      "durationInSeconds" : 0.0001251697540283203,
+                      "name" : "\"29\", \"Luma lamp costs EUR 29.99; batch 30.\"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceOfferValidationTests/partialSourceValuesAreRejected(value:source:)?args=1a824af6018891bb513862d6bdc32e07d6ab57c26528e9f2359ed3abdadc08f8",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,00027s",
+                      "durationInSeconds" : 0.0002658367156982422,
+                      "name" : "\"99\", \"Luma lamp costs EUR 29.99; model 98.\"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceOfferValidationTests/partialSourceValuesAreRejected(value:source:)?args=ef8d8629b91a307ef2e4321b1ecb0ba48db2fe5559455ab95c2152179534d671",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,00014s",
+                      "durationInSeconds" : 0.00014019012451171875,
+                      "name" : "\"SAVE5\", \"Luma lamp uses SAVE50; batch 5.\"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceOfferValidationTests/partialSourceValuesAreRejected(value:source:)?args=3fb6b28888eaade92b5981c945a2671c791f464fb6e603935644285d282ff20a",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    }
+                  ],
+                  "duration" : "0,00017s",
+                  "durationInSeconds" : 0.00016635656356811523,
+                  "name" : "Partial-only numeric or identifier matches cannot become an extracted offer",
+                  "nodeIdentifier" : "SourceOfferValidationTests/partialSourceValuesAreRejected(value:source:)",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceOfferValidationTests/partialSourceValuesAreRejected(value:source:)",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "children" : [
+                    {
+                      "duration" : "0,000095s",
+                      "durationInSeconds" : 9.512901306152344e-05,
+                      "name" : "false",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceOfferValidationTests/offerFieldsKeepUnknownValuesAndSourceSpelling(unknown:)?args=fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,00033s",
+                      "durationInSeconds" : 0.0003314018249511719,
+                      "name" : "true",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceOfferValidationTests/offerFieldsKeepUnknownValuesAndSourceSpelling(unknown:)?args=b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    }
+                  ],
+                  "duration" : "0,00021s",
+                  "durationInSeconds" : 0.00021326541900634766,
+                  "name" : "Missing offer fields remain unknown and exact quotes preserve negations",
+                  "nodeIdentifier" : "SourceOfferValidationTests/offerFieldsKeepUnknownValuesAndSourceSpelling(unknown:)",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceOfferValidationTests/offerFieldsKeepUnknownValuesAndSourceSpelling(unknown:)",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "children" : [
+                    {
+                      "duration" : "0,00015s",
+                      "durationInSeconds" : 0.00015091896057128906,
+                      "name" : "0",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceOfferValidationTests/unsupportedOfferFieldsAreRejected(kind:)?args=5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,0001s",
+                      "durationInSeconds" : 0.00010418891906738281,
+                      "name" : "1",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceOfferValidationTests/unsupportedOfferFieldsAreRejected(kind:)?args=6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,000055s",
+                      "durationInSeconds" : 5.507469177246094e-05,
+                      "name" : "2",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceOfferValidationTests/unsupportedOfferFieldsAreRejected(kind:)?args=d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,000039s",
+                      "durationInSeconds" : 3.886222839355469e-05,
+                      "name" : "3",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceOfferValidationTests/unsupportedOfferFieldsAreRejected(kind:)?args=4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,000044s",
+                      "durationInSeconds" : 4.410743713378906e-05,
+                      "name" : "4",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceOfferValidationTests/unsupportedOfferFieldsAreRejected(kind:)?args=4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,000031s",
+                      "durationInSeconds" : 3.0994415283203125e-05,
+                      "name" : "5",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceOfferValidationTests/unsupportedOfferFieldsAreRejected(kind:)?args=ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,00064s",
+                      "durationInSeconds" : 0.000640869140625,
+                      "name" : "6",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceOfferValidationTests/unsupportedOfferFieldsAreRejected(kind:)?args=e7f6c011776e8db7cd330b54174fd76f7d0216b612387a5ffcfb81e6f0919683",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,00062s",
+                      "durationInSeconds" : 0.0006191730499267578,
+                      "name" : "7",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceOfferValidationTests/unsupportedOfferFieldsAreRejected(kind:)?args=7902699be42c8a8e46fbbb4501726517e86b22c56a189f7625a6da49081b2451",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,00028s",
+                      "durationInSeconds" : 0.00028324127197265625,
+                      "name" : "8",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceOfferValidationTests/unsupportedOfferFieldsAreRejected(kind:)?args=2c624232cdd221771294dfbb310aca000a0df6ac8b66b696d90ef06fdefb64a3",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    }
+                  ],
+                  "duration" : "0,00022s",
+                  "durationInSeconds" : 0.0002186033460828993,
+                  "name" : "Offer fields must all occur in their own source fragment",
+                  "nodeIdentifier" : "SourceOfferValidationTests/unsupportedOfferFieldsAreRejected(kind:)",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceOfferValidationTests/unsupportedOfferFieldsAreRejected(kind:)",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "SourceOfferValidationTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceOfferValidationTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "0,15s",
+                  "durationInSeconds" : 0.154099702835083,
+                  "name" : "Later consolidation cannot recover numbers absent from its supplied evidence",
+                  "nodeIdentifier" : "AppleSummaryGeneratorTests/laterStagesCannotReachBackToDiscardedNumbers()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/laterStagesCannotReachBackToDiscardedNumbers()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "children" : [
+                    {
+                      "duration" : "0,096s",
+                      "durationInSeconds" : 0.09560799598693848,
+                      "name" : "false",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/selectedStatementsKeepExactProvenance(foreignAccount:)?args=fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,095s",
+                      "durationInSeconds" : 0.09493899345397949,
+                      "name" : "true",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/selectedStatementsKeepExactProvenance(foreignAccount:)?args=b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    }
+                  ],
+                  "duration" : "0,095s",
+                  "durationInSeconds" : 0.09527349472045898,
+                  "name" : "Selected statements reference only their supporting originals",
+                  "nodeIdentifier" : "AppleSummaryGeneratorTests/selectedStatementsKeepExactProvenance(foreignAccount:)",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/selectedStatementsKeepExactProvenance(foreignAccount:)",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0,079s",
+                  "durationInSeconds" : 0.07865381240844727,
+                  "name" : "Cloud permission is rechecked before every fragment",
+                  "nodeIdentifier" : "AppleSummaryGeneratorTests/revokedPermissionStopsLaterChunks()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/revokedPermissionStopsLaterChunks()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0,0017s",
+                  "durationInSeconds" : 0.0016551017761230469,
+                  "name" : "Insufficient context budget fails before any model request",
+                  "nodeIdentifier" : "AppleSummaryGeneratorTests/insufficientBudgetMakesNoRequest()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/insufficientBudgetMakesNoRequest()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "children" : [
+                    {
+                      "duration" : "0,67s",
+                      "durationInSeconds" : 0.6718859672546387,
+                      "name" : "false",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/selectedFragmentsKeepArticleCoverageAndNumericBounds(unsupportedPrice:)?args=fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,67s",
+                      "durationInSeconds" : 0.666539192199707,
+                      "name" : "true",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/selectedFragmentsKeepArticleCoverageAndNumericBounds(unsupportedPrice:)?args=b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    }
+                  ],
+                  "duration" : "0,67s",
+                  "durationInSeconds" : 0.6692125797271729,
+                  "name" : "Key-statement selection may omit a fragment but cannot borrow its price",
+                  "nodeIdentifier" : "AppleSummaryGeneratorTests/selectedFragmentsKeepArticleCoverageAndNumericBounds(unsupportedPrice:)",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/selectedFragmentsKeepArticleCoverageAndNumericBounds(unsupportedPrice:)",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "children" : [
+                    {
+                      "duration" : "0,086s",
+                      "durationInSeconds" : 0.08581686019897461,
+                      "name" : "false",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/traceRetainsRejectedDraft(factFailure:)?args=fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,075s",
+                      "durationInSeconds" : 0.07462692260742188,
+                      "name" : "true",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/traceRetainsRejectedDraft(factFailure:)?args=b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    }
+                  ],
+                  "duration" : "0,08s",
+                  "durationInSeconds" : 0.08022189140319824,
+                  "name" : "Opt-in evaluation captures rejected drafts without bypassing validation",
+                  "nodeIdentifier" : "AppleSummaryGeneratorTests/traceRetainsRejectedDraft(factFailure:)",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/traceRetainsRejectedDraft(factFailure:)",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0,07s",
+                  "durationInSeconds" : 0.06981992721557617,
+                  "name" : "Cancelling a held token count prevents all model requests",
+                  "nodeIdentifier" : "AppleSummaryGeneratorTests/cancellationDuringBudgetingPreventsRequests()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/cancellationDuringBudgetingPreventsRequests()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0,15s",
+                  "durationInSeconds" : 0.1518850326538086,
+                  "name" : "Hierarchical consolidation retains typed offers under all forty original identities",
+                  "nodeIdentifier" : "AppleSummaryGeneratorTests/hierarchicalOffersKeepOriginalFieldRecords()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/hierarchicalOffersKeepOriginalFieldRecords()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0,085s",
+                  "durationInSeconds" : 0.08489418029785156,
+                  "name" : "Native offer records retain each product's own price and conditions without Reader identifiers in model input",
+                  "nodeIdentifier" : "AppleSummaryGeneratorTests/structuredOffersKeepTheirOwnTerms()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/structuredOffersKeepTheirOwnTerms()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "children" : [
+                    {
+                      "duration" : "0,064s",
+                      "durationInSeconds" : 0.06354308128356934,
+                      "name" : "0",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/modelCancellationPropagates(stage:)?args=5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,07s",
+                      "durationInSeconds" : 0.07017111778259277,
+                      "name" : "1",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/modelCancellationPropagates(stage:)?args=6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    }
+                  ],
+                  "duration" : "0,067s",
+                  "durationInSeconds" : 0.06685709953308105,
+                  "name" : "Native cancellation remains cancellation in either stage",
+                  "nodeIdentifier" : "AppleSummaryGeneratorTests/modelCancellationPropagates(stage:)",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/modelCancellationPropagates(stage:)",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "children" : [
+                    {
+                      "duration" : "0,065s",
+                      "durationInSeconds" : 0.06535720825195312,
+                      "name" : "false",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/nativeNumericCitationsUseActualCitedText(copied:)?args=fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,06s",
+                      "durationInSeconds" : 0.059516191482543945,
+                      "name" : "true",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/nativeNumericCitationsUseActualCitedText(copied:)?args=b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    }
+                  ],
+                  "duration" : "0,062s",
+                  "durationInSeconds" : 0.062436699867248535,
+                  "name" : "Actual native output rejects invented bracket references while preserving copied bracket data",
+                  "nodeIdentifier" : "AppleSummaryGeneratorTests/nativeNumericCitationsUseActualCitedText(copied:)",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/nativeNumericCitationsUseActualCitedText(copied:)",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "children" : [
+                    {
+                      "duration" : "0,061s",
+                      "durationInSeconds" : 0.06110334396362305,
+                      "name" : "\"de_AT\", \"German\"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/instructionsNameRequestedLanguage(localeID:language:)?args=433b23cf1f88dae2424c8ad955d224bf9290758af303c36fca02d54d53649cd0",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,058s",
+                      "durationInSeconds" : 0.058264970779418945,
+                      "name" : "\"en_AT\", \"English\"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/instructionsNameRequestedLanguage(localeID:language:)?args=8d2b3e18cd36a5c0a6a2ec4f85ea9e26501601868ef87bb1575f704477532666",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    }
+                  ],
+                  "duration" : "0,06s",
+                  "durationInSeconds" : 0.059684157371520996,
+                  "name" : "Language selection changes consolidation instructions while retaining original quotations",
+                  "nodeIdentifier" : "AppleSummaryGeneratorTests/instructionsNameRequestedLanguage(localeID:language:)",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/instructionsNameRequestedLanguage(localeID:language:)",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0,06s",
+                  "durationInSeconds" : 0.06036782264709473,
+                  "name" : "Structured consolidation maps references only through validated source facts",
+                  "nodeIdentifier" : "AppleSummaryGeneratorTests/structuredGenerationUsesStoredSources()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/structuredGenerationUsesStoredSources()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "children" : [
+                    {
+                      "duration" : "0,062s",
+                      "durationInSeconds" : 0.0620269775390625,
+                      "name" : "false",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/equalFactsKeepEverySourceIdentity(foreignAccount:)?args=fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,064s",
+                      "durationInSeconds" : 0.0644690990447998,
+                      "name" : "true",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/equalFactsKeepEverySourceIdentity(foreignAccount:)?args=b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    }
+                  ],
+                  "duration" : "0,063s",
+                  "durationInSeconds" : 0.06324803829193115,
+                  "name" : "Matching source facts merge without losing stored source identities",
+                  "nodeIdentifier" : "AppleSummaryGeneratorTests/equalFactsKeepEverySourceIdentity(foreignAccount:)",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/equalFactsKeepEverySourceIdentity(foreignAccount:)",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "children" : [
+                    {
+                      "duration" : "0,048s",
+                      "durationInSeconds" : 0.04785776138305664,
+                      "name" : "false",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/factsRemainBoundToTheirOwnFragment(laterFragment:)?args=fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,05s",
+                      "durationInSeconds" : 0.04984307289123535,
+                      "name" : "true",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/factsRemainBoundToTheirOwnFragment(laterFragment:)?args=b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    }
+                  ],
+                  "duration" : "0,049s",
+                  "durationInSeconds" : 0.048850417137145996,
+                  "name" : "Facts cannot borrow text from another source or a later fragment",
+                  "nodeIdentifier" : "AppleSummaryGeneratorTests/factsRemainBoundToTheirOwnFragment(laterFragment:)",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/factsRemainBoundToTheirOwnFragment(laterFragment:)",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "children" : [
+                    {
+                      "duration" : "0,056s",
+                      "durationInSeconds" : 0.05608797073364258,
+                      "name" : "\"de_AT\"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/exactRepeatedClaimsAreDeduplicated(localeID:)?args=8768a4f20541d2c5e3d0341b39d13b4d10d90caf9e47a713033b6b2a7495472f",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,058s",
+                      "durationInSeconds" : 0.057882070541381836,
+                      "name" : "\"en_AT\"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/exactRepeatedClaimsAreDeduplicated(localeID:)?args=e03d81b0bb08a9a2313eb85b4bc85859734f703d4459df50e1839fb464b01bcb",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    }
+                  ],
+                  "duration" : "0,057s",
+                  "durationInSeconds" : 0.05698502063751221,
+                  "name" : "Exact repeated summary sentences and sections do not duplicate the same claim",
+                  "nodeIdentifier" : "AppleSummaryGeneratorTests/exactRepeatedClaimsAreDeduplicated(localeID:)",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/exactRepeatedClaimsAreDeduplicated(localeID:)",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0,045s",
+                  "durationInSeconds" : 0.04450416564941406,
+                  "name" : "Cloud consent revoked after fact extraction prevents consolidation",
+                  "nodeIdentifier" : "AppleSummaryGeneratorTests/revokedPermissionStopsConsolidation()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/revokedPermissionStopsConsolidation()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0,052s",
+                  "durationInSeconds" : 0.052026987075805664,
+                  "name" : "Native offer decoding preserves null fields without inventing a price",
+                  "nodeIdentifier" : "AppleSummaryGeneratorTests/nativeOfferFieldsMayRemainUnknown()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/nativeOfferFieldsMayRemainUnknown()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "children" : [
+                    {
+                      "children" : [
+                        {
+                          "name" : "Safety guardrails were triggered. If this is unexpected, please use `LanguageModelSession.logFeedbackAttachment(sentiment:issues:desiredOutput:)` to export the feedback attachment and file a feedback report at https://feedbackassistant.apple.com.",
+                          "nodeType" : "Runtime Warning",
+                          "sourceLocation" : {
+                            "filePath" : "/Users/mat/code/NetNewsWire/Reader/ReaderTests/ReaderIntelligenceTests/DigestTests.swift",
+                            "lineNumber" : 561
+                          }
+                        }
+                      ],
+                      "duration" : "0,039s",
+                      "durationInSeconds" : 0.03932619094848633,
+                      "name" : "0, 0",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/frameworkErrorsPropagate(kind:stage:)?args=d3e4747fcb39b878da66ca9dca3d9e76d227fa8ec4639ba6dd7d233567368152",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "children" : [
+                        {
+                          "name" : "Safety guardrails were triggered. If this is unexpected, please use `LanguageModelSession.logFeedbackAttachment(sentiment:issues:desiredOutput:)` to export the feedback attachment and file a feedback report at https://feedbackassistant.apple.com.",
+                          "nodeType" : "Runtime Warning",
+                          "sourceLocation" : {
+                            "filePath" : "/Users/mat/code/NetNewsWire/Reader/ReaderTests/ReaderIntelligenceTests/DigestTests.swift",
+                            "lineNumber" : 561
+                          }
+                        }
+                      ],
+                      "duration" : "0,048s",
+                      "durationInSeconds" : 0.04789328575134277,
+                      "name" : "0, 1",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/frameworkErrorsPropagate(kind:stage:)?args=b9b10a1bc77d2a241d120324db7f3b81b2edb67eb8e9cf02af9c95d30329aef5",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,038s",
+                      "durationInSeconds" : 0.03831195831298828,
+                      "name" : "1, 0",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/frameworkErrorsPropagate(kind:stage:)?args=ee90f071cfb31af4d9230c8b9d11d0279e1e4f92992a860882aa338b3b60cef9",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,05s",
+                      "durationInSeconds" : 0.04958295822143555,
+                      "name" : "1, 1",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/frameworkErrorsPropagate(kind:stage:)?args=488ad59efeafae6af0be932803b65470b908c33377f4ff99aad1fd8c68c4f463",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,038s",
+                      "durationInSeconds" : 0.038107872009277344,
+                      "name" : "2, 0",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/frameworkErrorsPropagate(kind:stage:)?args=b140e76a1d5b1db4ba3acced48648c7478c260500620eef24aa3a4fec1c2107d",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,049s",
+                      "durationInSeconds" : 0.04914712905883789,
+                      "name" : "2, 1",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/frameworkErrorsPropagate(kind:stage:)?args=940ed9abddfb5ef28004408546bc5043cda391232b6afe07267f9f8ed2b500c9",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,038s",
+                      "durationInSeconds" : 0.03773927688598633,
+                      "name" : "3, 0",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/frameworkErrorsPropagate(kind:stage:)?args=29259d94ecb8c57f4a945dc803c87ed99f55311dad778a61bca75711c2f90687",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,047s",
+                      "durationInSeconds" : 0.047492027282714844,
+                      "name" : "3, 1",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/frameworkErrorsPropagate(kind:stage:)?args=b361f0fb587245d9d9de63303f55a4cfbed251218d96ab0a49064e83c11110c5",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    }
+                  ],
+                  "duration" : "0,043s",
+                  "durationInSeconds" : 0.04345008730888367,
+                  "name" : "Native framework errors propagate unchanged from both shipping stages",
+                  "nodeIdentifier" : "AppleSummaryGeneratorTests/frameworkErrorsPropagate(kind:stage:)",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/frameworkErrorsPropagate(kind:stage:)",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0,04s",
+                  "durationInSeconds" : 0.04001498222351074,
+                  "name" : "Native offer extraction rejects fabricated fields before consolidation",
+                  "nodeIdentifier" : "AppleSummaryGeneratorTests/fabricatedOfferFieldsStopGeneration()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/fabricatedOfferFieldsStopGeneration()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0,13s",
+                  "durationInSeconds" : 0.1294400691986084,
+                  "name" : "Nonshrinking consolidation fails within a bounded first reduction",
+                  "nodeIdentifier" : "AppleSummaryGeneratorTests/nonshrinkingConsolidationDoesNotLoop()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/nonshrinkingConsolidationDoesNotLoop()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0,000086s",
+                  "durationInSeconds" : 8.606910705566406e-05,
+                  "name" : "Unconfigured PCC rejects before consent or a model request",
+                  "nodeIdentifier" : "AppleSummaryGeneratorTests/unconfiguredCloudIsNeverRequested()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/unconfiguredCloudIsNeverRequested()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0,000097s",
+                  "durationInSeconds" : 9.703636169433594e-05,
+                  "name" : "Revoked cloud consent is rejected before instantiating PCC",
+                  "nodeIdentifier" : "AppleSummaryGeneratorTests/cloudRequiresLiveConsentBeforeInstantiation()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/cloudRequiresLiveConsentBeforeInstantiation()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0,039s",
+                  "durationInSeconds" : 0.03930997848510742,
+                  "name" : "A native source quote cannot authorize a smaller price clipped from an original",
+                  "nodeIdentifier" : "AppleSummaryGeneratorTests/partialPriceQuotesStopBeforeConsolidation()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/partialPriceQuotesStopBeforeConsolidation()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0,11s",
+                  "durationInSeconds" : 0.1141672134399414,
+                  "name" : "Many distinct sources use bounded hierarchical consolidation without losing identities",
+                  "nodeIdentifier" : "AppleSummaryGeneratorTests/hierarchicalConsolidationKeepsEverySource()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/hierarchicalConsolidationKeepsEverySource()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0,055s",
+                  "durationInSeconds" : 0.05481910705566406,
+                  "name" : "Each source fragment keeps its merchant, price and conditions in one evidence packet",
+                  "nodeIdentifier" : "AppleSummaryGeneratorTests/fragmentFactsKeepTheirSharedReference()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/fragmentFactsKeepTheirSharedReference()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "children" : [
+                    {
+                      "duration" : "0,047s",
+                      "durationInSeconds" : 0.046613216400146484,
+                      "name" : "\"{\"groups\":[]}\"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/structuredGenerationRejectsUntrustedOutput(response:)?args=e2ff9cb2cb027963664cf59ce5529223782d227da80705cd7430c09268542d2e",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,042s",
+                      "durationInSeconds" : 0.04243922233581543,
+                      "name" : "\"{\"groups\":[{\"title\":\" \\t\",\"summary\":\"Stored offer\",\"sourceNumbers\":[0]}]}\"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/structuredGenerationRejectsUntrustedOutput(response:)?args=8b847f9571a4c788316ef7d5937426b1d72c91cd9f8b5593995b31a2773f25b8",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,042s",
+                      "durationInSeconds" : 0.04191398620605469,
+                      "name" : "\"{\"groups\":[{\"title\":\"\",\"summary\":\"Stored offer\",\"sourceNumbers\":[0]}]}\"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/structuredGenerationRejectsUntrustedOutput(response:)?args=33a8777d7d277afb71ea07990162f8305fc4eb7eb92907788aecb74914cae71f",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,044s",
+                      "durationInSeconds" : 0.04363298416137695,
+                      "name" : "\"{\"groups\":[{\"title\":\"https://invented.test\",\"summary\":\"Stored offer\",\"sourceNumbers\":[0]}]}\"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/structuredGenerationRejectsUntrustedOutput(response:)?args=e19cb34ec3a5e052dbb56b847dd6871060ddf0eb9c563489c671701ce9c0aee3",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,044s",
+                      "durationInSeconds" : 0.044219970703125,
+                      "name" : "\"{\"groups\":[{\"title\":\"Offer\",\"summary\":\" \\n\\t\",\"sourceNumbers\":[0]}]}\"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/structuredGenerationRejectsUntrustedOutput(response:)?args=d858330b45fae3f0516588503886387d9e9261ed970f01aa9775abd822c3bdda",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,041s",
+                      "durationInSeconds" : 0.041296958923339844,
+                      "name" : "\"{\"groups\":[{\"title\":\"Offer\",\"summary\":\"\",\"sourceNumbers\":[0]}]}\"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/structuredGenerationRejectsUntrustedOutput(response:)?args=098a792233daa3d1b502f044a314980e3f81fdbdb86c5a190499ed7ccc81d251",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,044s",
+                      "durationInSeconds" : 0.04435896873474121,
+                      "name" : "\"{\"groups\":[{\"title\":\"Offer\",\"summary\":\"EUR 999\",\"sourceNumbers\":[0]}]}\"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/structuredGenerationRejectsUntrustedOutput(response:)?args=c9a03b4fb3edcf097deb6964e375acceb411494d6e195e09908e903ed38075ef",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,045s",
+                      "durationInSeconds" : 0.0450587272644043,
+                      "name" : "\"{\"groups\":[{\"title\":\"Offer\",\"summary\":\"https://invented.test\",\"sourceNumbers\":[0]}]}\"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/structuredGenerationRejectsUntrustedOutput(response:)?args=b04496cef07f0ce0433d398687bfbf552974463523c4adedfa020872aa5081fc",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,045s",
+                      "durationInSeconds" : 0.04484701156616211,
+                      "name" : "\"{\"groups\":[{\"title\":\"Offer\",\"summary\":\"HTTPS://invented.test\",\"sourceNumbers\":[0]}]}\"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/structuredGenerationRejectsUntrustedOutput(response:)?args=ba67694638a2ffd4750e61873f3027a40654bd30770f1e5914f845f08174c8d8",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,044s",
+                      "durationInSeconds" : 0.04426312446594238,
+                      "name" : "\"{\"groups\":[{\"title\":\"Offer\",\"summary\":\"Stored offer\",\"sourceNumbers\":[-1]}]}\"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/structuredGenerationRejectsUntrustedOutput(response:)?args=f3d3da2da69137b536976b01c42b075f0e067d5e45fa9c8703aec571403aed2e",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,044s",
+                      "durationInSeconds" : 0.04429292678833008,
+                      "name" : "\"{\"groups\":[{\"title\":\"Offer\",\"summary\":\"Stored offer\",\"sourceNumbers\":[]}]}\"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/structuredGenerationRejectsUntrustedOutput(response:)?args=ecaa895ad82809b522871509913971ee326487c89a84eebcf854ae4e754dc6f0",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,045s",
+                      "durationInSeconds" : 0.04482889175415039,
+                      "name" : "\"{\"groups\":[{\"title\":\"Offer\",\"summary\":\"Stored offer\",\"sourceNumbers\":[1]}]}\"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/structuredGenerationRejectsUntrustedOutput(response:)?args=6a3c9b276cd4d0ef15867d54450fc3822f618e613c662a60627d8cb9012c13bd",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    }
+                  ],
+                  "duration" : "0,044s",
+                  "durationInSeconds" : 0.04398049910863241,
+                  "name" : "Consolidation rejects invalid references, unsupported numbers, links and blank output",
+                  "nodeIdentifier" : "AppleSummaryGeneratorTests/structuredGenerationRejectsUntrustedOutput(response:)",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/structuredGenerationRejectsUntrustedOutput(response:)",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0,04s",
+                  "durationInSeconds" : 0.0398259162902832,
+                  "name" : "Cancellation in an evaluation sink prevents validation and later requests",
+                  "nodeIdentifier" : "AppleSummaryGeneratorTests/traceCancellationStopsGeneration()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/traceCancellationStopsGeneration()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "children" : [
+                    {
+                      "duration" : "0,05s",
+                      "durationInSeconds" : 0.049796104431152344,
+                      "name" : "\"0\"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/generatedNumbersRequireTheirReferencedFacts(number:)?args=98089e6d36f78e9766c9ea34d5acb3611f3a92cd81c5eb102095d924ffc7d08b",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,05s",
+                      "durationInSeconds" : 0.05003833770751953,
+                      "name" : "\"10.00\"",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/generatedNumbersRequireTheirReferencedFacts(number:)?args=ec9335bf03589dc278576ac8df8c2e022b653b4e4c9c95b5c8cb64ebb6880cc7",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    }
+                  ],
+                  "duration" : "0,05s",
+                  "durationInSeconds" : 0.04991722106933594,
+                  "name" : "Packet indices and other packets cannot justify generated prices",
+                  "nodeIdentifier" : "AppleSummaryGeneratorTests/generatedNumbersRequireTheirReferencedFacts(number:)",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/generatedNumbersRequireTheirReferencedFacts(number:)",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "children" : [
+                    {
+                      "duration" : "0,054s",
+                      "durationInSeconds" : 0.05419802665710449,
+                      "name" : "8000",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/longSourceChunksPreserveContent(capacity:)?args=ad5f9478d603fe97eae2bbff07f76fe7f18610343b5f3bc8e00945ee51b30d2c",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0,05s",
+                      "durationInSeconds" : 0.05037975311279297,
+                      "name" : "12000",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/longSourceChunksPreserveContent(capacity:)?args=c5d1866aabc15dda07995e73b08c4ccb514947dcd3a621cea851af5fe366f11b",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    }
+                  ],
+                  "duration" : "0,052s",
+                  "durationInSeconds" : 0.05228888988494873,
+                  "name" : "Every raw source character reaches extraction and every stage respects its runtime budget",
+                  "nodeIdentifier" : "AppleSummaryGeneratorTests/longSourceChunksPreserveContent(capacity:)",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/longSourceChunksPreserveContent(capacity:)",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "AppleSummaryGeneratorTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "0,0044s",
+                  "durationInSeconds" : 0.0043599605560302734,
+                  "name" : "A source split cannot authorize a clipped word or decimal",
+                  "nodeIdentifier" : "SourceLiteralCatalogTests/fragmentCannotInventSourceBoundaries()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceLiteralCatalogTests/fragmentCannotInventSourceBoundaries()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0,0066s",
+                  "durationInSeconds" : 0.0066258907318115234,
+                  "name" : "Original Unicode spelling survives catalog construction",
+                  "nodeIdentifier" : "SourceLiteralCatalogTests/unicodeSpellingStaysLiteral()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceLiteralCatalogTests/unicodeSpellingStaysLiteral()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0,0069s",
+                  "durationInSeconds" : 0.006932973861694336,
+                  "name" : "Literal choices retain original spelling and protect token and decimal boundaries",
+                  "nodeIdentifier" : "SourceLiteralCatalogTests/choicesComeFromTheOriginal()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceLiteralCatalogTests/choicesComeFromTheOriginal()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0,0057s",
+                  "durationInSeconds" : 0.00566411018371582,
+                  "name" : "The candidate catalog includes distinct offer terms",
+                  "nodeIdentifier" : "SourceLiteralCatalogTests/catalogIncludesTwoOffers()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceLiteralCatalogTests/catalogIncludesTwoOffers()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "SourceLiteralCatalogTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/SourceLiteralCatalogTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            }
+          ],
+          "name" : "ReaderTests",
+          "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests",
+          "nodeType" : "Unit test bundle",
+          "result" : "Passed"
+        }
+      ],
+      "name" : "Reader",
+      "nodeType" : "Test Plan",
+      "result" : "Passed"
+    }
+  ],
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Test Scheme Action"
+    }
+  ]
+}
