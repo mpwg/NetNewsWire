@@ -1,0 +1,184 @@
+{
+  "policy": "v12",
+  "sourceCommit": "9bba0d49745901f6430a716d01a9ab7873d82b71",
+  "adopted": false,
+  "sourceHashes": [
+    "d7a3493daa1d6599b2e2de69858070cc1ff30c46021c3b34131b72a176f17435  ReaderKit/Sources/ReaderIntelligence/AppleSummaryGenerator.swift",
+    "9acffa0e9d280168874f80d02ce932b6f68950a1e72dd5b1dfd3332110951267  ReaderKit/Sources/ReaderIntelligence/SourceLiteralCatalog.swift",
+    "bc0ea98e965b78478d6f06bebe1d75ecd9083fa948d1e56764c726bcb34a0ae7  ReaderKit/Sources/ReaderIntelligence/DigestCoordinator.swift",
+    "8d0a2c1fcdcb5293fb619a6873eb5741e0c166321343d58a3464a803ac527632  ReaderKit/Probes/ReaderInferenceProbe/Probe.swift"
+  ],
+  "inputScope": "Fixed six-source RSS text projection and three pairs; not native Readability, FreshRSS or full article input.",
+  "evaluations": [
+    {
+      "configuration": "pair-1",
+      "rawReportSHA256": "5ca9c39b2c2d593c76d9e774add37d4dcf906079593ca1a0d015a9b1987eb760",
+      "elapsedSeconds": 11.96244875,
+      "errorCategory": "ReaderDomain.ReaderError.invalidResponse",
+      "sectionCount": 0,
+      "sourceCount": 2,
+      "locale": "de_AT",
+      "privateCloudComputeEnabled": false,
+      "traces": [
+        {
+          "stage": "facts",
+          "sourceNumber": 0,
+          "sourceCharacters": 513,
+          "offers": [
+            {
+              "fields": [
+                "product"
+              ],
+              "productCharacters": 59,
+              "merchantCharacters": null,
+              "priceCharacters": null,
+              "conditionCount": 0,
+              "distinctConditions": 0,
+              "valuesAbsentFromFragment": 0
+            }
+          ],
+          "excerptCount": 0
+        }
+      ],
+      "inputSHA256": "ccf83b34996dbd2cec898a47b568078172c4947fd02b135219472a74c4523501"
+    },
+    {
+      "configuration": "pair-2",
+      "rawReportSHA256": "a14a00b0771af9b5e9f850875ec7893ff8e6aac0c35960d6ba835a510d3684f4",
+      "elapsedSeconds": 25.147812166,
+      "errorCategory": "ReaderDomain.ReaderError.invalidResponse",
+      "sectionCount": 0,
+      "sourceCount": 2,
+      "locale": "de_AT",
+      "privateCloudComputeEnabled": false,
+      "traces": [
+        {
+          "stage": "facts",
+          "sourceNumber": 0,
+          "sourceCharacters": 490,
+          "offers": [
+            {
+              "fields": [
+                "conditions",
+                "merchant",
+                "price",
+                "product"
+              ],
+              "productCharacters": 89,
+              "merchantCharacters": 9,
+              "priceCharacters": 7,
+              "conditionCount": 1,
+              "distinctConditions": 1,
+              "valuesAbsentFromFragment": 0
+            },
+            {
+              "fields": [
+                "conditions",
+                "merchant",
+                "price",
+                "product"
+              ],
+              "productCharacters": 28,
+              "merchantCharacters": 6,
+              "priceCharacters": 7,
+              "conditionCount": 1,
+              "distinctConditions": 1,
+              "valuesAbsentFromFragment": 0
+            }
+          ],
+          "excerptCount": 3
+        },
+        {
+          "stage": "facts",
+          "sourceNumber": 0,
+          "sourceCharacters": 493,
+          "offers": [
+            {
+              "fields": [
+                "conditions",
+                "merchant",
+                "price",
+                "product"
+              ],
+              "productCharacters": 118,
+              "merchantCharacters": null,
+              "priceCharacters": null,
+              "conditionCount": 8,
+              "distinctConditions": 6,
+              "valuesAbsentFromFragment": 0
+            }
+          ],
+          "excerptCount": 8
+        }
+      ],
+      "inputSHA256": "dec8b262f8bd48b1a58ffdeefb9a2db24cd0978232cb9f7dc72860124b490b22"
+    },
+    {
+      "configuration": "pair-3",
+      "rawReportSHA256": "5c4196819bb3cde942027fac41ca4bf571d5c484f833c62f1fe4cd3a91c4c9ec",
+      "elapsedSeconds": 23.650405084,
+      "errorCategory": "Native JSON generation/decoding error",
+      "sectionCount": 0,
+      "sourceCount": 2,
+      "locale": "de_AT",
+      "privateCloudComputeEnabled": false,
+      "traces": [
+        {
+          "stage": "facts",
+          "sourceNumber": 0,
+          "sourceCharacters": 455,
+          "offers": [
+            {
+              "fields": [
+                "conditions",
+                "merchant",
+                "price",
+                "product"
+              ],
+              "productCharacters": 87,
+              "merchantCharacters": 87,
+              "priceCharacters": 3,
+              "conditionCount": 1,
+              "distinctConditions": 1,
+              "valuesAbsentFromFragment": 0
+            }
+          ],
+          "excerptCount": 4
+        }
+      ],
+      "inputSHA256": "e05318eb4f82f452cc48eaa7239f9cf888e899310c990a86da260fa139410555"
+    },
+    {
+      "configuration": "six",
+      "rawReportSHA256": "056d04f1e39af815465e97baa0978ea38ccc3e2f467b01bf894cff35014674f8",
+      "elapsedSeconds": 13.389434625,
+      "errorCategory": "ReaderDomain.ReaderError.invalidResponse",
+      "sectionCount": 0,
+      "sourceCount": 6,
+      "locale": "de_AT",
+      "privateCloudComputeEnabled": false,
+      "traces": [
+        {
+          "stage": "facts",
+          "sourceNumber": 0,
+          "sourceCharacters": 513,
+          "offers": [
+            {
+              "fields": [
+                "product"
+              ],
+              "productCharacters": 59,
+              "merchantCharacters": null,
+              "priceCharacters": null,
+              "conditionCount": 0,
+              "distinctConditions": 0,
+              "valuesAbsentFromFragment": 0
+            }
+          ],
+          "excerptCount": 0
+        }
+      ],
+      "inputSHA256": "104495438e1768ad323ea91ecb02bf0fd70dd9ad1c18f639db3d4069f05c7bf8"
+    }
+  ]
+}

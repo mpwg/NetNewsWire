@@ -1,0 +1,25 @@
+# I: source-literal choice candidate — policy v12
+
+Status: **rejected for integration after all four fixed live-model configurations fail**. Main remains policy v10 at `1d357f1a6`. The owner chose free app-language summaries plus a compact source-bound offer facts line; this candidate retains per-offer product, merchant, price and conditions from the typed prototype.
+
+Native tokenization, sentence/clause boundaries and currency expressions build a finite set of literal source spans. A request-specific Foundation Models schema constrains each returned field to those choices. The native validator independently requires membership and exact boundaries in both fragment and whole original; it never repairs altered output. Unknown merchant/price stays nil. Literal membership cannot prove that a product, merchant, price or term has the correct semantic role, nor that all mandatory terms are present. Model output still requires explicit quality assessment.
+
+The context calculation includes the encoded dynamic schema and prompt alongside instructions and the existing 2000-unit reserve. This is a conservative serialized-schema budget input, not a claim about the framework's exact internal prompt representation. Fragment splitting preserves all source characters and prefers whitespace boundaries. Whitespace, oversized single words and genuinely insufficient budgets must fail safely rather than authorize a clipped literal. No production context capacity or output token limit is raised; PCC remains disabled without authorization.
+
+| Criterion | Status | Evidence |
+|---|---|---|
+| Literal choices, partial numeric/identifier rejection, Unicode and two independent offers | Fulfilled for controlled Mac code | Four catalog functions and native executor controls pass; invalid offers are rejected before consolidation. |
+| Source identities, cache revisions, consent, cancellation and read/outbox contracts | Fulfilled for selected Mac code | Xcode MCP selection20:44:11 passes58 functions /148 executions without failures or skips. [Original summary](i-literal-offers-v12-code-summary-2026-10-26.json) and [case nodes](i-literal-offers-v12-code-cases-2026-10-26.json). |
+| Actual model semantic quality and compactness | Open | All four fixed configurations fail and return zero sections. Literal choices do not ensure complete or correctly assigned fields. |
+| Full code/native plan and hosted CI | Open | SwiftLint0.65.1 strict passes; a selected module pass is not a complete plan. |
+| PCC, offline/restart, physical devices, accessibility, performance and Swift CodeQL | Open | Separate prerequisites and existing failure evidence remain. |
+
+Original Xcode result bundle: `/Users/mat/Library/Developer/Xcode/DerivedData/Reader-fuevgxanyutuuihcfejpioljllaa/Logs/Test/Test-Reader-2026.10.26_20-44-11-+0100.xcresult`. Earlier targeted run had three failures: two fixtures' injected character budgets could not fit the new schema and one fixed request-count fixture did not force a first reduction. The budget tests now include the actual encoded schema; their controlled character capacities are adjusted, while production limits are unchanged. The nonshrinking case forces multiple batches and asserts that the next-round generated titles never reach another request. Subsequent complete selected run passes. No issue closes.
+
+## Fixed live-model outcomes
+
+Source `9bba0d49745901f6430a716d01a9ab7873d82b71` is built with Xcode MCP and evaluated once per unchanged configuration with on-device inference, German locale and PCC disabled. The six-source run (13.389s), first pair (11.962s), second pair (25.148s) and third pair (23.650s) all fail with zero sections. [Aggregate shape/count/hash receipt](i-literal-offers-v12-model-2026-10-26.json) excludes public source prose and raw model drafts; original reports remain private in `/Users/mat/.codex/artifacts/netnewswire/public-rss-20261026-6717d25bafce/v12`.
+
+Six-source and pair1 return an incomplete object with only a product field and no root excerpts; native decoding rejects it. Pair2 produces two complete-shaped offers in its first fragment, then eight conditions with only six distinct entries in a later fragment; generation rejects the invalid output before a digest. Pair3 initially assigns an identical87-character literal to merchant and product, then native JSON generation/decoding fails on a later fragment. These intermediate fragments are not successful digests or proof of correct pricing/conditions. The candidate cannot be accepted based on the passing controlled code cases. No unchanged configuration is retried, no response is repaired, and production main remains v10.
+
+The checked source has strict SwiftLint0.65.1 success. This does not establish a complete code plan or hosted CI. Source-literal enumeration improved exact source ownership but neither output completeness nor semantic field assignment on the fixed samples; future work must address both and respect actual context budgets and the owner's free-summary choice.

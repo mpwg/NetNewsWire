@@ -39,6 +39,9 @@ Native VoiceOver has both named passing runs and retained failures; full menu/fo
 
 ## Model verification
 
+The source-literal-choice v12 research candidate is not integrated: all four fixed public configurations fail despite148 passing controlled intelligence executions and strict lint. [Complete candidate results](docs/reader/evidence/i-literal-offers-v12-2026-10-26.md). Compact offer facts, correct semantic roles and complete purchase conditions remain open.
+
+
 Current policy v10 rejects source quotes clipped from longer ASCII tokens or decimal numbers, during extraction and source-facts cache validation. Existing prompts/schemas, free summaries and facts display remain unchanged. All236 local Mac code functions /511 executions pass; Reader CI40378018800 passes521 executions (511 code, ten native),246 distinct, with no failures/skips. [Quotation criteria and original results](docs/reader/evidence/i-quotation-v10-2026-10-26.md). The separate typed-offer copy prototype and its bounded-word-reference follow-up are not integrated: each fails all four fixed public configurations. The latter passes551 candidate code executions but still misassigns offer fields and exceeds span limits. [Copy outcomes](docs/reader/evidence/i-offer-fields-v9-2026-10-26.md) · [Reference outcomes](docs/reader/evidence/i-offer-references-v11-2026-10-26.md).
 
 Foundation Models uses structured sessions with source references tied to stored article identities. Validation rejects generated links, unsupported numeric claims and blank content. Literal duplicate sentences/sections are removed without merging distinct source identities. New results, existing cache reuse and startup publication share content/source rules: invalid cards cannot hide originals, and originals-only cards require an explicit warning. Model and presentation-state contracts use Swift Testing; actual UI interactions remain separate.
