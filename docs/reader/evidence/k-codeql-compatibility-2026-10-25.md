@@ -6,6 +6,8 @@ Rechecked on 2026-10-26 for ee2cefe14: the linked manufacturer requirements stil
 
 ## Observed execution
 
+At the successful native VoiceOver source 24d81f8cf, [CodeQL 40259656722 / Swift job 121369058551](https://github.com/mpwg/NetNewsWire/actions/runs/40259656722/job/121369058551) still uses CLI 2.27.3 and exits 139 in preload_tracer/autobuild before analysis (02:33:43 UTC on 2026-10-26). Actions, Python and JavaScript/TypeScript pass. Reader's 405 passing native executions do not establish successful Swift extraction/security analysis; the existing configuration remains unchanged.
+
 At c7867dbae, [CodeQL 40252765549 / Swift job 121348038449](https://github.com/mpwg/NetNewsWire/actions/runs/40252765549/job/121348038449) again uses CLI 2.27.3 and exits 139 in preload_tracer/autobuild before analysis (2026-10-26 01:09:27 UTC). The other three language jobs pass. This is a new observation of the same failure location, not proof of its underlying cause or successful Reader analysis. Existing checks remain enabled.
 
 [CodeQL 40238561575 / Swift job 121305244261](https://github.com/mpwg/NetNewsWire/actions/runs/40238561575/job/121305244261) uses CLI **2.27.3** on macos-26-arm64 image **20261013.0424.1**, macOS **26.6.2 (25G83)**. It exits 139 in preload_tracer while invoking Swift autobuild, before analysis. The three Actions, Python and JavaScript/TypeScript jobs pass. The job does not emit an actual selected Xcode version before the crash. Its [pinned image manifest](https://github.com/actions/runner-images/blob/macos-26-arm64/20261013.0424/images/macos/macos-26-arm64-Readme.md) lists Xcode 26.6 as the default and no SDK 27. That is an image declaration, not a captured xcode-select result.

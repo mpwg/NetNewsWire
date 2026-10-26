@@ -1,0 +1,119 @@
+{
+  "sourceRun": 40259657192,
+  "sourceRevision": "24d81f8cfb12bdc69f76c2442a332ed1c0bb460f",
+  "artifactID": 12624403382,
+  "attachments": [
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "1463786d70a818d8a305a9454e1caa9ffdaca437",
+      "deviceName": "My Mac",
+      "exportedFileName": "5C69A10E-F861-4FF7-82C9-57689D43B23A.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Native VoiceOver initial state_0_A2E9C27F-5DE9-41C2-ABC8-BBD0ABD83EA0.txt",
+      "timestamp": 1792982713.903,
+      "text": "VoiceOver originally enabled: false",
+      "sha256": "4efebe1027172734623f2bb365c619485a3373a14c52fbb8cebd51b1b1a3e960"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "1463786d70a818d8a305a9454e1caa9ffdaca437",
+      "deviceName": "My Mac",
+      "exportedFileName": "08AF2F78-385F-446D-B59B-0645153F42F8.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Native VoiceOver service before activation_0_7B805576-5AE2-47A5-8650-CE762C2F54EA.txt",
+      "timestamp": 1792982713.906,
+      "text": "<XCUIVoiceOverService: enabled=NO>",
+      "sha256": "2b36fb0ff5f71c6ddd373da937e167e3d5c84acbe697ec62d04f81486cb53ec4"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "1463786d70a818d8a305a9454e1caa9ffdaca437",
+      "deviceName": "My Mac",
+      "exportedFileName": "F4071150-A821-4436-A05B-0DB2CE0D3449.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Native VoiceOver service before current_0_FF2B2BFD-E2D8-4B6E-902E-D7E4553677D8.txt",
+      "timestamp": 1792982728.098,
+      "text": "<XCUIVoiceOverService: enabled=YES>",
+      "sha256": "bbb9855d86c7d1ad7b163f7b18213ef7ac579a30963e7e19ce9a63460faa9d5f"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "1463786d70a818d8a305a9454e1caa9ffdaca437",
+      "deviceName": "My Mac",
+      "exportedFileName": "C7C77AC9-6174-4C42-9881-DB4A01A5C3BB.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Actual native VoiceOver current_1_FF2B2BFD-E2D8-4B6E-902E-D7E4553677D8.txt",
+      "timestamp": 1792982728.1,
+      "text": "Welcome to macOS. VoiceOver is on.",
+      "sha256": "519805b176a983542fe773f5d368b86e17c70f952e6275b644c6baf6e9102429"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "1463786d70a818d8a305a9454e1caa9ffdaca437",
+      "deviceName": "My Mac",
+      "exportedFileName": "0C83EF23-FB56-4895-8BD7-B69D8F245DD4.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Native VoiceOver service before enter timeline_0_4BCCC1E9-370D-4BFD-8FF0-4B4DFFA656E1.txt",
+      "timestamp": 1792982728.104,
+      "text": "<XCUIVoiceOverService: enabled=YES>",
+      "sha256": "bbb9855d86c7d1ad7b163f7b18213ef7ac579a30963e7e19ce9a63460faa9d5f"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "1463786d70a818d8a305a9454e1caa9ffdaca437",
+      "deviceName": "My Mac",
+      "exportedFileName": "3DA065B9-48C8-4B0B-B132-5AA3B4FCFB3D.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Actual native VoiceOver enter timeline_1_4BCCC1E9-370D-4BFD-8FF0-4B4DFFA656E1.txt",
+      "timestamp": 1792982734.559,
+      "text": "Timeline article 299",
+      "sha256": "c0a7f1c278a83c01e795ba877096c3d536f8b86989608fd9860d4fbbbed37a0e"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "1463786d70a818d8a305a9454e1caa9ffdaca437",
+      "deviceName": "My Mac",
+      "exportedFileName": "3899A00B-C154-4E55-B12A-9320FF4DCE8B.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Native VoiceOver service before forward 1_0_1AA6E723-636B-497F-8B6C-0B6BDF9BAD5A.txt",
+      "timestamp": 1792982734.562,
+      "text": "<XCUIVoiceOverService: enabled=YES>",
+      "sha256": "bbb9855d86c7d1ad7b163f7b18213ef7ac579a30963e7e19ce9a63460faa9d5f"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "1463786d70a818d8a305a9454e1caa9ffdaca437",
+      "deviceName": "My Mac",
+      "exportedFileName": "A6ABE871-2C8D-423E-B181-63B3AD69B69E.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Actual native VoiceOver forward 1_1_1AA6E723-636B-497F-8B6C-0B6BDF9BAD5A.txt",
+      "timestamp": 1792982735.278,
+      "text": "Unread image, Timeline article 298, Representative content for k",
+      "sha256": "42f9fa4812bd0d2f70bac85c1291b681549af667113bbc76b6d6dfd0976f54d1"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "1463786d70a818d8a305a9454e1caa9ffdaca437",
+      "deviceName": "My Mac",
+      "exportedFileName": "5C078DD0-2B9A-4018-B5D9-1D25C1BCB783.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Native VoiceOver restored state_0_58A62054-0284-4EAB-AC3A-4E620DEDDB00.txt",
+      "timestamp": 1792982737.78,
+      "text": "VoiceOver enabled after restoration: false",
+      "sha256": "7ced859ebaedc9db9aec2d7ca64279bf43844b3b73069100131ae736c45351f4"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "1463786d70a818d8a305a9454e1caa9ffdaca437",
+      "deviceName": "My Mac",
+      "exportedFileName": "30DD2DE2-F9BB-4F9C-B301-64512B645B59.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Native VoiceOver service after restoration_1_58A62054-0284-4EAB-AC3A-4E620DEDDB00.txt",
+      "timestamp": 1792982737.781,
+      "text": "<XCUIVoiceOverService: enabled=NO>",
+      "sha256": "2b36fb0ff5f71c6ddd373da937e167e3d5c84acbe697ec62d04f81486cb53ec4"
+    }
+  ],
+  "matchingArchivedNativeCrashReports": 0,
+  "scope": "Successful native activation, post-activation first-row click, current/enter/forward speech and original disabled-state restoration. Speech and public debug-description payloads are preserved without normalization; the service descriptions expose enabled state only. No initially-enabled, complete menu/form/body journey or fix of the previous daemon fault is proved."
+}

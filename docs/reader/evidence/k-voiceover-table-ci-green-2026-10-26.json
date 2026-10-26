@@ -1,0 +1,60 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "1463786d70a818d8a305a9454e1caa9ffdaca437",
+        "deviceName" : "My Mac",
+        "modelName" : "Virtual Machine",
+        "osBuildNumber" : "26A434",
+        "osVersion" : "27.0.1",
+        "platform" : "macOS"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 0,
+      "passedTests" : 405,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "Reader · Built with macOS 27.0.1",
+  "expectedFailures" : 0,
+  "failedTests" : 0,
+  "finishTime" : 1792982810.45,
+  "passedTests" : 208,
+  "result" : "Passed",
+  "runtimeWarnings" : [
+    {
+      "issueType" : "Runtime Warning",
+      "message" : "Safety guardrails were triggered. If this is unexpected, please use `LanguageModelSession.logFeedbackAttachment(sentiment:issues:desiredOutput:)` to export the feedback attachment and file a feedback report at https://feedbackassistant.apple.com.",
+      "sourceURL" : "file:///Users/runner/work/NetNewsWire/NetNewsWire/Reader/ReaderTests/ReaderIntelligenceTests/DigestTests.swift"
+    }
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1792982186.898,
+  "statistics" : [
+    {
+      "subtitle" : "266 test runs",
+      "title" : "69 tests ran with dynamic parameters"
+    },
+    {
+      "subtitle" : "1 test run",
+      "title" : "1 test collected performance metrics"
+    }
+  ],
+  "testFailures" : [
+
+  ],
+  "title" : "Test - Reader",
+  "topInsights" : [
+    {
+      "category" : "Longest Test Runs",
+      "impact" : "20% of duration",
+      "text" : "4 longest test runs with outlier durations exceeding 1.87s (three standard deviations)"
+    }
+  ],
+  "totalTestCount" : 208
+}

@@ -1,6 +1,26 @@
 # K: native navigation roles and section heading — 2026-10-26
 
-## Native VoiceOver service — populated attempt failed; daemon crash recurs
+## Native VoiceOver service — table navigation passes; broader acceptance open
+
+### Verified table-navigation checkpoint at 24d81f8cf
+
+[Reader CI 40259657192](https://github.com/mpwg/NetNewsWire/actions/runs/40259657192), job 121369056199, passes **405 executions: all 395 code executions and ten native UI methods**, 208 distinct tests, zero failures/skips and one deliberate model-guardrail runtime warning. Lint, runner failure propagation, 10,000-article process recovery and native-report collection/upload pass. The VoiceOver method passes in 34.393 seconds; the following window method passes in 68.230 seconds. [Unaltered native summary](k-voiceover-table-ci-green-2026-10-26.json) · [recovery](k-voiceover-table-recovery-2026-10-26.json) · [exact activities](k-voiceover-table-activities-2026-10-26.json).
+
+The [native speech/state/service journal](k-voiceover-table-journal-2026-10-26.json) retains original payloads, metadata and checksums. Initial mode is false and the service description is enabled=NO. After activation and the first-row setup click, current speech is Welcome to macOS. VoiceOver is on. moveIn produces Timeline article 299; the first moveForward produces Unread image, Timeline article 298, Representative content for k (the returned clipping is retained). Both exact titles are obtained from actual VoiceOver outputs. After ordinary teardown, the explicit state assertion and description both report disabled. Service descriptions contain only enabled state; they do not expose a focus tree or establish an originating crash cause.
+
+The [inspected native window image](k-voiceover-table-window-2026-10-26.png) shows row 298 selected, its detail title and the actual VoiceOver caption. This corroborates the exercised selection/focus state; the case does not assert article-body painting or complete reading. Its initial mouse click is setup, not a VoiceOver-only launch/library journey.
+
+| Current VoiceOver criterion | Status | Scope and remaining work |
+|---|---|---|
+| Activate and enter the populated native table | Fulfilled for this run | Public service enable/moveIn with the isolated 300-article fixture and normal 200-row page. |
+| Announce two adjacent actual titles | Fulfilled | Original entry/forward utterances contain 299 and 298; no AX-label substitution. |
+| Restore an initially disabled service after ordinary completion | Fulfilled | Native false state, explicit assertion and enabled=NO description. |
+| Initially enabled branch | Open | The source restores/asserts either original state, but this run starts false. |
+| Whole current native Mac plan | Fulfilled for source 24d81f8cf | All 405 executions, lint, runner contracts and recovery pass. |
+| Earlier daemon failure and restoration after runner loss | Open | No new report is archived here; the older real .ips and missing restoration remain independently valid. Neither absence nor this pass proves their cause repaired. |
+| Full VoiceOver-only menu/form/article journeys and complete accessibility | Open | Not established by the two-title scenario or its screenshot; remaining audit findings and final platforms retain their requirements. |
+
+Differences between hosted attempts do not establish that the diagnostic getters repaired startup or daemon memory handling. This is the first successful observed entered-table path at its exact source, not a claimed product-memory fix. The physical-Mac comparison still awaits owner coordination; no local test, normal Reader restart or VoiceOver change has occurred. The source diff from this tested commit through 7d2ba49bf contains only README/language documentation; runtime, tests, build settings and workflow are unchanged.
 
 ### Table-entry attempt at 8ee61defd stops during activation
 
