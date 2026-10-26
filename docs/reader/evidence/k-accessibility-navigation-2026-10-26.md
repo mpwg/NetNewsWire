@@ -1,5 +1,15 @@
 # K: native navigation roles and section heading — 2026-10-26
 
+## Native VoiceOver service candidate — compiled, not yet executed
+
+Apple's public [XCUIVoiceOverService](https://developer.apple.com/documentation/xcuiautomation/xcuivoiceoverservice) provides enable/disable, focus movement and actual [utterance output](https://developer.apple.com/documentation/xcuiautomation/xcuivoiceoverservice/output/utterance). The official documentation metadata lists macOS 27.0; a temporary type/property probe builds successfully with the installed Mac SDK through Xcode MCP at 01:24:43. The probe is replaced by one concrete Mac-only native UI method, testVoiceOverAnnouncesReaderAndMovesFocus.
+
+The method records the initial state, enables VoiceOver only when needed, launches the isolated empty Reader with English app localization, captures current/forward/backward utterances and requires nonempty, changing speech that names Reader/Library/FreshRSS. It retains the actual utterances and a window-only screenshot. It registers XCTest teardown to restore a previously disabled service, including on test failure; a restoration error is not suppressed. No AppleScript, private selector, caption-panel scraping or accessibility-label substitution is used.
+
+Xcode MCP build-for-testing at 01:26:43 and strict lint pass. Discovery reports 208 enabled tests, zero disabled. Actual service enablement, speech, focus movement and restoration are **unverified** until a hosted native run executes this new method. The full menu/library/timeline/article journey, populated-screen and full accessibility acceptance remain open regardless of this smoke result. Existing audit findings are unchanged and unfiltered.
+
+The previous DeviceInteraction result remains valid only for that interface: it offers no native Mac target. That does not exclude this separate XCTest API. No local tests run or VoiceOver state changes during the pending owner journey; normal Reader PID 53387 stays alive. The existing 332d7f97d documentation-receipt CI is allowed to finish before this new source is pushed.
+
 ## Current result
 
 Earlier split-column/context and targeted-contrast evidence remains in [its named checkpoint](k-accessibility-columns-2026-10-25.md); the current summary supersedes its outstanding header/role findings only where proved below.

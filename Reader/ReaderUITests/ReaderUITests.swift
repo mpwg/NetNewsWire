@@ -23,6 +23,43 @@ final class ReaderSmokeTests: XCTestCase {
     }
 
     #if os(macOS)
+    func testVoiceOverAnnouncesReaderAndMovesFocus() throws {
+        let voiceOver = XCUIDevice.shared.voiceOverService
+        let wasEnabled = voiceOver.isEnabled
+        let initialState = XCTAttachment(string: "VoiceOver originally enabled: \(wasEnabled)")
+        initialState.name = "Native VoiceOver initial state"
+        initialState.lifetime = .keepAlways
+        add(initialState)
+        if !wasEnabled {
+            addTeardownBlock {
+                try await MainActor.run {
+                    let service = XCUIDevice.shared.voiceOverService
+                    if service.isEnabled { try service.disable() }
+                }
+            }
+            try voiceOver.enable()
+        }
+        XCTAssertTrue(voiceOver.isEnabled)
+        let app = launchReader(arguments: ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"])
+        let current = try voiceOver.currentSpeech().utterance
+        let forward = try voiceOver.moveForward().utterance
+        let backward = try voiceOver.moveBackward().utterance
+        let speech = [current, forward, backward]
+        let journal = XCTAttachment(string: "Current: \(current)\nForward: \(forward)\nBackward: \(backward)")
+        journal.name = "Actual native VoiceOver focus utterances"
+        journal.lifetime = .keepAlways
+        add(journal)
+        XCTAssertTrue(speech.allSatisfy { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty })
+        XCTAssertGreaterThan(Set(speech).count, 1)
+        XCTAssertTrue(speech.contains { phrase in
+            ["Reader", "Library", "FreshRSS"].contains { phrase.localizedCaseInsensitiveContains($0) }
+        })
+        let window = XCTAttachment(screenshot: app.windows.firstMatch.screenshot())
+        window.name = "Native Reader during actual VoiceOver focus navigation"
+        window.lifetime = .keepAlways
+        add(window)
+    }
+
     func testLoadedTimelineScrollingMetrics() throws {
         let app = launchReader(arguments: ["--ui-testing-load", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"])
         waitForValue(app.staticTexts["loadFixturePhase"], equalTo: "ready", timeout: 30)
