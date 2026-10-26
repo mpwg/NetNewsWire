@@ -39,6 +39,9 @@ Native VoiceOver has both named passing runs and retained failures; full menu/fo
 
 ## Model verification
 
+The architecture for improving offer-fact attribution is awaiting an owner decision; the current local model can misidentify qualifying purchase prices. No additional model or external provider has been enabled. [Decision context and evidence](docs/reader/handoff-2026-10-24.md#immediate-continuation).
+
+
 The price-subject v15 candidate is not integrated:553 Mac code executions pass, but the fixed public pair still assigns a qualifying purchase amount to an unrelated selected product. [Controlled and model evidence](docs/reader/evidence/i-price-subject-v15-2026-10-26.md).
 
 
