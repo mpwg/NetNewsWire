@@ -204,7 +204,7 @@ struct SourceNumberReferenceTests {
     }
 
     @Test("Source namespace collisions and numbers outside the packet are rejected", arguments: [
-        "⟦readerNumber:0:0⟧", "⟦readerNumber", "EUR 9999", "29,99", "⟦", "⟧"
+        "⟦readerNumber:0:0⟧", "⟦readerNumber", "EUR 9999", "29,99", "⟦", "⟧", "⟦0:0⟧"
     ])
     func sourceReferencesCannotBeForged(text: String) {
         #expect(throws: ReaderError.invalidResponse) {
@@ -214,8 +214,7 @@ struct SourceNumberReferenceTests {
     }
 
     @Test("Unknown, malformed and uncited packet references never restore", arguments: [
-        "⟦readerNumber:0:99⟧", "⟦readerNumber:0:0", "⟦readerNumber:00:0⟧", "⟦readerNumber:1:0⟧",
-        "⟦0:0⟧", "⟦readerNumber:0:0⟧⟧", "⟧"
+        "⟦0:99⟧", "⟦0:0", "⟦00:0⟧", "⟦1:0⟧", "⟦0⟧", "⟦0:0⟧⟧", "⟧", "⟦readerNumber:0:0⟧"
     ])
     func invalidNumericReferencesFailClosed(text: String) throws {
         let first = try SourceNumberReferences(packetNumber: 0, text: "EUR 29.99")
@@ -276,11 +275,11 @@ struct AppleSummaryGeneratorTests {
             selection: { _ in #"{"groups":[{"sourceNumbers":[0]}]}"# },
             consolidation: { prompt in
                 let packets = try JSONDecoder().decode([CapturedModelSource].self, from: Data(prompt.utf8))
-                #expect(packets.first?.text == "Project.\nThe budget is EUR ⟦readerNumber:0:0⟧.")
-                #expect(packets.first?.selectedExcerpts == ["The budget is EUR ⟦readerNumber:0:0⟧."])
+                #expect(packets.first?.text == "Project.\nThe budget is EUR ⟦0:0⟧.")
+                #expect(packets.first?.selectedExcerpts == ["The budget is EUR ⟦0:0⟧."])
                 #expect(packets.first?.articleNumbers == [0])
                 #expect(!prompt.contains("250000"))
-                return #"{"title":"Budget","summary":"The budget is EUR ⟦readerNumber:0:0⟧.","sourceNumbers":[0]}"#
+                return #"{"title":"Budget","summary":"The budget is EUR ⟦0:0⟧.","sourceNumbers":[0]}"#
             })
         let sections = try await AppleSummaryGenerator().generate(
             [source], model: ControlledLanguageModel(journal: journal), capacity: 10000,
@@ -291,8 +290,8 @@ struct AppleSummaryGeneratorTests {
     }
 
     @Test("Numeric drafts reject unknown or uncited references, changed literals and inline citations", arguments: [
-        "EUR ⟦readerNumber:0:99⟧.", "EUR ⟦readerNumber:1:0⟧.", "EUR ⟦readerNumber:0:0.",
-        "EUR 250.000.", "EUR ⟦readerNumber:0:0⟧ (0)."
+        "EUR ⟦0:99⟧.", "EUR ⟦1:0⟧.", "EUR ⟦0:0.",
+        "EUR 250.000.", "EUR ⟦0:0⟧ (0).", "EUR ⟦readerNumber:0:0⟧."
     ])
     func numericDraftsKeepIndependentSourceValidation(text: String) async throws {
         var sources = try distinctSources(count: 2)
@@ -324,7 +323,7 @@ struct AppleSummaryGeneratorTests {
             try await AppleSummaryGenerator().generate(
                 [source], model: ControlledLanguageModel(journal: journal), capacity: 10000,
                 isolateSelectedEvidence: true, selectSourceSentences: true, protectNumericLiterals: true,
-                count: { $0.contains("⟦readerNumber") ? 10000 : $0.count })
+                count: { $0.contains("⟦") ? 10000 : $0.count })
         }
         #expect(await journal.requests.count == 2)
     }

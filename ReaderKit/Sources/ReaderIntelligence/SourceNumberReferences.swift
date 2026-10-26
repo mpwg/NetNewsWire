@@ -15,7 +15,7 @@ struct SourceNumberReferences: Sendable {
         for match in text.matches(of: /[0-9]+(?:[.,][0-9]+)*/) {
             let literal = String(match.output)
             if forward[literal] != nil { continue }
-            let marker = "⟦readerNumber:\(packetNumber):\(forward.count)⟧"
+            let marker = "⟦\(packetNumber):\(forward.count)⟧"
             forward[literal] = marker
             reverse[marker] = literal
         }
@@ -40,7 +40,7 @@ struct SourceNumberReferences: Sendable {
     static func restored(_ text: String, tables: [Self], citedPackets: Set<Int>) throws -> String {
         var result = ""
         var cursor = text.startIndex
-        for match in text.matches(of: /⟦readerNumber:[0-9]+:[0-9]+⟧/) {
+        for match in text.matches(of: /⟦[0-9]+:[0-9]+⟧/) {
             let marker = String(match.output)
             guard let table = tables.first(where: { $0.markerToLiteral[marker] != nil }),
                   citedPackets.contains(table.packetNumber),
