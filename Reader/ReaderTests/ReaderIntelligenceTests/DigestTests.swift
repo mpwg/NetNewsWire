@@ -107,6 +107,18 @@ private actor ModelRequestJournal {
 }
 
 struct SourceFactValidationTests {
+    @Test("Numeric citation syntax must occur in the cited source, not merely share its digits", arguments: [
+        ("A claim [1].", "Model 1.", true),
+        ("A claim [ 1 ].", "Model 1.", true),
+        ("A claim [1, 2].", "Models 1 and 2.", true),
+        ("A claim [1–2].", "Models 1 and 2.", true),
+        ("Array [1] is retained.", "Array [1] is source data.", false),
+        ("Year (2026) is retained.", "Year 2026.", false)
+    ])
+    func numericCitationsNeedLiteralSourceSupport(text: String, source: String, unsupported: Bool) {
+        #expect(SourceFactValidation.hasUnownedNumericCitation(in: text, source: source) == unsupported)
+    }
+
     // Multilingual source-text fixtures; test code and descriptions remain English.
     @Test("Source excerpts preserve Unicode, merchant names and numeric punctuation",
           arguments: [
@@ -146,6 +158,27 @@ private actor GenerationTraceJournal {
 }
 
 struct AppleSummaryGeneratorTests {
+    @Test("Actual native output rejects invented bracket references while preserving copied bracket data", arguments: [false, true])
+    func nativeNumericCitationsUseActualCitedText(copied: Bool) async throws {
+        var source = try article()
+        source.title = "Model 1."
+        source.text = copied ? "Source data [1]. The price is EUR 29.99." : "The price is EUR 29.99."
+        let journal = ModelRequestJournal(response:
+            #"{"groups":[{"title":"Price","summary":"EUR 29.99 [1].","sourceNumbers":[0]}]}"#)
+        if copied {
+            let sections = try await AppleSummaryGenerator().generate(
+                [source], model: ControlledLanguageModel(journal: journal), capacity: 10000, count: { $0.count })
+            #expect(sections.first?.text == "EUR 29.99 [1].")
+            #expect(sections.first?.sources == [source.id])
+        } else {
+            await #expect(throws: ReaderError.self) {
+                try await AppleSummaryGenerator().generate(
+                    [source], model: ControlledLanguageModel(journal: journal), capacity: 10000, count: { $0.count })
+            }
+        }
+        #expect(await journal.requests.count == 2)
+    }
+
     @Test("Each source fragment keeps its merchant, price and conditions in one evidence packet")
     func fragmentFactsKeepTheirSharedReference() async throws {
         let first = try article()
@@ -607,7 +640,7 @@ private actor ControlledGenerator: SummaryGenerator {
 }
 
 struct DigestTests {
-    @Test("Unchanged valid caches from source-only and first-stage policies are regenerated", arguments: ["", "reader-source-facts-consolidation-v1\n", "reader-source-facts-consolidation-v2\n", "reader-source-facts-consolidation-v3\n", "reader-source-facts-consolidation-v4\n"])
+    @Test("Unchanged caches from earlier generation and validation policies are regenerated", arguments: ["", "reader-source-facts-consolidation-v1\n", "reader-source-facts-consolidation-v2\n", "reader-source-facts-consolidation-v3\n", "reader-source-facts-consolidation-v4\n", "reader-source-facts-consolidation-v5\n"])
     func previousGenerationCacheIsRegenerated(policyPrefix: String) async throws {
         let (store, feed, articles) = try await fixture()
         let coordinator = DigestCoordinator(repository: store, generator: FixtureGenerator())

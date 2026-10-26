@@ -11,6 +11,12 @@ private struct GeneratedFacts {
 }
 
 enum SourceFactValidation {
+    static func hasUnownedNumericCitation(in text: String, source: String) -> Bool {
+        text.matches(of: /\[\s*[0-9]+(?:\s*[,;–-]\s*[0-9]+)*\s*\]/).contains {
+            !source.contains($0.output)
+        }
+    }
+
     static func excerpts(_ excerpts: [String], in fragment: String) throws -> [String] {
         guard !excerpts.isEmpty, excerpts.count <= 8 else { throw ReaderError.invalidResponse }
         var seen: Set<String> = []
@@ -335,6 +341,7 @@ public actor AppleSummaryGenerator: SummaryGenerator {
             let generatedText = group.title + " " + group.summary
             let normalizedText = generatedText.lowercased()
             guard numbers(in: generatedText).isSubset(of: numbers(in: sourceText)),
+                  !SourceFactValidation.hasUnownedNumericCitation(in: generatedText, source: sourceText),
                   !normalizedText.contains("http://"), !normalizedText.contains("https://") else {
                 throw ReaderError.unavailable(String(localized: "The summary contains unsupported numbers or links. Original articles remain available.", bundle: #bundle))
             }

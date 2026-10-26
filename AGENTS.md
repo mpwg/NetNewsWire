@@ -22,3 +22,5 @@
 - On 2026-10-26 the owner chose key-statement selection for digests: summaries may omit less important details, but every original article must remain linked. Preserve conditions and negations of selected claims and their supporting provenance. Do not require every fragment or independent fact to appear, and do not treat links to all originals as proof of semantic correctness.
 
 - On 2026-10-26 the owner explicitly retained free summaries in the app language and directed further quality work after the source-review experiment missed a known weekday error. Do not replace summaries with source-language extracts or treat the unvalidated reviewer as a reliable production gate. The key-statement/all-original-links rule remains.
+
+- On 2026-10-26 the owner chose free app-language summaries plus an additional compact source-bound offer facts line for merchant, price and conditions. This resolves the public RSS corpus decision; do not replace free summaries with extracts or silently show incomplete offer terms as if complete. Keep provenance, conditions/negations, all-original links and read/outbox invariants explicit.

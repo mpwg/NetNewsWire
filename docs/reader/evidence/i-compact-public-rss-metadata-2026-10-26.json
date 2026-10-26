@@ -1,0 +1,161 @@
+{
+  "sourceURL": "https://www.preisjaeger.at/rss/alle",
+  "capturedAtUTC": "2026-10-26T16:26:26.928597+00:00",
+  "feedSHA256": "6717d25bafcec62b533e8a4b73269215ac95144a2ba986807071615e5b389139",
+  "feedBytes": 118767,
+  "totalItems": 30,
+  "selection": "First six RSS items, fixed before inference; one six-item configuration and consecutive pairs1-3.",
+  "transport": "One successful HTTPS RSS response, redirects disabled, 5MiB/30second limits; no linked articles or subresources requested.",
+  "projection": "DTD/entities rejected; passive HTML tokenization, active/media/form blocks ignored; whitespace normalized. This is a text corpus, not native Readability or FreshRSS ingestion acceptance.",
+  "records": [
+    {
+      "position": 1,
+      "articleID": "public-evening-1",
+      "titleSHA256": "c81f1b92ccf404da2b4fe2befa5335f3f04eb76150be93ba0d183eb1f24c2141",
+      "textSHA256": "73daf7a3dd1557c9f9d2902324e3f63e298aaf44c5bb69e3f0def2bd32a35bb0",
+      "rawDescriptionSHA256": "f0e52b79f527051bca4c653953dac8430b98baa70275f17f1209800f41ab2eb8",
+      "linkSHA256": "96fe8ac41ef3d066d921c30aa6eaf3a55702bf067566f586b81a0442d30e88fa",
+      "titleCharacters": 75,
+      "textCharacters": 437,
+      "tagCounts": {
+        "strong": 2,
+        "br": 6,
+        "img": 1,
+        "p": 5
+      }
+    },
+    {
+      "position": 2,
+      "articleID": "public-evening-2",
+      "titleSHA256": "17d2c23d8daf8156d6e51a4baac856a9e68ceccdf7558713707f02daaf666bca",
+      "textSHA256": "e97495da3f864ec01cefc38e6bf394debffa613feb07b2e83c427c4d2178469a",
+      "rawDescriptionSHA256": "5e5277e91394bcbcb3817eb8242651724afb1ab0a2d30f08483ad70f4236988a",
+      "linkSHA256": "af7bf8e5827ca814c731a84b7f93b7b5bc91ef9551187391ca3200cd9aeda387",
+      "titleCharacters": 91,
+      "textCharacters": 2413,
+      "tagCounts": {
+        "strong": 12,
+        "br": 11,
+        "img": 15,
+        "p": 14,
+        "a": 2
+      }
+    },
+    {
+      "position": 3,
+      "articleID": "public-evening-3",
+      "titleSHA256": "96f8974341eaac47e6ed907a64e8235b070a3ae1fdc6d2808b21f9853d1d6f50",
+      "textSHA256": "8a58c8db2d6934398880120cbb6653818af07dbe06dcb0b5ce1fc3563746f5d3",
+      "rawDescriptionSHA256": "d0fdead0b88428c67ec13b7128210d970d78f8fab3a1ff81409a1188dab45446",
+      "linkSHA256": "8f8286856ef1176cf9b43fe5cf551cc2d5391c1ef1fc9b0c926765d84480f218",
+      "titleCharacters": 120,
+      "textCharacters": 1864,
+      "tagCounts": {
+        "strong": 49,
+        "br": 3,
+        "img": 7,
+        "p": 57,
+        "a": 4,
+        "ul": 8,
+        "li": 40
+      }
+    },
+    {
+      "position": 4,
+      "articleID": "public-evening-4",
+      "titleSHA256": "bf44160bb625d9c837d3a52b5cbff57f1e8706fe49817d653fd59d42f3e8fecf",
+      "textSHA256": "0175724dae9e3fdc637074017bc5327d78681120db6bb7030772a5fe90e38140",
+      "rawDescriptionSHA256": "2b94b03bba9233c585797bc63a046d5731a7dfd22759f616c5f8e9cfab0197a0",
+      "linkSHA256": "7210275e1194ff721e25c46062a8becbe24db8b73b5b9e18d318f97f0aac9faa",
+      "titleCharacters": 53,
+      "textCharacters": 167,
+      "tagCounts": {
+        "strong": 1,
+        "br": 2,
+        "img": 1
+      }
+    },
+    {
+      "position": 5,
+      "articleID": "public-evening-5",
+      "titleSHA256": "b8b02c168d91aab82d2377f2cf4854f430dbd8b54d343c9235fac542c4a0e0e9",
+      "textSHA256": "e1de4f9f67f2507b30d1c3073a55d62ba02a926cb47100997893e574dda93a62",
+      "rawDescriptionSHA256": "16b899c32a1defa8b08dcc4a5805dc8ad8ecb639293a50792bdc0f235fde7ae9",
+      "linkSHA256": "6ddbd2318355639c35eb96e8949efce1ab18fff111d50e2c0604e7c08414596b",
+      "titleCharacters": 87,
+      "textCharacters": 844,
+      "tagCounts": {
+        "strong": 5,
+        "br": 2,
+        "img": 4,
+        "p": 10,
+        "ul": 1,
+        "li": 3,
+        "a": 3
+      }
+    },
+    {
+      "position": 6,
+      "articleID": "public-evening-6",
+      "titleSHA256": "408b399e37253f04f06491c71c30c02bbbc6b4bd756a4233147b86a2dd505d66",
+      "textSHA256": "e99060a5ddf255cdade7ccc3d8d663e761dd658915d9a143a93aa3b7e4057aca",
+      "rawDescriptionSHA256": "e8cdaa5720e72f709bf631f839792ad5718772e0246ed61700ef0b6388144817",
+      "linkSHA256": "74fba8445c65e1610661d489becb0988221dcd29b809f47748ee54f72f9d32fd",
+      "titleCharacters": 48,
+      "textCharacters": 1892,
+      "tagCounts": {
+        "strong": 2,
+        "br": 2,
+        "img": 5,
+        "p": 32,
+        "a": 2,
+        "ul": 2,
+        "li": 28
+      }
+    }
+  ],
+  "configurations": [
+    {
+      "name": "six",
+      "articleIDs": [
+        "public-evening-1",
+        "public-evening-2",
+        "public-evening-3",
+        "public-evening-4",
+        "public-evening-5",
+        "public-evening-6"
+      ],
+      "inputSHA256": "104495438e1768ad323ea91ecb02bf0fd70dd9ad1c18f639db3d4069f05c7bf8",
+      "inputBytes": 10081
+    },
+    {
+      "name": "pair-1",
+      "articleIDs": [
+        "public-evening-1",
+        "public-evening-2"
+      ],
+      "inputSHA256": "ccf83b34996dbd2cec898a47b568078172c4947fd02b135219472a74c4523501",
+      "inputBytes": 3685
+    },
+    {
+      "name": "pair-2",
+      "articleIDs": [
+        "public-evening-3",
+        "public-evening-4"
+      ],
+      "inputSHA256": "dec8b262f8bd48b1a58ffdeefb9a2db24cd0978232cb9f7dc72860124b490b22",
+      "inputBytes": 2894
+    },
+    {
+      "name": "pair-3",
+      "articleIDs": [
+        "public-evening-5",
+        "public-evening-6"
+      ],
+      "inputSHA256": "e05318eb4f82f452cc48eaa7239f9cf888e899310c990a86da260fa139410555",
+      "inputBytes": 3508
+    }
+  ],
+  "localDirectory": "/Users/mat/.codex/artifacts/netnewswire/public-rss-20261026-6717d25bafce",
+  "projectionScriptSHA256": "26f77a5f9be4cf2f3a49d8584fd96b37367060ecc4d00996662a062c0031944d"
+}
