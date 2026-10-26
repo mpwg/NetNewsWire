@@ -1,0 +1,84 @@
+{
+  "sourceRun": 40263583204,
+  "sourceRevision": "ea33073120a07d8daada4741ff1be382923c2610",
+  "artifactID": 12626345113,
+  "attachments": [
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "6927d125bf1a9db50bafaa60f43159dcfb18dc3d",
+      "deviceName": "My Mac",
+      "exportedFileName": "475D44E9-FF3D-4037-9E19-D12A092DA926.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Native VoiceOver initial state_0_1ED4C646-2AD3-4AE9-8160-6645B68C6062.txt",
+      "timestamp": 1792985408.278,
+      "payload": "VoiceOver originally enabled: false",
+      "sha256": "4efebe1027172734623f2bb365c619485a3373a14c52fbb8cebd51b1b1a3e960"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "6927d125bf1a9db50bafaa60f43159dcfb18dc3d",
+      "deviceName": "My Mac",
+      "exportedFileName": "EB8732BE-4F0F-499F-831F-3E4BF05BA8F1.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Native VoiceOver service before activation_0_93680754-35B1-4C11-A014-AEA3F9011CBE.txt",
+      "timestamp": 1792985408.28,
+      "payload": "<XCUIVoiceOverService: enabled=NO>",
+      "sha256": "2b36fb0ff5f71c6ddd373da937e167e3d5c84acbe697ec62d04f81486cb53ec4"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "6927d125bf1a9db50bafaa60f43159dcfb18dc3d",
+      "deviceName": "My Mac",
+      "exportedFileName": "02D3D6E5-BD66-4584-BA64-FDF71890D431.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Native VoiceOver service before current_0_04BC0C65-D039-45D1-84A3-03242D9897E1.txt",
+      "timestamp": 1792985422.405,
+      "payload": "<XCUIVoiceOverService: enabled=YES>",
+      "sha256": "bbb9855d86c7d1ad7b163f7b18213ef7ac579a30963e7e19ce9a63460faa9d5f"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "6927d125bf1a9db50bafaa60f43159dcfb18dc3d",
+      "deviceName": "My Mac",
+      "exportedFileName": "2492473A-41EE-4423-9EA0-E5488B209879.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Actual native VoiceOver current_1_04BC0C65-D039-45D1-84A3-03242D9897E1.txt",
+      "timestamp": 1792985422.412,
+      "payload": "Welcome to macOS. VoiceOver is on.",
+      "sha256": "519805b176a983542fe773f5d368b86e17c70f952e6275b644c6baf6e9102429"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "6927d125bf1a9db50bafaa60f43159dcfb18dc3d",
+      "deviceName": "My Mac",
+      "exportedFileName": "FDF122DE-4410-43AF-B697-DDB1456DCEC3.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Native VoiceOver service before enter timeline_0_99803614-B6A0-45AE-B3AC-C3349CF07A18.txt",
+      "timestamp": 1792985422.417,
+      "payload": "<XCUIVoiceOverService: enabled=YES>",
+      "sha256": "bbb9855d86c7d1ad7b163f7b18213ef7ac579a30963e7e19ce9a63460faa9d5f"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "6927d125bf1a9db50bafaa60f43159dcfb18dc3d",
+      "deviceName": "My Mac",
+      "exportedFileName": "5804D7A8-9D6C-4A30-8A52-6B1F5EF63B18.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Native VoiceOver restored state_0_039BBCFD-AA7A-4786-BE2B-D2CEB779DD00.txt",
+      "timestamp": 1792985437.943,
+      "payload": "VoiceOver enabled after restoration: false",
+      "sha256": "7ced859ebaedc9db9aec2d7ca64279bf43844b3b73069100131ae736c45351f4"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "6927d125bf1a9db50bafaa60f43159dcfb18dc3d",
+      "deviceName": "My Mac",
+      "exportedFileName": "9365B2B7-B030-4C93-9453-B7E4E37CE0E1.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Native VoiceOver service after restoration_1_039BBCFD-AA7A-4786-BE2B-D2CEB779DD00.txt",
+      "timestamp": 1792985437.945,
+      "payload": "<XCUIVoiceOverService: enabled=NO>",
+      "sha256": "2b36fb0ff5f71c6ddd373da937e167e3d5c84acbe697ec62d04f81486cb53ec4"
+    }
+  ]
+}
