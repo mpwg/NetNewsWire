@@ -57,6 +57,7 @@ public final class ReaderSession {
     public private(set) var digests: [DigestSnapshot] = []
     public private(set) var feedPreferences: [FeedPreferences] = []
     public private(set) var rows: [TimelineRow] = []
+    public private(set) var unreadCounts = ReaderUnreadCounts()
     public private(set) var loading = false
     public private(set) var syncing = false
     public private(set) var markingFeedsRead: Set<FeedKey> = []
@@ -105,8 +106,9 @@ public final class ReaderSession {
         if resetLimit { limit = 200 }
         loading = true
         defer { if current == generation { loading = false } }
+        let repository = services.repository
+        let initialRevision = await repository.currentRevision()
         do {
-            let repository = services.repository
             let nextAccounts = try await repository.accounts()
             let nextFeeds = try await repository.feeds()
             let nextFolders = try await repository.folders()
@@ -146,7 +148,10 @@ public final class ReaderSession {
                     if article?.read == false { nextDigestUnread[digest.id] = true; break }
                 }
             }
-            guard !Task.isCancelled, current == generation, queryID == queryIdentity else { return }
+            let nextCounts = try await repository.unreadCounts()
+            let finalRevision = await repository.currentRevision()
+            guard !Task.isCancelled, current == generation, queryID == queryIdentity,
+                  initialRevision == finalRevision else { return }
             if nextDigests.count != storedDigests.count { errorMessage = ReaderError.invalidResponse.localizedDescription }
             accounts = nextAccounts
             feeds = nextFeeds
@@ -155,6 +160,7 @@ public final class ReaderSession {
             digests = nextDigests
             articles = nextArticles
             digestUnread = nextDigestUnread
+            unreadCounts = ReaderUnreadCounts(byFeed: nextCounts, feeds: nextFeeds)
             canLoadMore = page.count == requestedCount
             rebuildRows()
             if let publishedQueryIdentity, publishedQueryIdentity != queryID {
@@ -167,7 +173,8 @@ public final class ReaderSession {
             if let displayedDigest { await loadSources(displayedDigest) }
         } catch is CancellationError {
         } catch {
-            if !Task.isCancelled, current == generation, queryID == queryIdentity {
+            let finalRevision = await repository.currentRevision()
+            if !Task.isCancelled, current == generation, queryID == queryIdentity, initialRevision == finalRevision {
                 errorMessage = error.localizedDescription
             }
         }

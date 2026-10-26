@@ -168,6 +168,8 @@ private struct ReaderSidebar: View {
                 NavigationLink(LocalizedStringResource("Unread", bundle: .atURL(#bundle.bundleURL)), value: "unread").tag("unread")
                     .accessibilityAddTraits(.isButton)
                     .accessibilityIdentifier("readerUnread")
+                    .badge(session.unreadCounts.total)
+                    .accessibilityValue(unreadValue(session.unreadCounts.total))
                 NavigationLink(LocalizedStringResource("All articles", bundle: .atURL(#bundle.bundleURL)), value: "all").tag("all")
                     .accessibilityAddTraits(.isButton)
                     .accessibilityIdentifier("readerAllArticles")
@@ -182,7 +184,7 @@ private struct ReaderSidebar: View {
                     #endif
             }
             ForEach(session.accounts) { account in
-                Section(account.name + " · " + account.username) {
+                Section {
                     ForEach(session.feeds.filter { $0.id.accountID == account.id && $0.folderIDs.isEmpty }) { feed in
                         feedRow(feed)
                     }
@@ -193,6 +195,8 @@ private struct ReaderSidebar: View {
                             }
                         } label: {
                             NavigationLink(value: folder.id) { Label(folder.title, systemImage: "folder") }
+                                .badge(session.unreadCounts.byFolder[folder.id, default: 0])
+                                .accessibilityValue(unreadValue(session.unreadCounts.byFolder[folder.id, default: 0]))
                                 .accessibilityAddTraits(.isButton)
                                 .accessibilityIdentifier("folderRow-\(folder.id)")
                         }
@@ -201,6 +205,13 @@ private struct ReaderSidebar: View {
                             Button(LocalizedStringResource("Rename folder", bundle: .atURL(#bundle.bundleURL)), systemImage: "pencil") { editFolder(folder) }
                             Button(LocalizedStringResource("Remove folder", bundle: .atURL(#bundle.bundleURL)), systemImage: "folder.badge.minus", role: .destructive) { removeFolder(folder) }
                         }
+                    }
+                } header: {
+                    HStack {
+                        Text(account.name + " · " + account.username)
+                        Spacer()
+                        Text(session.unreadCounts.byAccount[account.id, default: 0], format: .number)
+                            .accessibilityLabel(unreadValue(session.unreadCounts.byAccount[account.id, default: 0]))
                     }
                 }
             }
@@ -222,6 +233,10 @@ private struct ReaderSidebar: View {
         }
     }
 
+    private func unreadValue(_ count: Int) -> Text {
+        Text("Unread: \(count)", bundle: #bundle, comment: "Unread original article count for a library, account, folder or feed.")
+    }
+
     private func feedRow(_ feed: FeedSnapshot) -> some View {
         NavigationLink(value: feed.id.id) {
             Label {
@@ -235,6 +250,8 @@ private struct ReaderSidebar: View {
             }
         }
             .tag(feed.id.id)
+            .badge(session.unreadCounts.byFeed[feed.id, default: 0])
+            .accessibilityValue(unreadValue(session.unreadCounts.byFeed[feed.id, default: 0]))
             .accessibilityAddTraits(.isButton)
             .accessibilityIdentifier("feedRow-\(feed.id.id)")
             .contextMenu {

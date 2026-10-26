@@ -5,6 +5,10 @@ public protocol ReaderRepository: Sendable {
     func saveAccount(_ account: ReaderAccount) async throws
     func feeds() async throws -> [FeedSnapshot]
     func folders() async throws -> [FolderSnapshot]
+    /// Complete unread counts, independent of the current timeline query.
+    func unreadCounts() async throws -> [FeedKey: Int]
+    /// Monotonic committed-write version for coherent reads across actor calls.
+    func currentRevision() async -> UInt64
     func articles(_ query: ArticleQuery) async throws -> [ArticleSnapshot]
     func article(_ key: ArticleKey) async throws -> ArticleSnapshot?
     func changes() async -> AsyncStream<UInt64>

@@ -408,6 +408,8 @@ private actor CommitGateRepository: ReaderRepository {
     func saveAccount(_ account: ReaderAccount) async throws { try await store.saveAccount(account) }
     func feeds() async throws -> [FeedSnapshot] { try await store.feeds() }
     func folders() async throws -> [FolderSnapshot] { try await store.folders() }
+    func unreadCounts() async throws -> [FeedKey: Int] { try await store.unreadCounts() }
+    func currentRevision() async -> UInt64 { await store.currentRevision() }
     func articles(_ query: ArticleQuery) async throws -> [ArticleSnapshot] { try await store.articles(query) }
     func article(_ key: ArticleKey) async throws -> ArticleSnapshot? { try await store.article(key) }
     func changes() async -> AsyncStream<UInt64> { await store.changes() }
@@ -691,6 +693,8 @@ private actor TestRepository: ReaderRepository {
     func saveAccount(_ account: ReaderAccount) {}
     func feeds() -> [FeedSnapshot] { [] }
     func folders() -> [FolderSnapshot] { [] }
+    func unreadCounts() -> [FeedKey: Int] { [:] }
+    func currentRevision() -> UInt64 { UInt64(snapshots.count) }
     func articles(_ query: ArticleQuery) -> [ArticleSnapshot] { [] }
     func applyRefresh(_ snapshot: RefreshSnapshot) { snapshots.append(snapshot) }
     func setStatus(_ keys: [ArticleKey], field: StatusField, value: Bool) {}

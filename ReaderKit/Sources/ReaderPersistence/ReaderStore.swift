@@ -29,6 +29,8 @@ public actor ReaderStore: ReaderRepository {
         for continuation in observers.values { continuation.finish() }
     }
 
+    public func currentRevision() -> UInt64 { revision }
+
     /// Buffered current revision plus committed writes; termination never retains the store.
     public func changes() async -> AsyncStream<UInt64> {
         let id = UUID()

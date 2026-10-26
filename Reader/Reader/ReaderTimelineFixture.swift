@@ -132,6 +132,8 @@ actor ReaderTimelineRepository: ReaderRepository {
     func saveAccount(_ account: ReaderAccount) async throws { try await store.saveAccount(account) }
     func feeds() async throws -> [FeedSnapshot] { try await store.feeds() }
     func folders() async throws -> [FolderSnapshot] { try await store.folders() }
+    func unreadCounts() async throws -> [FeedKey: Int] { try await store.unreadCounts() }
+    func currentRevision() async -> UInt64 { await store.currentRevision() }
     func changes() async -> AsyncStream<UInt64> { await store.changes() }
     func applyRefresh(_ snapshot: RefreshSnapshot) async throws { try await store.applyRefresh(snapshot) }
     func setStatus(_ keys: [ArticleKey], field: StatusField, value: Bool) async throws { try await store.setStatus(keys, field: field, value: value) }

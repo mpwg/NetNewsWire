@@ -1233,6 +1233,14 @@
         }
       }
     },
+    "Unread: %lld" : {
+      "comment" : "Unread original article count for a library, account, folder or feed.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Ungelesen: %lld" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Unread: %lld" } }
+      }
+    },
     "Unsubscribe" : {
       "extractionState" : "manual",
       "localizations" : {

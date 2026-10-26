@@ -153,6 +153,128 @@ struct ReaderSessionTests {
         #expect(session.errorMessage == nil)
     }
 
+    @Test("Unread totals remain complete across pages, search, accounts and pure deletion",
+          .timeLimit(.minutes(1)), arguments: [false, true])
+    func unreadCountsFollowCommittedDeletion(searchHasNoResults: Bool) async throws {
+        let (store, services, originalFeed, originals) = try await fixture(count: 251)
+        var feed = originalFeed
+        feed.folderIDs = ["folder", "folder"]
+        let folder = FolderSnapshot(accountID: feed.id.accountID, remoteID: "folder", title: "Folder")
+        let remaining = FeedSnapshot(id: FeedKey(accountID: feed.id.accountID, remoteID: "feed/remaining"),
+                                     title: "Remaining", url: feed.url, folderIDs: ["folder"])
+        let other = ArticleSnapshot(id: ArticleKey(accountID: feed.id.accountID, remoteID: "other"),
+                                    feedID: remaining.id.remoteID, title: "Other")
+        let allUnread = Set(originals.map(\.id.remoteID)).union([other.id.remoteID])
+        try await store.applyRefresh(RefreshSnapshot(accountID: feed.id.accountID, feeds: [feed, remaining],
+                                                    folders: [folder], articles: [other], unreadIDs: allUnread, starredIDs: []))
+        let foreign = ReaderAccount(serverURL: feed.url, username: "foreign")
+        try await store.saveAccount(foreign)
+        let foreignFeed = FeedSnapshot(id: FeedKey(accountID: foreign.id, remoteID: feed.id.remoteID),
+                                       title: "Foreign", url: feed.url, folderIDs: ["folder"])
+        let foreignFolder = FolderSnapshot(accountID: foreign.id, remoteID: "folder", title: "Foreign folder")
+        let foreignArticle = ArticleSnapshot(id: ArticleKey(accountID: foreign.id, remoteID: "0"),
+                                             feedID: foreignFeed.id.remoteID, title: "Foreign")
+        try await store.applyRefresh(RefreshSnapshot(accountID: foreign.id, feeds: [foreignFeed], folders: [foreignFolder],
+                                                    articles: [foreignArticle], unreadIDs: ["0"], starredIDs: []))
+        let session = ReaderSession(services: services)
+        session.sidebarSelection = "unread"
+        if searchHasNoResults { session.search = "no matching fixture" }
+        await session.reload()
+        #expect(session.articles.count == (searchHasNoResults ? 0 : 200))
+        #expect(session.unreadCounts.byFeed == [feed.id: 251, remaining.id: 1, foreignFeed.id: 1])
+        #expect(session.unreadCounts.byFolder == [folder.id: 252, foreignFolder.id: 1])
+        #expect(session.unreadCounts.byAccount == [feed.id.accountID: 252, foreign.id: 1])
+        #expect(session.unreadCounts.total == 253)
+        // Keep all status IDs unchanged: deleting the subscription alone removes its unprotected originals.
+        try await store.applyRefresh(RefreshSnapshot(accountID: feed.id.accountID, feeds: [remaining], folders: [folder],
+                                                    articles: [], unreadIDs: allUnread, starredIDs: []))
+        await session.reload()
+        #expect(session.articles.count == (searchHasNoResults ? 0 : 2))
+        #expect(session.rows.count == (searchHasNoResults ? 0 : 2))
+        #expect(Set(session.articles.map(\.id)) == (searchHasNoResults ? [] : [other.id, foreignArticle.id]))
+        #expect(Set(session.feeds.map(\.id)) == [remaining.id, foreignFeed.id])
+        #expect(session.unreadCounts.byFeed == [remaining.id: 1, foreignFeed.id: 1])
+        #expect(session.unreadCounts.byFolder == [folder.id: 1, foreignFolder.id: 1])
+        #expect(session.unreadCounts.byAccount == [feed.id.accountID: 1, foreign.id: 1])
+        #expect(session.unreadCounts.total == 2)
+        #expect(session.errorMessage == nil)
+        #expect(try await store.pendingChanges(accountID: feed.id.accountID).isEmpty)
+    }
+
+    @Test("A commit during a count read cannot publish mixed data or an obsolete error",
+          .timeLimit(.minutes(1)), arguments: [false, true])
+    func unreadCountsRejectMixedRevisions(failingRead: Bool) async throws {
+        let (store, _, feed, originals) = try await fixture()
+        let remaining = FeedSnapshot(id: FeedKey(accountID: feed.id.accountID, remoteID: "feed/remaining"),
+                                     title: "Remaining", url: feed.url)
+        let unread = Set(originals.map(\.id.remoteID))
+        try await store.applyRefresh(RefreshSnapshot(accountID: feed.id.accountID, feeds: [feed, remaining],
+                                                    folders: [], articles: [], unreadIDs: unread, starredIDs: []))
+        let gate = RequestGate()
+        let replies = UnreadCountReplies(store: store, gate: gate)
+        let repository = ScriptedRepository(base: store, countsLookup: { try await replies.counts() },
+                                            query: { try await store.articles($0) })
+        let session = ReaderSession(services: ReaderServices(repository: repository))
+        await session.reload()
+        let previousArticles = session.articles
+        let previousRows = session.rows
+        let previousFeeds = session.feeds
+        let previousCounts = session.unreadCounts
+        #expect(previousCounts.total == originals.count)
+        await replies.holdNext(failing: failingRead)
+        let request = Task { await session.reload() }
+        defer { request.cancel(); Task { await gate.open() } }
+        try await gate.waitUntilEntered()
+        try await store.applyRefresh(RefreshSnapshot(accountID: feed.id.accountID, feeds: [remaining],
+                                                    folders: [], articles: [], unreadIDs: unread, starredIDs: []))
+        await gate.open()
+        await request.value
+        #expect(session.articles == previousArticles)
+        #expect(session.rows == previousRows)
+        #expect(session.feeds == previousFeeds)
+        #expect(session.unreadCounts == previousCounts)
+        #expect(session.errorMessage == nil)
+        #expect(!session.loading)
+        await session.reload()
+        #expect(session.articles.isEmpty)
+        #expect(session.rows.isEmpty)
+        #expect(session.feeds == [remaining])
+        #expect(session.unreadCounts.total == 0)
+        #expect(session.errorMessage == nil)
+    }
+
+    @Test("Committed deletion automatically refreshes timeline and complete counters",
+          .timeLimit(.minutes(1)))
+    func observedDeletionRefreshesTimelineAndCounts() async throws {
+        let (store, _, feed, originals) = try await fixture()
+        let gate = RequestGate()
+        let replies = UnreadCountReplies(store: store, gate: gate)
+        let repository = ScriptedRepository(base: store, countsLookup: { try await replies.counts() },
+                                            query: { try await store.articles($0) })
+        let session = ReaderSession(services: ReaderServices(repository: repository))
+        await session.reload()
+        #expect(session.unreadCounts.total == originals.count)
+        await replies.holdNext(failing: false)
+        let observer = Task { await session.observeChanges() }
+        defer { observer.cancel(); Task { await gate.open() } }
+        try await gate.waitUntilEntered()
+        try await store.applyRefresh(RefreshSnapshot(accountID: feed.id.accountID, feeds: [], folders: [],
+                                                    articles: [], unreadIDs: Set(originals.map(\.id.remoteID)), starredIDs: []))
+        await gate.open()
+        let deadline = ContinuousClock.now.advanced(by: .seconds(10))
+        while session.unreadCounts.total != 0 || !session.rows.isEmpty || session.loading {
+            try Task.checkCancellation()
+            try #require(ContinuousClock.now < deadline, "The committed revision must refresh the observed session.")
+            try await Task.sleep(for: .milliseconds(10))
+        }
+        #expect(session.articles.isEmpty)
+        #expect(session.feeds.isEmpty)
+        #expect(session.unreadCounts.byFeed.isEmpty)
+        #expect(session.unreadCounts.byFolder.isEmpty)
+        #expect(session.unreadCounts.byAccount.isEmpty)
+        #expect(session.errorMessage == nil)
+    }
+
     private func summarySections(_ keys: [ArticleKey]) -> [DigestSection] {
         [DigestSection(title: "Fixture summary", text: "Sourced fixture content", sources: keys)]
     }
@@ -764,18 +886,43 @@ private actor DetailReplies {
     }
 }
 
+private actor UnreadCountReplies {
+    let store: ReaderStore
+    let gate: RequestGate
+    private var nextFailure: Bool?
+
+    init(store: ReaderStore, gate: RequestGate) { self.store = store; self.gate = gate }
+    func holdNext(failing: Bool) { nextFailure = failing }
+    func counts() async throws -> [FeedKey: Int] {
+        if let failing = nextFailure {
+            nextFailure = nil
+            try await gate.pause()
+            if failing { throw ReaderError.server(500) }
+        }
+        return try await store.unreadCounts()
+    }
+}
+
 private actor ScriptedRepository: ReaderRepository {
     let base: any ReaderRepository
     let query: @Sendable (ArticleQuery) async throws -> [ArticleSnapshot]
     let articleLookup: (@Sendable (ArticleKey) async throws -> ArticleSnapshot?)?
+    let countsLookup: (@Sendable () async throws -> [FeedKey: Int])?
     init(base: any ReaderRepository, articleLookup: (@Sendable (ArticleKey) async throws -> ArticleSnapshot?)? = nil,
+         countsLookup: (@Sendable () async throws -> [FeedKey: Int])? = nil,
          query: @escaping @Sendable (ArticleQuery) async throws -> [ArticleSnapshot]) {
-        self.base = base; self.query = query; self.articleLookup = articleLookup
+        self.base = base; self.query = query; self.articleLookup = articleLookup; self.countsLookup = countsLookup
     }
     func accounts() async throws -> [ReaderAccount] { try await base.accounts() }
     func saveAccount(_ account: ReaderAccount) async throws { try await base.saveAccount(account) }
     func feeds() async throws -> [FeedSnapshot] { try await base.feeds() }
     func folders() async throws -> [FolderSnapshot] { try await base.folders() }
+    func unreadCounts() async throws -> [FeedKey: Int] {
+        if let countsLookup { return try await countsLookup() }
+        return try await base.unreadCounts()
+    }
+    func currentRevision() async -> UInt64 { await base.currentRevision() }
+    func changes() async -> AsyncStream<UInt64> { await base.changes() }
     func articles(_ query: ArticleQuery) async throws -> [ArticleSnapshot] { try await self.query(query) }
     func article(_ key: ArticleKey) async throws -> ArticleSnapshot? {
         if let articleLookup { return try await articleLookup(key) }

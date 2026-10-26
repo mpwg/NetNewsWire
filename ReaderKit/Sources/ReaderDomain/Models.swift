@@ -45,6 +45,33 @@ public struct FolderSnapshot: Identifiable, Hashable, Codable, Sendable {
     }
 }
 
+/// Complete original-article counts, including retained originals without a subscription.
+/// Folder totals count a feed once per folder; account/library totals count it only once.
+public struct ReaderUnreadCounts: Equatable, Sendable {
+    public private(set) var byFeed: [FeedKey: Int]
+    public private(set) var byFolder: [String: Int] = [:]
+    public private(set) var byAccount: [UUID: Int] = [:]
+    public private(set) var total = 0
+
+    public init(byFeed: [FeedKey: Int] = [:], feeds: [FeedSnapshot] = []) {
+        self.byFeed = byFeed
+        for (key, count) in byFeed {
+            byAccount[key.accountID, default: 0] += count
+            total += count
+        }
+        var memberships: [FeedKey: Set<String>] = [:]
+        for feed in feeds {
+            memberships[feed.id, default: []].formUnion(feed.folderIDs)
+        }
+        for (key, folders) in memberships {
+            for remoteID in folders {
+                let folderID = FolderSnapshot(accountID: key.accountID, remoteID: remoteID, title: "").id
+                byFolder[folderID, default: 0] += byFeed[key, default: 0]
+            }
+        }
+    }
+}
+
 public struct ArticleSnapshot: Identifiable, Hashable, Codable, Sendable {
     public var id: ArticleKey
     public var feedID: String
