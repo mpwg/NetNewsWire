@@ -1,0 +1,15 @@
+# I: packet/trace/cache CI and wording-test repair — 2026-10-26
+
+Reader CI [40299098994](https://github.com/mpwg/NetNewsWire/actions/runs/40299098994) is complete on **2ffe1ffe3561defe190a08d098e02b98d550cf64**, with **469 passed / two failed executions of 471**, zero skips; 232 passed / one failed distinct test of 233. There are **459 code passes / two failed code cases**, with all ten native methods passing. This is a failed full plan, not an accepted runtime checkpoint.
+
+The two failed executions are the en_AT/de_AT cases of instructionsNameRequestedLanguage. Six original failures expect three old prompt fragments: at most two sentences, Do not repeat, Cover every supplied source. The implementation uses equivalent revised prose; no actual generator-result, provenance, number/link/content, cancellation, cache, store or native UI failure is reported in this run. All three newly added packet/trace functions and the prior-cache cases pass on this exact source. Lint, isolated-probe build, direct runner and process recovery pass.
+
+[Original summary](i-packet-ci-summary-2026-10-26.json), [selected I suite/case nodes including failures](i-packet-ci-cases-2026-10-26.json), [recovery report](i-packet-ci-recovery-2026-10-26.json). Artifact 12639688187 ZIP SHA-256 `227960bd96d21888e7888382a0e264ccd65198f94d5d7b1b96d560b13b5f0524`. Destination: arm64 My Mac VM, macOS 27.0.1 (26A434).
+
+The repair removes only those three obsolete wording assertions from the locale-routing test. That test continues to check extraction/verbatim/nontranslation instructions and the requested English/German consolidation locale. Exact duplicate suppression, missing/invalid references, foreign prices, cancellation and store/cache behavior remain tested through generated results. No disabled test, expected failure, timeout extension or native retry is introduced. New execution is required after the repair; native build-for-testing 10:35:35 and strict lint/whitespace checks pass. Held normal Reader PID 24529 is preserved.
+
+## Staged candidate and open product decision
+
+Further unpublished work is retained on local branch codex/reader-reference-candidate, including commits 25072c4b3 and 62362289e: explicit per-batch IDs with fully counted instruction budgets, policy v3, native guided array bounds and retained actual-model series. Its three-offer series preserves both merchants/prices/conditions; long-text factual omission, repetition and a source-validation failure remain. It is not relabeled as execution of this CI source or silently adopted while the product decision is pending.
+
+The owner is asked whether digests must retain every independent fact or may select key statements while linking every original. No answer is assumed. Canonical acceptance remains open for model/editorial reliability, that product boundary, PCC authorization and final platforms. Actual network-off/restart stays owner-deferred. Earlier native UI/daemon failures remain unexplained despite this run's native passes.
