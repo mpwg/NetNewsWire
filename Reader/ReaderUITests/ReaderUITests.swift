@@ -35,6 +35,13 @@ final class ReaderSmokeTests: XCTestCase {
                 try await MainActor.run {
                     let service = XCUIDevice.shared.voiceOverService
                     if service.isEnabled { try service.disable() }
+                    XCTContext.runActivity(named: "Restore native VoiceOver state") { activity in
+                        let restored = XCTAttachment(string: "VoiceOver enabled after restoration: \(service.isEnabled)")
+                        restored.name = "Native VoiceOver restored state"
+                        restored.lifetime = .keepAlways
+                        activity.add(restored)
+                    }
+                    XCTAssertFalse(service.isEnabled)
                 }
             }
             try voiceOver.enable()
