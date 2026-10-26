@@ -9,10 +9,30 @@ on:
         type: choice
         options: [macos, all]
   pull_request:
-    paths: ['ReaderKit/**', 'Reader/**', 'scripts/test-reader.sh', 'scripts/verify-reader-store.py', '.swiftlint.yml', '.github/workflows/reader.yml']
+    paths:
+      - 'ReaderKit/**'
+      - 'Reader/**'
+      - 'scripts/test-reader.sh'
+      - 'scripts/verify-reader-store.py'
+      - '.swiftlint.yml'
+      - '.github/workflows/reader.yml'
+      - '!Reader/README.md'
+      - '!ReaderKit/Sources/ReaderPersistence/README.md'
+      - '!ReaderKit/Sources/ReaderSync/README.md'
+      - '!ReaderKit/Sources/ReaderUI/README.md'
   push:
     branches: [main, 'codex/intelligence-reader']
-    paths: ['ReaderKit/**', 'Reader/**', 'scripts/test-reader.sh', 'scripts/verify-reader-store.py', '.swiftlint.yml', '.github/workflows/reader.yml']
+    paths:
+      - 'ReaderKit/**'
+      - 'Reader/**'
+      - 'scripts/test-reader.sh'
+      - 'scripts/verify-reader-store.py'
+      - '.swiftlint.yml'
+      - '.github/workflows/reader.yml'
+      - '!Reader/README.md'
+      - '!ReaderKit/Sources/ReaderPersistence/README.md'
+      - '!ReaderKit/Sources/ReaderSync/README.md'
+      - '!ReaderKit/Sources/ReaderUI/README.md'
 permissions:
   contents: read
 concurrency:

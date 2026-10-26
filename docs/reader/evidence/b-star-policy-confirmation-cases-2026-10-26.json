@@ -1,0 +1,149 @@
+[
+  {
+    "children": [
+      {
+        "duration": "0,014s",
+        "durationInSeconds": 0.013966083526611328,
+        "name": "false, false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderSessionTests/starredPresentationRetainsUnsubscribedOriginals(keepsOtherSubscription:serverKeepsUnread:)?args=2cb9cd7a6e5c6b9715ab5cf29594cc7e9ac403a4b11f069b25cc08d470e85e8c",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,014s",
+        "durationInSeconds": 0.01381826400756836,
+        "name": "false, true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderSessionTests/starredPresentationRetainsUnsubscribedOriginals(keepsOtherSubscription:serverKeepsUnread:)?args=fb81853b6da15e1c6b215c7d5bbdc041502ac5845645d53117102670260da0f9",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,015s",
+        "durationInSeconds": 0.014540910720825195,
+        "name": "true, false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderSessionTests/starredPresentationRetainsUnsubscribedOriginals(keepsOtherSubscription:serverKeepsUnread:)?args=c597e9971e116a16e33e49d9c3ca3bd8c92cc910f859de3e71f24df7c80048bc",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,015s",
+        "durationInSeconds": 0.01454782485961914,
+        "name": "true, true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderSessionTests/starredPresentationRetainsUnsubscribedOriginals(keepsOtherSubscription:serverKeepsUnread:)?args=cf9b5ecf10f3e4cdc87754898380ed1d707ec4f70d44d7606755a90c603de577",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "0,014s",
+    "durationInSeconds": 0.014218270778656006,
+    "name": "Starred presentation follows authoritative orphan read state and clears removed selection",
+    "nodeIdentifier": "ReaderSessionTests/starredPresentationRetainsUnsubscribedOriginals(keepsOtherSubscription:serverKeepsUnread:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderSessionTests/starredPresentationRetainsUnsubscribedOriginals(keepsOtherSubscription:serverKeepsUnread:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "children": [
+      {
+        "duration": "0,0063s",
+        "durationInSeconds": 0.006346940994262695,
+        "name": "false, false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderStoreTests/unsubscribingRetainsStarsAndRemovesUnprotectedArticles(keepsOtherSubscription:serverKeepsUnread:)?args=2cb9cd7a6e5c6b9715ab5cf29594cc7e9ac403a4b11f069b25cc08d470e85e8c",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,0067s",
+        "durationInSeconds": 0.0066907405853271484,
+        "name": "false, true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderStoreTests/unsubscribingRetainsStarsAndRemovesUnprotectedArticles(keepsOtherSubscription:serverKeepsUnread:)?args=fb81853b6da15e1c6b215c7d5bbdc041502ac5845645d53117102670260da0f9",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,0075s",
+        "durationInSeconds": 0.007493019104003906,
+        "name": "true, false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderStoreTests/unsubscribingRetainsStarsAndRemovesUnprotectedArticles(keepsOtherSubscription:serverKeepsUnread:)?args=c597e9971e116a16e33e49d9c3ca3bd8c92cc910f859de3e71f24df7c80048bc",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,0072s",
+        "durationInSeconds": 0.0071637630462646484,
+        "name": "true, true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderStoreTests/unsubscribingRetainsStarsAndRemovesUnprotectedArticles(keepsOtherSubscription:serverKeepsUnread:)?args=cf9b5ecf10f3e4cdc87754898380ed1d707ec4f70d44d7606755a90c603de577",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "0,0069s",
+    "durationInSeconds": 0.0069236159324646,
+    "name": "Unsubscribing retains independent stars and follows authoritative unread membership",
+    "nodeIdentifier": "ReaderStoreTests/unsubscribingRetainsStarsAndRemovesUnprotectedArticles(keepsOtherSubscription:serverKeepsUnread:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderStoreTests/unsubscribingRetainsStarsAndRemovesUnprotectedArticles(keepsOtherSubscription:serverKeepsUnread:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "children": [
+      {
+        "duration": "0,012s",
+        "durationInSeconds": 0.011638879776000977,
+        "name": "false, false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderStoreTests/orphanReadRevisionsKeepPrecedenceUntilAcknowledged(localRead:serverKeepsUnread:)?args=2cb9cd7a6e5c6b9715ab5cf29594cc7e9ac403a4b11f069b25cc08d470e85e8c",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,012s",
+        "durationInSeconds": 0.011914968490600586,
+        "name": "false, true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderStoreTests/orphanReadRevisionsKeepPrecedenceUntilAcknowledged(localRead:serverKeepsUnread:)?args=fb81853b6da15e1c6b215c7d5bbdc041502ac5845645d53117102670260da0f9",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,011s",
+        "durationInSeconds": 0.011424064636230469,
+        "name": "true, false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderStoreTests/orphanReadRevisionsKeepPrecedenceUntilAcknowledged(localRead:serverKeepsUnread:)?args=c597e9971e116a16e33e49d9c3ca3bd8c92cc910f859de3e71f24df7c80048bc",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,012s",
+        "durationInSeconds": 0.011688947677612305,
+        "name": "true, true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderStoreTests/orphanReadRevisionsKeepPrecedenceUntilAcknowledged(localRead:serverKeepsUnread:)?args=cf9b5ecf10f3e4cdc87754898380ed1d707ec4f70d44d7606755a90c603de577",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "0,012s",
+    "durationInSeconds": 0.011666715145111084,
+    "name": "Pending orphan read revisions survive refresh and yield to server membership only after acknowledgement",
+    "nodeIdentifier": "ReaderStoreTests/orphanReadRevisionsKeepPrecedenceUntilAcknowledged(localRead:serverKeepsUnread:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderStoreTests/orphanReadRevisionsKeepPrecedenceUntilAcknowledged(localRead:serverKeepsUnread:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "1min 10s",
+    "durationInSeconds": 70.38290989398956,
+    "name": "testLoadedTimelineScrollingMetrics()",
+    "nodeIdentifier": "ReaderSmokeTests/testLoadedTimelineScrollingMetrics()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testLoadedTimelineScrollingMetrics",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "28s",
+    "durationInSeconds": 28.052278995513916,
+    "name": "testVoiceOverAnnouncesReaderAndMovesFocus()",
+    "nodeIdentifier": "ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  }
+]
