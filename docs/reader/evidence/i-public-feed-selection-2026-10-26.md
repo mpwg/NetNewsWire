@@ -4,6 +4,17 @@ Status: **selection/store boundary implemented; new runtime verification pending
 
 The owner retains free summaries in the app language. Important statements may be selected, but every original must remain linked. This is an end-to-end digest requirement; it does not require model prose to claim evidence from every article.
 
+## Criteria
+
+| Criterion | Status | Evidence |
+|---|---|---|
+| Permit key-statement selection with exact supporting provenance | Open | v5 implementation and two-account native controlled-model case compile; actual new-source runtime result pending. |
+| Every original remains linked; stored articles/outbox unchanged | Open | New native controlled-model/ReaderStore integration compiles; actual runtime result pending. Existing coordinator fallback remains unchanged. |
+| Invalid references, numbers, URLs, blank text, budgets and old caches | Open | Validators remain; v4 cache case added. Current-source runtime result pending. |
+| Native compilation, lint and README | Fulfilled | Xcode MCP app/test and probe builds, strict lint and whitespace pass. ReaderKit README documents selected prose versus all-original links and bounded corpus input. |
+| Representative semantic model quality | Open | Public fixed corpus retains excerpt failures and missing merchants; earlier conditional-fidelity counterexamples remain. |
+| PCC and final-platform/device/operational prerequisites | Open | No authorized PCC entitlement or final-device acceptance. Actual offline/persistent-app restart remains owner-deferred. |
+
 ## Source evidence and fix
 
 The existing DigestCoordinator already adds unselected originals as a separate originals section, retains every original in the digest source list, and reports incomplete AI coverage. The generator nevertheless rejected valid selections before the coordinator could apply that contract. The first fixed public pair under policy v4 illustrates this: both source fact packets validate, but consolidation selects packet 0 from available packets 0 and 1 and is rejected for incomplete coverage.
