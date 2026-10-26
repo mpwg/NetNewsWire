@@ -1,0 +1,613 @@
+[
+  {
+    "activityType": "com.apple.dt.xctest.activity-type.internal",
+    "attachments": [
+      {
+        "lifetime": "deleteOnSuccess",
+        "name": "Synthesized Event 2026-10-26 at 09.38.29 AM",
+        "payloadId": "0~--VzDD_3nOLU9rSS4rll8LJQWKKv_xNMATVwR_JUHX9LZ3DB06bQtSN6LRXteViLOPMna7lxxUXJorM08J6pbw==",
+        "timestamp": 1793003909.53,
+        "uuid": "0DD683A1-D3FC-4996-9F0E-79DB3693569D"
+      }
+    ],
+    "childActivities": [
+      {
+        "activityType": "com.apple.dt.xctest.activity-type.internal",
+        "isAssociatedWithFailure": false,
+        "startTime": 1793003908.708,
+        "title": "Wait for eu.mpwg.reader.debug to idle"
+      },
+      {
+        "activityType": "com.apple.dt.xctest.activity-type.internal",
+        "isAssociatedWithFailure": false,
+        "startTime": 1793003908.713,
+        "title": "Find the \"removeLoadFolderFeed\" Button"
+      },
+      {
+        "activityType": "com.apple.dt.xctest.activity-type.internal",
+        "isAssociatedWithFailure": false,
+        "startTime": 1793003909.027,
+        "title": "Check for interrupting elements affecting \"removeLoadFolderFeed\" Button"
+      },
+      {
+        "activityType": "com.apple.dt.xctest.activity-type.internal",
+        "attachments": [
+          {
+            "lifetime": "deleteOnSuccess",
+            "name": "Synthesized Event 2026-10-26 at 09.38.29 AM",
+            "payloadId": "0~--VzDD_3nOLU9rSS4rll8LJQWKKv_xNMATVwR_JUHX9LZ3DB06bQtSN6LRXteViLOPMna7lxxUXJorM08J6pbw==",
+            "timestamp": 1793003909.53,
+            "uuid": "0DD683A1-D3FC-4996-9F0E-79DB3693569D"
+          }
+        ],
+        "childActivities": [
+          {
+            "isAssociatedWithFailure": false,
+            "startTime": 1793003909.53,
+            "title": "kXCTAttachmentLegacySynthesizedEvent"
+          }
+        ],
+        "isAssociatedWithFailure": false,
+        "startTime": 1793003909.055,
+        "title": "Synthesize event"
+      },
+      {
+        "activityType": "com.apple.dt.xctest.activity-type.internal",
+        "isAssociatedWithFailure": false,
+        "startTime": 1793003909.531,
+        "title": "Wait for eu.mpwg.reader.debug to idle"
+      }
+    ],
+    "isAssociatedWithFailure": false,
+    "startTime": 1793003908.708,
+    "title": "Click \"removeLoadFolderFeed\" Button"
+  },
+  {
+    "activityType": "com.apple.dt.xctest.activity-type.internal",
+    "isAssociatedWithFailure": false,
+    "startTime": 1793003908.713,
+    "title": "Find the \"removeLoadFolderFeed\" Button"
+  },
+  {
+    "activityType": "com.apple.dt.xctest.activity-type.internal",
+    "isAssociatedWithFailure": false,
+    "startTime": 1793003909.027,
+    "title": "Check for interrupting elements affecting \"removeLoadFolderFeed\" Button"
+  },
+  {
+    "activityType": "com.apple.dt.xctest.activity-type.internal",
+    "attachments": [
+      {
+        "lifetime": "deleteOnSuccess",
+        "name": "Debug description for `\"loadFixturePhase\" StaticText`_0_6FA55536-5694-45AB-AEC7-9401476DDF9C.txt",
+        "payloadId": "0~bmDNfLNBS-cBwLbJph4KPanZUSMmogN1RYyA8pqyDDjde4VWG1fQoS0Wq-Bwt7hfEmLcOgVMpStcKX05ZwH_1Q==",
+        "timestamp": 1793003911.486,
+        "uuid": "4E04BE51-912F-466D-BEDF-9E54FA6D5E0D"
+      },
+      {
+        "lifetime": "deleteOnSuccess",
+        "name": "UI Snapshot 2026-10-26 at 09.38.31 AM",
+        "payloadId": "0~W-eb9b4GjYYDdaEIaftc3p0rl2CLMHh6g6KsccHAIo0brNiZBbyI0G08RMyqNN0qEXI5aIyWBL3OMsgUvadczg==",
+        "timestamp": 1793003911.486,
+        "uuid": "BFFAEB65-5CC4-4170-A76E-FD207F99B87C"
+      }
+    ],
+    "childActivities": [
+      {
+        "activityType": "com.apple.dt.xctest.activity-type.internal",
+        "isAssociatedWithFailure": false,
+        "startTime": 1793003910.6,
+        "title": "Find the \"loadFixturePhase\" StaticText"
+      },
+      {
+        "activityType": "com.apple.dt.xctest.activity-type.internal",
+        "childActivities": [
+          {
+            "activityType": "com.apple.dt.xctest.activity-type.internal",
+            "isAssociatedWithFailure": false,
+            "startTime": 1793003910.99,
+            "title": "Requesting snapshot of accessibility hierarchy for app with pid 12738"
+          },
+          {
+            "activityType": "com.apple.dt.xctest.activity-type.internal",
+            "isAssociatedWithFailure": false,
+            "startTime": 1793003911.408,
+            "title": "Find: Descendants matching type StaticText"
+          },
+          {
+            "activityType": "com.apple.dt.xctest.activity-type.internal",
+            "isAssociatedWithFailure": false,
+            "startTime": 1793003911.415,
+            "title": "Find: Elements matching predicate '\"loadFixturePhase\" IN identifiers'"
+          },
+          {
+            "activityType": "com.apple.dt.xctest.activity-type.internal",
+            "childActivities": [
+              {
+                "activityType": "com.apple.dt.xctest.activity-type.internal",
+                "isAssociatedWithFailure": false,
+                "startTime": 1793003911.43,
+                "title": "Using snapshot previously cached by application"
+              }
+            ],
+            "isAssociatedWithFailure": false,
+            "startTime": 1793003911.429,
+            "title": "Requesting snapshot of accessibility hierarchy for app with pid 12738"
+          },
+          {
+            "activityType": "com.apple.dt.xctest.activity-type.internal",
+            "isAssociatedWithFailure": false,
+            "startTime": 1793003911.431,
+            "title": "Find: Descendants matching type StaticText"
+          },
+          {
+            "activityType": "com.apple.dt.xctest.activity-type.internal",
+            "childActivities": [
+              {
+                "activityType": "com.apple.dt.xctest.activity-type.internal",
+                "isAssociatedWithFailure": false,
+                "startTime": 1793003911.449,
+                "title": "Using snapshot previously cached by application"
+              }
+            ],
+            "isAssociatedWithFailure": false,
+            "startTime": 1793003911.447,
+            "title": "Requesting snapshot of accessibility hierarchy for app with pid 12738"
+          }
+        ],
+        "isAssociatedWithFailure": false,
+        "startTime": 1793003910.959,
+        "title": "Capturing element debug description"
+      },
+      {
+        "isAssociatedWithFailure": false,
+        "startTime": 1793003911.486,
+        "title": "Debug description for `\"loadFixturePhase\" StaticText`"
+      },
+      {
+        "isAssociatedWithFailure": false,
+        "startTime": 1793003911.486,
+        "title": "kXCTAttachmentLegacySnapshot"
+      }
+    ],
+    "isAssociatedWithFailure": false,
+    "startTime": 1793003910.598,
+    "title": "Checking `Expect predicate `value == \"removed\"` for object \"loadFixturePhase\" StaticText`"
+  },
+  {
+    "activityType": "com.apple.dt.xctest.activity-type.internal",
+    "isAssociatedWithFailure": false,
+    "startTime": 1793003910.6,
+    "title": "Find the \"loadFixturePhase\" StaticText"
+  },
+  {
+    "activityType": "com.apple.dt.xctest.activity-type.internal",
+    "isAssociatedWithFailure": false,
+    "startTime": 1793003911.415,
+    "title": "Find: Elements matching predicate '\"loadFixturePhase\" IN identifiers'"
+  },
+  {
+    "isAssociatedWithFailure": false,
+    "startTime": 1793003911.486,
+    "title": "Debug description for `\"loadFixturePhase\" StaticText`"
+  },
+  {
+    "activityType": "com.apple.dt.xctest.activity-type.internal",
+    "attachments": [
+      {
+        "lifetime": "deleteOnSuccess",
+        "name": "Debug description for `\"loadFixturePhase\" StaticText`_0_42A5CFDA-C230-4F04-9B85-30456675C3DC.txt",
+        "payloadId": "0~CkW9IPZNcaeG0xjxLBxBi-1bUnYHhgvx5BTzKjtIaSo767q-pB-8-DZtzdkEdvSCG9_kBkSTWupJSZCc4bs7IQ==",
+        "timestamp": 1793003912.52,
+        "uuid": "4E1ED178-DB4B-44C9-8C90-37D6C77A3453"
+      },
+      {
+        "lifetime": "deleteOnSuccess",
+        "name": "UI Snapshot 2026-10-26 at 09.38.32 AM",
+        "payloadId": "0~W-eb9b4GjYYDdaEIaftc3p0rl2CLMHh6g6KsccHAIo0brNiZBbyI0G08RMyqNN0qEXI5aIyWBL3OMsgUvadczg==",
+        "timestamp": 1793003912.521,
+        "uuid": "4CABBAE6-21D7-4650-869B-95FD08B90FDD"
+      }
+    ],
+    "childActivities": [
+      {
+        "activityType": "com.apple.dt.xctest.activity-type.internal",
+        "isAssociatedWithFailure": false,
+        "startTime": 1793003911.584,
+        "title": "Find the \"loadFixturePhase\" StaticText"
+      },
+      {
+        "activityType": "com.apple.dt.xctest.activity-type.internal",
+        "childActivities": [
+          {
+            "activityType": "com.apple.dt.xctest.activity-type.internal",
+            "isAssociatedWithFailure": false,
+            "startTime": 1793003912.055,
+            "title": "Requesting snapshot of accessibility hierarchy for app with pid 12738"
+          },
+          {
+            "activityType": "com.apple.dt.xctest.activity-type.internal",
+            "isAssociatedWithFailure": false,
+            "startTime": 1793003912.477,
+            "title": "Find: Descendants matching type StaticText"
+          },
+          {
+            "activityType": "com.apple.dt.xctest.activity-type.internal",
+            "isAssociatedWithFailure": false,
+            "startTime": 1793003912.483,
+            "title": "Find: Elements matching predicate '\"loadFixturePhase\" IN identifiers'"
+          },
+          {
+            "activityType": "com.apple.dt.xctest.activity-type.internal",
+            "childActivities": [
+              {
+                "activityType": "com.apple.dt.xctest.activity-type.internal",
+                "isAssociatedWithFailure": false,
+                "startTime": 1793003912.49,
+                "title": "Using snapshot previously cached by application"
+              }
+            ],
+            "isAssociatedWithFailure": false,
+            "startTime": 1793003912.49,
+            "title": "Requesting snapshot of accessibility hierarchy for app with pid 12738"
+          },
+          {
+            "activityType": "com.apple.dt.xctest.activity-type.internal",
+            "isAssociatedWithFailure": false,
+            "startTime": 1793003912.491,
+            "title": "Find: Descendants matching type StaticText"
+          },
+          {
+            "activityType": "com.apple.dt.xctest.activity-type.internal",
+            "childActivities": [
+              {
+                "activityType": "com.apple.dt.xctest.activity-type.internal",
+                "isAssociatedWithFailure": false,
+                "startTime": 1793003912.499,
+                "title": "Using snapshot previously cached by application"
+              }
+            ],
+            "isAssociatedWithFailure": false,
+            "startTime": 1793003912.499,
+            "title": "Requesting snapshot of accessibility hierarchy for app with pid 12738"
+          }
+        ],
+        "isAssociatedWithFailure": false,
+        "startTime": 1793003912.016,
+        "title": "Capturing element debug description"
+      },
+      {
+        "isAssociatedWithFailure": false,
+        "startTime": 1793003912.52,
+        "title": "Debug description for `\"loadFixturePhase\" StaticText`"
+      },
+      {
+        "isAssociatedWithFailure": false,
+        "startTime": 1793003912.521,
+        "title": "kXCTAttachmentLegacySnapshot"
+      }
+    ],
+    "isAssociatedWithFailure": false,
+    "startTime": 1793003911.584,
+    "title": "Checking `Expect predicate `value == \"removed\"` for object \"loadFixturePhase\" StaticText`"
+  },
+  {
+    "activityType": "com.apple.dt.xctest.activity-type.internal",
+    "isAssociatedWithFailure": false,
+    "startTime": 1793003911.584,
+    "title": "Find the \"loadFixturePhase\" StaticText"
+  },
+  {
+    "activityType": "com.apple.dt.xctest.activity-type.internal",
+    "isAssociatedWithFailure": false,
+    "startTime": 1793003912.483,
+    "title": "Find: Elements matching predicate '\"loadFixturePhase\" IN identifiers'"
+  },
+  {
+    "isAssociatedWithFailure": false,
+    "startTime": 1793003912.52,
+    "title": "Debug description for `\"loadFixturePhase\" StaticText`"
+  },
+  {
+    "activityType": "com.apple.dt.xctest.activity-type.internal",
+    "attachments": [
+      {
+        "lifetime": "deleteOnSuccess",
+        "name": "Debug description for `\"loadFixturePhase\" StaticText`_0_927283C4-74B6-40F8-B167-FD25F0409A58.txt",
+        "payloadId": "0~HkDLOe9UM-fNDgjS3Ub1yTlaoRmj3Ed2fOeAUVeHfbhbeV45MPT8YHY8ppWUGMHg7yVeTMksSJc7Je04fWKn6A==",
+        "timestamp": 1793003913.333,
+        "uuid": "533B8010-4AFB-4AB3-8C5D-CB31B30ED0B0"
+      },
+      {
+        "lifetime": "deleteOnSuccess",
+        "name": "UI Snapshot 2026-10-26 at 09.38.33 AM",
+        "payloadId": "0~W-eb9b4GjYYDdaEIaftc3p0rl2CLMHh6g6KsccHAIo0brNiZBbyI0G08RMyqNN0qEXI5aIyWBL3OMsgUvadczg==",
+        "timestamp": 1793003913.333,
+        "uuid": "111705C4-8AE3-4987-92B3-DA2203C36841"
+      }
+    ],
+    "childActivities": [
+      {
+        "activityType": "com.apple.dt.xctest.activity-type.internal",
+        "isAssociatedWithFailure": false,
+        "startTime": 1793003912.616,
+        "title": "Find the \"loadFixturePhase\" StaticText"
+      },
+      {
+        "activityType": "com.apple.dt.xctest.activity-type.internal",
+        "childActivities": [
+          {
+            "activityType": "com.apple.dt.xctest.activity-type.internal",
+            "isAssociatedWithFailure": false,
+            "startTime": 1793003912.908,
+            "title": "Requesting snapshot of accessibility hierarchy for app with pid 12738"
+          },
+          {
+            "activityType": "com.apple.dt.xctest.activity-type.internal",
+            "isAssociatedWithFailure": false,
+            "startTime": 1793003913.276,
+            "title": "Find: Descendants matching type StaticText"
+          },
+          {
+            "activityType": "com.apple.dt.xctest.activity-type.internal",
+            "isAssociatedWithFailure": false,
+            "startTime": 1793003913.279,
+            "title": "Find: Elements matching predicate '\"loadFixturePhase\" IN identifiers'"
+          },
+          {
+            "activityType": "com.apple.dt.xctest.activity-type.internal",
+            "childActivities": [
+              {
+                "activityType": "com.apple.dt.xctest.activity-type.internal",
+                "isAssociatedWithFailure": false,
+                "startTime": 1793003913.291,
+                "title": "Using snapshot previously cached by application"
+              }
+            ],
+            "isAssociatedWithFailure": false,
+            "startTime": 1793003913.288,
+            "title": "Requesting snapshot of accessibility hierarchy for app with pid 12738"
+          },
+          {
+            "activityType": "com.apple.dt.xctest.activity-type.internal",
+            "isAssociatedWithFailure": false,
+            "startTime": 1793003913.293,
+            "title": "Find: Descendants matching type StaticText"
+          },
+          {
+            "activityType": "com.apple.dt.xctest.activity-type.internal",
+            "childActivities": [
+              {
+                "activityType": "com.apple.dt.xctest.activity-type.internal",
+                "isAssociatedWithFailure": false,
+                "startTime": 1793003913.309,
+                "title": "Using snapshot previously cached by application"
+              }
+            ],
+            "isAssociatedWithFailure": false,
+            "startTime": 1793003913.308,
+            "title": "Requesting snapshot of accessibility hierarchy for app with pid 12738"
+          }
+        ],
+        "isAssociatedWithFailure": false,
+        "startTime": 1793003912.89,
+        "title": "Capturing element debug description"
+      },
+      {
+        "isAssociatedWithFailure": false,
+        "startTime": 1793003913.333,
+        "title": "Debug description for `\"loadFixturePhase\" StaticText`"
+      },
+      {
+        "isAssociatedWithFailure": false,
+        "startTime": 1793003913.333,
+        "title": "kXCTAttachmentLegacySnapshot"
+      }
+    ],
+    "isAssociatedWithFailure": false,
+    "startTime": 1793003912.615,
+    "title": "Checking `Expect predicate `value == \"removed\"` for object \"loadFixturePhase\" StaticText`"
+  },
+  {
+    "activityType": "com.apple.dt.xctest.activity-type.internal",
+    "isAssociatedWithFailure": false,
+    "startTime": 1793003912.616,
+    "title": "Find the \"loadFixturePhase\" StaticText"
+  },
+  {
+    "activityType": "com.apple.dt.xctest.activity-type.internal",
+    "isAssociatedWithFailure": false,
+    "startTime": 1793003913.279,
+    "title": "Find: Elements matching predicate '\"loadFixturePhase\" IN identifiers'"
+  },
+  {
+    "isAssociatedWithFailure": false,
+    "startTime": 1793003913.333,
+    "title": "Debug description for `\"loadFixturePhase\" StaticText`"
+  },
+  {
+    "activityType": "com.apple.dt.xctest.activity-type.internal",
+    "attachments": [
+      {
+        "lifetime": "deleteOnSuccess",
+        "name": "Debug description for `\"loadFixturePhase\" StaticText`_0_37A86A9A-C04B-4706-AD56-FB9F37F032D5.txt",
+        "payloadId": "0~YggHAb9bXLko1ltRlzVuKj8dpWlZDQqV-CkHrpJZUmzpidn2M7-ao2mv6KwLK_mgmSaHl6eBb7mRAuKvSUzhOw==",
+        "timestamp": 1793003914.479,
+        "uuid": "AD409E25-5C02-45AC-9DA2-5921DE6A6E28"
+      },
+      {
+        "lifetime": "deleteOnSuccess",
+        "name": "UI Snapshot 2026-10-26 at 09.38.34 AM",
+        "payloadId": "0~uL6fsEInhugHRuoHclGBZftWSiNA744PkSzrqqbau8jjDTzsKAaijnYn-8arxSI1lLRwuYAgknZBlX2mdKse0A==",
+        "timestamp": 1793003914.479,
+        "uuid": "57E2B65B-42CC-4A92-9FA1-C97D43747F9F"
+      }
+    ],
+    "childActivities": [
+      {
+        "activityType": "com.apple.dt.xctest.activity-type.internal",
+        "isAssociatedWithFailure": false,
+        "startTime": 1793003913.644,
+        "title": "Find the \"loadFixturePhase\" StaticText"
+      },
+      {
+        "activityType": "com.apple.dt.xctest.activity-type.internal",
+        "childActivities": [
+          {
+            "activityType": "com.apple.dt.xctest.activity-type.internal",
+            "isAssociatedWithFailure": false,
+            "startTime": 1793003914.046,
+            "title": "Requesting snapshot of accessibility hierarchy for app with pid 12738"
+          },
+          {
+            "activityType": "com.apple.dt.xctest.activity-type.internal",
+            "isAssociatedWithFailure": false,
+            "startTime": 1793003914.433,
+            "title": "Find: Descendants matching type StaticText"
+          },
+          {
+            "activityType": "com.apple.dt.xctest.activity-type.internal",
+            "isAssociatedWithFailure": false,
+            "startTime": 1793003914.436,
+            "title": "Find: Elements matching predicate '\"loadFixturePhase\" IN identifiers'"
+          },
+          {
+            "activityType": "com.apple.dt.xctest.activity-type.internal",
+            "childActivities": [
+              {
+                "activityType": "com.apple.dt.xctest.activity-type.internal",
+                "isAssociatedWithFailure": false,
+                "startTime": 1793003914.441,
+                "title": "Using snapshot previously cached by application"
+              }
+            ],
+            "isAssociatedWithFailure": false,
+            "startTime": 1793003914.441,
+            "title": "Requesting snapshot of accessibility hierarchy for app with pid 12738"
+          },
+          {
+            "activityType": "com.apple.dt.xctest.activity-type.internal",
+            "isAssociatedWithFailure": false,
+            "startTime": 1793003914.442,
+            "title": "Find: Descendants matching type StaticText"
+          },
+          {
+            "activityType": "com.apple.dt.xctest.activity-type.internal",
+            "childActivities": [
+              {
+                "activityType": "com.apple.dt.xctest.activity-type.internal",
+                "isAssociatedWithFailure": false,
+                "startTime": 1793003914.451,
+                "title": "Using snapshot previously cached by application"
+              }
+            ],
+            "isAssociatedWithFailure": false,
+            "startTime": 1793003914.451,
+            "title": "Requesting snapshot of accessibility hierarchy for app with pid 12738"
+          }
+        ],
+        "isAssociatedWithFailure": false,
+        "startTime": 1793003914.002,
+        "title": "Capturing element debug description"
+      },
+      {
+        "isAssociatedWithFailure": false,
+        "startTime": 1793003914.479,
+        "title": "Debug description for `\"loadFixturePhase\" StaticText`"
+      },
+      {
+        "isAssociatedWithFailure": false,
+        "startTime": 1793003914.479,
+        "title": "kXCTAttachmentLegacySnapshot"
+      }
+    ],
+    "isAssociatedWithFailure": false,
+    "startTime": 1793003913.643,
+    "title": "Checking `Expect predicate `value == \"removed\"` for object \"loadFixturePhase\" StaticText`"
+  },
+  {
+    "activityType": "com.apple.dt.xctest.activity-type.internal",
+    "isAssociatedWithFailure": false,
+    "startTime": 1793003913.644,
+    "title": "Find the \"loadFixturePhase\" StaticText"
+  },
+  {
+    "activityType": "com.apple.dt.xctest.activity-type.internal",
+    "isAssociatedWithFailure": false,
+    "startTime": 1793003914.436,
+    "title": "Find: Elements matching predicate '\"loadFixturePhase\" IN identifiers'"
+  },
+  {
+    "isAssociatedWithFailure": false,
+    "startTime": 1793003914.479,
+    "title": "Debug description for `\"loadFixturePhase\" StaticText`"
+  },
+  {
+    "activityType": "com.apple.dt.xctest.activity-type.internal",
+    "attachments": [
+      {
+        "lifetime": "deleteOnSuccess",
+        "name": "Debug description for `\"loadFixturePhase\" StaticText`_0_FA0AB7D7-9C57-4D1E-82A7-6D81D0DFCD44.txt",
+        "payloadId": "0~oGiQN8GAfIl7mEVTGhuyk_wgjrQ0Ymb9jZBGdO42p0UDqkuh5vdx2lQJveI1E2QXoL0dnQQYw6hi6ewwinI9Ow==",
+        "timestamp": 1793003914.895,
+        "uuid": "9ABCFA37-E74F-46D0-AD14-D652FA4517DF"
+      }
+    ],
+    "childActivities": [
+      {
+        "activityType": "com.apple.dt.xctest.activity-type.internal",
+        "isAssociatedWithFailure": false,
+        "startTime": 1793003914.576,
+        "title": "Find the \"loadFixturePhase\" StaticText"
+      },
+      {
+        "activityType": "com.apple.dt.xctest.activity-type.internal",
+        "isAssociatedWithFailure": false,
+        "startTime": 1793003914.893,
+        "title": "Capturing element debug description"
+      },
+      {
+        "isAssociatedWithFailure": false,
+        "startTime": 1793003914.895,
+        "title": "Debug description for `\"loadFixturePhase\" StaticText`"
+      }
+    ],
+    "isAssociatedWithFailure": false,
+    "startTime": 1793003914.575,
+    "title": "Checking `Expect predicate `value == \"removed\"` for object \"loadFixturePhase\" StaticText`"
+  },
+  {
+    "activityType": "com.apple.dt.xctest.activity-type.internal",
+    "isAssociatedWithFailure": false,
+    "startTime": 1793003914.576,
+    "title": "Find the \"loadFixturePhase\" StaticText"
+  },
+  {
+    "isAssociatedWithFailure": false,
+    "startTime": 1793003914.895,
+    "title": "Debug description for `\"loadFixturePhase\" StaticText`"
+  },
+  {
+    "activityType": "com.apple.dt.xctest.activity-type.internal",
+    "isAssociatedWithFailure": false,
+    "startTime": 1793003914.899,
+    "title": "Checking existence of `\"loadFixturePhase\" StaticText`"
+  },
+  {
+    "activityType": "com.apple.dt.xctest.activity-type.internal",
+    "isAssociatedWithFailure": false,
+    "startTime": 1793003915.215,
+    "title": "Find the \"loadFixturePhase\" StaticText"
+  },
+  {
+    "childActivities": [
+      {
+        "isAssociatedWithFailure": false,
+        "title": ""
+      }
+    ],
+    "isAssociatedWithFailure": true,
+    "startTime": 1793003915.435,
+    "title": "XCTAssertEqual failed: (\"XCTWaiterResult(rawValue: 2)\") is not equal to (\"XCTWaiterResult(rawValue: 1)\") - Expected removed; observed Optional(removed)"
+  }
+]
