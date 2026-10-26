@@ -252,17 +252,18 @@ public actor AppleSummaryGenerator: SummaryGenerator {
             try Task.checkCancellation()
         }
         guard !plan.content.groups.isEmpty, plan.content.groups.count <= 4 else { throw ReaderError.invalidResponse }
-        var selections: [[SummaryEvidence]] = []
+        var selections: [[Int]] = []
         for group in plan.content.groups {
             guard !group.sourceNumbers.isEmpty, group.sourceNumbers.count <= 32,
                   group.sourceNumbers.allSatisfy({ batch.indices.contains($0) }) else { throw Self.invalidSourcesError() }
-            selections.append(Array(Set(group.sourceNumbers)).sorted().map { batch[$0] })
+            selections.append(Array(Set(group.sourceNumbers)).sorted())
         }
         var result: [ValidatedSummaryGroup] = []
-        for selected in selections {
+        for selectedIndices in selections {
+            let selected = selectedIndices.map { batch[$0] }
             let draftInstructions = Self.consolidationInstructions(
                 instructions + "\nWrite one group using only these selected packets.", evidence: selected)
-            let draftPrompt = try Self.evidencePrompt(selected)
+            let draftPrompt = try Self.evidencePrompt(batch, indices: selectedIndices)
             guard try await count(draftInstructions) + count(draftPrompt) <= capacity - 2000 else {
                 throw Self.contextBudgetError()
             }
@@ -276,7 +277,11 @@ public actor AppleSummaryGenerator: SummaryGenerator {
                                                    response: draft.rawContent.jsonString, instructions: draftInstructions))
                 try Task.checkCancellation()
             }
-            result.append(contentsOf: try Self.validate([draft.content], evidence: selected, languageCode: languageCode))
+            let permitted = Set(selectedIndices)
+            guard draft.content.sourceNumbers.allSatisfy({ permitted.contains($0) }) else {
+                throw Self.invalidSourcesError()
+            }
+            result.append(contentsOf: try Self.validate([draft.content], evidence: batch, languageCode: languageCode))
         }
         return result
     }
@@ -359,11 +364,13 @@ public actor AppleSummaryGenerator: SummaryGenerator {
         return String(decoding: try encoder.encode(ModelSourceInput(sourceNumber: index, text: text)), as: UTF8.self)
     }
 
-    private static func evidencePrompt(_ evidence: [SummaryEvidence]) throws -> String {
+    private static func evidencePrompt(_ evidence: [SummaryEvidence], indices: [Int]? = nil) throws -> String {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys]
-        let inputs = evidence.enumerated().map { ModelSourceInput(sourceNumber: $0.offset, text: $0.element.text,
-                                                                              articleNumbers: $0.element.sourceNumbers.sorted()) }
+        let inputs = (indices ?? Array(evidence.indices)).map { index in
+            ModelSourceInput(sourceNumber: index, text: evidence[index].text,
+                             articleNumbers: evidence[index].sourceNumbers.sorted())
+        }
         return String(decoding: try encoder.encode(inputs), as: UTF8.self)
     }
 

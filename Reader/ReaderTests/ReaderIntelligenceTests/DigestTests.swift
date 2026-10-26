@@ -156,7 +156,7 @@ struct AppleSummaryGeneratorTests {
     @Test("An isolated draft receives only selected evidence and keeps its actual original identity")
     func isolatedDraftExcludesUnselectedPackets() async throws {
         let sources = try distinctSources(count: 2)
-        let journal = ModelRequestJournal(response: #"{"title":"Selected","summary":"A sourced summary.","sourceNumbers":[0]}"#,
+        let journal = ModelRequestJournal(response: #"{"title":"Selected","summary":"A sourced summary.","sourceNumbers":[1]}"#,
             selection: { _ in #"{"groups":[{"sourceNumbers":[1]}]}"# })
         let sections = try await AppleSummaryGenerator().generate(
             sources, model: ControlledLanguageModel(journal: journal), capacity: 10000,
@@ -167,11 +167,11 @@ struct AppleSummaryGeneratorTests {
         #expect(requests.count == 4)
         let plan = try #require(requests.dropFirst(2).first)
         let supplied = try JSONDecoder().decode([CapturedModelSource].self, from: Data(modelPrompt(plan).utf8))
-        #expect(supplied.count == 2)
+        try #require(supplied.count == 2)
         let draft = try #require(requests.last)
         let selected = try JSONDecoder().decode([CapturedModelSource].self, from: Data(modelPrompt(draft).utf8))
         #expect(selected.count == 1)
-        #expect(selected.first?.sourceNumber == 0)
+        #expect(selected.first?.sourceNumber == 1)
         #expect(selected.first?.articleNumbers == [1])
         #expect(selected.first?.text == supplied[1].text)
         #expect(selected.first?.text != supplied[0].text)
