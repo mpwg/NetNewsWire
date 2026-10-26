@@ -2,6 +2,14 @@
 
 Status: **initial candidate contracts fulfilled on their exact source; stable-label correction pending; no production adoption**.
 
+## Owner-requested stopping point
+
+The owner requested wrapping up. Stable-label CI40320201927 is now successful on 1482dadd314a86ee5603f99a195057f2c1db94f6: **488/488 executions, 478 code and ten native, 241 distinct, no failures/skips**. [Raw summary](i-isolated-stable-ci-summary-2026-10-26.json), [I cases](i-isolated-stable-ci-cases-2026-10-26.json), [recovery](i-isolated-stable-ci-recovery-2026-10-26.json). Artifact12648523570 ZIP SHA-256 `6457fc9f92d8014cca37da97d8a3df9f4a6dcf4abc576ba55cfcdb7dbb4befca`. This fulfills its controlled Mac request/label/budget/cancellation/consent contracts, not model quality or production adoption. Earlier pending statements below are historical.
+
+A further sentence-selection checkpoint is saved only on the separate candidate branch at 251013883. Eight more functions / 21 cases compile; their runtime verification remains open. The fixed seven-model series reaches drafting in every configuration, but selected source sentences omit adjacent offer restrictions before drafting. Five outputs are structurally valid; two reject unsupported numbers/links. It is not adopted. [Exact checkpoint](https://github.com/mpwg/NetNewsWire/blob/251013883/docs/reader/evidence/i-sentence-selection-checkpoint-2026-10-26.md).
+
+Main is restored to v5 source and binaries. Xcode initially retained the removed candidate source file in its package graph; a temporary newline in Package.swift, changed/reversed through Xcode MCP, refreshes that graph. The manifest has no diff. Main probe build13:24:54 and app/test build13:24:58 succeed; Reader/My Mac is restored and held PID24529 remains. No local app tests/relaunch occur. Work is paused at the owner's request; full #45/#54 acceptance, semantic quality, PCC, final devices and deferred offline/restart remain open.
+
 The previous goal turn made concrete progress by implementing and compiling the isolated candidate, correcting its observed label protocol, recording fourteen fixed model observations, committing both candidate states, and restoring main's v5 source/binaries. This turn preserves actual native runtime evidence rather than treating compilation or model outputs as code-test execution.
 
 ## Initial candidate source

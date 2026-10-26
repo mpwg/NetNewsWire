@@ -1,5 +1,7 @@
 # Native Reader application
 
+At the owner's stopping point, main v5 source/binaries are restored and compile through Xcode MCP. The separate stable-label candidate passes488/488 native-plan executions; it is not adopted because model quality remains open. Further sentence-selection research is saved only on its branch. [Final status and receipts](../docs/reader/evidence/i-isolated-ci-2026-10-26.md#owner-requested-stopping-point).
+
 Initial isolated-candidate CI40318608194 passes all 488 executions (478 code, ten native) on 9766c3e12, including all six new Swift Testing functions. It does not prove the changed stable-label source1482dadd3, whose separate CI40320201927 is live. [Exact source-bound native receipts and remaining criteria](../docs/reader/evidence/i-isolated-ci-2026-10-26.md). Main still has no candidate code and actual model quality remains open.
 
 The isolated-context research candidate lives separately on codex/reader-isolated-context; its package-only opt-in is not part of main. It adds native selection plus per-group draft requests and six Swift Testing functions covering actual request contents, stable references, budgets, invalid output, cancellation and consent. Real-model quality remains insufficient; main's v5 source and binaries are restored. [Candidate criteria and all fourteen observations](https://github.com/mpwg/NetNewsWire/blob/1482dadd3/docs/reader/evidence/i-isolated-context-candidate-2026-10-26.md). No new UI method is added.
