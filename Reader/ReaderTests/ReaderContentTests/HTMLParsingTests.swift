@@ -259,6 +259,28 @@ struct HTMLHTTPIsolationTests {
         #expect(server.paths.withLock { $0 == ["/article"] })
     }
 
+    @Test("Redirect policy rejects HTTPS downgrades regardless of scheme casing")
+    func redirectPolicyHandlesSchemeCasing() throws {
+        for sourceScheme in ["https", "HTTPS", "HtTpS"] {
+            for targetScheme in ["http", "HTTP", "HtTp"] {
+                let source = try #require(URL(string: "\(sourceScheme)://reader.invalid/article"))
+                let target = try #require(URL(string: "\(targetScheme)://reader.invalid/article"))
+                #expect(!ReaderWebContentPolicy.permitsRedirect(from: source, to: target))
+            }
+        }
+        for pair in [("http", "https"), ("https", "https"), ("http", "http")] {
+            let source = try #require(URL(string: "\(pair.0)://reader.invalid/article"))
+            let target = try #require(URL(string: "\(pair.1)://reader.invalid/article"))
+            #expect(ReaderWebContentPolicy.permitsRedirect(from: source, to: target))
+        }
+        let source = try #require(URL(string: "https://reader.invalid/article"))
+        let credentials = try #require(URL(string: "https://user:password@reader.invalid/article"))
+        let unsupported = try #require(URL(string: "file:///article"))
+        #expect(!ReaderWebContentPolicy.permitsRedirect(from: nil, to: source))
+        #expect(!ReaderWebContentPolicy.permitsRedirect(from: source, to: credentials))
+        #expect(!ReaderWebContentPolicy.permitsRedirect(from: source, to: unsupported))
+    }
+
     @Test("HTTP redirects remain document-only and redirect loops stop after five hops", .timeLimit(.minutes(1)),
           arguments: [false, true])
     func boundedHTTPRedirects(loop: Bool) async throws {

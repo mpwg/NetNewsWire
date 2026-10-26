@@ -188,6 +188,11 @@ public enum ReaderWebContentPolicy {
         ["https", "http"].contains(url.scheme?.lowercased() ?? "") && !(url.host ?? "").isEmpty && url.user == nil && url.password == nil
     }
 
+    nonisolated static func permitsRedirect(from source: URL?, to target: URL) -> Bool {
+        guard let source, permitsExternalLink(source), permitsExternalLink(target) else { return false }
+        return !(source.scheme?.lowercased() == "https" && target.scheme?.lowercased() == "http")
+    }
+
     /// Uses WebKit's inert DOM parser, then copies only passive HTML into a clean document.
     public static func sanitizedHTML(_ html: String, baseURL: URL?, page: WebPage) async throws -> String {
         try Task.checkCancellation()
@@ -322,8 +327,8 @@ private final class BoundedArticleDownload: NSObject, URLSessionDataDelegate {
                     newRequest request: URLRequest, completionHandler: @escaping @Sendable (URLRequest?) -> Void) {
         let accepted = state.withLock { value in
             guard !value.cancelled, value.error == nil else { return false }
-            guard let target = request.url, ReaderWebContentPolicy.permitsExternalLink(target),
-                  !(response.url?.scheme == "https" && target.scheme == "http"), value.redirects < 5 else {
+            guard let target = request.url, ReaderWebContentPolicy.permitsRedirect(from: response.url, to: target),
+                  value.redirects < 5 else {
                 value.error = ReaderError.invalidResponse
                 return false
             }
