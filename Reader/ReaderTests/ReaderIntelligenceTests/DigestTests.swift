@@ -71,6 +71,7 @@ private func consolidationJSON(_ prompt: String, text: String = "A sourced summa
 private actor ModelRequestJournal {
     let response: String?
     let factResponses: [String]?
+    let sentenceSelection: (@Sendable (String) throws -> String)?
     let selection: (@Sendable (String) throws -> String)?
     let consolidation: (@Sendable (String) throws -> String)?
     let failure: (any Error)?
@@ -79,11 +80,13 @@ private actor ModelRequestJournal {
     private(set) var requests: [LanguageModelExecutorGenerationRequest] = []
 
     init(response: String? = nil, factResponses: [String]? = nil,
+         sentenceSelection: (@Sendable (String) throws -> String)? = nil,
          selection: (@Sendable (String) throws -> String)? = nil,
          consolidation: (@Sendable (String) throws -> String)? = nil,
          failure: (any Error)? = nil, failureRequest: Int = 0) {
         self.response = response
         self.factResponses = factResponses
+        self.sentenceSelection = sentenceSelection
         self.selection = selection
         self.consolidation = consolidation
         self.failure = failure
@@ -95,6 +98,10 @@ private actor ModelRequestJournal {
         requests.append(request)
         if let failure, ordinal == failureRequest { throw failure }
         let prompt = modelPrompt(request)
+        if modelInstructions(request).hasPrefix("Select source sentences") {
+            guard let sentenceSelection else { throw ReaderError.invalidResponse }
+            return try sentenceSelection(prompt)
+        }
         if let source = try? JSONDecoder().decode(CapturedModelSource.self, from: Data(prompt.utf8)) {
             if let factResponses {
                 guard nextFact < factResponses.count else { throw ReaderError.invalidResponse }
@@ -110,6 +117,54 @@ private actor ModelRequestJournal {
         if let consolidation { return try consolidation(prompt) }
         if let response { return response }
         return try consolidationJSON(prompt)
+    }
+}
+
+private struct CapturedSentenceSource: Decodable {
+    struct Sentence: Decodable {
+        var sentenceNumber: Int
+        var text: String
+    }
+    var sourceNumber: Int
+    var sentences: [Sentence]
+}
+
+struct SourceSentenceSelectionTests {
+    // Explicit multilingual source-text fixtures; code and descriptions stay English.
+    @Test("Native sentence choices retain every nonwhitespace character in source order", arguments: [
+        "Heading.\nA notebook costs EUR 29.99; pickup only. Shipping is excluded.",
+        "Überschrift.\nStraße: 29,99 €. Nur Abholung!",
+        "Cafe\u{301} offer 🧪. Price: EUR 2.99.\nOnly Thursday.",
+        "商店の価格は 29.99 EUR。木曜日だけです。",
+        "🧪 ✓ <tag> [source] ;",
+        "First\r\n\tSecond.\u{200B}Third!"
+    ])
+    func nativeChoicesPreserveCompleteSource(text: String) {
+        let choices = SourceSentenceSelection.choices(in: text)
+        #expect(!choices.isEmpty)
+        #expect(choices.allSatisfy { !$0.isEmpty && text.contains($0) })
+        #expect(choices.joined().filter { !$0.isWhitespace } == text.filter { !$0.isWhitespace })
+    }
+
+    @Test("Blank fragments provide no selectable sentence", arguments: ["", " \n\t"])
+    func blankFragmentsHaveNoChoices(text: String) {
+        let choices = SourceSentenceSelection.choices(in: text)
+        #expect(choices.isEmpty)
+        #expect(throws: ReaderError.self) { try SourceSentenceSelection.excerpts([0], from: choices) }
+    }
+
+    @Test("Selected text preserves original punctuation, order and deduplicated identity")
+    func selectedSourceTextIsCopiedWithoutRewriting() throws {
+        let choices = ["Example Store: EUR 29.99; pickup only.", "Other Store: EUR 44.90 — online only."]
+        #expect(try SourceSentenceSelection.excerpts([1, 0, 1], from: choices) == [choices[1], choices[0]])
+    }
+
+    @Test("Empty, negative, excessive and out-of-range sentence selections are rejected",
+          arguments: [[], [-1], [2], Array(repeating: 0, count: 9)])
+    func invalidSentenceSelectionsAreRejected(indices: [Int]) {
+        #expect(throws: ReaderError.self) {
+            try SourceSentenceSelection.excerpts(indices, from: ["First original.", "Second original."])
+        }
     }
 }
 
@@ -153,6 +208,74 @@ private actor GenerationTraceJournal {
 }
 
 struct AppleSummaryGeneratorTests {
+    @Test("Indexed facts pass exact original sentence text to consolidation", arguments: [false, true])
+    func indexedFactsKeepActualSourceText(isolated: Bool) async throws {
+        var source = try article()
+        source.title = "First statement."
+        source.text = "A merchant sells an item for EUR 29.99. Pickup only."
+        let journal = ModelRequestJournal(
+            sentenceSelection: { _ in #"{"sentenceNumbers":[1]}"# },
+            selection: { _ in #"{"groups":[{"sourceNumbers":[0]}]}"# },
+            consolidation: { prompt in
+                let packets = try JSONDecoder().decode([CapturedModelSource].self, from: Data(prompt.utf8))
+                #expect(packets.count == 1)
+                #expect(packets.first?.text == "A merchant sells an item for EUR 29.99.")
+                let group = #"{"title":"Selected","summary":"EUR 29.99.","sourceNumbers":[0]}"#
+                return isolated ? group : #"{"groups":["# + group + "]}"
+            })
+        let sections = try await AppleSummaryGenerator().generate(
+            [source], model: ControlledLanguageModel(journal: journal), capacity: 10000,
+            isolateSelectedEvidence: isolated, selectSourceSentences: true, count: { $0.count })
+        #expect(sections.first?.sources == [source.id])
+        let requests = await journal.requests
+        #expect(requests.count == (isolated ? 3 : 2))
+        let first = try #require(requests.first)
+        let supplied = try JSONDecoder().decode(CapturedSentenceSource.self, from: Data(modelPrompt(first).utf8))
+        #expect(supplied.sourceNumber == 0)
+        #expect(supplied.sentences.contains { $0.sentenceNumber == 1 && $0.text == "A merchant sells an item for EUR 29.99." })
+        for request in requests { #expect(modelInstructions(request).count + modelPrompt(request).count <= 8000) }
+    }
+
+    @Test("Invalid native sentence indices stop before evidence consolidation",
+          arguments: [[], [-1], [99], Array(repeating: 0, count: 9)])
+    func indexedFactsRejectInvalidNativeSelections(indices: [Int]) async throws {
+        let journal = ModelRequestJournal(sentenceSelection: { _ in try modelJSON(["sentenceNumbers": indices]) })
+        await #expect(throws: ReaderError.self) {
+            try await AppleSummaryGenerator().generate(
+                [article()], model: ControlledLanguageModel(journal: journal), capacity: 10000,
+                selectSourceSentences: true, count: { $0.count })
+        }
+        #expect(await journal.requests.count == 1)
+    }
+
+    @Test("Indexed input budgeting includes the actual sentence JSON before a request")
+    func indexedSourceJSONMustFitItsBudget() async throws {
+        let journal = ModelRequestJournal(sentenceSelection: { _ in #"{"sentenceNumbers":[0]}"# })
+        await #expect(throws: ReaderError.self) {
+            try await AppleSummaryGenerator().generate(
+                [article()], model: ControlledLanguageModel(journal: journal), capacity: 10000,
+                selectSourceSentences: true, count: { text in
+                    text.contains(#""sentences""#) ? 10000 : text.count
+                })
+        }
+        #expect(await journal.requests.isEmpty)
+    }
+
+    @Test("Cancellation after native sentence selection prevents consolidation")
+    func indexedFactsCheckCancellation() async throws {
+        let source = try article()
+        let journal = ModelRequestJournal(sentenceSelection: { _ in #"{"sentenceNumbers":[0]}"# })
+        let task = Task {
+            try await AppleSummaryGenerator().generate(
+                [source], model: ControlledLanguageModel(journal: journal), capacity: 10000,
+                trace: { entry in
+                    if entry.stage == "sentence-selection" { withUnsafeCurrentTask { $0?.cancel() } }
+                }, selectSourceSentences: true, count: { $0.count })
+        }
+        await #expect(throws: CancellationError.self) { try await task.value }
+        #expect(await journal.requests.count == 1)
+    }
+
     @Test("An isolated draft receives only selected evidence and keeps its actual original identity")
     func isolatedDraftExcludesUnselectedPackets() async throws {
         let sources = try distinctSources(count: 2)
