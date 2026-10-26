@@ -37,3 +37,11 @@ The final prompt explicitly requires product, merchant and price together for ev
 Both destinations are arm64 My Mac VMs on macOS 27.0.1 (26A434). Lint, isolated-probe build, direct runner and process recovery pass in both runs. Earlier native wait/VoiceOver/daemon failures remain unexplained; neither green run proves a repair. The two original failed en_AT/de_AT wording cases remain versioned in the preceding packet receipt.
 
 Next run the new selection/current-budget/identity/cache contracts on the actual new source, then address literal-number formatting and preservation of attached temporal conditions without weakening factual checks. Keep I/#54 and product acceptance open; originals-only fallback and original accessibility remain required.
+
+## Controlled main adoption and live verification
+
+The existing candidate history and current main receipts were merged as **eaf90aea62eb58a77e3bfc9d15192cb738d6e998**. Only overlapping status documents needed resolution; current main receipts and original raw reports are preserved, and source/README now consistently record the owner's decision. Generator SHA-256 remains 9a0bdb7a20e98d35d531e14c327fc532a788342052719d8f592e933a43b1dd4e, matching the final model series. Merged-main Xcode MCP build-for-testing 11:03:00 and strict lint/whitespace pass. Normal Reader PID 24529 remains present, with no local tests/relaunch.
+
+[Reader CI 40304336042](https://github.com/mpwg/NetNewsWire/actions/runs/40304336042) is confirmed in progress on that exact merged source. Expected 476 executions are still expectations; inspect the same handle and preserve actual discovery/cases before updating runtime criteria. No issue is closed and neither preceding green result is relabeled.
+
+Separate [CodeQL 40304336699](https://github.com/mpwg/NetNewsWire/actions/runs/40304336699), Swift job 121509616726, fails in preload_tracer/autobuild with exit 139 before analysis; the other three language jobs pass. The exact crash cause remains unproved. No security check is disabled and no complete Swift analysis is claimed.
