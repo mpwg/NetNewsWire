@@ -1,0 +1,145 @@
+{
+  "runID": 40350150914,
+  "sourceCommit": "33462f8169c04eef733472e0d187b9df9526b73b",
+  "testFailure": "ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus(), ReaderUITests.swift:95, lost application/helper connection",
+  "failureLogTimeUTC": "2026-10-26T15:44:34.0443920Z",
+  "rootCauseEstablished": false,
+  "crashes": [
+    {
+      "fileName": "testmanagerd-2026-10-26-154505.ips",
+      "sha256": "7716350575fc99ed87895702375499cf61509d09beafbb03cfaeb9fb1d0a19a9",
+      "reportTimestamp": "2026-10-26 15:45:05.00 +0000",
+      "captureTime": "2026-10-26 15:44:32.0480 +0000",
+      "processName": "testmanagerd",
+      "exception": {
+        "codes": "0x0000000000000001, 0x00003b27a9b21788",
+        "rawCodes": [
+          1,
+          65041536784264
+        ],
+        "type": "EXC_BAD_ACCESS",
+        "signal": "SIGSEGV",
+        "subtype": "KERN_INVALID_ADDRESS at 0x00003b27a9b21788"
+      },
+      "termination": {
+        "flags": 0,
+        "code": 11,
+        "namespace": "SIGNAL",
+        "indicator": "Segmentation fault: 11",
+        "byProc": "exc handler",
+        "byPid": 54449
+      },
+      "faultingThread": 4,
+      "topFrames": [
+        {
+          "image": "libobjc.A.dylib",
+          "symbol": "objc_release",
+          "symbolLocation": 16
+        },
+        {
+          "image": "libobjc.A.dylib",
+          "symbol": "AutoreleasePoolPage::releaseUntil(objc_object**)",
+          "symbolLocation": 204
+        },
+        {
+          "image": "libobjc.A.dylib",
+          "symbol": "objc_autoreleasePoolPop",
+          "symbolLocation": 244
+        },
+        {
+          "image": "Foundation",
+          "symbol": "message_handler",
+          "symbolLocation": 136
+        },
+        {
+          "image": "libxpc.dylib",
+          "symbol": "_xpc_connection_call_event_handler",
+          "symbolLocation": 112
+        },
+        {
+          "image": "libxpc.dylib",
+          "symbol": "_xpc_connection_mach_event",
+          "symbolLocation": 1140
+        },
+        {
+          "image": "libdispatch.dylib",
+          "symbol": "_dispatch_client_callout4",
+          "symbolLocation": 16
+        },
+        {
+          "image": "libdispatch.dylib",
+          "symbol": "_dispatch_mach_msg_invoke",
+          "symbolLocation": 480
+        }
+      ]
+    },
+    {
+      "fileName": "testmanagerd-2026-10-26-154506.ips",
+      "sha256": "a1e601e88ae5817e1d725bbf1a1a1151e7ad6b68e6cb5fb0120c8d6a0b9de47c",
+      "reportTimestamp": "2026-10-26 15:45:06.00 +0000",
+      "captureTime": "2026-10-26 15:44:30.7581 +0000",
+      "processName": "testmanagerd",
+      "exception": {
+        "codes": "0x0000000000000001, 0x00001820b4d63140",
+        "rawCodes": [
+          1,
+          26528751956288
+        ],
+        "type": "EXC_BAD_ACCESS",
+        "signal": "SIGSEGV",
+        "subtype": "KERN_INVALID_ADDRESS at 0x00001820b4d63140"
+      },
+      "termination": {
+        "flags": 0,
+        "code": 11,
+        "namespace": "SIGNAL",
+        "indicator": "Segmentation fault: 11",
+        "byProc": "exc handler",
+        "byPid": 32385
+      },
+      "faultingThread": 3,
+      "topFrames": [
+        {
+          "image": "libobjc.A.dylib",
+          "symbol": "objc_release",
+          "symbolLocation": 16
+        },
+        {
+          "image": "libobjc.A.dylib",
+          "symbol": "AutoreleasePoolPage::releaseUntil(objc_object**)",
+          "symbolLocation": 204
+        },
+        {
+          "image": "libobjc.A.dylib",
+          "symbol": "objc_autoreleasePoolPop",
+          "symbolLocation": 244
+        },
+        {
+          "image": "Foundation",
+          "symbol": "message_handler",
+          "symbolLocation": 136
+        },
+        {
+          "image": "libxpc.dylib",
+          "symbol": "_xpc_connection_call_event_handler",
+          "symbolLocation": 112
+        },
+        {
+          "image": "libxpc.dylib",
+          "symbol": "_xpc_connection_mach_event",
+          "symbolLocation": 1140
+        },
+        {
+          "image": "libdispatch.dylib",
+          "symbol": "_dispatch_client_callout4",
+          "symbolLocation": 16
+        },
+        {
+          "image": "libdispatch.dylib",
+          "symbol": "_dispatch_mach_msg_invoke",
+          "symbolLocation": 480
+        }
+      ]
+    }
+  ]
+}
