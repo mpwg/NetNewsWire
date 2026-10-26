@@ -6,6 +6,8 @@ The existing scrolling method passes with app-targeted XCTHitchMetric and pre/po
 
 Crash diagnostics must include the native hosted DiagnosticReports directories: exported xcresult diagnostics omitted a testmanagerd .ips file whose generation is proved in unified logs. The CI collection addition copies only new Reader/testmanagerd .ips/.crash files after the app test action into the existing artifact, including on test failure. It changes no test status, order, retry or runtime source. Static workflow/shell checks pass; actual report collection and crash-stack analysis still require hosted evidence. [Generation events and collection scope](evidence/k-accessibility-navigation-2026-10-26.md#native-crash-report-collection).
 
+The repeated run's native service log reports enabled immediately after no settled VoiceOver speech within 5.0s. A compiled setup candidate therefore moves the existing first-row click after activation so a focus action precedes currentSpeech. It changes no expected title, error policy, restoration, twenty-step bound or test order. Native build-for-testing at 02:45:33 and strict lint pass; the hypothesis still needs complete runtime verification. [Original startup records and exact change](evidence/k-accessibility-navigation-2026-10-26.md#focus-setup-after-service-activation--compiled-candidate).
+
 ## Current load-test boundary — 2026-10-26
 
 The current native UI boundary was reviewed through Xcode MCP at e9e109696: ten methods remain in one XCTest class. The 198 Swift Testing functions cover business, store, transport, validation and ownership contracts. Counts describe the suite, not code coverage or product acceptance.

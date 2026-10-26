@@ -1,0 +1,27 @@
+{
+  "sourceRun": 40254660895,
+  "sourceRevision": "92f91cfe03212b97526eb4f04f9ebc0a1a6ac6f1",
+  "rangeUTC": [
+    "2026-10-26 01:40:15",
+    "2026-10-26 01:40:47"
+  ],
+  "sourceArchive": "test-session-systemlogs-2026.10.26_01-33-42-+0000.logarchive",
+  "events": [
+    {
+      "processImagePath": "/usr/libexec/testmanagerd",
+      "timestamp": "2026-10-26 01:40:32.287089+0000",
+      "eventMessage": "enableVoiceOver called, isEnabled=0"
+    },
+    {
+      "processImagePath": "/usr/libexec/testmanagerd",
+      "timestamp": "2026-10-26 01:40:39.766654+0000",
+      "eventMessage": "no settled VoiceOver speech within 5.0s"
+    },
+    {
+      "processImagePath": "/usr/libexec/testmanagerd",
+      "timestamp": "2026-10-26 01:40:39.766657+0000",
+      "eventMessage": "VoiceOver enabled"
+    }
+  ],
+  "scope": "The service reports enabled after explicitly observing no settled speech. This does not identify a Reader defect or prove that a later focus action repairs navigation."
+}

@@ -29,7 +29,6 @@ final class ReaderSmokeTests: XCTestCase {
         let timeline = app.outlines["readerTimeline"]
         let first = timeline.staticTexts["Timeline article 299"].firstMatch
         XCTAssertTrue(first.wait(for: \.isHittable, toEqual: true, timeout: 5))
-        first.click()
         let voiceOver = XCUIDevice.shared.voiceOverService
         let wasEnabled = voiceOver.isEnabled
         let initialState = XCTAttachment(string: "VoiceOver originally enabled: \(wasEnabled)")
@@ -53,6 +52,7 @@ final class ReaderSmokeTests: XCTestCase {
             try voiceOver.enable()
         }
         XCTAssertTrue(voiceOver.isEnabled)
+        first.click()
         func captureSpeech(_ step: String, operation: () throws -> XCUIVoiceOverService.Output) throws -> String {
             try XCTContext.runActivity(named: "Native VoiceOver \(step)") { activity in
                 let utterance = try operation().utterance
