@@ -1,0 +1,3 @@
+Before: window=(24.0, 55.0, 976.0, 626.0); timeline=(283.0, 106.0, 282.0, 509.0)
+After: window=(24.0, 55.0, 976.0, 626.0); timeline=(283.0, 106.0, 282.0, 509.0)
+10000 stored articles; normal initial 200-row page; five recorded down/up pairs; no calibrated baseline.

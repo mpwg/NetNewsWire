@@ -52,18 +52,30 @@ final class ReaderSmokeTests: XCTestCase {
         XCTAssertTrue(timeline.wait(for: \.isHittable, toEqual: true, timeout: 5))
         XCTAssertEqual(timeline.label, "All articles")
         timeline.click()
-        let current = try voiceOver.currentSpeech().utterance
-        let forward = try voiceOver.moveForward().utterance
-        let backward = try voiceOver.moveBackward().utterance
-        let speech = [current, forward, backward]
-        let journal = XCTAttachment(string: "Current: \(current)\nForward: \(forward)\nBackward: \(backward)")
-        journal.name = "Actual native VoiceOver focus utterances"
-        journal.lifetime = .keepAlways
-        add(journal)
+        func captureSpeech(_ step: String, _ output: XCUIVoiceOverService.Output) -> String {
+            let utterance = output.utterance
+            let attachment = XCTAttachment(string: utterance)
+            attachment.name = "Actual native VoiceOver \(step)"
+            attachment.lifetime = .keepAlways
+            add(attachment)
+            return utterance
+        }
+        let current = captureSpeech("current", try voiceOver.currentSpeech())
+        let forward = captureSpeech("forward", try voiceOver.moveForward())
+        let backward = captureSpeech("backward", try voiceOver.moveBackward())
+        let parent = captureSpeech("parent", try voiceOver.moveOut())
+        var reentered = captureSpeech("reentered", try voiceOver.moveIn())
+        for step in 1...20 {
+            if reentered.localizedCaseInsensitiveContains("All articles") || reentered.contains("Entries: 0 · Loaded originals: 0") { break }
+            reentered = captureSpeech("reentered forward \(step)", try voiceOver.moveForward())
+        }
+        let speech = [current, forward, backward, parent, reentered]
         XCTAssertTrue(speech.allSatisfy { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty })
         XCTAssertGreaterThan(Set(speech).count, 1)
+        XCTAssertTrue(current.localizedCaseInsensitiveContains("All articles"))
         XCTAssertTrue(forward.contains("Entries: 0 · Loaded originals: 0"))
-        XCTAssertTrue(backward.localizedCaseInsensitiveContains("All articles"))
+        XCTAssertTrue(parent.localizedCaseInsensitiveContains("All articles"))
+        XCTAssertTrue(reentered.localizedCaseInsensitiveContains("All articles") || reentered.contains("Entries: 0 · Loaded originals: 0"))
         let window = XCTAttachment(screenshot: app.windows.firstMatch.screenshot())
         window.name = "Native Reader during actual VoiceOver focus navigation"
         window.lifetime = .keepAlways

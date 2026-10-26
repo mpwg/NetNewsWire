@@ -1,0 +1,11 @@
+{
+  "sourceRun": 40250933311,
+  "sourceRevision": "87bc8cad9797c69bff32dd7672a88997d4af7797",
+  "sourceArchive": "test-session-systemlogs-2026.10.26_00-47-50-+0000.logarchive",
+  "rangeUTC": ["2026-10-26 00:54:18", "2026-10-26 00:55:45"],
+  "launchdPredicate": "process == launchd AND subsystem contains com.apple.testmanagerd AND eventMessage contains SIGSEGV",
+  "matchingSIGSEGVRecords": 0,
+  "testmanagerdLogLostDaemonRecords": 0,
+  "followingWindowMethod": "passed in 54.956 seconds",
+  "scope": "No matching daemon-crash/loss observation in this exported run and interval; not proof that the earlier crash trigger is fixed."
+}

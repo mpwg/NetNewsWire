@@ -1,0 +1,210 @@
+[
+  {
+    "testIdentifier" : "ReaderSmokeTests/testLoadedTimelineScrollingMetrics()",
+    "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testLoadedTimelineScrollingMetrics",
+    "testRuns" : [
+      {
+        "device" : {
+          "deviceId" : "179b955114be42a0a57725e6a6a18bf6caf2b819",
+          "deviceName" : "My Mac"
+        },
+        "metrics" : [
+          {
+            "baselineAverage" : 0,
+            "baselineName" : "",
+            "displayName" : "Memory Peak Physical (debug)",
+            "identifier" : "com.apple.dt.XCTMetric_Memory-eu.mpwg.reader.debug.physical_peak",
+            "maxPercentRegression" : 10,
+            "maxPercentRelativeStandardDeviation" : 10,
+            "maxRegression" : 0,
+            "maxStandardDeviation" : 10,
+            "measurements" : [
+              247893.12,
+              248351.872,
+              254119.04,
+              255200.384,
+              255495.296
+            ],
+            "polarity" : "prefers smaller",
+            "unitOfMeasurement" : "kB"
+          },
+          {
+            "baselineAverage" : 0,
+            "baselineName" : "",
+            "displayName" : "Memory Physical (debug)",
+            "identifier" : "com.apple.dt.XCTMetric_Memory-eu.mpwg.reader.debug.physical",
+            "maxPercentRegression" : 10,
+            "maxPercentRelativeStandardDeviation" : 10,
+            "maxRegression" : 0,
+            "maxStandardDeviation" : 10,
+            "measurements" : [
+              1638.4,
+              1245.184,
+              6094.912,
+              540.672,
+              884.736
+            ],
+            "polarity" : "prefers smaller",
+            "unitOfMeasurement" : "kB"
+          },
+          {
+            "baselineAverage" : 0,
+            "baselineName" : "",
+            "displayName" : "Clock Monotonic Time",
+            "identifier" : "com.apple.dt.XCTMetric_Clock.time.monotonic",
+            "maxPercentRegression" : 10,
+            "maxPercentRelativeStandardDeviation" : 10,
+            "maxRegression" : 0,
+            "maxStandardDeviation" : 10,
+            "measurements" : [
+              4.059514427,
+              3.8290439970000003,
+              3.7680149230000004,
+              3.384117245,
+              3.3373055770000004
+            ],
+            "polarity" : "prefers smaller",
+            "unitOfMeasurement" : "s"
+          },
+          {
+            "baselineAverage" : 0,
+            "baselineName" : "",
+            "displayName" : "Hitch Time Ratio (debug)",
+            "identifier" : "com.apple.dt.XCTMetric_Hitch-debug.time.ratio",
+            "maxPercentRegression" : 10,
+            "maxPercentRelativeStandardDeviation" : 10,
+            "maxRegression" : 0,
+            "maxStandardDeviation" : 10,
+            "measurements" : [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "polarity" : "prefers smaller",
+            "unitOfMeasurement" : "ms per s"
+          },
+          {
+            "baselineAverage" : 0,
+            "baselineName" : "",
+            "displayName" : "Hitches Total Duration (debug)",
+            "identifier" : "com.apple.dt.XCTMetric_Hitch-debug.total.duration",
+            "maxPercentRegression" : 10,
+            "maxPercentRelativeStandardDeviation" : 10,
+            "maxRegression" : 0,
+            "maxStandardDeviation" : 10,
+            "measurements" : [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "polarity" : "prefers smaller",
+            "unitOfMeasurement" : "s"
+          },
+          {
+            "baselineAverage" : 0,
+            "baselineName" : "",
+            "displayName" : "Absolute Memory Physical (debug)",
+            "identifier" : "com.apple.dt.XCTMetric_Memory-eu.mpwg.reader.debug.physical_absolute",
+            "maxPercentRegression" : 10,
+            "maxPercentRelativeStandardDeviation" : 10,
+            "maxRegression" : 0,
+            "maxStandardDeviation" : 10,
+            "measurements" : [
+              234769.472,
+              235965.504,
+              242011.264,
+              242502.784,
+              243387.52
+            ],
+            "polarity" : "prefers smaller",
+            "unitOfMeasurement" : "kB"
+          },
+          {
+            "baselineAverage" : 0,
+            "baselineName" : "",
+            "displayName" : "Number of Hitches (debug)",
+            "identifier" : "com.apple.dt.XCTMetric_Hitch-debug.number",
+            "maxPercentRegression" : 10,
+            "maxPercentRelativeStandardDeviation" : 10,
+            "maxRegression" : 0,
+            "maxStandardDeviation" : 10,
+            "measurements" : [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "polarity" : "prefers smaller",
+            "unitOfMeasurement" : "hitches"
+          },
+          {
+            "baselineAverage" : 0,
+            "baselineName" : "",
+            "displayName" : "CPU Instructions Retired (debug)",
+            "identifier" : "com.apple.dt.XCTMetric_CPU-eu.mpwg.reader.debug.instructions_retired",
+            "maxPercentRegression" : 10,
+            "maxPercentRelativeStandardDeviation" : 10,
+            "maxRegression" : 0,
+            "maxStandardDeviation" : 10,
+            "measurements" : [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "polarity" : "prefers smaller",
+            "unitOfMeasurement" : "kI"
+          },
+          {
+            "baselineAverage" : 0,
+            "baselineName" : "",
+            "displayName" : "CPU Time (debug)",
+            "identifier" : "com.apple.dt.XCTMetric_CPU-eu.mpwg.reader.debug.time",
+            "maxPercentRegression" : 10,
+            "maxPercentRelativeStandardDeviation" : 10,
+            "maxRegression" : 0,
+            "maxStandardDeviation" : 10,
+            "measurements" : [
+              3.6330433330000003,
+              3.322616302,
+              3.277445659,
+              2.90947111,
+              2.87360308
+            ],
+            "polarity" : "prefers smaller",
+            "unitOfMeasurement" : "s"
+          },
+          {
+            "baselineAverage" : 0,
+            "baselineName" : "",
+            "displayName" : "CPU Cycles (debug)",
+            "identifier" : "com.apple.dt.XCTMetric_CPU-eu.mpwg.reader.debug.cycles",
+            "maxPercentRegression" : 10,
+            "maxPercentRelativeStandardDeviation" : 10,
+            "maxRegression" : 0,
+            "maxStandardDeviation" : 10,
+            "measurements" : [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "polarity" : "prefers smaller",
+            "unitOfMeasurement" : "kC"
+          }
+        ],
+        "testPlanConfiguration" : {
+          "configurationId" : "1",
+          "configurationName" : "Test Scheme Action"
+        }
+      }
+    ]
+  }
+]
