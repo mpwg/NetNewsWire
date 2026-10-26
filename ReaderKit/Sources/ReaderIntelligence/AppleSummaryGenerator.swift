@@ -299,7 +299,7 @@ public actor AppleSummaryGenerator: SummaryGenerator {
             selections.append(Array(Set(group.sourceNumbers)).sorted())
         }
         var result: [ValidatedSummaryGroup] = []
-        for selectedIndices in selections {
+        for selectedIndices in Self.coalescedSelections(selections) {
             let selected = selectedIndices.map { batch[$0] }
             let draftInstructions = Self.consolidationInstructions(
                 instructions + "\nWrite one group using only these selected packets.", evidence: selected)
@@ -324,6 +324,26 @@ public actor AppleSummaryGenerator: SummaryGenerator {
             result.append(contentsOf: try Self.validate([draft.content], evidence: batch, languageCode: languageCode))
         }
         return result
+    }
+
+    // Coalesce connected packet groups before independent drafts can repeat the same evidence.
+    static func coalescedSelections(_ selections: [[Int]]) -> [[Int]] {
+        var groups = selections.map(Set.init)
+        var index = 0
+        while index < groups.count {
+            var other = index + 1
+            while other < groups.count {
+                if groups[index].isDisjoint(with: groups[other]) {
+                    other += 1
+                } else {
+                    let overlapping = groups.remove(at: other)
+                    groups[index].formUnion(overlapping)
+                    other = index + 1
+                }
+            }
+            index += 1
+        }
+        return groups.map { $0.sorted() }
     }
 
     private func checkRequestPermission(_ permission: (@Sendable () async throws -> Bool)?) async throws {

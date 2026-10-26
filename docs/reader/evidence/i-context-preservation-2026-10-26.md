@@ -18,6 +18,14 @@ Generator SHA-256 `859c5cb569331b144a1a9376d891bbcb306fe81ea538dac1d2c15502e3d95
 
 The former held Reader PID24529 is no longer present and no workspace was open at resumption. No app was launched or tested locally. The package is opened through Xcode MCP to access its native executable scheme; no project/scheme generation occurs. The old temporary public corpus and model reports are absent, so no re-execution of those exact bytes is claimed. Committed historical hashes/results remain historical evidence. New synthetic raw reports are retained under `/tmp/reader-context-preservation-20261026/` and will be saved with their outcomes.
 
+## Overlapping-plan follow-up
+
+The first news/injection observations repeat assertions because the selected packet groups overlap. Before issuing independent drafts, the candidate now coalesces connected groups of packet indices. Duplicate and transitively overlapping groups become one draft; disjoint groups remain separate. All plan bounds/references are validated before coalescing; per-request budgets, current consent, cancellation and per-reference draft validation are unchanged. This does not guarantee that a single model response cannot repeat prose or misstate a claim.
+
+Two further Swift Testing functions / seven cases verify duplicate/transitive/disjoint groups and actual native executor request count, labels and complete original identities for both verbatim and indexed extraction. Xcode MCP app/test build15:37:53 succeeds; discovery reports253 enabled distinct tests, none disabled (expected523 executions,513 code/ten native). The generator SHA-256 is now `e5fe86936d0b485fe6bc57526b63580b1c9da7bf475da1f8898f4c6083b26422`; earlier 4bbf6f997 model/CI evidence remains scoped to that earlier source.
+
+At resumption no Reader process is present (neither the former PID nor another process named Reader). The old prohibition protected that held process; after confirming its absence, focused local native code tests are safe without app launch. Xcode MCP passes all16 targeted executions, then **all60 intelligence test functions /129 executions**, no failures/skips, at15:38:55. [Complete MCP result and exact xcresult path](i-context-local-code-2026-10-26.json). This executes the actual FoundationModels controlled executor and store/coordinator contracts; it is not a live-model/GUI/device/PCC acceptance claim. No UI test runs locally and no normal app is launched.
+
 ## Fixed real-model observations
 
 Source commit `4bbf6f997e40cd81c25753bbe8973b9ec933743f`; Mac CI [40340848512](https://github.com/mpwg/NetNewsWire/actions/runs/40340848512) is confirmed live on that source. Inspect that same handle; do not restart an unchanged run. All four synthetic scenarios run once with `--trace --isolate --sentences`, with every result retained in the [complete synthetic report](i-context-preservation-model-2026-10-26.json). No public/account text or credentials are included.

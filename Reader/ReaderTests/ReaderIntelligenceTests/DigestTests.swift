@@ -227,6 +227,37 @@ private actor GenerationTraceJournal {
 }
 
 struct AppleSummaryGeneratorTests {
+    @Test("Overlapping evidence groups coalesce transitively while independent groups stay separate", arguments: [
+        ([[0], [0]], [[0]]),
+        ([[0, 1], [2, 3], [1, 2]], [[0, 1, 2, 3]]),
+        ([[0], [1, 2], [2, 3], [4]], [[0], [1, 2, 3], [4]]),
+        ([[3, 1, 1], [0], [4, 2]], [[1, 3], [0], [2, 4]]),
+        ([], [])
+    ])
+    func evidenceGroupsCoalesceOnlySharedPackets(input: [[Int]], expected: [[Int]]) {
+        #expect(AppleSummaryGenerator.coalescedSelections(input) == expected)
+    }
+
+    @Test("Overlapping native plans issue only one draft with all connected original identities", arguments: [false, true])
+    func overlappingPlansShareOneActualDraft(indexed: Bool) async throws {
+        let sources = try distinctSources(count: 2)
+        let journal = ModelRequestJournal(
+            response: #"{"title":"Selected","summary":"A sourced summary.","sourceNumbers":[0,1]}"#,
+            sentenceSelection: { _ in #"{"sentenceNumbers":[0]}"# },
+            selection: { _ in #"{"groups":[{"sourceNumbers":[0]},{"sourceNumbers":[1]},{"sourceNumbers":[0,1]}]}"# })
+        let sections = try await AppleSummaryGenerator().generate(
+            sources, model: ControlledLanguageModel(journal: journal), capacity: 10000,
+            isolateSelectedEvidence: true, selectSourceSentences: indexed, count: { $0.count })
+        #expect(sections.count == 1)
+        #expect(sections.first?.sources == sources.map(\.id))
+        let requests = await journal.requests
+        #expect(requests.count == 4)
+        let draft = try #require(requests.last)
+        let packets = try JSONDecoder().decode([CapturedModelSource].self, from: Data(modelPrompt(draft).utf8))
+        #expect(packets.map(\.sourceNumber) == [0, 1])
+        #expect(packets.map(\.articleNumbers) == [[0], [1]])
+    }
+
     @Test("Indexed facts retain the selected claim and its complete bounded source context", arguments: [false, true])
     func indexedFactsKeepActualSourceText(isolated: Bool) async throws {
         var source = try article()

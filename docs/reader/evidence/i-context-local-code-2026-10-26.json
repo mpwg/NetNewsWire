@@ -1,0 +1,721 @@
+{
+  "activeTestPlanName": "Reader",
+  "counts": {
+    "expectedFailures": 0,
+    "failed": 0,
+    "notRun": 0,
+    "passed": 129,
+    "skipped": 0,
+    "total": 129
+  },
+  "fullConsoleLogsPath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/test-console-log-2026-10-26T15-38-55+01-00.txt",
+  "fullSummaryPath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/C4E693F0-E825-4875-9908-D2F3616CCEF0.txt",
+  "message": "Results truncated to 100 of 129 tests. Failed tests shown first. Full logs available at /var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/C4E693F0-E825-4875-9908-D2F3616CCEF0.txt.",
+  "results": [
+    {
+      "displayName": "[[0, 1], [2, 3], [1, 2]], [[0, 1, 2, 3]]",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/evidenceGroupsCoalesceOnlySharedPackets(input:expected:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "true",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/overlappingPlansShareOneActualDraft(indexed:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "false",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/indexedFactsKeepActualSourceText(isolated:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "[]",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/indexedFactsRejectInvalidNativeSelections(indices:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "[-1]",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/indexedFactsRejectInvalidNativeSelections(indices:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "[99]",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/indexedFactsRejectInvalidNativeSelections(indices:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "[0, 0, 0, 0, 0, 0, 0, 0, 0]",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/indexedFactsRejectInvalidNativeSelections(indices:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Indexed input budgeting includes the actual sentence JSON before a request",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/indexedSourceJSONMustFitItsBudget()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Cancellation after native sentence selection prevents consolidation",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/indexedFactsCheckCancellation()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "An isolated draft receives only selected evidence and keeps its actual original identity",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/isolatedDraftExcludesUnselectedPackets()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "0",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/invalidIsolationPlansStopBeforeDrafting(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "1",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/invalidIsolationPlansStopBeforeDrafting(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "2",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/invalidIsolationPlansStopBeforeDrafting(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "false",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/isolatedDraftsKeepIndependentValidation(invalidIndex:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "true",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/isolatedDraftsKeepIndependentValidation(invalidIndex:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Revoking live permission after selection prevents isolated drafting",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/isolatedDraftChecksLivePermission()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Cancellation after selection prevents isolated drafting",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/isolatedDraftChecksCancellation()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "false",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/isolatedRequestsEnforceActualBudgets(draft:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "true",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/isolatedRequestsEnforceActualBudgets(draft:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Each source fragment keeps its merchant, price and conditions in one evidence packet",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/fragmentFactsKeepTheirSharedReference()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "false",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/traceRetainsRejectedDraft(factFailure:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "true",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/traceRetainsRejectedDraft(factFailure:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Cancellation in an evaluation sink prevents validation and later requests",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/traceCancellationStopsGeneration()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "false",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/equalFactsKeepEverySourceIdentity(foreignAccount:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "true",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/equalFactsKeepEverySourceIdentity(foreignAccount:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"en_AT\"",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/exactRepeatedClaimsAreDeduplicated(localeID:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"de_AT\"",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/exactRepeatedClaimsAreDeduplicated(localeID:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"en_AT\", \"English\"",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/instructionsNameRequestedLanguage(localeID:language:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"de_AT\", \"German\"",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/instructionsNameRequestedLanguage(localeID:language:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "3500",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/longSourceChunksPreserveContent(capacity:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "4500",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/longSourceChunksPreserveContent(capacity:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Unconfigured PCC rejects before consent or a model request",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/unconfiguredCloudIsNeverRequested()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Revoked cloud consent is rejected before instantiating PCC",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/cloudRequiresLiveConsentBeforeInstantiation()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "0, 0",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/frameworkErrorsPropagate(kind:stage:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "0, 1",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/frameworkErrorsPropagate(kind:stage:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "1, 0",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/frameworkErrorsPropagate(kind:stage:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "1, 1",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/frameworkErrorsPropagate(kind:stage:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "2, 0",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/frameworkErrorsPropagate(kind:stage:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "2, 1",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/frameworkErrorsPropagate(kind:stage:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "3, 0",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/frameworkErrorsPropagate(kind:stage:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "3, 1",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/frameworkErrorsPropagate(kind:stage:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Insufficient context budget fails before any model request",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/insufficientBudgetMakesNoRequest()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Cloud permission is rechecked before every fragment",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/revokedPermissionStopsLaterChunks()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Cloud consent revoked after fact extraction prevents consolidation",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/revokedPermissionStopsConsolidation()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "0",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/modelCancellationPropagates(stage:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "1",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/modelCancellationPropagates(stage:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Cancelling a held token count prevents all model requests",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/cancellationDuringBudgetingPreventsRequests()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Structured consolidation maps references only through validated source facts",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/structuredGenerationUsesStoredSources()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"{\"groups\":[]}\"",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/structuredGenerationRejectsUntrustedOutput(response:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"{\"groups\":[{\"title\":\"Offer\",\"summary\":\"Stored offer\",\"sourceNumbers\":[]}]}\"",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/structuredGenerationRejectsUntrustedOutput(response:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"{\"groups\":[{\"title\":\"Offer\",\"summary\":\"Stored offer\",\"sourceNumbers\":[-1]}]}\"",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/structuredGenerationRejectsUntrustedOutput(response:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"{\"groups\":[{\"title\":\"Offer\",\"summary\":\"Stored offer\",\"sourceNumbers\":[1]}]}\"",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/structuredGenerationRejectsUntrustedOutput(response:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"{\"groups\":[{\"title\":\"Offer\",\"summary\":\"EUR 999\",\"sourceNumbers\":[0]}]}\"",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/structuredGenerationRejectsUntrustedOutput(response:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"{\"groups\":[{\"title\":\"Offer\",\"summary\":\"https://invented.test\",\"sourceNumbers\":[0]}]}\"",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/structuredGenerationRejectsUntrustedOutput(response:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"{\"groups\":[{\"title\":\"https://invented.test\",\"summary\":\"Stored offer\",\"sourceNumbers\":[0]}]}\"",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/structuredGenerationRejectsUntrustedOutput(response:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"{\"groups\":[{\"title\":\"Offer\",\"summary\":\"HTTPS://invented.test\",\"sourceNumbers\":[0]}]}\"",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/structuredGenerationRejectsUntrustedOutput(response:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"{\"groups\":[{\"title\":\"\",\"summary\":\"Stored offer\",\"sourceNumbers\":[0]}]}\"",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/structuredGenerationRejectsUntrustedOutput(response:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"{\"groups\":[{\"title\":\" \\t\",\"summary\":\"Stored offer\",\"sourceNumbers\":[0]}]}\"",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/structuredGenerationRejectsUntrustedOutput(response:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"{\"groups\":[{\"title\":\"Offer\",\"summary\":\"\",\"sourceNumbers\":[0]}]}\"",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/structuredGenerationRejectsUntrustedOutput(response:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"{\"groups\":[{\"title\":\"Offer\",\"summary\":\" \\n\\t\",\"sourceNumbers\":[0]}]}\"",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/structuredGenerationRejectsUntrustedOutput(response:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "false",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/factsRemainBoundToTheirOwnFragment(laterFragment:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "true",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/factsRemainBoundToTheirOwnFragment(laterFragment:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "false",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/selectedStatementsKeepExactProvenance(foreignAccount:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "true",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/selectedStatementsKeepExactProvenance(foreignAccount:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "false",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/selectedFragmentsKeepArticleCoverageAndNumericBounds(unsupportedPrice:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "true",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/selectedFragmentsKeepArticleCoverageAndNumericBounds(unsupportedPrice:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"0\"",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/generatedNumbersRequireTheirReferencedFacts(number:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"10.00\"",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/generatedNumbersRequireTheirReferencedFacts(number:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Many distinct sources use bounded hierarchical consolidation without losing identities",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/hierarchicalConsolidationKeepsEverySource()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Later consolidation cannot recover numbers absent from its supplied evidence",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/laterStagesCannotReachBackToDiscardedNumbers()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Nonshrinking consolidation fails within a bounded first reduction",
+      "errorMessages": [],
+      "identifier": "AppleSummaryGeneratorTests/nonshrinkingConsolidationDoesNotLoop()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"\"",
+      "errorMessages": [],
+      "identifier": "DigestTests/previousGenerationCacheIsRegenerated(policyPrefix:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"reader-source-facts-consolidation-v1\n\"",
+      "errorMessages": [],
+      "identifier": "DigestTests/previousGenerationCacheIsRegenerated(policyPrefix:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"reader-source-facts-consolidation-v2\n\"",
+      "errorMessages": [],
+      "identifier": "DigestTests/previousGenerationCacheIsRegenerated(policyPrefix:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"reader-source-facts-consolidation-v3\n\"",
+      "errorMessages": [],
+      "identifier": "DigestTests/previousGenerationCacheIsRegenerated(policyPrefix:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "\"reader-source-facts-consolidation-v4\n\"",
+      "errorMessages": [],
+      "identifier": "DigestTests/previousGenerationCacheIsRegenerated(policyPrefix:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Selected native model prose retains every original without changing stored articles",
+      "errorMessages": [],
+      "identifier": "DigestTests/selectedModelStatementsPreserveAllOriginalLinks()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "false",
+      "errorMessages": [],
+      "identifier": "DigestTests/stagedFailuresPreserveOriginalsAndOutbox(invalidOutput:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "true",
+      "errorMessages": [],
+      "identifier": "DigestTests/stagedFailuresPreserveOriginalsAndOutbox(invalidOutput:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "0",
+      "errorMessages": [],
+      "identifier": "DigestTests/cachedClaimsRequireValidContentAndSources(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "1",
+      "errorMessages": [],
+      "identifier": "DigestTests/cachedClaimsRequireValidContentAndSources(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "2",
+      "errorMessages": [],
+      "identifier": "DigestTests/cachedClaimsRequireValidContentAndSources(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "3",
+      "errorMessages": [],
+      "identifier": "DigestTests/cachedClaimsRequireValidContentAndSources(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "4",
+      "errorMessages": [],
+      "identifier": "DigestTests/cachedClaimsRequireValidContentAndSources(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "5",
+      "errorMessages": [],
+      "identifier": "DigestTests/cachedClaimsRequireValidContentAndSources(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "6",
+      "errorMessages": [],
+      "identifier": "DigestTests/cachedClaimsRequireValidContentAndSources(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Blank model text cannot claim complete source coverage or publish a digest",
+      "errorMessages": [],
+      "identifier": "DigestTests/blankModelTextDoesNotClaimCoverage()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "0",
+      "errorMessages": [],
+      "identifier": "DigestTests/modelFailuresPreserveWarningsAndOriginals(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "1",
+      "errorMessages": [],
+      "identifier": "DigestTests/modelFailuresPreserveWarningsAndOriginals(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "2",
+      "errorMessages": [],
+      "identifier": "DigestTests/modelFailuresPreserveWarningsAndOriginals(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "3",
+      "errorMessages": [],
+      "identifier": "DigestTests/modelFailuresPreserveWarningsAndOriginals(kind:)",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "A generator gate fails promptly when generation never starts",
+      "errorMessages": [],
+      "identifier": "DigestTests/generatorGateFailsWhenGenerationNeverStarts()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Cancelling generation releases the generator gate",
+      "errorMessages": [],
+      "identifier": "DigestTests/cancellingGenerationReleasesGeneratorGate()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "All sources remain accessible when model coverage is incomplete",
+      "errorMessages": [],
+      "identifier": "DigestTests/allSourcesRemainAccessibleWhenModelCoverageIsIncomplete()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Marking a digest read applies only to the displayed revision",
+      "errorMessages": [],
+      "identifier": "DigestTests/markingADigestReadAppliesOnlyToTheDisplayedRevision()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Invalid model source references are not saved",
+      "errorMessages": [],
+      "identifier": "DigestTests/invalidModelSourceReferencesAreNotSaved()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Changed source text regenerates a digest",
+      "errorMessages": [],
+      "identifier": "DigestTests/changedSourceTextRegeneratesADigest()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Revoked cloud consent applies to ongoing work",
+      "errorMessages": [],
+      "identifier": "DigestTests/revokedCloudConsentAppliesToOngoingWork()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Model responses for changed sources are not saved",
+      "errorMessages": [],
+      "identifier": "DigestTests/modelResponsesForChangedSourcesAreNotSaved()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    },
+    {
+      "displayName": "Cancelling a window task does not cancel the owned digest job",
+      "errorMessages": [],
+      "identifier": "DigestTests/cancellingAWindowTaskDoesNotCancelTheOwnedDigestJob()",
+      "state": "Passed",
+      "targetName": "ReaderTests"
+    }
+  ],
+  "schemeName": "Reader",
+  "summary": "129 tests: 129 passed, 0 failed, 0 skipped, 0 expected failures, 0 not run",
+  "totalResults": 129,
+  "truncated": true,
+  "xcresultBundlePath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/Test-Reader-2026.10.26_15-38-55-+0100.xcresult"
+}
