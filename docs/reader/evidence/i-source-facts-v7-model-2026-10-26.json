@@ -1,0 +1,67 @@
+{
+  "date": "2026-10-26",
+  "policy": "v7",
+  "generatorSHA256": "97600f6eae5a623f352f8ed12874244183a1ace7547edb1fe4fc8439cda51ea8",
+  "sourceFeedSHA256": "6717d25bafcec62b533e8a4b73269215ac95144a2ba986807071615e5b389139",
+  "protocol": "Four unchanged frozen configurations, one native on-device invocation each; no retries; no PCC or transport.",
+  "rawDirectory": "/Users/mat/.codex/artifacts/netnewswire/public-rss-20261026-6717d25bafce/v7",
+  "observations": [
+    {
+      "configuration": "six",
+      "inputSHA256": "104495438e1768ad323ea91ecb02bf0fd70dd9ad1c18f639db3d4069f05c7bf8",
+      "reportSHA256": "bc91985e765610092fade5d00d7158f585f3af1b370066ae15cf70f07e0fde48",
+      "locale": "de_AT",
+      "elapsedSeconds": 35.531963167,
+      "error": "ReaderDomain.ReaderError.invalidResponse",
+      "sections": 0,
+      "missingSourceCount": 6,
+      "sourceFactBlocks": 0,
+      "sourceExcerptCharacters": [],
+      "exactSourceMatches": null
+    },
+    {
+      "configuration": "pair-1",
+      "inputSHA256": "ccf83b34996dbd2cec898a47b568078172c4947fd02b135219472a74c4523501",
+      "reportSHA256": "ba56a54f4042c18419def2c8fdd39a35af78a75b404e84d161a2f3dc80e58522",
+      "locale": "de_AT",
+      "elapsedSeconds": 15.865246791,
+      "error": null,
+      "sections": 2,
+      "missingSourceCount": 0,
+      "sourceFactBlocks": 2,
+      "sourceExcerptCharacters": [
+        516,
+        1110
+      ],
+      "exactSourceMatches": true
+    },
+    {
+      "configuration": "pair-2",
+      "inputSHA256": "dec8b262f8bd48b1a58ffdeefb9a2db24cd0978232cb9f7dc72860124b490b22",
+      "reportSHA256": "80dd6e6281b01c7a28f2efdc258459fda51dc6106eebf8fbd3c1845e17d455ee",
+      "locale": "de_AT",
+      "elapsedSeconds": 22.77479875,
+      "error": null,
+      "sections": 1,
+      "missingSourceCount": 1,
+      "sourceFactBlocks": 1,
+      "sourceExcerptCharacters": [
+        1996
+      ],
+      "exactSourceMatches": true
+    },
+    {
+      "configuration": "pair-3",
+      "inputSHA256": "e05318eb4f82f452cc48eaa7239f9cf888e899310c990a86da260fa139410555",
+      "reportSHA256": "def401cc3d7d047f34f95dc516736c02df141c7d02062497e22c4a928249dd83",
+      "locale": "de_AT",
+      "elapsedSeconds": 5.308257875,
+      "error": "ReaderDomain.ReaderError.invalidResponse",
+      "sections": 0,
+      "missingSourceCount": 2,
+      "sourceFactBlocks": 0,
+      "sourceExcerptCharacters": [],
+      "exactSourceMatches": null
+    }
+  ]
+}

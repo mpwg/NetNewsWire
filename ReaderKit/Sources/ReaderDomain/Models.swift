@@ -147,11 +147,34 @@ public struct RefreshSnapshot: Sendable {
     }
 }
 
+/// Original-language excerpts retained before free-text consolidation; not a completeness guarantee.
+public struct DigestSourceFacts: Identifiable, Hashable, Codable, Sendable {
+    public var source: ArticleKey
+    public var excerpts: [String]
+    public var id: ArticleKey { source }
+
+    public init(source: ArticleKey, excerpts: [String]) {
+        self.source = source
+        self.excerpts = excerpts
+    }
+
+    public var text: String { excerpts.joined(separator: " · ") }
+
+    public var hasValidContent: Bool {
+        !excerpts.isEmpty && Set(excerpts).count == excerpts.count &&
+        excerpts.allSatisfy { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+    }
+}
+
 public struct DigestSection: Hashable, Codable, Sendable {
     public var title: String
     public var text: String
     public var sources: [ArticleKey]
-    public init(title: String, text: String, sources: [ArticleKey]) { self.title = title; self.text = text; self.sources = sources }
+    /// Optional so snapshots written before source facts were introduced remain decodable.
+    public var sourceFacts: [DigestSourceFacts]?
+    public init(title: String, text: String, sources: [ArticleKey], sourceFacts: [DigestSourceFacts]? = nil) {
+        self.title = title; self.text = text; self.sources = sources; self.sourceFacts = sourceFacts
+    }
 
     /// Structural content and reference checks; this does not attest the model's factual accuracy.
     public func hasValidContent(referencing sourceKeys: Set<ArticleKey>, allowingOriginalsOnly: Bool = false) -> Bool {
@@ -159,6 +182,8 @@ public struct DigestSection: Hashable, Codable, Sendable {
         return !normalizedText.contains("http://") && !normalizedText.contains("https://") &&
         !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
         !sources.isEmpty && sources.allSatisfy(sourceKeys.contains) &&
+        Set((sourceFacts ?? []).map(\.source)).count == (sourceFacts ?? []).count &&
+        (sourceFacts ?? []).allSatisfy { sources.contains($0.source) && $0.hasValidContent } &&
         (!text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || (allowingOriginalsOnly && text.isEmpty))
     }
 }

@@ -57,7 +57,8 @@ public actor DigestCoordinator {
             if let cached = existing.first(where: { $0.id == identifier }),
                Set(cached.sources) == allKeys, cached.warning == nil,
                cached.sourceFingerprint == sourceFingerprint,
-               cached.hasDisplayableContent {
+               cached.hasDisplayableContent,
+               Self.sourceFactsMatchOriginals(cached.sections, sources: sources) {
                 result.append(cached); continue
             }
             var warnings: [String] = []
@@ -84,7 +85,8 @@ public actor DigestCoordinator {
                     return current?.mode == .digest && current?.cloudAllowed == true
                 })
             } catch is CancellationError { throw CancellationError() } catch { sections = []; warnings.append(error.localizedDescription) }
-            guard Self.validGeneratedSections(sections, sources: allKeys) else { throw ReaderError.invalidResponse }
+            guard Self.validGeneratedSections(sections, sources: allKeys),
+                  Self.sourceFactsMatchOriginals(sections, sources: sources) else { throw ReaderError.invalidResponse }
             let covered = Set(sections.flatMap(\.sources))
             let missing = sources.filter { !covered.contains($0.id) }
             if !missing.isEmpty {
@@ -106,11 +108,21 @@ public actor DigestCoordinator {
         sections.allSatisfy { $0.hasValidContent(referencing: sources) }
     }
 
+    private static func sourceFactsMatchOriginals(_ sections: [DigestSection], sources: [ArticleSnapshot]) -> Bool {
+        sections.allSatisfy { section in
+            (section.sourceFacts ?? []).allSatisfy { facts in
+                guard let source = sources.first(where: { $0.id == facts.source }) else { return false }
+                let text = source.text.isEmpty ? source.title : source.title + "\n" + source.text
+                return facts.excerpts.allSatisfy(text.contains)
+            }
+        }
+    }
+
     private static func fingerprint(_ articles: [ArticleSnapshot]) throws -> String {
         struct Source: Encodable { let id: ArticleKey; let title: String; let text: String; let html: String; let url: URL? }
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys]
-        var bytes = Data("reader-source-facts-consolidation-v6\n".utf8)
+        var bytes = Data("reader-source-facts-consolidation-v7\n".utf8)
         bytes.append(try encoder.encode(articles.map { Source(id: $0.id, title: $0.title, text: $0.text, html: $0.html, url: $0.url) }))
         return SHA256.hash(data: bytes).map { String(format: "%02x", $0) }.joined()
     }

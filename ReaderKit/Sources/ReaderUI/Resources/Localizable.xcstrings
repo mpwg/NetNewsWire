@@ -1,6 +1,20 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Source facts" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Fakten aus der Quelle" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Source facts" } }
+      }
+    },
+    "Quoted excerpts may omit terms. Check the original." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Zitierte Ausschnitte können Bedingungen auslassen. Bitte prüfe das Original." } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Quoted excerpts may omit terms. Check the original." } }
+      }
+    },
     "Full text is unavailable. Showing saved feed content." : {
       "extractionState" : "manual",
       "localizations" : {

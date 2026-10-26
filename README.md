@@ -41,7 +41,9 @@ Native VoiceOver has both named passing runs and retained failures; full menu/fo
 
 Foundation Models uses structured sessions with source references tied to stored article identities. Validation rejects generated links, unsupported numeric claims and blank content. Literal duplicate sentences/sections are removed without merging distinct source identities. New results, existing cache reuse and startup publication share content/source rules: invalid cards cannot hide originals, and originals-only cards require an explicit warning. Model and presentation-state contracts use Swift Testing; actual UI interactions remain separate.
 
-[I evidence](docs/reader/evidence/i-generator-2026-10-25.md) retains reproduced failures and real local observations. German offer generation and semantic long-text quality remain unresolved; the multi-stage pipeline decision is pending. PCC requires approved Apple entitlement/provisioning and is disabled in this build. Full product acceptance remains open.
+The owner-approved multi-stage pipeline now retains original-language source facts alongside free app-language summaries. Source quotations stay tied to each original through consolidation and are checked before publication/cache reuse. The detail view displays selectable plain text with an explicit incomplete-terms notice. Historical digests remain readable; policy v7 regenerates older caches on the next request without changing article/read/outbox state.
+
+[Current source-facts criteria and model observations](docs/reader/evidence/i-source-facts-v7-2026-10-26.md):495 local Mac code executions pass. Two of four frozen public configurations return sections with recovered offer terms; two reject altered quotations. Compactness and representative semantic quality remain open. [Earlier I evidence](docs/reader/evidence/i-generator-2026-10-25.md) retains reproduced failures. PCC requires approved Apple entitlement/provisioning and is disabled in this build. Full product acceptance remains open.
 
 ## OPML acceptance
 

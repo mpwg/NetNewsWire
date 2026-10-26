@@ -4,6 +4,7 @@ import Foundation
 import SwiftUI
 import Testing
 import ReaderPersistence
+import ReaderDomain
 @testable import ReaderUI
 
 @MainActor
@@ -140,6 +141,36 @@ struct ReaderAccessibilityTests {
         let labels = Set(groupLabels(in: host))
         #expect(expected.isSubset(of: labels))
         #expect(groupLabels(in: host).filter { $0 == library }.count >= 2)
+    }
+
+    @Test("Hosted source facts expose literal selectable text without app UI automation",
+          arguments: ["en", "de"])
+    func sourceFactsExposeLiteralText(localeID: String) async throws {
+        let quote = "Example Store: EUR 29.99; code SAVE5. Not valid online. [Terms](https://example.invalid)"
+        let facts = DigestSourceFacts(source: ArticleKey(accountID: UUID(), remoteID: "offer"), excerpts: [quote])
+        let host = NSHostingView(rootView: DigestSourceFactsView(facts: facts).environment(\.locale, Locale(identifier: localeID)))
+        let window = makeWindow()
+        window.setContentSize(NSSize(width: 240, height: 500))
+        window.contentView = host
+        defer { window.contentView = nil; window.close() }
+        window.orderFront(nil)
+        let deadline = ContinuousClock.now.advanced(by: .seconds(3))
+        var values: [String] = []
+        repeat {
+            host.layoutSubtreeIfNeeded()
+            values = accessibleText(in: host)
+            if values.contains(quote) { break }
+            try await Task.sleep(for: .milliseconds(10))
+        } while ContinuousClock.now < deadline
+        #expect(values.contains(quote))
+        #expect(facts.excerpts == [quote])
+    }
+
+    private func accessibleText(in element: any NSAccessibilityProtocol) -> [String] {
+        let own = [element.accessibilityLabel(), element.accessibilityValue() as? String].compactMap { $0 }
+        let children = (element.accessibilityChildren() ?? []).compactMap { $0 as? any NSAccessibilityProtocol }
+        let descendants = children.isEmpty ? ((element as? NSView)?.subviews ?? []).map { $0 as any NSAccessibilityProtocol } : children
+        return own + descendants.flatMap { accessibleText(in: $0) }
     }
 
     private func groupLabels(in view: NSView) -> [String] {

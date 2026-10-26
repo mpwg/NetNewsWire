@@ -1,0 +1,44 @@
+{
+  "result": "passed",
+  "syntheticArticles": 10000,
+  "seedPID": 47590,
+  "seedExitCode": -9,
+  "walBytesBeforeKill": 271952,
+  "restarts": [
+    {
+      "phase": "recover",
+      "pid": 47885,
+      "exitCode": 0
+    },
+    {
+      "phase": "verify",
+      "pid": 48016,
+      "exitCode": 0
+    }
+  ],
+  "retainedArticles": 3,
+  "pendingRevisions": 2,
+  "retention": {
+    "subscribedFeedIDs": [
+      "feed/remaining"
+    ],
+    "pendingRevisions": 2,
+    "unreadTotal": 0,
+    "articleIDs": [
+      "0",
+      "1",
+      "3"
+    ],
+    "independentStarHasPendingChange": false,
+    "starredIDs": [
+      "0",
+      "3"
+    ],
+    "readStatus": {
+      "0": true,
+      "3": true,
+      "1": true
+    }
+  },
+  "durationSeconds": 10.609
+}

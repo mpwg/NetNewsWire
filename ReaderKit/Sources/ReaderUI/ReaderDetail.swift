@@ -180,6 +180,27 @@ enum ReaderArticleDocument {
     }
 }
 
+struct DigestSourceFactsView: View {
+    let facts: DigestSourceFacts
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text("Source facts", bundle: #bundle,
+                 comment: "Heading for original-language quotations beside a free AI summary.")
+                .font(.caption.bold())
+            Text(verbatim: facts.text)
+                .font(.callout)
+                .textSelection(.enabled)
+                .fixedSize(horizontal: false, vertical: true)
+            Text("Quoted excerpts may omit terms. Check the original.", bundle: #bundle,
+                 comment: "Source quotations are not a guarantee that all purchase conditions were extracted.")
+                .font(.caption).foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .accessibilityElement(children: .contain)
+    }
+}
+
 private struct DigestDetailView: View {
     var session: ReaderSession
     let digest: DigestSnapshot
@@ -208,8 +229,13 @@ private struct DigestDetailView: View {
                         Text(section.title).font(.title3.bold())
                         Text(section.text).textSelection(.enabled)
                         ForEach(section.sources) { source in
-                            if let article = session.sourceArticles.first(where: { $0.id == source }) {
-                                sourceButton(article)
+                            VStack(alignment: .leading, spacing: 8) {
+                                if let facts = section.sourceFacts?.first(where: { $0.source == source }) {
+                                    DigestSourceFactsView(facts: facts)
+                                }
+                                if let article = session.sourceArticles.first(where: { $0.id == source }) {
+                                    sourceButton(article)
+                                }
                             }
                         }
                     }

@@ -199,6 +199,10 @@ struct AppleSummaryGeneratorTests {
         let result = try await AppleSummaryGenerator().generate([first, second], model: ControlledLanguageModel(journal: journal),
                                                                capacity: 10000, count: { $0.count })
         #expect(result.first?.sources == [first.id, second.id])
+        #expect(result.first?.sourceFacts == [
+            DigestSourceFacts(source: first.id, excerpts: [first.title, firstText]),
+            DigestSourceFacts(source: second.id, excerpts: ["Other Store offers a kettle for EUR 44.90.", "Online only."])
+        ])
     }
 
     @Test("Opt-in evaluation captures rejected drafts without bypassing validation", arguments: [false, true])
@@ -248,7 +252,10 @@ struct AppleSummaryGeneratorTests {
                                remoteID: foreignAccount ? first.id.remoteID : "other-stored")
         let result = try await AppleSummaryGenerator().generate([first, second], model: ControlledLanguageModel(journal: journal),
                                                                capacity: 10000, count: { $0.count })
-        #expect(result == [DigestSection(title: "Notebook", text: "Example Store: EUR 29.99.", sources: [first.id, second.id])])
+        #expect(result == [DigestSection(title: "Notebook", text: "Example Store: EUR 29.99.", sources: [first.id, second.id],
+                                        sourceFacts: [first, second].map {
+                                            DigestSourceFacts(source: $0.id, excerpts: [String(($0.title + "\n" + $0.text).prefix(128))])
+                                        })])
         let requests = await journal.requests
         #expect(requests.count == 3)
         let consolidation = try JSONDecoder().decode([CapturedModelSource].self, from: Data(modelPrompt(try #require(requests.last)).utf8))
@@ -267,7 +274,9 @@ struct AppleSummaryGeneratorTests {
         let source = try article()
         let result = try await AppleSummaryGenerator().generate([source], model: ControlledLanguageModel(journal: journal),
                                                                capacity: 10000, locale: Locale(identifier: localeID), count: { $0.count })
-        #expect(result == [DigestSection(title: "Notebook", text: "Example Store: EUR 29.99.", sources: [source.id])])
+        #expect(result == [DigestSection(title: "Notebook", text: "Example Store: EUR 29.99.", sources: [source.id],
+                                        sourceFacts: [DigestSourceFacts(source: source.id,
+                                                                       excerpts: [String((source.title + "\n" + source.text).prefix(128))])])])
     }
 
     @Test("Only consolidation translates; source extraction remains verbatim", arguments: [("en_AT", "English"), ("de_AT", "German")])
@@ -413,7 +422,9 @@ struct AppleSummaryGeneratorTests {
         """)
         let result = try await AppleSummaryGenerator().generate([source], model: ControlledLanguageModel(journal: journal),
                                                                capacity: 10000, count: { $0.count })
-        #expect(result == [DigestSection(title: "Notebook", text: "Example Store: EUR 29.99.", sources: [source.id])])
+        #expect(result == [DigestSection(title: "Notebook", text: "Example Store: EUR 29.99.", sources: [source.id],
+                                        sourceFacts: [DigestSourceFacts(source: source.id,
+                                                                       excerpts: [String((source.title + "\n" + source.text).prefix(128))])])])
         let requests = await journal.requests
         #expect(requests.count == 2)
         #expect(requests.allSatisfy { $0.enabledToolDefinitions.isEmpty && $0.schema != nil })
@@ -496,7 +507,14 @@ struct AppleSummaryGeneratorTests {
         } else {
             let result = try await generator.generate([source], model: ControlledLanguageModel(journal: journal),
                                                       capacity: 8000, count: { $0.count })
-            #expect(result == [DigestSection(title: "Context", text: "Relevant background context.", sources: [source.id])])
+            #expect(result.first?.title == "Context")
+            #expect(result.first?.text == "Relevant background context.")
+            #expect(result.first?.sources == [source.id])
+            let facts = try #require(result.first?.sourceFacts)
+            #expect(facts.count == 1)
+            #expect(facts[0].source == source.id)
+            #expect(facts[0].excerpts.allSatisfy { (source.title + "\n" + source.text).contains($0) })
+            #expect(facts[0].excerpts.contains { $0.contains("9999") })
         }
         #expect(await journal.requests.filter { modelPrompt($0).first == "{" }.count > 1)
     }
@@ -526,6 +544,12 @@ struct AppleSummaryGeneratorTests {
                                                                capacity: 100000, count: { $0.count })
         #expect(result.count == 1)
         #expect(Set(result.flatMap(\.sources)) == Set(sources.map(\.id)))
+        let retained = try #require(result.first?.sourceFacts)
+        #expect(retained.count == sources.count)
+        for source in sources {
+            #expect(retained.first { $0.source == source.id }?.excerpts == [String((source.title + "\n" + source.text).prefix(128))])
+        }
+        #expect(retained.allSatisfy { !$0.text.contains("A sourced summary.") })
         let requests = await journal.requests
         let consolidations = requests.filter { modelPrompt($0).first == "[" }
         #expect(consolidations.count == 3)
@@ -600,12 +624,14 @@ private struct FixtureGenerator: SummaryGenerator {
     var omitLast = false
     var invalid = false
     var blank = false
+    var fabricatedFacts = false
     var failure: (any Error)?
     func summarize(_ articles: [ArticleSnapshot], cloudAllowed: Bool) async throws -> [DigestSection] {
         if let failure { throw failure }
         if invalid { return [DigestSection(title: "Invalid", text: "", sources: [ArticleKey(accountID: UUID(), remoteID: "wrong")])] }
         let sources = omitLast ? Array(articles.dropLast()) : articles
-        return [DigestSection(title: "Offers", text: blank ? " \n\t" : "Sourced digest", sources: sources.map(\.id))]
+        let facts = fabricatedFacts ? sources.map { DigestSourceFacts(source: $0.id, excerpts: ["Invented terms."]) } : nil
+        return [DigestSection(title: "Offers", text: blank ? " \n\t" : "Sourced digest", sources: sources.map(\.id), sourceFacts: facts)]
     }
 }
 
@@ -640,7 +666,7 @@ private actor ControlledGenerator: SummaryGenerator {
 }
 
 struct DigestTests {
-    @Test("Unchanged caches from earlier generation and validation policies are regenerated", arguments: ["", "reader-source-facts-consolidation-v1\n", "reader-source-facts-consolidation-v2\n", "reader-source-facts-consolidation-v3\n", "reader-source-facts-consolidation-v4\n", "reader-source-facts-consolidation-v5\n"])
+    @Test("Unchanged caches from earlier generation and validation policies are regenerated", arguments: ["", "reader-source-facts-consolidation-v1\n", "reader-source-facts-consolidation-v2\n", "reader-source-facts-consolidation-v3\n", "reader-source-facts-consolidation-v4\n", "reader-source-facts-consolidation-v5\n", "reader-source-facts-consolidation-v6\n"])
     func previousGenerationCacheIsRegenerated(policyPrefix: String) async throws {
         let (store, feed, articles) = try await fixture()
         let coordinator = DigestCoordinator(repository: store, generator: FixtureGenerator())
@@ -709,7 +735,7 @@ struct DigestTests {
         #expect(await journal.requests.count == articles.count + 1)
     }
 
-    @Test("Cache reuse requires complete nonblank sections bound to stored sources", arguments: [0, 1, 2, 3, 4, 5, 6])
+    @Test("Cache reuse requires complete nonblank sections and source-owned facts", arguments: 0..<10)
     func cachedClaimsRequireValidContentAndSources(kind: Int) async throws {
         let (store, feed, articles) = try await fixture()
         let coordinator = DigestCoordinator(repository: store, generator: FixtureGenerator())
@@ -721,6 +747,9 @@ struct DigestTests {
         case 4: cached.sections[0].sources = [articles[0].id]
         case 5: cached.sections[0].title = "https://invented.test"
         case 6: cached.sections[0].text = "HTTPS://invented.test"
+        case 7: cached.sections[0].sourceFacts = [DigestSourceFacts(source: articles[0].id, excerpts: ["Invented terms."])]
+        case 8: cached.sections[0].sourceFacts = [DigestSourceFacts(source: articles[0].id, excerpts: [articles[1].title])]
+        case 9: cached.sections[0].sourceFacts = [DigestSourceFacts(source: articles[0].id, excerpts: [])]
         default: break
         }
         try await store.saveDigest(cached)
@@ -730,6 +759,16 @@ struct DigestTests {
         #expect(refreshed.sections.first?.title == "Offers")
         #expect(refreshed.sections.first?.text == "Sourced digest")
         #expect(Set(refreshed.sections.flatMap(\.sources)) == Set(articles.map(\.id)))
+        #expect(try await store.pendingChanges(accountID: feed.id.accountID).isEmpty)
+    }
+
+    @Test("A generator cannot publish source facts that do not occur in their own originals")
+    func fabricatedSourceFactsAreNotPublished() async throws {
+        let (store, feed, articles) = try await fixture()
+        let coordinator = DigestCoordinator(repository: store, generator: FixtureGenerator(fabricatedFacts: true))
+        await #expect(throws: ReaderError.self) { try await coordinator.generate(feed: feed) }
+        #expect(try await store.digests().isEmpty)
+        for article in articles { #expect(try await store.article(article.id) == article) }
         #expect(try await store.pendingChanges(accountID: feed.id.accountID).isEmpty)
     }
 

@@ -35,8 +35,59 @@ struct IdentityTests {
     }
 }
 
+struct DigestSourceFactsTests {
+    @Test("Historical digest sections decode without source facts")
+    func historicalSectionsRemainReadable() throws {
+        let data = Data(#"{"title":"Offer","text":"Original summary.","sources":[{"accountID":"99999999-9999-4999-8999-999999999999","remoteID":"offer"}]}"#.utf8)
+        let section = try JSONDecoder().decode(DigestSection.self, from: data)
+        #expect(section.sourceFacts == nil)
+        #expect(section.text == "Original summary.")
+        #expect(section.hasValidContent(referencing: Set(section.sources)))
+    }
+
+    @Test("Source facts round-trip exact merchant, currency, coupon, exclusion and expiry text")
+    func sourceFactsRoundTripWithoutRewriting() throws {
+        let key = ArticleKey(accountID: UUID(), remoteID: "offer")
+        let excerpts = ["Example Store: EUR 29.99; code SAVE5.", "Until 31 October; not valid for TravelDeals.", "Shipping is not included."]
+        let facts = DigestSourceFacts(source: key, excerpts: excerpts)
+        let section = DigestSection(title: "Offer", text: "Free summary in the app language.", sources: [key], sourceFacts: [facts])
+        let decoded = try JSONDecoder().decode(DigestSection.self, from: JSONEncoder().encode(section))
+        #expect(decoded == section)
+        #expect(decoded.sourceFacts?.first?.excerpts == excerpts)
+        #expect(facts.text == excerpts.joined(separator: " · "))
+        #expect(decoded.hasValidContent(referencing: [key]))
+    }
+
+    @Test("Empty, duplicate and foreign source fact blocks cannot become displayable", arguments: 0..<6)
+    func malformedSourceFactsAreRejected(kind: Int) {
+        let key = ArticleKey(accountID: UUID(), remoteID: "offer")
+        let foreign = ArticleKey(accountID: UUID(), remoteID: "offer")
+        let facts: [DigestSourceFacts]
+        switch kind {
+        case 0: facts = [DigestSourceFacts(source: foreign, excerpts: ["Foreign offer."])]
+        case 1: facts = [DigestSourceFacts(source: key, excerpts: [])]
+        case 2: facts = [DigestSourceFacts(source: key, excerpts: [" \n\t"])]
+        case 3: facts = [DigestSourceFacts(source: key, excerpts: ["Same.", "Same."])]
+        case 4: facts = Array(repeating: DigestSourceFacts(source: key, excerpts: ["Offer."]), count: 2)
+        default: facts = [DigestSourceFacts(source: ArticleKey(accountID: key.accountID, remoteID: "other"), excerpts: ["Other offer."])]
+        }
+        let section = DigestSection(title: "Offer", text: "Summary.", sources: [key], sourceFacts: facts)
+        #expect(!section.hasValidContent(referencing: [key, foreign]))
+    }
+}
+
 // German strings below are intentional expected translations from the compiled catalogs.
 struct LocalizationTests {
+    @Test("Source fact headings use the requested resource language", arguments: [
+        ("en", "Source facts"),
+        ("de", "Fakten aus der Quelle")
+    ])
+    func sourceFactsUseRequestedLanguage(localeID: String, expected: String) {
+        var resource = LocalizedStringResource.sourceFacts
+        resource.locale = Locale(identifier: localeID)
+        #expect(String(localized: resource) == expected)
+    }
+
     @Test("Error resources use the requested language", arguments: [
         ("en", "Invalid server URL."),
         ("de", "Ungültige Serveradresse.")

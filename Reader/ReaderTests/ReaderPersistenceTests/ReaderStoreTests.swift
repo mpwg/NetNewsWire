@@ -304,6 +304,29 @@ struct ReaderStoreTests {
         #expect(try await reopened.pendingChanges(accountID: accountID).count == 1)
     }
 
+    @Test("Source facts survive a disk store reopen without changing originals or pending revisions")
+    func digestSourceFactsSurviveReopening() async throws {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let url = directory.appendingPathComponent("Reader.store")
+        let original = article(text: "Example Store: EUR 29.99. Code SAVE5 required; not valid online.")
+        let store = try ReaderStore(url: url)
+        try await store.applyRefresh(refresh(articles: [original]))
+        try await store.setStatus([original.id], field: .starred, value: true)
+        let stored = try #require(try await store.article(original.id))
+        let pending = try await store.pendingChanges(accountID: accountID)
+        let facts = DigestSourceFacts(source: original.id, excerpts: [original.text])
+        let digest = DigestSnapshot(id: "facts-day", feed: feed.id, day: Date(timeIntervalSince1970: 0), timeZoneID: "UTC",
+                                    sections: [DigestSection(title: "Offer", text: "A free summary.", sources: [original.id], sourceFacts: [facts])],
+                                    sources: [original.id], sourceFingerprint: "source-facts-fixture")
+        #expect(try await store.saveDigest(digest, expectedSources: [stored]))
+        let reopened = try ReaderStore(url: url)
+        #expect(try await reopened.digests() == [digest])
+        #expect(try await reopened.digests().first?.hasDisplayableContent == true)
+        #expect(try await reopened.article(original.id) == stored)
+        #expect(try await reopened.pendingChanges(accountID: accountID) == pending)
+    }
+
     @Test("Cross-account refresh data is rejected before any mutation") func crossAccountRefreshDataIsRejectedBeforeAnyMutation() async throws {
         let store = try ReaderStore(inMemory: true)
         var foreign = article()
