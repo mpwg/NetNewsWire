@@ -1,0 +1,35 @@
+{
+  "policy": "v14",
+  "sourceCommit": "8798adccae8c89cca3ba9eb2ebbd1304a2e461f3",
+  "adopted": false,
+  "operatingSystem": "Version 27.2 (Build 26B123)",
+  "inputSHA256": "ccf83b34996dbd2cec898a47b568078172c4947fd02b135219472a74c4523501",
+  "rawReportSHA256": "41230f5ffeb51bbbd581e8de9ab145376fa17c48fc93ee69323653942c894a04",
+  "sourceHashes": [
+    "8f331006aa09e4bd429edad0c0ed0572667286f1f1bba1ec0073a2b57304f6a9  ReaderKit/Sources/ReaderIntelligence/AppleSummaryGenerator.swift",
+    "a9cc630be8a090ea83afb1432f95a027af2625fd8238ea1a0a73649a7ac4d0d7  ReaderKit/Sources/ReaderIntelligence/SourceLiteralCatalog.swift",
+    "302507521d8bc72da05e07e2a9dc0ae8a658fb71ecf925730c5a6c1fbf6e046d  ReaderKit/Sources/ReaderIntelligence/DigestCoordinator.swift",
+    "8d0a2c1fcdcb5293fb619a6873eb5741e0c166321343d58a3464a803ac527632  ReaderKit/Probes/ReaderInferenceProbe/Probe.swift"
+  ],
+  "fixedInput": "Frozen two-source public RSS text projection; not FreshRSS, native Readability, full articles or UI.",
+  "elapsedSeconds": 77.799644292,
+  "error": null,
+  "sectionCount": 2,
+  "sourceCount": 2,
+  "sourcesMissingFromGeneratorSections": 0,
+  "stages": {
+    "facts": 5,
+    "consolidation": 1
+  },
+  "offerCount": 8,
+  "firstSourceOfferCount": 2,
+  "firstSourceQualifyingPurchaseAmountUsedAsOfferPrice": 2,
+  "secondSourceOfferCount": 6,
+  "secondSourceOffersWithoutPrice": 4,
+  "secondSourceProductEqualsMerchant": 2,
+  "maximumProductCharacters": 80,
+  "maximumMerchantCharacters": 24,
+  "maximumPriceCharacters": 6,
+  "maximumConditionCharacters": 126,
+  "otherConfigurations": "Not run after the first pair demonstrated incorrect price assignment; no results claimed."
+}

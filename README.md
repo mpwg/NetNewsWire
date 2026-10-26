@@ -39,6 +39,9 @@ Native VoiceOver has both named passing runs and retained failures; full menu/fo
 
 ## Model verification
 
+The bounded role-catalog v14 candidate is not integrated:154 controlled intelligence executions pass, but the fixed first public pair uses a qualifying newspaper purchase as the offer price. [Candidate results and limits](docs/reader/evidence/i-role-catalog-v14-2026-10-26.md).
+
+
 A reversible encoded-label v13 candidate on `codex/reader-encoded-offers` passes151 controlled code executions and four synthetic quoted-literal model controls, but the fixed six-source group fails compactness and field roles after nearly five minutes. The candidate is not integrated; complete acceptance remains open. [Candidate scope and receipts](docs/reader/evidence/i-encoded-offers-v13-2026-10-26.md).
 
 
