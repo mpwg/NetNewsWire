@@ -57,6 +57,7 @@ private struct CapturedModelSource: Decodable {
     let sourceNumber: Int
     let text: String
     let articleNumbers: [Int]?
+    let selectedExcerpts: [String]?
 }
 
 private func modelJSON(_ value: [String: Any]) throws -> String {
@@ -270,6 +271,7 @@ struct AppleSummaryGeneratorTests {
                 let packets = try JSONDecoder().decode([CapturedModelSource].self, from: Data(prompt.utf8))
                 #expect(packets.count == 1)
                 #expect(packets.first?.text == "First statement.\nA merchant sells an item for EUR 29.99. Pickup only.")
+                #expect(packets.first?.selectedExcerpts == ["A merchant sells an item for EUR 29.99."])
                 let group = #"{"title":"Selected","summary":"EUR 29.99.","sourceNumbers":[0]}"#
                 return isolated ? group : #"{"groups":["# + group + "]}"
             })
@@ -284,6 +286,52 @@ struct AppleSummaryGeneratorTests {
         #expect(supplied.sourceNumber == 0)
         #expect(supplied.sentences.contains { $0.sentenceNumber == 1 && $0.text == "A merchant sells an item for EUR 29.99." })
         for request in requests { #expect(modelInstructions(request).count + modelPrompt(request).count <= 8000) }
+    }
+
+    @Test("Identical context preserves independent selected assertions and merges only matching focus",
+          arguments: [(false, false), (false, true), (true, false), (true, true)])
+    func selectedFocusKeepsItsOriginalIdentity(isolated: Bool, differentFocus: Bool) async throws {
+        var sources = try distinctSources(count: 2)
+        for index in sources.indices {
+            sources[index].title = "Shared report."
+            sources[index].text = "The notebook costs EUR 29.99. Pickup only."
+        }
+        let journal = ModelRequestJournal(sentenceSelection: { prompt in
+            let input = try JSONDecoder().decode(CapturedSentenceSource.self, from: Data(prompt.utf8))
+            return try modelJSON(["sentenceNumbers": [differentFocus ? input.sourceNumber + 1 : 1]])
+        }, selection: { _ in
+            try modelJSON(["groups": [["sourceNumbers": differentFocus ? [0, 1] : [0]]]])
+        }, consolidation: { prompt in
+            let packets = try JSONDecoder().decode([CapturedModelSource].self, from: Data(prompt.utf8))
+            #expect(packets.count == (differentFocus ? 2 : 1))
+            #expect(packets.allSatisfy { $0.text == "Shared report.\nThe notebook costs EUR 29.99. Pickup only." })
+            #expect(packets.first?.selectedExcerpts == ["The notebook costs EUR 29.99."])
+            #expect(packets.first?.articleNumbers == (differentFocus ? [0] : [0, 1]))
+            if differentFocus {
+                #expect(packets.last?.selectedExcerpts == ["Pickup only."])
+                #expect(packets.last?.articleNumbers == [1])
+            }
+            let group: [String: Any] = ["title": "Selected", "summary": "A sourced summary.",
+                                        "sourceNumbers": packets.map(\.sourceNumber)]
+            return try modelJSON(isolated ? group : ["groups": [group]])
+        })
+        let sections = try await AppleSummaryGenerator().generate(
+            sources, model: ControlledLanguageModel(journal: journal), capacity: 10000,
+            isolateSelectedEvidence: isolated, selectSourceSentences: true, count: { $0.count })
+        #expect(sections.first?.sources == sources.map(\.id))
+    }
+
+    @Test("Selected excerpts and complete context must fit together without truncation")
+    func selectedContextBudgetRejectsBeforeConsolidation() async throws {
+        let journal = ModelRequestJournal(sentenceSelection: { _ in #"{"sentenceNumbers":[0]}"# })
+        await #expect(throws: ReaderError.self) {
+            try await AppleSummaryGenerator().generate(
+                [article()], model: ControlledLanguageModel(journal: journal), capacity: 10000,
+                selectSourceSentences: true, count: { text in
+                    text.contains(#""selectedExcerpts""#) ? 10000 : text.count
+                })
+        }
+        #expect(await journal.requests.count == 1)
     }
 
     @Test("Invalid native sentence indices stop before evidence consolidation",
