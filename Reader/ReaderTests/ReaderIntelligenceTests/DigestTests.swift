@@ -423,17 +423,18 @@ struct AppleSummaryGeneratorTests {
         #expect(await journal.requests.count == 1)
     }
 
-    @Test("Selecting key statements cannot omit an original article", arguments: [false, true])
-    func consolidationRequiresCompleteCoverage(foreignAccount: Bool) async throws {
+    @Test("Selected statements reference only their supporting originals", arguments: [false, true])
+    func selectedStatementsKeepExactProvenance(foreignAccount: Bool) async throws {
         var sources = try distinctSources(count: 2)
         if foreignAccount {
             sources[1].id = ArticleKey(accountID: UUID(), remoteID: sources[0].id.remoteID)
         }
         let journal = ModelRequestJournal(response: #"{"groups":[{"title":"Notes","summary":"A sourced summary.","sourceNumbers":[0]}]}"#)
-        await #expect(throws: ReaderError.self) {
-            try await AppleSummaryGenerator().generate(sources, model: ControlledLanguageModel(journal: journal),
-                                                      capacity: 10000, count: { $0.count })
-        }
+        let sections = try await AppleSummaryGenerator().generate(
+            sources, model: ControlledLanguageModel(journal: journal), capacity: 10000, count: { $0.count })
+        #expect(sections.count == 1)
+        #expect(sections.first?.text == "A sourced summary.")
+        #expect(sections.first?.sources == [sources[0].id])
         #expect(await journal.requests.count == 3)
     }
 
@@ -500,9 +501,9 @@ struct AppleSummaryGeneratorTests {
             let inputs = try JSONDecoder().decode([CapturedModelSource].self, from: Data(modelPrompt(request).utf8))
             #expect((1...32).contains(inputs.count))
             let requiredLine = try #require(modelInstructions(request).components(separatedBy: "\n").first {
-                $0.hasPrefix("Required articles: ")
+                $0.hasPrefix("Available articles: ")
             })
-            let encodedReferences = requiredLine.replacingOccurrences(of: "Required articles: ", with: "")
+            let encodedReferences = requiredLine.replacingOccurrences(of: "Available articles: ", with: "")
             let required = try JSONDecoder().decode([Int].self, from: Data(encodedReferences.utf8))
             #expect(required == Set(inputs.flatMap { $0.articleNumbers ?? [] }).sorted())
         }
@@ -606,7 +607,7 @@ private actor ControlledGenerator: SummaryGenerator {
 }
 
 struct DigestTests {
-    @Test("Unchanged valid caches from source-only and first-stage policies are regenerated", arguments: ["", "reader-source-facts-consolidation-v1\n", "reader-source-facts-consolidation-v2\n", "reader-source-facts-consolidation-v3\n"])
+    @Test("Unchanged valid caches from source-only and first-stage policies are regenerated", arguments: ["", "reader-source-facts-consolidation-v1\n", "reader-source-facts-consolidation-v2\n", "reader-source-facts-consolidation-v3\n", "reader-source-facts-consolidation-v4\n"])
     func previousGenerationCacheIsRegenerated(policyPrefix: String) async throws {
         let (store, feed, articles) = try await fixture()
         let coordinator = DigestCoordinator(repository: store, generator: FixtureGenerator())
@@ -636,6 +637,26 @@ struct DigestTests {
         for article in articles { #expect(try await store.article(article.id) == article) }
         #expect(try await store.pendingChanges(accountID: feed.id.accountID).isEmpty)
     }
+    @Test("Selected native model prose retains every original without changing stored articles")
+    func selectedModelStatementsPreserveAllOriginalLinks() async throws {
+        let (store, feed, articles) = try await fixture()
+        let journal = ModelRequestJournal(response: #"{"groups":[{"title":"Notes","summary":"A sourced summary.","sourceNumbers":[0]}]}"#)
+        let coordinator = DigestCoordinator(repository: store, generator: StagedFixtureGenerator(journal: journal))
+        let digest = try #require(try await coordinator.generate(feed: feed).first)
+        #expect(digest.hasDisplayableContent)
+        #expect(digest.warning != nil)
+        #expect(Set(digest.sources) == Set(articles.map(\.id)))
+        #expect(digest.sections.count == 2)
+        #expect(digest.sections.first?.text == "A sourced summary.")
+        #expect(digest.sections.first?.sources == [articles[0].id])
+        #expect(digest.sections.last?.text == "")
+        #expect(digest.sections.last?.sources == [articles[1].id])
+        #expect(Set(digest.sections.flatMap(\.sources)) == Set(articles.map(\.id)))
+        for article in articles { #expect(try await store.article(article.id) == article) }
+        #expect(try await store.pendingChanges(accountID: feed.id.accountID).isEmpty)
+        #expect(await journal.requests.count == articles.count + 1)
+    }
+
     @Test("A late staged failure keeps warned originals and cannot change their stored state", arguments: [false, true])
     func stagedFailuresPreserveOriginalsAndOutbox(invalidOutput: Bool) async throws {
         let (store, feed, articles) = try await fixture()

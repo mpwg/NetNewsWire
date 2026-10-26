@@ -1,0 +1,201 @@
+{
+  "date": "2026-10-26",
+  "scope": "Public RSS text only; isolated native local model; not FreshRSS/app/PCC acceptance",
+  "feedURL": "https://www.preisjaeger.at/rss/alle",
+  "feedSHA256": "fea83b709a7c1877b17322fec1d8626c3c591a88decee96cbb45bd343ac17a21",
+  "inputSHA256": "8219fcc2380f7181e99a1b70bb1044916f3418519152bd7f91465b3e4fce5d7b",
+  "protocol": "First six feed items; one six-item group and fixed consecutive pairs; one observation per configuration per policy; no retries",
+  "sourceMetadata": [
+    {
+      "index": 0,
+      "sourceURL": "https://www.preisjaeger.at/deals/acclafit-smartwatch-damen-herren-371286",
+      "published": "2026-10-26T10:19:59Z",
+      "merchant": "Amazon",
+      "listedPrice": "32,64€",
+      "textBytes": 2203,
+      "textSHA256": "0f737dbd11db3464b323cf50f70296d2465691fdde9fac4b56861e36bdab8a94"
+    },
+    {
+      "index": 1,
+      "sourceURL": "https://www.preisjaeger.at/deals/msi-mag-pano-m100l-pz-atx-pc-gehause-371285",
+      "published": "2026-10-26T10:12:02Z",
+      "merchant": "Amazon",
+      "listedPrice": "51,72€",
+      "textBytes": 3253,
+      "textSHA256": "35cc45f5817b12bc93814d9543e21f7846287ab41c20dadaa2bda18d8330d5a4"
+    },
+    {
+      "index": 2,
+      "sourceURL": "https://www.preisjaeger.at/deals/bissell-spotclean-c2-fleckenentferner-waschsauger-371283",
+      "published": "2026-10-26T09:41:19Z",
+      "merchant": "iBOOD",
+      "listedPrice": "59,90€",
+      "textBytes": 2044,
+      "textSHA256": "e4f6f23d54ed0f62b4dae987dbc629e280ee034d954406283e774cb5cec7b081"
+    },
+    {
+      "index": 3,
+      "sourceURL": "https://www.preisjaeger.at/deals/iniu-usb-c-auf-hdmi-adapter-02m-4k-at-60hz-offiziell-hdmi-zertifiziert-371280",
+      "published": "2026-10-26T09:39:47Z",
+      "merchant": "Amazon",
+      "listedPrice": "5,09€",
+      "textBytes": 4433,
+      "textSHA256": "b0a5aa284bd34e54564346a103bb1acbc30c9da2c32b10e0d8586b1a278cc394"
+    },
+    {
+      "index": 4,
+      "sourceURL": "https://www.preisjaeger.at/deals/bushnell-trophy-r5-10x42-fernglas-bei-ibood-stark-reduziert-371281",
+      "published": "2026-10-26T09:26:19Z",
+      "merchant": "iBOOD",
+      "listedPrice": "157,90€",
+      "textBytes": 3372,
+      "textSHA256": "aedd12dc91312d89d4bda4508ab91d7576ebf84525168efeb1faca5f11bcee19"
+    },
+    {
+      "index": 5,
+      "sourceURL": "https://www.preisjaeger.at/deals/amazon-spar-abo-240-eur-paketsteuer-mit-einfachem-trick-umgehen-370334",
+      "published": "2026-10-26T08:45:49Z",
+      "merchant": "Amazon",
+      "listedPrice": null,
+      "textBytes": 1562,
+      "textSHA256": "391e3708ee7830c6203bf7ea836127446e6327b9deb787213b487bba19bd2797"
+    }
+  ],
+  "observations": [
+    {
+      "policy": "v4",
+      "scenario": "six",
+      "rawReportPath": "/tmp/reader-public-preisjaeger-result-six.json",
+      "rawReportSHA256": "fd70b14825c354842004638ab90ed880bd38cbbc36ef94c02b722e81214ff262",
+      "articles": 6,
+      "inputTokens": 5175,
+      "elapsedSeconds": 24.429202625,
+      "error": "ReaderDomain.ReaderError.invalidResponse",
+      "sections": 0,
+      "unselectedOriginals": 6,
+      "stages": [
+        "facts",
+        "facts"
+      ],
+      "semanticAcceptance": false
+    },
+    {
+      "policy": "v4",
+      "scenario": "pair-1",
+      "rawReportPath": "/tmp/reader-public-preisjaeger-result-pair-1.json",
+      "rawReportSHA256": "8102af40d44a3d62f174a7d5d61f4a92fcf3f4f26a6a8b0aa4158a4a145311eb",
+      "articles": 2,
+      "inputTokens": 1623,
+      "elapsedSeconds": 20.30860125,
+      "error": "ReaderDomain.ReaderError.unavailable(\"The model returned invalid sources. Use the original articles.\")",
+      "sections": 0,
+      "unselectedOriginals": 2,
+      "stages": [
+        "facts",
+        "facts",
+        "consolidation"
+      ],
+      "semanticAcceptance": false
+    },
+    {
+      "policy": "v4",
+      "scenario": "pair-2",
+      "rawReportPath": "/tmp/reader-public-preisjaeger-result-pair-2.json",
+      "rawReportSHA256": "ddbb2e47deb1ac4c70bec0828428e82a4f7918719fb4c33e11209feca073e66f",
+      "articles": 2,
+      "inputTokens": 2245,
+      "elapsedSeconds": 32.760555042,
+      "error": "ReaderDomain.ReaderError.invalidResponse",
+      "sections": 0,
+      "unselectedOriginals": 2,
+      "stages": [
+        "facts",
+        "facts"
+      ],
+      "semanticAcceptance": false
+    },
+    {
+      "policy": "v4",
+      "scenario": "pair-3",
+      "rawReportPath": "/tmp/reader-public-preisjaeger-result-pair-3.json",
+      "rawReportSHA256": "82b159e02a800718ee3b9ab942c1c11e62e6d852883ecdcedc90520882cfb645",
+      "articles": 2,
+      "inputTokens": 1307,
+      "elapsedSeconds": 5.927718917,
+      "error": "ReaderDomain.ReaderError.invalidResponse",
+      "sections": 0,
+      "unselectedOriginals": 2,
+      "stages": [
+        "facts"
+      ],
+      "semanticAcceptance": false
+    },
+    {
+      "policy": "v5",
+      "scenario": "six",
+      "rawReportPath": "/tmp/reader-public-preisjaeger-v5-six.json",
+      "rawReportSHA256": "582c82dc4fc089711ad00ef25aad3f4043c0bf1c328f37f2566f27940c376448",
+      "articles": 6,
+      "inputTokens": 5175,
+      "elapsedSeconds": 9.301501667,
+      "error": "ReaderDomain.ReaderError.invalidResponse",
+      "sections": 0,
+      "unselectedOriginals": 6,
+      "stages": [
+        "facts"
+      ],
+      "semanticAcceptance": false
+    },
+    {
+      "policy": "v5",
+      "scenario": "pair-1",
+      "rawReportPath": "/tmp/reader-public-preisjaeger-v5-pair-1.json",
+      "rawReportSHA256": "51e566aca7a2cc3d722fb6d53280be2c0f2e35916769aae60aa50dde57516480",
+      "articles": 2,
+      "inputTokens": 1623,
+      "elapsedSeconds": 20.447702125,
+      "error": null,
+      "sections": 2,
+      "unselectedOriginals": 0,
+      "stages": [
+        "facts",
+        "facts",
+        "consolidation"
+      ],
+      "semanticAcceptance": false
+    },
+    {
+      "policy": "v5",
+      "scenario": "pair-2",
+      "rawReportPath": "/tmp/reader-public-preisjaeger-v5-pair-2.json",
+      "rawReportSHA256": "2bf436ed0ef9ac49f0089f9967663acfd5ae5f736a743baaf6e0717ee1022b48",
+      "articles": 2,
+      "inputTokens": 2245,
+      "elapsedSeconds": 12.848024542,
+      "error": "ReaderDomain.ReaderError.invalidResponse",
+      "sections": 0,
+      "unselectedOriginals": 2,
+      "stages": [
+        "facts"
+      ],
+      "semanticAcceptance": false
+    },
+    {
+      "policy": "v5",
+      "scenario": "pair-3",
+      "rawReportPath": "/tmp/reader-public-preisjaeger-v5-pair-3.json",
+      "rawReportSHA256": "add570a568377ce03a1f84b7eee9897685922f2d46666e00134e9d80b47f542e",
+      "articles": 2,
+      "inputTokens": 1307,
+      "elapsedSeconds": 5.599111833,
+      "error": "ReaderDomain.ReaderError.invalidResponse",
+      "sections": 0,
+      "unselectedOriginals": 2,
+      "stages": [
+        "facts"
+      ],
+      "semanticAcceptance": false
+    }
+  ],
+  "conclusion": "V5 pair-1 is structurally valid but omits merchants. Seven other observations reject; no semantic quality acceptance or representative improvement established."
+}

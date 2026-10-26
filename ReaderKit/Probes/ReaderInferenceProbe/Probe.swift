@@ -32,7 +32,7 @@ struct ReaderInferenceProbe {
             try await runFaithfulnessReview()
             return
         }
-        let articles = try fixtures(scenario)
+        let articles = try scenario == "corpus" ? corpusInput(arguments) : fixtures(scenario)
         let model = SystemLanguageModel.default
         var report = Report(
             scenario: scenario, locale: Locale.current.identifier,
@@ -204,6 +204,25 @@ struct ReaderInferenceProbe {
     enum ProbeError: Error {
         case unknownScenario
         case modelUnavailable
+        case missingInputFile
+        case inputTooLarge
+        case invalidCorpusSize
+    }
+
+    static func corpusInput(_ arguments: [String]) throws -> [ArticleSnapshot] {
+        guard let index = arguments.firstIndex(of: "--input"), arguments.indices.contains(index + 1) else {
+            throw ProbeError.missingInputFile
+        }
+        let handle = try FileHandle(forReadingFrom: URL(fileURLWithPath: arguments[index + 1]))
+        defer { try? handle.close() }
+        let limit = 512 * 1024
+        let data = try handle.read(upToCount: limit + 1) ?? Data()
+        guard data.count <= limit else { throw ProbeError.inputTooLarge }
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        let articles = try decoder.decode([ArticleSnapshot].self, from: data)
+        guard !articles.isEmpty, articles.count <= 32 else { throw ProbeError.invalidCorpusSize }
+        return articles
     }
 
     static func fixtures(_ scenario: String) throws -> [ArticleSnapshot] {
