@@ -53,10 +53,16 @@ private func modelInstructions(_ request: LanguageModelExecutorGenerationRequest
     }.joined()
 }
 
+private struct CapturedSentenceChoice: Decodable {
+    let sentenceNumber: Int
+    let text: String
+}
+
 private struct CapturedModelSource: Decodable {
     let sourceNumber: Int
     let text: String
     let articleNumbers: [Int]?
+    let sentenceChoices: [CapturedSentenceChoice]?
 }
 
 private func modelJSON(_ value: [String: Any]) throws -> String {
@@ -98,11 +104,54 @@ private actor ModelRequestJournal {
                 defer { nextFact += 1 }
                 return factResponses[nextFact]
             }
-            return try modelJSON(["excerpts": [String(source.text.prefix(128))]])
+            let choices = try #require(source.sentenceChoices)
+            return try modelJSON(["sentenceNumbers": Array(choices.prefix(8).map(\.sentenceNumber))])
         }
         if let consolidation { return try consolidation(prompt) }
         if let response { return response }
         return try consolidationJSON(prompt)
+    }
+}
+
+struct SourceSentenceSelectionTests {
+    // Explicit multilingual source fixtures verify original punctuation and Unicode.
+    @Test("Native sentence choices retain every nonwhitespace source byte", arguments: [
+        "Example Store: EUR 29.99. Code SAVE5 required; not valid online.",
+        "Zum Feiertag gibts Rabatt. Gültig bis 26.10.2026, 23:59 Uhr.",
+        "Café 🧪 costs EUR 2.99. Cafe\u{301} remains unchanged.",
+        "商店の価格は29.99 EUR。条件があります。",
+        "Heading\nNo final punctuation",
+        "  <script>doNotRun()</script> [1] ; trailing fragment  "
+    ])
+    func sentenceChoicesPreserveAllSourceBytes(text: String) {
+        let choices = SourceSentenceSelection.choices(in: text)
+        #expect(!choices.isEmpty)
+        #expect(choices.allSatisfy(text.contains))
+        let reconstructed = choices.joined().filter { !$0.isWhitespace }
+        let expected = text.filter { !$0.isWhitespace }
+        #expect(Array(reconstructed.utf8) == Array(expected.utf8))
+    }
+
+    @Test("Invalid sentence indices cannot address another fragment or an unbounded selection", arguments: [
+        [], [-1], [2], [0, 99999], Array(repeating: 0, count: 9)
+    ])
+    func invalidSentenceIndicesAreRejected(indices: [Int]) {
+        #expect(throws: ReaderError.invalidResponse) {
+            try SourceSentenceSelection.excerpts(indices, from: ["Own source.", "Own condition."])
+        }
+    }
+
+    @Test("Duplicate and reordered indices resolve once in original source order")
+    func selectedSentencesKeepSourceOrder() throws {
+        let choices = ["Example Store: EUR 29.99.", "Code SAVE5 required.", "Not valid online."]
+        #expect(try SourceSentenceSelection.excerpts([2, 0, 2, 1], from: choices) == choices)
+    }
+
+    @Test("Blank fragments expose no selectable sentence", arguments: ["", " \n\t"])
+    func blankSourcesHaveNoChoices(text: String) {
+        let choices = SourceSentenceSelection.choices(in: text)
+        #expect(choices.isEmpty)
+        #expect(throws: ReaderError.invalidResponse) { try SourceSentenceSelection.excerpts([0], from: choices) }
     }
 }
 
@@ -158,6 +207,27 @@ private actor GenerationTraceJournal {
 }
 
 struct AppleSummaryGeneratorTests {
+    @Test("Native selection resolves original coupon conditions without copying technical filler")
+    func nativeSentenceSelectionKeepsExactTerms() async throws {
+        var source = try article()
+        source.text = "Example Store: EUR 29.99. Code SAVE5 required; don't combine offers. Display has 1000 pixels."
+        let choices = SourceSentenceSelection.choices(in: source.title + "\n" + source.text)
+        let selected = choices.indices.filter { choices[$0].contains("29.99") || choices[$0].contains("SAVE5") }
+        #expect(selected.count == 2)
+        let journal = ModelRequestJournal(
+            response: #"{"groups":[{"title":"Offer","summary":"Example Store: EUR 29.99; code SAVE5 required.","sourceNumbers":[0]}]}"#,
+            factResponses: [try modelJSON(["sentenceNumbers": selected.reversed() + selected])])
+        let result = try await AppleSummaryGenerator().generate(
+            [source], model: ControlledLanguageModel(journal: journal), capacity: 10000, count: { $0.count })
+        let facts = try #require(result.first?.sourceFacts?.first)
+        #expect(facts.source == source.id)
+        #expect(facts.text.contains("don't combine offers."))
+        #expect(!facts.text.contains("1000"))
+        #expect(facts.excerpts.count == 2)
+        #expect(facts.excerpts.allSatisfy((source.title + "\n" + source.text).contains))
+        #expect(await journal.requests.count == 2)
+    }
+
     @Test("Actual native output rejects invented bracket references while preserving copied bracket data", arguments: [false, true])
     func nativeNumericCitationsUseActualCitedText(copied: Bool) async throws {
         var source = try article()
@@ -185,29 +255,30 @@ struct AppleSummaryGeneratorTests {
         var second = first
         second.id.remoteID = "second-offer"
         second.text = "Other Store offers a kettle for EUR 44.90. Online only."
-        let firstText = first.text
+        let firstChoices = SourceSentenceSelection.choices(in: first.title + "\n" + first.text)
+        let secondChoices = SourceSentenceSelection.choices(in: second.title + "\n" + second.text)
         let journal = ModelRequestJournal(factResponses: [
-            try modelJSON(["excerpts": [first.title, firstText]]),
-            try modelJSON(["excerpts": ["Other Store offers a kettle for EUR 44.90.", "Online only."]])
+            try modelJSON(["sentenceNumbers": Array(firstChoices.indices)]),
+            try modelJSON(["sentenceNumbers": Array(secondChoices.indices)])
         ], consolidation: { prompt in
             let inputs = try JSONDecoder().decode([CapturedModelSource].self, from: Data(prompt.utf8))
             #expect(inputs.count == 2)
-            #expect(inputs[0].text == first.title + "\n" + firstText)
-            #expect(inputs[1].text == "Other Store offers a kettle for EUR 44.90.\nOnline only.")
+            #expect(inputs[0].text == firstChoices.joined(separator: "\n"))
+            #expect(inputs[1].text == secondChoices.joined(separator: "\n"))
             return #"{"groups":[{"title":"Offers","summary":"Other Store: EUR 44.90, online only.","sourceNumbers":[0,1]}]}"#
         })
         let result = try await AppleSummaryGenerator().generate([first, second], model: ControlledLanguageModel(journal: journal),
                                                                capacity: 10000, count: { $0.count })
         #expect(result.first?.sources == [first.id, second.id])
         #expect(result.first?.sourceFacts == [
-            DigestSourceFacts(source: first.id, excerpts: [first.title, firstText]),
-            DigestSourceFacts(source: second.id, excerpts: ["Other Store offers a kettle for EUR 44.90.", "Online only."])
+            DigestSourceFacts(source: first.id, excerpts: firstChoices),
+            DigestSourceFacts(source: second.id, excerpts: secondChoices)
         ])
     }
 
     @Test("Opt-in evaluation captures rejected drafts without bypassing validation", arguments: [false, true])
     func traceRetainsRejectedDraft(factFailure: Bool) async throws {
-        let invalid = factFailure ? #"{"excerpts":["A fabricated quote."]}"#
+        let invalid = factFailure ? #"{"sentenceNumbers":[99999]}"#
             : #"{"groups":[{"title":"Offer","summary":"EUR 9999.","sourceNumbers":[0]}]}"#
         let journal = ModelRequestJournal(response: factFailure ? nil : invalid,
                                           factResponses: factFailure ? [invalid] : nil)
@@ -254,7 +325,7 @@ struct AppleSummaryGeneratorTests {
                                                                capacity: 10000, count: { $0.count })
         #expect(result == [DigestSection(title: "Notebook", text: "Example Store: EUR 29.99.", sources: [first.id, second.id],
                                         sourceFacts: [first, second].map {
-                                            DigestSourceFacts(source: $0.id, excerpts: [String(($0.title + "\n" + $0.text).prefix(128))])
+                                            DigestSourceFacts(source: $0.id, excerpts: Array(SourceSentenceSelection.choices(in: $0.title + "\n" + $0.text).prefix(8)))
                                         })])
         let requests = await journal.requests
         #expect(requests.count == 3)
@@ -276,7 +347,7 @@ struct AppleSummaryGeneratorTests {
                                                                capacity: 10000, locale: Locale(identifier: localeID), count: { $0.count })
         #expect(result == [DigestSection(title: "Notebook", text: "Example Store: EUR 29.99.", sources: [source.id],
                                         sourceFacts: [DigestSourceFacts(source: source.id,
-                                                                       excerpts: [String((source.title + "\n" + source.text).prefix(128))])])])
+                                                                       excerpts: Array(SourceSentenceSelection.choices(in: source.title + "\n" + source.text).prefix(8)))])])
     }
 
     @Test("Only consolidation translates; source extraction remains verbatim", arguments: [("en_AT", "English"), ("de_AT", "German")])
@@ -286,10 +357,12 @@ struct AppleSummaryGeneratorTests {
                                                       capacity: 10000, locale: Locale(identifier: localeID), count: { $0.count })
         let requests = await journal.requests
         #expect(requests.count == 2)
-        let extraction = modelInstructions(try #require(requests.first))
         let consolidation = modelInstructions(try #require(requests.last))
-        #expect(extraction.contains("verbatim"))
-        #expect(extraction.contains("Do not rewrite or translate"))
+        let input = try JSONDecoder().decode(CapturedModelSource.self, from: Data(modelPrompt(try #require(requests.first)).utf8))
+        let choices = try #require(input.sentenceChoices)
+        #expect(choices.map(\.sentenceNumber) == Array(choices.indices))
+        #expect(choices.allSatisfy { input.text.contains($0.text) })
+        #expect(choices.contains { $0.text.contains("Example Store") && $0.text.contains("29.99") })
         #expect(consolidation.contains("in " + language + "."))
         // Repetition and source coverage are verified through generated results, not prompt wording.
     }
@@ -424,7 +497,7 @@ struct AppleSummaryGeneratorTests {
                                                                capacity: 10000, count: { $0.count })
         #expect(result == [DigestSection(title: "Notebook", text: "Example Store: EUR 29.99.", sources: [source.id],
                                         sourceFacts: [DigestSourceFacts(source: source.id,
-                                                                       excerpts: [String((source.title + "\n" + source.text).prefix(128))])])])
+                                                                       excerpts: Array(SourceSentenceSelection.choices(in: source.title + "\n" + source.text).prefix(8)))])])
         let requests = await journal.requests
         #expect(requests.count == 2)
         #expect(requests.allSatisfy { $0.enabledToolDefinitions.isEmpty && $0.schema != nil })
@@ -459,7 +532,7 @@ struct AppleSummaryGeneratorTests {
     func factsRemainBoundToTheirOwnFragment(laterFragment: Bool) async throws {
         var source = try article()
         if laterFragment { source.text = String(repeating: "Leading source material. ", count: 200) + "Other Store costs EUR 10.00." }
-        let journal = ModelRequestJournal(factResponses: [try modelJSON(["excerpts": ["Other Store costs EUR 10.00."]])])
+        let journal = ModelRequestJournal(factResponses: [try modelJSON(["sentenceNumbers": [99999]])])
         await #expect(throws: ReaderError.self) {
             try await AppleSummaryGenerator().generate([source], model: ControlledLanguageModel(journal: journal),
                                                       capacity: laterFragment ? 4000 : 10000, count: { $0.count })
@@ -547,7 +620,7 @@ struct AppleSummaryGeneratorTests {
         let retained = try #require(result.first?.sourceFacts)
         #expect(retained.count == sources.count)
         for source in sources {
-            #expect(retained.first { $0.source == source.id }?.excerpts == [String((source.title + "\n" + source.text).prefix(128))])
+            #expect(retained.first { $0.source == source.id }?.excerpts == Array(SourceSentenceSelection.choices(in: source.title + "\n" + source.text).prefix(8)))
         }
         #expect(retained.allSatisfy { !$0.text.contains("A sourced summary.") })
         let requests = await journal.requests
@@ -598,8 +671,20 @@ struct AppleSummaryGeneratorTests {
             try await AppleSummaryGenerator().generate(sources, model: ControlledLanguageModel(journal: journal),
                                                       capacity: 4000, count: { $0.count })
         }
-        let count = await journal.requests.count
-        #expect(count > 8 && count <= 16)
+        let requests = await journal.requests
+        let facts = requests.filter { modelPrompt($0).first == "{" }
+        let consolidations = try requests.filter { modelPrompt($0).first == "[" }.map {
+            try JSONDecoder().decode([CapturedModelSource].self, from: Data(modelPrompt($0).utf8))
+        }
+        #expect(facts.count >= sources.count)
+        #expect(!consolidations.isEmpty)
+        #expect(consolidations.count <= facts.count)
+        // The next round would contain generated Alpha/Beta/Gamma/Delta titles.
+        // Check the reduction boundary instead of assuming a fixed source-packing count.
+        #expect(consolidations.flatMap { $0 }.allSatisfy { input in
+            !["Alpha ", "Beta ", "Gamma ", "Delta "].contains { input.text.hasPrefix($0) }
+        })
+        #expect(requests.count == facts.count + consolidations.count)
     }
 
     private func distinctSources(count: Int) throws -> [ArticleSnapshot] {
@@ -666,7 +751,7 @@ private actor ControlledGenerator: SummaryGenerator {
 }
 
 struct DigestTests {
-    @Test("Unchanged caches from earlier generation and validation policies are regenerated", arguments: ["", "reader-source-facts-consolidation-v1\n", "reader-source-facts-consolidation-v2\n", "reader-source-facts-consolidation-v3\n", "reader-source-facts-consolidation-v4\n", "reader-source-facts-consolidation-v5\n", "reader-source-facts-consolidation-v6\n"])
+    @Test("Unchanged caches from earlier generation and validation policies are regenerated", arguments: ["", "reader-source-facts-consolidation-v1\n", "reader-source-facts-consolidation-v2\n", "reader-source-facts-consolidation-v3\n", "reader-source-facts-consolidation-v4\n", "reader-source-facts-consolidation-v5\n", "reader-source-facts-consolidation-v6\n", "reader-source-facts-consolidation-v7\n"])
     func previousGenerationCacheIsRegenerated(policyPrefix: String) async throws {
         let (store, feed, articles) = try await fixture()
         let coordinator = DigestCoordinator(repository: store, generator: FixtureGenerator())

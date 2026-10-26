@@ -122,7 +122,7 @@ public actor DigestCoordinator {
         struct Source: Encodable { let id: ArticleKey; let title: String; let text: String; let html: String; let url: URL? }
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys]
-        var bytes = Data("reader-source-facts-consolidation-v7\n".utf8)
+        var bytes = Data("reader-source-facts-consolidation-v8\n".utf8)
         bytes.append(try encoder.encode(articles.map { Source(id: $0.id, title: $0.title, text: $0.text, html: $0.html, url: $0.url) }))
         return SHA256.hash(data: bytes).map { String(format: "%02x", $0) }.joined()
     }
