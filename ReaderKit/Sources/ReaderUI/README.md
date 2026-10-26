@@ -1,5 +1,9 @@
 # ReaderUI
 
+Daily digests retain free summaries and display additional source facts beside each original's button. The source-facts component uses wrapping, selectable literal text and English/German resources; it never renders quotation strings as HTML or Markdown. Its notice explicitly says excerpts may omit terms. Directly hosted Swift Testing verifies the complete literal text; compiled resources verify localization. These code checks do not accept the app's full VoiceOver journey.
+
+The first source-facts implementation preserves original quotations but still produces overly long blocks in the frozen public offer sample. Compactness and representative semantic quality remain open. [Current criteria, native code results and every fixed model outcome](../../../docs/reader/evidence/i-source-facts-v7-2026-10-26.md).
+
 Mapped audit #29 has a passing four-case Swift Testing consumer matrix for the real ReaderSession/ReaderStore reload path: new/existing records, both response orders, warmed full-text cache, complete selected/detail snapshots, coherent row data and search invalidation. Reader CI 40265223444 at 43829790a confirms all eight store/consumer cases and the complete 412-execution Mac plan. No UI method is added; final platforms and unrelated accessibility criteria remain separate. [Accepted criteria and original evidence](../../../docs/reader/evidence/b-canonical-identity-2026-10-26.md).
 
 Normal feed rows load thumbnails through the shared FeedImageService actor. Each icon reads its nearest display scale and a Dynamic Type scaled size, cancels its view task when its request changes, and checks cancellation before replacing the displayed image. ImageIO decoding stays outside MainActor. Missing or invalid images use a system-symbol fallback; digest feeds keep their Sparkles mode symbol. This wiring does not by itself establish native responsiveness or energy acceptance under image load.
