@@ -4,7 +4,7 @@
 
 On 2026-10-26 the owner explicitly stopped OCR work and requested text-only verification. The active four-case Swift Testing contract now reads text directly from the actual hosted ArticleDetailView's WebPage. Vision imports, recognition requests, compute-stage selection, page-image exports and their image/OCR attachments are removed. No further OCR or pixel-analysis variant is planned.
 
-Current text-test source: **6882228f316caa993ad29ecd43111076f432d13e**. Fresh [Reader CI 40285814983](https://github.com/mpwg/NetNewsWire/actions/runs/40285814983) is live; inspect this existing handle for the changed-source text/lifetime cases and full plan result.
+Current text-test source: **6882228f316caa993ad29ecd43111076f432d13e**. [Reader CI 40285814983](https://github.com/mpwg/NetNewsWire/actions/runs/40285814983) is complete: **all 422 code executions and nine native methods pass**, 431 passes / one failure of 432, 217 distinct tests, no skips. All four direct-text/lifetime arguments pass, as does the native article-removal/blocked-page/saved-content method. Only the separate VoiceOver window snapshot fails. [Original summary](f-text-ci-summary-2026-10-26.json) · [original text/native case nodes](f-text-ci-cases-2026-10-26.json) · [process recovery](f-text-ci-recovery-2026-10-26.json). Artifact 12633893718, ZIP SHA-256 5a1b6c2e5ea5d22b7742de17ce1e2352b5e1d74924a5fb673ccfe7c9d3c7a590.
 
 For successful extraction the actual document must contain the extracted heading and representative body text. HTTP failure, empty extraction and held cancellation must retain the saved heading and saved body text. Existing request/error/state/outbox checks, cancellation, view removal and weak graph-release assertions remain. No UI method, retry or timing workaround is added. Production rendering, parser isolation and article-resource restrictions are unchanged.
 
@@ -13,11 +13,13 @@ The earlier OCR experiment is superseded by this owner instruction, not accepted
 | Current criterion | Status | Evidence |
 |---|---|---|
 | No OCR or page-image export in active Reader code/tests | Fulfilled | Vision import, recognition/compute calls and image-export/attachment block removed through Xcode MCP. Source search finds no remaining OCR/image-export calls. |
-| Saved/extracted heading and body text in actual WebKit document | Open | Direct document-text assertions are implemented for all four existing outcomes; fresh execution is required. |
-| Cancellation and weak graph release | Open on changed source | Existing four-case assertions remain; re-execution is required after removal of the OCR experiment. |
+| Saved/extracted heading and body text in actual WebKit document | Fulfilled on exercised Mac | All four arguments pass at 6882228f3: success, HTTP failure, empty result and held cancellation. Original case nodes retain exact outcomes. |
+| Cancellation and weak graph release | Fulfilled on exercised Mac | All four changed-source cases reach removal/release assertions and pass; request/state/outbox assertions remain. |
 | Build and strict lint | Fulfilled | Xcode MCP build-for-testing at 08:23:04 local time succeeds; compiler warnings remain errors. Strict SwiftLint and whitespace checks pass. |
 | Held normal Reader | Fulfilled | No local tests or relaunch are performed. |
 | Actual offline/restart and final platform/accessibility requirements | Open | Owner-deferred or separately tracked in the main acceptance matrix; text tests do not substitute for them. |
+
+The separate VoiceOver method returns complete titles 298/297 and restores its original disabled state, then its line-95 window snapshot loses the helper connection. [Literal text/state journal](k-voiceover-text-ci-2026-10-26.json) and [unaltered testmanagerd report](k-native-testmanagerd-2026-10-26-073859.ips) retain the failure. Capture time 07:38:38.5444 UTC, PID 24628, EXC_BAD_ACCESS/SIGSEGV, fault thread three, objc_release/autorelease/XPC handling. Its underlying cause remains unknown under K. No OCR or image analysis is used to establish this result.
 
 ## Historical experiment and preserved failures
 

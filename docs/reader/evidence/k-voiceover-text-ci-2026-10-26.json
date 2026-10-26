@@ -1,0 +1,161 @@
+{
+  "runID": 40285814983,
+  "source": "6882228f316caa993ad29ecd43111076f432d13e",
+  "artifactID": 12633893718,
+  "testIdentifier": "ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus()",
+  "attachments": [
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "f1d196893bbec8032eeeb6d789b815f9aad27799",
+      "deviceName": "My Mac",
+      "exportedFileName": "152E9FDC-D7CA-4997-8594-88B39B16035F.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Native VoiceOver restored state_0_35A9F963-F7EE-41BD-BB5B-9E15BC81B126.txt",
+      "timestamp": 1793000323.814,
+      "text": "VoiceOver enabled after restoration: false",
+      "sha256": "7ced859ebaedc9db9aec2d7ca64279bf43844b3b73069100131ae736c45351f4"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "f1d196893bbec8032eeeb6d789b815f9aad27799",
+      "deviceName": "My Mac",
+      "exportedFileName": "2854524C-8DFE-4DBC-BC38-B24C0F68F2BE.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Native VoiceOver service after restoration_1_35A9F963-F7EE-41BD-BB5B-9E15BC81B126.txt",
+      "timestamp": 1793000323.817,
+      "text": "<XCUIVoiceOverService: enabled=NO>",
+      "sha256": "2b36fb0ff5f71c6ddd373da937e167e3d5c84acbe697ec62d04f81486cb53ec4"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "f1d196893bbec8032eeeb6d789b815f9aad27799",
+      "deviceName": "My Mac",
+      "exportedFileName": "1B2848A9-AA2B-4375-A318-D8C946EE507E.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Native VoiceOver service before forward 2_0_3F9FC4E2-6766-474B-93E8-7A3455FBE949.txt",
+      "timestamp": 1793000319.253,
+      "text": "<XCUIVoiceOverService: enabled=YES>",
+      "sha256": "bbb9855d86c7d1ad7b163f7b18213ef7ac579a30963e7e19ce9a63460faa9d5f"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "f1d196893bbec8032eeeb6d789b815f9aad27799",
+      "deviceName": "My Mac",
+      "exportedFileName": "BDF79B10-4173-4721-840E-DF7FB18F26AF.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Actual native VoiceOver forward 2_1_3F9FC4E2-6766-474B-93E8-7A3455FBE949.txt",
+      "timestamp": 1793000319.742,
+      "text": "Unread image, Timeline article 297, Representative content for k",
+      "sha256": "c7c01c13648b7904d2241e8f3536d9063c63ad35b90e499e08b2476467fa4041"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "f1d196893bbec8032eeeb6d789b815f9aad27799",
+      "deviceName": "My Mac",
+      "exportedFileName": "07B721C3-B638-4F7C-9B9E-6ACBE6B9A6D3.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Native VoiceOver service before forward 1_0_8F9E2625-3E12-460C-AA68-C4F86A792EFF.txt",
+      "timestamp": 1793000318.551,
+      "text": "<XCUIVoiceOverService: enabled=YES>",
+      "sha256": "bbb9855d86c7d1ad7b163f7b18213ef7ac579a30963e7e19ce9a63460faa9d5f"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "f1d196893bbec8032eeeb6d789b815f9aad27799",
+      "deviceName": "My Mac",
+      "exportedFileName": "AA939E1E-B9A4-4FA2-9D51-AE93369A8183.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Actual native VoiceOver forward 1_1_8F9E2625-3E12-460C-AA68-C4F86A792EFF.txt",
+      "timestamp": 1793000319.252,
+      "text": "Unread image, Timeline article 298, Representative content for k",
+      "sha256": "42f9fa4812bd0d2f70bac85c1291b681549af667113bbc76b6d6dfd0976f54d1"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "f1d196893bbec8032eeeb6d789b815f9aad27799",
+      "deviceName": "My Mac",
+      "exportedFileName": "597BC62F-C5B0-4BCA-851A-2B8100C20FA2.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Native VoiceOver service before enter timeline_0_721FAE5E-8FA0-4031-8D41-AFCE3FF101FF.txt",
+      "timestamp": 1793000312.833,
+      "text": "<XCUIVoiceOverService: enabled=YES>",
+      "sha256": "bbb9855d86c7d1ad7b163f7b18213ef7ac579a30963e7e19ce9a63460faa9d5f"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "f1d196893bbec8032eeeb6d789b815f9aad27799",
+      "deviceName": "My Mac",
+      "exportedFileName": "41AC0257-ABB6-40AD-8734-8A4388BB59DC.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Actual native VoiceOver enter timeline_1_721FAE5E-8FA0-4031-8D41-AFCE3FF101FF.txt",
+      "timestamp": 1793000318.455,
+      "text": "Timeline article 299",
+      "sha256": "c0a7f1c278a83c01e795ba877096c3d536f8b86989608fd9860d4fbbbed37a0e"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "f1d196893bbec8032eeeb6d789b815f9aad27799",
+      "deviceName": "My Mac",
+      "exportedFileName": "D56CEB1C-4943-4B2C-8EA9-46CD51032783.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Native VoiceOver service before current_0_5CFACA27-C839-4354-92EB-E86A2FF5EEFD.txt",
+      "timestamp": 1793000312.827,
+      "text": "<XCUIVoiceOverService: enabled=YES>",
+      "sha256": "bbb9855d86c7d1ad7b163f7b18213ef7ac579a30963e7e19ce9a63460faa9d5f"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "f1d196893bbec8032eeeb6d789b815f9aad27799",
+      "deviceName": "My Mac",
+      "exportedFileName": "04C37857-3894-4793-AF2A-2FB65818C60A.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Actual native VoiceOver current_1_5CFACA27-C839-4354-92EB-E86A2FF5EEFD.txt",
+      "timestamp": 1793000312.831,
+      "text": "Welcome to macOS. VoiceOver is on.",
+      "sha256": "519805b176a983542fe773f5d368b86e17c70f952e6275b644c6baf6e9102429"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "f1d196893bbec8032eeeb6d789b815f9aad27799",
+      "deviceName": "My Mac",
+      "exportedFileName": "1B8FB9E5-B6AC-4BBA-9681-EBC91DF13E0B.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Native VoiceOver service before activation_0_420A62A4-30EE-4D26-B7D1-39DF892D90BB.txt",
+      "timestamp": 1793000300.519,
+      "text": "<XCUIVoiceOverService: enabled=NO>",
+      "sha256": "2b36fb0ff5f71c6ddd373da937e167e3d5c84acbe697ec62d04f81486cb53ec4"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "f1d196893bbec8032eeeb6d789b815f9aad27799",
+      "deviceName": "My Mac",
+      "exportedFileName": "A511486E-F410-452C-85B1-4658AC32A8CC.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Native VoiceOver initial state_0_15BE8A4B-CB52-4410-8BE1-940F36254E2F.txt",
+      "timestamp": 1793000300.518,
+      "text": "VoiceOver originally enabled: false",
+      "sha256": "4efebe1027172734623f2bb365c619485a3373a14c52fbb8cebd51b1b1a3e960"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "f1d196893bbec8032eeeb6d789b815f9aad27799",
+      "deviceName": "My Mac",
+      "exportedFileName": "3366F6A5-5E0A-4405-8EF3-AA899D83FEDE.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "XCUITest window setup_0_EE62AA5F-7154-4124-96D1-443776888003.txt",
+      "timestamp": 1793000297.367,
+      "text": "readyWindowCount=1",
+      "sha256": "22d53573855dd530749e2bd9121b1e7a0de6a61b858978cfdd1a9edbcf2ec3c0"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "f1d196893bbec8032eeeb6d789b815f9aad27799",
+      "deviceName": "My Mac",
+      "exportedFileName": "71655EBF-DA7A-4959-A5FA-16C93B7B0362.txt",
+      "isAssociatedWithFailure": true,
+      "suggestedHumanReadableName": "Complete Issue Description.txt",
+      "text": "Failed to get matching snapshots: Lost connection to the application (pid 43929). (Underlying Error: Couldn’t communicate with a helper application. Try your operation again. If that fails, quit and relaunch the application and try again. The connection to service created from an endpoint was invalidated: Failed to check-in, peer may have been unloaded: mach_error=10000003.)",
+      "sha256": "4cafb4c6b38d4b239f76c162722d49d0131235d322ebff301c64c661e7752066"
+    }
+  ]
+}
