@@ -1,0 +1,28 @@
+# I: explicit per-batch references — 2026-10-26
+
+Status: **compiled candidate; current code/model acceptance open**.
+
+Consolidation instructions now include the exact required zero-based packet IDs for each individual request, including later hierarchy rounds. Every possible list length (1–32) is token-counted; the largest instruction count is reserved before splitting prompts, without assuming tokenizer monotonicity. Existing strict reference/number/link/content validation, live consent, cancellation and bounded reduction remain unchanged. No missing reference is mechanically added to a model response. Cache policy v3 refreshes source-only/v1/v2 cards on their next generation request without deleting data or migrating schema.
+
+Opt-in package diagnostics include the actual supplied instructions alongside prompts/drafts; the app's public generation path still has no sink. Existing native-session Swift Testing contracts now check required IDs against each hierarchy batch, trace instructions against native request instructions, and v2 cache refresh as well as the two older formats. Expected discovery: 223 code functions / 462 code executions, ten unchanged native methods / 472 total, 233 distinct. Runtime is pending; Xcode MCP app/test build-for-testing at 10:27:21 and probe build at 10:25:55, strict lint and whitespace checks pass. Held Reader PID 24529 is preserved and Reader/My Mac restored; no local tests or relaunch.
+
+## Fixed actual-model observations
+
+Generator SHA-256 `62608285f55c9dd2e4d4cb857b3e05a9009e30a5569a002514020458d40961bc`; probe `932bc7477247e88296f442a36a8e0d20655e2a9f574a753b3650104b02b3bc79`. [All six original reports](i-required-references-series-2026-10-26.json), ordered three offers then three long-text runs. The count was fixed before execution; every result is retained. Earlier pre-instruction-capture exploratory success is not counted in this series or relabeled with these hashes.
+
+| Criterion | Status | Evidence |
+|---|---|---|
+| Two synthetic German offers | Fulfilled within these three observations | 3/3 structurally valid outputs. Both merchants/products, exact EUR 29.99/44.90, pickup/shipping/online/no-end-date conditions and stored identities remain. Minor grammar defects persist. This is narrow fixture evidence, not representative editorial acceptance. |
+| Long-text factual coverage | Open | 2/3 structurally valid outputs, but both drop the September inspection/no approved opening date despite those facts appearing in the extracted evidence. Both IDs are referenced: reference coverage does not prove claim coverage. The third run produces 29 repetitive excerpts and is correctly rejected by the eight-excerpt limit. |
+| Native guided collection bounds | Open | The excessive-list observation motivates native minimum/maximum collection guides while retaining independent validators. No bound repair is claimed in this source. |
+| Broad quality, PCC and final platforms | Open | No representative feed, cloud authorization, device, offline or distribution acceptance follows from synthetic results. |
+
+Next use native guided array bounds and improve preservation of distinct facts during consolidation. Preserve prior failed and superficially valid but incomplete outputs. The still-running Reader CI 40299098994 belongs to preceding 2ffe1ffe3, not this candidate; inspect that same run before another functional push.
+
+## Native bounded-generation follow-up
+
+The final follow-up uses Apple's native minimumCount/maximumCount generation guides: excerpts 1–8, thematic groups 1–4 and source references 1–32. Independent response validators remain in place. Consolidation instructions also distinguish repeated facts from unique dates/conditions/negations. Final generator SHA-256 is `c2638ee8930df24564907ca1d712d14702d51a818b995ccf7f590e52acf8f93c`; the probe source hash is unchanged. Xcode MCP probe build 10:29:07 and app/test build-for-testing 10:29:45 succeed; strict lint and whitespace pass, with the held normal Reader preserved.
+
+[Eight original final-source reports](i-guided-bounds-series-2026-10-26.json) are ordered long 1–3, offers 1–3, quoted injection and news. Three long runs and three offer runs were fixed before execution; no failed report was discarded. All six long-fragment responses have exactly eight raw excerpts, and the earlier excessive-array symptom is not observed in this series. Long results remain inadequate for broad acceptance: run 1 retains the September/no-opening-date information but repeats renovation and exceeds the requested sentence count; run 2 fails source validation; run 3 omits those tail facts despite retaining their packet reference. All three offers preserve both merchant/product/price/condition sets. The quoted injection is excluded in its single observation. The news observation keeps opening/hours and both identities but omits the free-room fact. These are narrow synthetic observations, not representative feed acceptance or universal semantic security.
+
+A product question is pending: must a digest preserve every independent fact, or may it select the most important statements while retaining links to every original? No answer is assumed. Do not accept complete factual coverage or weaken source/number/link guards while that decision is open. Current source/model reliability, PCC authorization, final platforms and owner-deferred network-off/restart remain open. Expected native code-test discovery stays 223 functions / 462 executions plus ten UI methods, 472 total; builds do not prove those new cases passed. Preceding CI 40299098994 remains the live authoritative handle for 2ffe1ffe3; do not relabel it as this follow-up's execution.
