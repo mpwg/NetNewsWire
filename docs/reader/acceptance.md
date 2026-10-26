@@ -19,6 +19,8 @@ Native accessibility failures and prior daemon/timeouts remain preserved. Warm c
 
 ## I staged-generation candidate
 
+**Current focused-context candidate:**exact selected excerpts remain distinct from complete bounded context; atomic budgeting rejects overflow before consolidation. All62 intelligence functions /145 executions pass natively, and strict lint passes after the two recorded style corrections. Five fixed model outcomes retain four successes and one long-text unsupported-number rejection. CI40347228928 runs earlier0603f4708 and already fails strict lint; its native test job remains live. No adoption or semantic acceptance. [Exact criteria and raw results](evidence/i-focused-context-2026-10-26.md).
+
 **Current resumed code boundary:**4901a8577 preserves bounded original context and coalesces connected packet groups before drafting. Xcode MCP passes all60 intelligence functions /129 executions, zero failures/skips; no UI automation is added or run locally. Four fixed model cases still contain mixed-language/irrelevant-content defects, so no production adoption or semantic acceptance follows. [Complete criteria, raw native result and all model outcomes](evidence/i-context-preservation-2026-10-26.md). Earlier4bbf6f997 has its own live CI40340848512; it is not evidence for4901a8577.
 
 **Resumed candidate, not adopted:** retain the full bounded original fragment after validating selected sentence indices. Two new Swift Testing functions/seven cases and strengthened actual-request checks compile through Xcode MCP; current-source runtime and model quality remain open. [Context-preservation criteria](evidence/i-context-preservation-2026-10-26.md). Shipping main remains v5; no acceptance or issue closure follows.

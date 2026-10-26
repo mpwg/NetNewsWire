@@ -1,5 +1,7 @@
 # Native Reader application
 
+Current focused-context research keeps exact selected assertions separate from complete supporting text. All62 intelligence Swift Testing functions /145 executions pass through Xcode MCP; strict SwiftLint0.65.1 passes after removing redundant nil initializers. Four fixed model cases are correct; long-text formatting/citation digits are rejected. No adoption. [Current criteria and all five outcomes](../docs/reader/evidence/i-focused-context-2026-10-26.md).
+
 Current research at4901a8577 retains bounded source context and coalesces overlapping packet plans before separate drafts. All60 intelligence code-test functions /129 executions pass through Xcode MCP. The four fixed model observations still include mixed language and irrelevant quotation content; the candidate remains opt-in and unadopted. [Exact sources, runtime results and quality limits](../docs/reader/evidence/i-context-preservation-2026-10-26.md).
 
 The resumed research candidate preserves the complete bounded source fragment after sentence selection so adjacent conditions are not lost before drafting. It remains opt-in and unadopted. [Current criteria and native/model verification](../docs/reader/evidence/i-context-preservation-2026-10-26.md).

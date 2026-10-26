@@ -33,7 +33,7 @@ package struct SummaryGenerationTrace: Codable, Sendable {
 private struct SummaryEvidence: Sendable {
     var text: String
     var sourceNumbers: Set<Int>
-    var selectedExcerpts: [String]? = nil
+    var selectedExcerpts: [String]?
 }
 
 private struct SummaryEvidenceIdentity: Hashable {
@@ -56,7 +56,7 @@ private struct ModelSourceInput: Encodable {
     var sourceNumber: Int
     var text: String
     var articleNumbers: [Int]?
-    var selectedExcerpts: [String]? = nil
+    var selectedExcerpts: [String]?
 }
 
 @Generable
