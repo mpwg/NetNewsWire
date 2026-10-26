@@ -19,6 +19,9 @@ Native accessibility failures and prior daemon/timeouts remain preserved. Warm c
 
 ## I staged-generation candidate
 
+An isolated local source reviewer accepts the known missing-weekday error in 3/3 repetitions and is not adopted. The owner retains free app-language summaries with further quality work, rather than replacing them with source-language extracts. The key-statement/all-original-links decision stays resolved. Latest fixture-only CI 40306422836 passes all 466 code executions/nine native methods but fails the unchanged removal wait, 475/476 passes. [Original reports and decision scope](evidence/i-faithfulness-review-2026-10-26.md).
+
+
 The owner chose key-statement selection with every original article linked. Current implementation separates packet indices from Reader-assigned original identities, permits unused fragments while requiring complete original coverage, retains per-reference numeric/content checks, budgets actual instruction/JSON pairs and refreshes earlier caches under policy v4. Native array bounds and cancellation/live consent remain. Current-source CI 40304336042 on eaf90aea6 confirms all 224 Swift Testing functions / 466 code executions plus ten native methods: 476 total, 234 distinct, zero failures/skips. Build/lint/probe/runner/recovery pass. Structural Mac contracts are fulfilled. [Current criteria and all model observations](evidence/i-key-statements-2026-10-26.md).
 
 Preceding main repair 01f68a03c / CI 40301145872 passes 471/471 executions; earlier candidate 124584690 / CI 40301373886 passes 472/472. Each has 233 distinct tests, no failures/skips, and passes lint/probe/runner/recovery. Raw results and ZIP checksums are linked in the current matrix. Neither is a pass for the new original-coverage rule. The original failed wording cases remain preserved; later native passes do not explain earlier UI/daemon failures.

@@ -20,3 +20,5 @@
 - On 2026-10-26 the owner chose multiple stages for long-text inference under #54: extract source-bound facts from bounded sections, then consolidate those facts into a shared digest. Preserve source provenance and the existing validation/read-status contracts.
 
 - On 2026-10-26 the owner chose key-statement selection for digests: summaries may omit less important details, but every original article must remain linked. Preserve conditions and negations of selected claims and their supporting provenance. Do not require every fragment or independent fact to appear, and do not treat links to all originals as proof of semantic correctness.
+
+- On 2026-10-26 the owner explicitly retained free summaries in the app language and directed further quality work after the source-review experiment missed a known weekday error. Do not replace summaries with source-language extracts or treat the unvalidated reviewer as a reliable production gate. The key-statement/all-original-links rule remains.
