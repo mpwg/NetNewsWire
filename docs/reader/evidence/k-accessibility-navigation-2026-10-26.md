@@ -2,6 +2,12 @@
 
 ## Native VoiceOver service — populated attempt failed; daemon crash recurs
 
+### Unchanged-runtime repeat at 92f91cfe0
+
+[Reader CI 40254660895](https://github.com/mpwg/NetNewsWire/actions/runs/40254660895), job 121353818571, fails with **404 passed executions and one failure**, zero skips and one deliberate guardrail warning. All 395 code executions and nine other UI methods pass; the following window method passes in 60.678 seconds. Lint, runner failure propagation and process recovery pass. Runtime/test/build sources are identical to e9e109696. [Unaltered summary](k-voiceover-repeat-ci-red-2026-10-26.json) · [native activities](k-voiceover-repeat-activities-2026-10-26.json).
+
+In this attempt currentSpeech itself throws No speech available, so no utterance or forward operation is obtained. Do not attach the older Reader is not responding utterance to this run. [Initial](k-voiceover-repeat-initial-state-2026-10-26.txt) and [restored](k-voiceover-repeat-restored-state-2026-10-26.txt) state are false. Unlike the preceding run, the following window method has no transport failure; this observation alone does not establish daemon health or a fixed earlier crash trigger. The speech failure repeats at a different operation, and native VoiceOver navigation remains unaccepted.
+
 ### Populated result at e9e109696
 
 [Reader CI 40253726796](https://github.com/mpwg/NetNewsWire/actions/runs/40253726796), job 121350960446, fails with **403 passed executions and two failures**, zero skips and one deliberate guardrail warning. All 395 code executions and eight UI methods pass. VoiceOver fails on its first forward operation; the following independent-window method loses testmanagerd connectivity. Lint, direct runner failure propagation and process recovery pass. [Unaltered summary](k-voiceover-populated-ci-red-2026-10-26.json) · [recovery](k-voiceover-populated-recovery-2026-10-26.json) · [exact native activities](k-voiceover-populated-activities-2026-10-26.json).
@@ -24,7 +30,7 @@ Later b0b42974d and dc19ead6c change only README/test-review documentation; runt
 
 Read-only inspection of the same archive finds [ReportCrash's original generation events](k-voiceover-populated-report-generation-2026-10-26.json): at 01:29:21.243072 UTC it records /Users/runner/Library/Logs/DiagnosticReports/testmanagerd-2026-10-26-012920.ips, with generation taking about seventeen seconds. That file is absent from the exported xcresult diagnostics. This proves a missing artifact collection path, not that no crash report existed or that its stack is already known.
 
-The Reader workflow is extended to mark the start of its app test action and, afterward even on failure, preserve newly written Reader/testmanagerd .ips/.crash reports from the native user/system DiagnosticReports directories. Only matching files newer than that marker are copied into reader-native-diagnostics/user or system within the existing results artifact. There is no daemon operation, application restart, test retry, test ordering change or altered test exit status. Workflow YAML parsing, shell syntax and whitespace checks pass; a fresh hosted run must verify the collection step and inspect any resulting report. Existing run 40254660895 predates this workflow change and is allowed to reach its terminal result before the new workflow is pushed.
+Workflow source 1e1a0b9d8 marks the start of its app test action and, afterward even on failure, preserves newly written Reader/testmanagerd .ips/.crash reports from the native user/system DiagnosticReports directories. Only matching files newer than that marker are copied into reader-native-diagnostics/user or system within the existing results artifact. There is no daemon operation, application restart, test retry, test ordering change or altered test exit status. Workflow YAML parsing, shell syntax and whitespace checks pass. The earlier run 40254660895 reached its terminal result before this source was pushed. [Reader CI 40255516707](https://github.com/mpwg/NetNewsWire/actions/runs/40255516707) must verify the collection step and inspect any resulting report. App/test/build sources remain unchanged; actual file collection and crash-stack interpretation are not yet accepted.
 
 ### Container result at c7867dbae and revised test contract
 
