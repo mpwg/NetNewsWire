@@ -1,0 +1,156 @@
+[
+  {
+    "children": [
+      {
+        "duration": "0,00078s",
+        "durationInSeconds": 0.0007770061492919922,
+        "name": "false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/IdentityTests/unreadCountsPreserveAccountAndFolderIdentity(includesCounts:)?args=fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,00077s",
+        "durationInSeconds": 0.0007691383361816406,
+        "name": "true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/IdentityTests/unreadCountsPreserveAccountAndFolderIdentity(includesCounts:)?args=b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "0,00077s",
+    "durationInSeconds": 0.0007730722427368164,
+    "name": "Hierarchical counts deduplicate memberships and retain orphan originals",
+    "nodeIdentifier": "IdentityTests/unreadCountsPreserveAccountAndFolderIdentity(includesCounts:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/IdentityTests/unreadCountsPreserveAccountAndFolderIdentity(includesCounts:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "children": [
+      {
+        "duration": "1s",
+        "durationInSeconds": 1.1247172355651855,
+        "name": "1000",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderLoadScenarioTests/loadScenarioPreservesStoredCoverage(articleCount:)?args=40510175845988f13f6162ed8526f0b09f73384467fa855e1e79b44a56562a58",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "11s",
+        "durationInSeconds": 11.463929176330566,
+        "name": "10000",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderLoadScenarioTests/loadScenarioPreservesStoredCoverage(articleCount:)?args=39e5b4830d4d9c14db7368a95b65d5463ea3d09520373723430c03a5a453b5df",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "6s",
+    "durationInSeconds": 6.294323205947876,
+    "name": "The synthetic load survives storage and shipping query/pagination transitions",
+    "nodeIdentifier": "ReaderLoadScenarioTests/loadScenarioPreservesStoredCoverage(articleCount:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderLoadScenarioTests/loadScenarioPreservesStoredCoverage(articleCount:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "children": [
+      {
+        "duration": "0,13s",
+        "durationInSeconds": 0.13057994842529297,
+        "name": "false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderSessionTests/unreadCountsFollowCommittedDeletion(searchHasNoResults:)?args=fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,12s",
+        "durationInSeconds": 0.12328290939331055,
+        "name": "true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderSessionTests/unreadCountsFollowCommittedDeletion(searchHasNoResults:)?args=b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "0,13s",
+    "durationInSeconds": 0.12693142890930176,
+    "name": "Unread totals remain complete across pages, search, accounts and pure deletion",
+    "nodeIdentifier": "ReaderSessionTests/unreadCountsFollowCommittedDeletion(searchHasNoResults:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderSessionTests/unreadCountsFollowCommittedDeletion(searchHasNoResults:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "children": [
+      {
+        "duration": "0,089s",
+        "durationInSeconds": 0.08858871459960938,
+        "name": "false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderSessionTests/unreadCountsRejectMixedRevisions(failingRead:)?args=fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,096s",
+        "durationInSeconds": 0.09592103958129883,
+        "name": "true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderSessionTests/unreadCountsRejectMixedRevisions(failingRead:)?args=b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "0,092s",
+    "durationInSeconds": 0.0922548770904541,
+    "name": "A commit during a count read cannot publish mixed data or an obsolete error",
+    "nodeIdentifier": "ReaderSessionTests/unreadCountsRejectMixedRevisions(failingRead:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderSessionTests/unreadCountsRejectMixedRevisions(failingRead:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "0,099s",
+    "durationInSeconds": 0.09928584098815918,
+    "name": "Committed deletion automatically refreshes timeline and complete counters",
+    "nodeIdentifier": "ReaderSessionTests/observedDeletionRefreshesTimelineAndCounts()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderSessionTests/observedDeletionRefreshesTimelineAndCounts()",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "2min 5s",
+    "durationInSeconds": 125.44954490661621,
+    "name": "testDelayedTimelineQueryKeepsInputAndFeedMenuResponsive()",
+    "nodeIdentifier": "ReaderSmokeTests/testDelayedTimelineQueryKeepsInputAndFeedMenuResponsive()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testDelayedTimelineQueryKeepsInputAndFeedMenuResponsive",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "children": [
+      {
+        "name": "XCTAssertEqual failed: (\"XCTWaiterResult(rawValue: 2)\") is not equal to (\"XCTWaiterResult(rawValue: 1)\") - Expected 7,500; observed Optional()",
+        "nodeType": "Failure Message",
+        "sourceLocation": {
+          "filePath": "/Users/runner/work/NetNewsWire/NetNewsWire/Reader/ReaderUITests/ReaderUITests.swift",
+          "lineNumber": 137
+        }
+      }
+    ],
+    "duration": "1min 1s",
+    "durationInSeconds": 61.360535979270935,
+    "name": "testLoadedTimelineScrollingMetrics()",
+    "nodeIdentifier": "ReaderSmokeTests/testLoadedTimelineScrollingMetrics()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testLoadedTimelineScrollingMetrics",
+    "nodeType": "Test Case",
+    "result": "Failed"
+  },
+  {
+    "duration": "29s",
+    "durationInSeconds": 29.208168029785156,
+    "name": "testVoiceOverAnnouncesReaderAndMovesFocus()",
+    "nodeIdentifier": "ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  }
+]

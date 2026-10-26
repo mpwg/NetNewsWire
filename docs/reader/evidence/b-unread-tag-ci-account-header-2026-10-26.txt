@@ -1,0 +1,19 @@
+Attributes: StaticText, 0x799a019680, {{38.0, 237.5}, {227.0, 14.0}}, identifier: 'accountUnreadCount-00000000-0000-0000-0000-000000000045', label: 'Load fixture · load-fixture, Unread: 7,500'
+Element subtree:
+ →StaticText, 0x799a019680, {{38.0, 237.5}, {227.0, 14.0}}, identifier: 'accountUnreadCount-00000000-0000-0000-0000-000000000045', label: 'Load fixture · load-fixture, Unread: 7,500'
+Path to element:
+ →Application, 0x799a018a00, pid: 60900, title: 'Reader'
+  ↳Window (Main), 0x799a018b40, {{24.0, 55.0}, {976.0, 626.0}}, identifier: 'reader-AppWindow-1', title: 'All articles'
+   ↳Group, 0x799a018c80, {{24.0, 55.0}, {976.0, 626.0}}, label: 'Reader'
+    ↳SplitGroup, 0x799a018dc0, {{24.0, 55.0}, {976.0, 585.0}}, identifier: 'reader-AppWindow-1, SidebarNavigationSplitView'
+     ↳Group, 0x799a018f00, {{24.0, 55.0}, {260.0, 585.0}}, label: 'Library'
+      ↳ScrollView, 0x799a019040, {{24.0, 107.0}, {260.0, 533.0}}
+       ↳Outline, 0x799a019180, {{23.0, 106.0}, {262.0, 535.0}}, identifier: 'readerSidebar', label: 'Sidebar'
+        ↳OutlineRow, 0x799a0192c0, {{24.0, 235.0}, {243.0, 19.0}}
+         ↳Cell, 0x799a019400, {{34.0, 235.0}, {223.0, 19.0}}, Keyboard Focused
+          ↳Group, 0x799a019540, {{38.0, 235.0}, {227.0, 19.0}}
+           ↳StaticText, 0x799a019680, {{38.0, 237.5}, {227.0, 14.0}}, identifier: 'accountUnreadCount-00000000-0000-0000-0000-000000000045', label: 'Load fixture · load-fixture, Unread: 7,500'
+Query chain:
+ →Find: Target Application 'eu.mpwg.reader.debug'
+  ↪︎Find: Descendants matching type StaticText
+    ↪︎Find: Elements matching predicate '"accountUnreadCount-00000000-0000-0000-0000-000000000045" IN identifiers'

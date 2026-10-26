@@ -134,7 +134,8 @@ final class ReaderSmokeTests: XCTestCase {
         waitForValue(sidebar.buttons["Unread"], equalTo: "Unread: 7,500")
         waitForValue(sidebar.buttons["Load feed 0"], equalTo: "Unread: 75")
         let accountCount = app.staticTexts["accountUnreadCount-00000000-0000-0000-0000-000000000045"]
-        waitForValue(accountCount, equalTo: "7,500")
+        XCTAssertTrue(accountCount.wait(for: \.label, toEqual: "Load fixture · load-fixture, Unread: 7,500", timeout: 5),
+                      "The native account header must announce its identity and complete unread count: \(accountCount.label)")
         sidebar.scroll(byDeltaX: 0, deltaY: -800)
         waitForValue(sidebar.buttons["Load folder 0"], equalTo: "Unread: 600")
         let counters = XCTAttachment(screenshot: app.windows.firstMatch.screenshot())
@@ -152,7 +153,8 @@ final class ReaderSmokeTests: XCTestCase {
         waitForValue(app.staticTexts["timelineCounts"], equalTo: "Entries: 0 · Loaded originals: 0")
         XCTAssertFalse(timeline.staticTexts["Load article 120"].exists)
         waitForValue(sidebar.buttons["Unread"], equalTo: "Unread: 7,430")
-        waitForValue(accountCount, equalTo: "7,430")
+        XCTAssertTrue(accountCount.wait(for: \.label, toEqual: "Load fixture · load-fixture, Unread: 7,430", timeout: 5),
+                      "The native account header must publish the post-deletion count: \(accountCount.label)")
         waitForValue(sidebar.buttons["Load folder 0"], equalTo: "Unread: 525")
         let deletion = XCTAttachment(screenshot: app.windows.firstMatch.screenshot())
         deletion.name = "Native folder count and empty timeline after pure subscription deletion"

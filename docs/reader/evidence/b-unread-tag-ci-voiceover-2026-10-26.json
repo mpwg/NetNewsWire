@@ -1,0 +1,22 @@
+{
+  "runID": 40270864862,
+  "artifactID": 12628737888,
+  "sourceCommit": "2bdaa78c902661837b8d79a76969d4e5d0e70e6b",
+  "description": "Literal UTF-8 contents collated from original xcresult attachments; no trimming or speech normalization.",
+  "sourceFiles": {
+    "initial": "A553430A-6B20-4C2B-8AAA-39C44E7C159D.txt",
+    "current": "CE2685DA-72CD-4B94-B439-7BC83B1320BF.txt",
+    "enter": "7419B4D1-3A81-4A4A-A372-F3FD3B6A40AC.txt",
+    "forward1": "83A77127-FDD8-4F16-8ABC-56DF6350678F.txt",
+    "forward2": "B1BA61A6-0937-49CC-ABA5-705C454F20BB.txt",
+    "restored": "83432372-13CD-41EA-8F88-6A6103A5729C.txt"
+  },
+  "outputs": {
+    "initial": "VoiceOver originally enabled: false",
+    "current": "Welcome to macOS. VoiceOver is on.",
+    "enter": "Timeline article 299",
+    "forward1": "Unread image, Timeline article 298, Representative content for k",
+    "forward2": "Unread image, Timeline article 297, Representative content for k",
+    "restored": "VoiceOver enabled after restoration: false"
+  }
+}
