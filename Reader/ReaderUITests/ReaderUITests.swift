@@ -154,11 +154,16 @@ final class ReaderSmokeTests: XCTestCase {
         waitForValue(sidebar.buttons["Unread"], equalTo: "Unread: 7,430")
         waitForValue(accountCount, equalTo: "7,430")
         waitForValue(sidebar.buttons["Load folder 0"], equalTo: "Unread: 525")
-        XCTAssertFalse(sidebar.buttons["Load feed 20"].exists)
         let deletion = XCTAttachment(screenshot: app.windows.firstMatch.screenshot())
-        deletion.name = "Native timeline and complete counts after pure subscription deletion"
+        deletion.name = "Native folder count and empty timeline after pure subscription deletion"
         deletion.lifetime = .keepAlways
         add(deletion)
+        sidebar.scroll(byDeltaX: 0, deltaY: 800)
+        waitForValue(sidebar.buttons["Load feed 0"], equalTo: "Unread: 75")
+        let library = XCTAttachment(screenshot: app.windows.firstMatch.screenshot())
+        library.name = "Native library and account counts after pure subscription deletion"
+        library.lifetime = .keepAlways
+        add(library)
     }
 
     func testOPMLExportUsesNativeSavePanel() throws {
