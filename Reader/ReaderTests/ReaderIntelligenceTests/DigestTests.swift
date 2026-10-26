@@ -57,10 +57,32 @@ private struct CapturedModelSource: Decodable {
     let sourceNumber: Int
     let text: String
     let articleNumbers: [Int]?
+    let wordChoices: [[String]]?
 }
 
 private func modelJSON(_ value: [String: Any]) throws -> String {
     String(decoding: try JSONSerialization.data(withJSONObject: value, options: [.sortedKeys]), as: UTF8.self)
+}
+
+/// Test fixtures state intended source values; the controlled executor emits actual reference JSON.
+private func referenceFixtureJSON(_ facts: [String: Any], source: String) throws -> String {
+    let table = SourceWordTable(source)
+    func span(_ value: String) -> [String: Int] {
+        guard let range = source.range(of: value, options: .literal),
+              let first = table.ranges.firstIndex(where: { $0.lowerBound == range.lowerBound }),
+              let last = table.ranges.firstIndex(where: { $0.upperBound == range.upperBound }) else {
+            return ["firstWord": -1, "lastWord": -1]
+        }
+        return ["firstWord": first, "lastWord": last]
+    }
+    let offers = (facts["offers"] as? [[String: Any]] ?? []).map { offer -> [String: Any] in
+        var result: [String: Any] = ["product": span(offer["product"] as? String ?? ""),
+                                     "conditions": (offer["conditions"] as? [String] ?? []).map(span)]
+        result["merchant"] = (offer["merchant"] as? String).map(span) ?? NSNull()
+        result["price"] = (offer["price"] as? String).map(span) ?? NSNull()
+        return result
+    }
+    return try modelJSON(["offers": offers, "factRanges": (facts["excerpts"] as? [String] ?? []).map(span)])
 }
 
 private func consolidationJSON(_ prompt: String, text: String = "A sourced summary.") throws -> String {
@@ -105,11 +127,63 @@ private actor ModelRequestJournal {
             } else {
                 excerpt = prefix
             }
-            return try modelJSON(["offers": [], "excerpts": [excerpt]])
+            return try referenceFixtureJSON(["offers": [], "excerpts": [excerpt]], source: source.text)
         }
         if let consolidation { return try consolidation(prompt) }
         if let response { return response }
         return try consolidationJSON(prompt)
+    }
+}
+
+struct SourceWordReferenceTests {
+    // Explicit multilingual source fixtures; the lookup preserves original bytes.
+    @Test("Native word and punctuation choices retain every nonwhitespace source byte", arguments: [
+        "Example Store: EUR 29.99. Code SAVE5 required; pickup only.",
+        "Gültig bis 26.10.2026, 23:59 Uhr. Nicht kombinierbar.",
+        "商店の価格は29.99 EUR。条件があります。",
+        "Cafe\u{301} 🧪 [quoted] <script>doNotRun()</script>",
+        "  leading\n\ntrailing without final punctuation  "
+    ])
+    func originalWordRangesPreserveSourceBytes(text: String) throws {
+        let table = SourceWordTable(text)
+        #expect(!table.ranges.isEmpty)
+        let rebuilt = table.ranges.map { String(text[$0]) }.joined().filter { !$0.isWhitespace }
+        #expect(Array(rebuilt.utf8) == Array(text.filter { !$0.isWhitespace }.utf8))
+        #expect(table.choices.map { $0[0] } == table.ranges.indices.map(String.init))
+        let whole = try table.resolve(SourceWordSpan(firstWord: 0, lastWord: table.ranges.count - 1), maximumWords: 1000)
+        #expect(Array(whole.utf8) == Array(text.trimmingCharacters(in: .whitespacesAndNewlines).utf8))
+    }
+
+    @Test("Invalid, reversed, excessive and foreign word references cannot be resolved", arguments: [
+        (-1, 0, 4), (0, -1, 4), (2, 1, 4), (0, 99, 4), (Int.max, Int.max, 4), (0, 2, 2), (0, 0, 0)
+    ])
+    func invalidSourceWordRangesAreRejected(first: Int, last: Int, limit: Int) {
+        let table = SourceWordTable("One two three.")
+        #expect(throws: ReaderError.invalidResponse) {
+            try table.resolve(SourceWordSpan(firstWord: first, lastWord: last), maximumWords: limit)
+        }
+    }
+
+    @Test("Blank sources have no referenceable word", arguments: ["", " \n\t"])
+    func blankSourcesHaveNoWordReferences(text: String) {
+        let table = SourceWordTable(text)
+        #expect(table.ranges.isEmpty)
+        #expect(throws: ReaderError.invalidResponse) {
+            try table.resolve(SourceWordSpan(firstWord: 0, lastWord: 0), maximumWords: 8)
+        }
+    }
+
+    @Test("References cannot clip a smaller price out of a larger original literal")
+    func wordReferencesCannotInventPartialPrices() {
+        let table = SourceWordTable("EUR 129.99.")
+        for first in table.ranges.indices {
+            for last in first..<table.ranges.count {
+                if let value = try? table.resolve(SourceWordSpan(firstWord: first, lastWord: last), maximumWords: 16) {
+                    #expect(value != "29.99")
+                    #expect(value != "99")
+                }
+            }
+        }
     }
 }
 
@@ -239,7 +313,7 @@ struct AppleSummaryGeneratorTests {
         source.text = "The Luma lamp is available for pickup only."
         let journal = ModelRequestJournal(
             response: #"{"groups":[{"title":"Lamp","summary":"Luma lamp: pickup only.","sourceNumbers":[0]}]}"#,
-            factResponses: [try modelJSON(["offers": [["product": "Luma lamp", "merchant": NSNull(), "price": NSNull(), "conditions": ["pickup only"]]], "excerpts": []])])
+            factResponses: [try referenceFixtureJSON(["offers": [["product": "Luma lamp", "merchant": NSNull(), "price": NSNull(), "conditions": ["pickup only"]]], "excerpts": []], source: source.title + "\n" + source.text)])
         let result = try await AppleSummaryGenerator().generate(
             [source], model: ControlledLanguageModel(journal: journal), capacity: 10000, count: { $0.count })
         let offer = try #require(result.first?.sourceFacts?.first?.offers?.first)
@@ -256,7 +330,7 @@ struct AppleSummaryGeneratorTests {
                                     "conditions": ["Code SAVE5 required", "pickup only"]]
         let second: [String: Any] = ["product": "Vela kettle", "merchant": "Other Store", "price": "EUR 44.90",
                                      "conditions": ["online only"]]
-        let journal = ModelRequestJournal(factResponses: [try modelJSON(["offers": [first, second], "excerpts": []])],
+        let journal = ModelRequestJournal(factResponses: [try referenceFixtureJSON(["offers": [first, second], "excerpts": []], source: source.title + "\n" + source.text)],
                                           consolidation: { prompt in
             let inputs = try JSONDecoder().decode([CapturedModelSource].self, from: Data(prompt.utf8))
             #expect(inputs.count == 1)
@@ -290,8 +364,8 @@ struct AppleSummaryGeneratorTests {
     func hierarchicalOffersKeepOriginalFieldRecords() async throws {
         let sources = try distinctSources(count: 40)
         let facts = try sources.map { source in
-            try modelJSON(["offers": [["product": source.title, "merchant": "Example Store", "price": "EUR 29.99", "conditions": []]],
-                           "excerpts": []])
+            try referenceFixtureJSON(["offers": [["product": source.title, "merchant": "Example Store", "price": "EUR 29.99", "conditions": []]],
+                                      "excerpts": []], source: source.title + "\n" + source.text)
         }
         let journal = ModelRequestJournal(factResponses: facts)
         let sections = try await AppleSummaryGenerator().generate(
@@ -354,8 +428,8 @@ struct AppleSummaryGeneratorTests {
         second.text = "Other Store offers a kettle for EUR 44.90. Online only."
         let firstText = first.text
         let journal = ModelRequestJournal(factResponses: [
-            try modelJSON(["offers": [], "excerpts": [first.title, firstText]]),
-            try modelJSON(["offers": [], "excerpts": ["Other Store offers a kettle for EUR 44.90.", "Online only."]])
+            try referenceFixtureJSON(["offers": [], "excerpts": [first.title, firstText]], source: first.title + "\n" + firstText),
+            try referenceFixtureJSON(["offers": [], "excerpts": ["Other Store offers a kettle for EUR 44.90.", "Online only."]], source: second.title + "\n" + second.text)
         ], consolidation: { prompt in
             let inputs = try JSONDecoder().decode([CapturedModelSource].self, from: Data(prompt.utf8))
             #expect(inputs.count == 2)
@@ -374,7 +448,7 @@ struct AppleSummaryGeneratorTests {
 
     @Test("Opt-in evaluation captures rejected drafts without bypassing validation", arguments: [false, true])
     func traceRetainsRejectedDraft(factFailure: Bool) async throws {
-        let invalid = factFailure ? #"{"offers":[],"excerpts":["A fabricated quote."]}"#
+        let invalid = factFailure ? #"{"offers":[],"factRanges":[{"firstWord":99999,"lastWord":99999}]}"#
             : #"{"groups":[{"title":"Offer","summary":"EUR 9999.","sourceNumbers":[0]}]}"#
         let journal = ModelRequestJournal(response: factFailure ? nil : invalid,
                                           factResponses: factFailure ? [invalid] : nil)
@@ -460,7 +534,7 @@ struct AppleSummaryGeneratorTests {
         #expect(result.first?.sourceFacts?.first?.source == source.id)
     }
 
-    @Test("Every raw source character reaches extraction and every stage respects its runtime budget", arguments: [3500, 4500])
+    @Test("Every raw source character reaches extraction and every stage respects its runtime budget", arguments: [6000, 8192])
     func longSourceChunksPreserveContent(capacity: Int) async throws {
         let journal = ModelRequestJournal()
         var source = try article()
@@ -748,24 +822,34 @@ struct AppleSummaryGeneratorTests {
 
     @Test("Nonshrinking consolidation fails within a bounded first reduction", .timeLimit(.minutes(1)))
     func nonshrinkingConsolidationDoesNotLoop() async throws {
-        var sources = try distinctSources(count: 8)
+        var sources = try distinctSources(count: 40)
         for index in sources.indices { sources[index].text = String(repeating: "Source evidence words ", count: 20) }
         let journal = ModelRequestJournal(consolidation: { prompt in
             let inputs = try JSONDecoder().decode([CapturedModelSource].self, from: Data(prompt.utf8))
             let label = String(try #require(inputs.first).text.prefix(20))
             let groups = ["Alpha", "Beta", "Gamma", "Delta"].map {
                 ["title": $0 + " " + label,
-                 "summary": String(repeating: "Source evidence words ", count: 8) + ".",
+                 "summary": String(repeating: "Source evidence words ", count: 40) + ".",
                  "sourceNumbers": inputs.map(\.sourceNumber)] as [String: Any]
             }
             return try modelJSON(["groups": groups])
         })
         await #expect(throws: ReaderError.self) {
             try await AppleSummaryGenerator().generate(sources, model: ControlledLanguageModel(journal: journal),
-                                                      capacity: 4000, count: { $0.count })
+                                                      capacity: 6000, count: { $0.count })
         }
-        let count = await journal.requests.count
-        #expect(count > 8 && count <= 16)
+        let requests = await journal.requests
+        let facts = requests.filter { modelPrompt($0).first == "{" }
+        let consolidations = try requests.filter { modelPrompt($0).first == "[" }.map {
+            try JSONDecoder().decode([CapturedModelSource].self, from: Data(modelPrompt($0).utf8))
+        }
+        #expect(facts.count >= sources.count)
+        #expect(!consolidations.isEmpty)
+        #expect(consolidations.count <= facts.count)
+        #expect(consolidations.flatMap { $0 }.allSatisfy { input in
+            !["Alpha ", "Beta ", "Gamma ", "Delta "].contains { input.text.hasPrefix($0) }
+        })
+        #expect(requests.count == facts.count + consolidations.count)
     }
 
     private func distinctSources(count: Int) throws -> [ArticleSnapshot] {
@@ -832,7 +916,7 @@ private actor ControlledGenerator: SummaryGenerator {
 }
 
 struct DigestTests {
-    @Test("Unchanged caches from earlier generation and validation policies are regenerated", arguments: ["", "reader-source-facts-consolidation-v1\n", "reader-source-facts-consolidation-v2\n", "reader-source-facts-consolidation-v3\n", "reader-source-facts-consolidation-v4\n", "reader-source-facts-consolidation-v5\n", "reader-source-facts-consolidation-v6\n", "reader-source-facts-consolidation-v7\n", "reader-source-facts-consolidation-v8\n"])
+    @Test("Unchanged caches from earlier generation and validation policies are regenerated", arguments: ["", "reader-source-facts-consolidation-v1\n", "reader-source-facts-consolidation-v2\n", "reader-source-facts-consolidation-v3\n", "reader-source-facts-consolidation-v4\n", "reader-source-facts-consolidation-v5\n", "reader-source-facts-consolidation-v6\n", "reader-source-facts-consolidation-v7\n", "reader-source-facts-consolidation-v8\n", "reader-source-facts-consolidation-v9\n", "reader-source-facts-consolidation-v10\n"])
     func previousGenerationCacheIsRegenerated(policyPrefix: String) async throws {
         let (store, feed, articles) = try await fixture()
         let coordinator = DigestCoordinator(repository: store, generator: FixtureGenerator())
