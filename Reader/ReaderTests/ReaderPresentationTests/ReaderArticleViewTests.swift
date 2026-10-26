@@ -4,6 +4,7 @@ import Foundation
 import SwiftUI
 import Testing
 import WebKit
+import Vision
 import ReaderContent
 import ReaderDomain
 import ReaderPersistence
@@ -13,7 +14,7 @@ import ReaderPersistence
 struct ReaderArticleViewTests {
     enum Outcome: CaseIterable, Sendable { case success, failure, empty, cancelled }
 
-    @Test("Removing the actual hosted article view ends extraction and releases its graph",
+    @Test("The actual hosted article paints saved or extracted text and releases its graph",
           .timeLimit(.minutes(1)), arguments: Outcome.allCases)
     func removingHostedArticleReleasesItsGraph(outcome: Outcome) async throws {
         let graph = try await exerciseView(outcome)
@@ -69,6 +70,17 @@ struct ReaderArticleViewTests {
         }
         window.displayIfNeeded()
         host.layoutSubtreeIfNeeded()
+        let imageData = try await reader.page.exported(as: .image(region: .rect(CGRect(x: 0, y: 0, width: 800, height: 300)),
+                                                                  snapshotWidth: 800, afterScreenUpdates: true))
+        let image = try #require(NSImage(data: imageData))
+        Attachment.record(image, named: "Hosted article WebKit pixels \(outcome)", as: .png)
+        var recognition = RecognizeTextRequest()
+        recognition.recognitionLevel = .accurate
+        let observations = try await recognition.perform(on: imageData)
+        let paintedText = observations.compactMap { $0.topCandidates(1).first?.string }.joined(separator: "\n")
+        Attachment.record(paintedText, named: "Hosted article recognized pixels \(outcome)")
+        let expectedHeading = outcome == .success ? "Extracted native article" : "Saved native article"
+        #expect(paintedText.contains(expectedHeading), Comment(rawValue: paintedText))
         host.rootView = AnyView(EmptyView())
         host.layoutSubtreeIfNeeded()
         #expect(try await waitUntil { !reader.extracting })

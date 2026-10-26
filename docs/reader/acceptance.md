@@ -19,6 +19,8 @@ Native accessibility failures and prior daemon/timeouts remain preserved. Warm c
 
 ## F content-isolation boundary
 
+Hosted body-pixel uncertainty now has a separate [four-case code-test candidate](evidence/f-render-capture-2026-10-26.md): the existing actual hosted ArticleDetailView test exports WebKit page pixels after screen updates and requires native recognition of the saved/extracted heading. It compiles and passes strict lint; changed-source runtime/lifetime proof is pending. This adds no UI method and does not accept the white app-window capture or its cause.
+
 Native WebKit HTML5 plus bundled Readability parses only bounded main HTML/XHTML in an inert document. Publisher scripts/events/CSS, images/SVG/data, media/forms/frames and other resources are blocked by passive allowlisting, disabled page scripts, native block-all rules and strict CSP; Reader's fixed style has its own CSP hash. Positive controls, removed-rule/CSP mutations and actual HTTP canaries prove the exercised Mac boundaries. Reader CI 40223509901 at 2a4f89f39 passes the corrected 320-execution checkpoint after parser retirement. Actual offline/restart, final platforms/accessibility, broader editorial quality and process memory/energy remain open. [Exact criteria and raw evidence](evidence/f-active-content-2026-10-25.md), [native HTML5](evidence/f-native-html-2026-10-25.md), [bounded streaming](evidence/f-streaming-2026-10-25.md).
 
 ## A / #46: accepted foundation
