@@ -1,0 +1,1 @@
+After all 300 read commits, the native Unread filter shows Entries: 0 · Loaded originals: 0 and clears the previous article detail.

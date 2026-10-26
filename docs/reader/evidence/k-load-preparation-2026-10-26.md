@@ -2,7 +2,7 @@
 
 ## Status
 
-The synthetic workload and one native scrolling measurement are exercised. Full representative latency, scrolling, whole-app memory and energy acceptance remains **open**. The first scrolling checkpoint passes its metric case but fails a separate existing UI assertion; its corrected modal-diagnostic check requires a fresh full run.
+The synthetic workload, native scrolling measurement and corrected modal-diagnostic check pass at c29d13483. Full representative latency, scrolling, whole-app memory and energy acceptance remains **open**. New code timing attachments and improved UI failure locations are compiled separately and still require hosted verification.
 
 The new workload uses 100 synthetic feeds, ten folders, 20 root feeds and a default 10,000 articles spanning roughly seven days. Titles, bodies, IDs, dates and mixed read/star memberships are deterministic. Each body contains passive HTML/text; a sparse marker exercises body search. Feed homepages are nil, so icon requests are not started by these records. Data contains no credentials, account tokens or external article resources.
 
@@ -71,6 +71,16 @@ The correction moves the unchanged-query and zero-feed-write observations after 
 Apple's app-targeted [XCTMemoryMetric](https://developer.apple.com/documentation/xctest/xctmemorymetric/init(application:)) and [XCTCPUMetric](https://developer.apple.com/documentation/xctest/xctcpumetric/init(application:)) select the app process; their parameterless forms measure the caller. A UI-runner measurement must not be reported as Reader memory/CPU. [Launch responsiveness](https://developer.apple.com/documentation/xctest/xctapplicationlaunchmetric/init(waituntilresponsive:)) and [scrolling metrics](https://developer.apple.com/documentation/xctest/xctossignpostmetric/scrollinganddecelerationmetric) require actual platform execution and usable samples before acceptance.
 
 Workload generation/ingestion must be excluded from warm interaction/scroll intervals and reported separately. The in-memory entry does not prove cold persistent-store startup or disk performance. CPU measurements are not energy acceptance. Actual UI observations, comparable hardware/run conditions, raw measurements and the separate energy method remain required. Business-rule matrices continue to use Swift Testing; app input/rendering and XCTest measure APIs retain their native boundaries.
+
+## Corrected full hosted checkpoint
+
+[Reader CI 40247068317](https://github.com/mpwg/NetNewsWire/actions/runs/40247068317) passes at c29d134835cf089c4b525473e5c7843a0e657577, test job 121330773682. The [raw native summary](k-load-scrolling-ci-2026-10-26.json) confirms **404 executions: 395 code and nine native UI**, 207 distinct tests, 198 Swift Testing functions / 33 suites, 69 parameterized functions / 266 cases, zero failures/skips and the one deliberate model-guardrail warning. Strict lint, runner failure propagation and [10,000-article process recovery](k-load-scrolling-corrected-ci-recovery-2026-10-26.json) pass.
+
+The corrected delayed-query method passes. Its [native journal](k-load-delayed-confirmation-green-2026-10-26.txt) records unchanged lookup count 20, zero feed-read calls/pending writes after cancellation, then exactly one confirmed feed-read call and all 300 queued rows. The [final native Unread journal](k-load-final-unread-green-2026-10-26.txt) confirms zero entries and cleared detail after commit. The failed previous checkpoint stays preserved above.
+
+The unchanged scrolling method passes again. [Raw samples](k-load-scrolling-corrected-metrics-2026-10-26.json) and the inspected [window screenshot](k-load-scrolling-corrected-2026-10-26.png) prove the isolated visible list. Mean down/up automation time is 3.258 s (3.058–3.589); Reader CPU time is 2.739 s (2.476–3.055). Mean Reader physical peak is 249,426.534 kB (245,730.304–257,510.400), absolute physical memory 238,200.218 kB and physical-memory change 2,470.707 kB. Instruction/cycle samples remain all zero and are unusable. These differ from the earlier samples even though the scrolling code is unchanged; no optimization or calibrated regression claim follows.
+
+Separate Swift CodeQL 40247068217/job 121330775876 again fails in preload_tracer/autobuild with exit 139, CLI 2.27.3; the other three language jobs pass. Complete Swift analysis stays open and enabled. Current local commits f033ce27f and 075d4969d add code timing attachments and caller-site UI diagnostics after this tested checkpoint; they have build/lint proof only until their own full CI run completes.
 
 ## Code timing attachments compiled; execution pending
 
