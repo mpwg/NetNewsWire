@@ -244,21 +244,24 @@ public actor AppleSummaryGenerator: SummaryGenerator {
                     throw ReaderError.invalidResponse
                 }
                 guard generatedOffers.count <= 8 else { throw ReaderError.invalidResponse }
-                func resolve(_ label: String) throws -> String {
-                    guard let original = catalog.resolve(label) else { throw ReaderError.invalidResponse }
+                func resolve(_ label: String, role: SourceLiteralCatalog.Role) throws -> String {
+                    guard let original = catalog.resolve(label, for: role) else { throw ReaderError.invalidResponse }
                     return original
                 }
                 let offers = try generatedOffers.map { value in
-                    let offer = try DigestOfferFact(product: resolve(value.product),
-                                                    merchant: value.merchant.map(resolve), price: value.price.map(resolve),
-                                                    conditions: value.conditions.map(resolve))
+                    let offer = try DigestOfferFact(
+                        product: resolve(value.product, role: .product),
+                        merchant: value.merchant.map { try resolve($0, role: .merchant) },
+                        price: value.price.map { try resolve($0, role: .price) },
+                        conditions: value.conditions.map { try resolve($0, role: .condition) }
+                    )
                     _ = try SourceOfferValidation.validate(offer, in: fragment)
                     return try SourceOfferValidation.validate(offer, in: source)
                 }
                 let excerpts: [String]
                 let evidenceText: String
                 if offers.isEmpty {
-                    let resolvedExcerpts = try generatedExcerpts.map(resolve)
+                    let resolvedExcerpts = try generatedExcerpts.map { try resolve($0, role: .excerpt) }
                     let fragmentExcerpts = try SourceFactValidation.excerpts(resolvedExcerpts, in: fragment)
                     excerpts = try SourceFactValidation.excerpts(fragmentExcerpts, in: source)
                     evidenceText = excerpts.joined(separator: "\n")
@@ -405,25 +408,38 @@ public actor AppleSummaryGenerator: SummaryGenerator {
     }
 
     static func literalFactsSchema(_ catalog: SourceLiteralCatalog) throws -> GenerationSchema {
-        guard !catalog.wireChoices.isEmpty else { throw ReaderError.invalidResponse }
-        let literal = DynamicGenerationSchema(name: "OriginalLiteral", anyOf: catalog.wireChoices)
-        let value = DynamicGenerationSchema(referenceTo: "OriginalLiteral")
+        guard !catalog.wireChoices(for: .product).isEmpty,
+              !catalog.wireChoices(for: .excerpt).isEmpty else { throw ReaderError.invalidResponse }
+        var dependencies: [DynamicGenerationSchema] = []
+        func valueSchema(_ role: SourceLiteralCatalog.Role, name: String) -> DynamicGenerationSchema {
+            let values = catalog.wireChoices(for: role)
+            guard !values.isEmpty else { return .null }
+            dependencies.append(DynamicGenerationSchema(name: name, anyOf: values))
+            return DynamicGenerationSchema(referenceTo: name)
+        }
+        let product = valueSchema(.product, name: "ProductLiteral")
+        let merchant = valueSchema(.merchant, name: "MerchantLiteral")
+        let price = valueSchema(.price, name: "PriceLiteral")
+        let condition = valueSchema(.condition, name: "ConditionLiteral")
+        let excerpt = valueSchema(.excerpt, name: "ExcerptLiteral")
         let offer = DynamicGenerationSchema(name: "Offer", representNilExplicitlyInGeneratedContent: true, properties: [
-            .init(name: "product", description: "Short product or benefit name.", schema: value),
-            .init(name: "merchant", description: "Supplying merchant or null if unknown.", schema: value, isOptional: true),
+            .init(name: "product", description: "Short product or benefit name.", schema: product),
+            .init(name: "merchant", description: "Supplying merchant or null if unknown.", schema: merchant, isOptional: true),
             .init(name: "price", description: "Offered price or discount, not comparison price; null if unknown.",
-                  schema: value, isOptional: true),
+                  schema: price, isOptional: true),
             .init(name: "conditions", description: "Required coupons, eligibility and restrictions.",
-                  schema: DynamicGenerationSchema(arrayOf: value, minimumElements: 0, maximumElements: 8))
+                  schema: DynamicGenerationSchema(arrayOf: condition, minimumElements: 0,
+                                                  maximumElements: catalog.wireChoices(for: .condition).isEmpty ? 0 : 8))
         ])
+        dependencies.append(offer)
         let root = DynamicGenerationSchema(name: "Facts", properties: [
             .init(name: "offers", description: "Separate offers with their own terms.",
                   schema: DynamicGenerationSchema(arrayOf: DynamicGenerationSchema(referenceTo: "Offer"),
                                                   minimumElements: 0, maximumElements: 8)),
             .init(name: "excerpts", description: "Only for non-offer news.",
-                  schema: DynamicGenerationSchema(arrayOf: value, minimumElements: 0, maximumElements: 8))
+                  schema: DynamicGenerationSchema(arrayOf: excerpt, minimumElements: 0, maximumElements: 8))
         ])
-        return try GenerationSchema(root: root, dependencies: [literal, offer])
+        return try GenerationSchema(root: root, dependencies: dependencies)
     }
 
     private static func schemaText(_ schema: GenerationSchema) throws -> String {

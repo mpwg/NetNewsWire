@@ -158,6 +158,23 @@ struct SourceLiteralCatalogTests {
         #expect(SourceLiteralCatalog.wireLabel("%22") != SourceLiteralCatalog.wireLabel("\""))
     }
 
+    @Test("Offer roles reject oversized passages and non-price literals")
+    func roleCatalogsBoundFields() {
+        let longPassage = String(repeating: "details ", count: 30).trimmingCharacters(in: .whitespaces)
+        let source = "Luma lamp at Example Store costs EUR 29.99. Code SAVE50; pickup only. " + longPassage
+        let catalog = SourceLiteralCatalog(fragment: source, original: source)
+        let price = SourceLiteralCatalog.wireLabel("EUR 29.99")
+        #expect(catalog.resolve(price, for: .price) == "EUR 29.99")
+        #expect(catalog.resolve(SourceLiteralCatalog.wireLabel("Luma lamp"), for: .price) == nil)
+        #expect(catalog.resolve(SourceLiteralCatalog.wireLabel("Example Store"), for: .merchant) == "Example Store")
+        #expect(catalog.resolve(SourceLiteralCatalog.wireLabel(longPassage), for: .product) == nil)
+        #expect(catalog.resolve(SourceLiteralCatalog.wireLabel(longPassage), for: .merchant) == nil)
+        #expect(catalog.resolve(SourceLiteralCatalog.wireLabel(longPassage), for: .condition) == nil)
+        #expect(catalog.wireChoices(for: .price).allSatisfy { label in
+            catalog.resolve(label, for: .price)?.count ?? 1000 <= 32
+        })
+    }
+
     @Test("A source split cannot authorize a clipped word or decimal")
     func fragmentCannotInventSourceBoundaries() {
         let original = "Special code SAVE50 costs EUR 129.99."
@@ -333,6 +350,21 @@ struct AppleSummaryGeneratorTests {
         let decoded = try #require(JSONSerialization.jsonObject(with: Data(payload.utf8)) as? [[String: Any]])
         let conditions = try #require(decoded.first?["conditions"] as? [String])
         #expect(conditions == [condition, "pickup only"])
+    }
+
+    @Test("A non-price source value cannot enter the price field")
+    func roleMismatchStopsBeforeConsolidation() async throws {
+        var source = try article()
+        source.text = "Example Store offers the Luma lamp for EUR 29.99."
+        let journal = ModelRequestJournal(factResponses: [try modelJSON([
+            "offers": [["product": "Luma lamp", "merchant": "Example Store",
+                        "price": "Example Store", "conditions": []]], "excerpts": []
+        ])])
+        await #expect(throws: ReaderError.invalidResponse) {
+            try await AppleSummaryGenerator().generate(
+                [source], model: ControlledLanguageModel(journal: journal), capacity: 100000, count: { $0.count })
+        }
+        #expect(await journal.requests.count == 1)
     }
 
     @Test("Native offer records retain each product's own price and conditions without Reader identifiers in model input")
@@ -937,7 +969,7 @@ private actor ControlledGenerator: SummaryGenerator {
 }
 
 struct DigestTests {
-    @Test("Unchanged caches from earlier generation and validation policies are regenerated", arguments: ["", "reader-source-facts-consolidation-v1\n", "reader-source-facts-consolidation-v2\n", "reader-source-facts-consolidation-v3\n", "reader-source-facts-consolidation-v4\n", "reader-source-facts-consolidation-v5\n", "reader-source-facts-consolidation-v6\n", "reader-source-facts-consolidation-v7\n", "reader-source-facts-consolidation-v8\n", "reader-source-facts-consolidation-v9\n", "reader-source-facts-consolidation-v10\n", "reader-source-facts-consolidation-v11\n", "reader-source-facts-consolidation-v12\n"])
+    @Test("Unchanged caches from earlier generation and validation policies are regenerated", arguments: ["", "reader-source-facts-consolidation-v1\n", "reader-source-facts-consolidation-v2\n", "reader-source-facts-consolidation-v3\n", "reader-source-facts-consolidation-v4\n", "reader-source-facts-consolidation-v5\n", "reader-source-facts-consolidation-v6\n", "reader-source-facts-consolidation-v7\n", "reader-source-facts-consolidation-v8\n", "reader-source-facts-consolidation-v9\n", "reader-source-facts-consolidation-v10\n", "reader-source-facts-consolidation-v11\n", "reader-source-facts-consolidation-v12\n", "reader-source-facts-consolidation-v13\n"])
     func previousGenerationCacheIsRegenerated(policyPrefix: String) async throws {
         let (store, feed, articles) = try await fixture()
         let coordinator = DigestCoordinator(repository: store, generator: FixtureGenerator())
