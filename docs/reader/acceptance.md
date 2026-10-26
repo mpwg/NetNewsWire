@@ -19,6 +19,8 @@ Native accessibility failures and prior daemon/timeouts remain preserved. Warm c
 
 ## I staged-generation candidate
 
+The current packet candidate keeps each fragment's excerpts together and clarifies complete coverage. One actual German two-offer observation preserves both merchants/prices/conditions; long-text tail/coverage loss and quoted-instruction promotion remain open. New opt-in package diagnostics and three Swift Testing functions compile; their runtime proof is pending. [Exact candidate criteria](evidence/i-packets-2026-10-26.md).
+
 The owner-approved I/#54 staged implementation now compiles: verbatim source-bound facts, bounded hierarchical consolidation, complete provenance/coverage checks, cancellation/live consent per request and generation-policy cache invalidation. All new contracts use Swift Testing; ten UI methods remain unchanged. At 99123f785 / CI 40292848095 all 456 code executions pass, including 62 staged cases. The full plan reports 465 passes / one native removal-wait failure of 466, no skips. Actual local-model evaluation records five synthetic observations: offers fail validation in both locales and long text fails source validation; German news has semantic repetition/qualification and the quoted spam price surfaces as its own section. Actual model quality remains open. [Current I candidate matrix](evidence/i-staged-2026-10-26.md).
 
 ## F content-isolation boundary

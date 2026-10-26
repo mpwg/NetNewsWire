@@ -18,6 +18,7 @@ struct ReaderInferenceProbe {
         var sections: [DigestSection]
         var missingSourceIDs: [String]
         var error: String?
+        var trace: [SummaryGenerationTrace] = []
         let cloudAllowed = false
         let privateCloudComputeEnabled = false
     }
@@ -35,17 +36,26 @@ struct ReaderInferenceProbe {
             modelAvailable: model.isAvailable, contextTokens: model.contextSize,
             elapsedSeconds: 0, articles: articles, sections: [], missingSourceIDs: []
         )
+        let journal = TraceJournal()
         let start = ContinuousClock.now
         do {
             guard model.isAvailable else { throw ProbeError.modelUnavailable }
             report.inputTokens = try await model.tokenCount(
                 for: articles.map { $0.title + "\n" + $0.text }.joined(separator: "\n")
             )
-            report.sections = try await AppleSummaryGenerator(privateCloudComputeEnabled: false)
-                .summarize(articles, cloudAllowed: false)
+            let generator = AppleSummaryGenerator(privateCloudComputeEnabled: false)
+            if arguments.contains("--trace") {
+                report.sections = try await generator.generate(articles, model: model, capacity: model.contextSize,
+                                                               trace: { await journal.append($0) }, count: { @Sendable text in
+                    try await model.tokenCount(for: text)
+                })
+            } else {
+                report.sections = try await generator.summarize(articles, cloudAllowed: false)
+            }
         } catch {
             report.error = String(reflecting: error)
         }
+        report.trace = await journal.entries
         let elapsed = start.duration(to: .now).components
         report.elapsedSeconds = Double(elapsed.seconds) + Double(elapsed.attoseconds) / 1e18
         let covered = Set(report.sections.flatMap(\.sources))
@@ -55,6 +65,11 @@ struct ReaderInferenceProbe {
         encoder.dateEncodingStrategy = .iso8601
         FileHandle.standardOutput.write(try encoder.encode(report))
         FileHandle.standardOutput.write(Data("\n".utf8))
+    }
+
+    actor TraceJournal {
+        var entries: [SummaryGenerationTrace] = []
+        func append(_ entry: SummaryGenerationTrace) { entries.append(entry) }
     }
 
     enum ProbeError: Error {

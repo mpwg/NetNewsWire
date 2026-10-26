@@ -1,0 +1,64 @@
+{
+  "articles" : [
+    {
+      "dateArrived" : "1970-01-01T00:00:00Z",
+      "feedID" : "synthetic-inference",
+      "html" : "",
+      "id" : {
+        "accountID" : "99999999-9999-4999-8999-999999999999",
+        "remoteID" : "offer-a"
+      },
+      "read" : false,
+      "starred" : false,
+      "text" : "Alpenmarkt bietet die Luma-Tischlampe für EUR 29.99 an. Das Angebot gilt nur bei Abholung; Versand ist nicht enthalten.",
+      "title" : "Angebot bei Alpenmarkt"
+    },
+    {
+      "dateArrived" : "1970-01-01T00:00:00Z",
+      "feedID" : "synthetic-inference",
+      "html" : "",
+      "id" : {
+        "accountID" : "99999999-9999-4999-8999-999999999999",
+        "remoteID" : "offer-b"
+      },
+      "read" : false,
+      "starred" : false,
+      "text" : "Donauhandel bietet den Vela-Wasserkocher für EUR 44.90 an. Das Angebot gilt ausschließlich im Onlineshop; ein Enddatum ist nicht genannt.",
+      "title" : "Angebot bei Donauhandel"
+    }
+  ],
+  "cloudAllowed" : false,
+  "contextTokens" : 8192,
+  "elapsedSeconds" : 5.366230666,
+  "error" : "ReaderDomain.ReaderError.unavailable(\"The summary contains unsupported numbers or links. Original articles remain available.\")",
+  "inputTokens" : 86,
+  "locale" : "de_AT",
+  "missingSourceIDs" : [
+    "99999999-9999-4999-8999-999999999999\/offer-a",
+    "99999999-9999-4999-8999-999999999999\/offer-b"
+  ],
+  "modelAvailable" : true,
+  "operatingSystem" : "Version 27.0.1 (Build 26A434)",
+  "privateCloudComputeEnabled" : false,
+  "scenario" : "offers",
+  "sections" : [
+
+  ],
+  "trace" : [
+    {
+      "prompt" : "{\"sourceNumber\":0,\"text\":\"Angebot bei Alpenmarkt\\nAlpenmarkt bietet die Luma-Tischlampe für EUR 29.99 an. Das Angebot gilt nur bei Abholung; Versand ist nicht enthalten.\"}",
+      "response" : "{\"excerpts\": [\"Angebot bei Alpenmarkt\", \"Alpenmarkt bietet die Luma-Tischlampe für EUR 29.99 an\", \"Das Angebot gilt nur bei Abholung\", \"Versand ist nicht enthalten\"]}",
+      "stage" : "facts"
+    },
+    {
+      "prompt" : "{\"sourceNumber\":1,\"text\":\"Angebot bei Donauhandel\\nDonauhandel bietet den Vela-Wasserkocher für EUR 44.90 an. Das Angebot gilt ausschließlich im Onlineshop; ein Enddatum ist nicht genannt.\"}",
+      "response" : "{\"excerpts\": [\"Angebot bei Donauhandel\", \"Donauhandel bietet den Vela-Wasserkocher für EUR 44.90 an.\", \"Das Angebot gilt ausschließlich im Onlineshop; ein Enddatum ist nicht genannt.\"]}",
+      "stage" : "facts"
+    },
+    {
+      "prompt" : "[{\"sourceNumber\":0,\"text\":\"Angebot bei Alpenmarkt\"},{\"sourceNumber\":1,\"text\":\"Alpenmarkt bietet die Luma-Tischlampe für EUR 29.99 an\"},{\"sourceNumber\":2,\"text\":\"Das Angebot gilt nur bei Abholung\"},{\"sourceNumber\":3,\"text\":\"Versand ist nicht enthalten\"},{\"sourceNumber\":4,\"text\":\"Angebot bei Donauhandel\"},{\"sourceNumber\":5,\"text\":\"Donauhandel bietet den Vela-Wasserkocher für EUR 44.90 an.\"},{\"sourceNumber\":6,\"text\":\"Das Angebot gilt ausschließlich im Onlineshop; ein Enddatum ist nicht genannt.\"}]",
+      "response" : "{\"groups\": [{\"title\": \"Angebot bei Alpenmarkt\", \"summary\": \"Alpenmarkt bietet die Luma-Tischlampe für EUR 29.99 an. Das Angebot gilt nur bei Abholung und der Versand ist nicht enthalten.\", \"sourceNumbers\": [0, 2, 3]}]}",
+      "stage" : "consolidation"
+    }
+  ]
+}

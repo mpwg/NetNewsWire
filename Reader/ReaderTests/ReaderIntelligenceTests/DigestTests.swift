@@ -139,7 +139,69 @@ struct SourceFactValidationTests {
     }
 }
 
+private actor GenerationTraceJournal {
+    var entries: [SummaryGenerationTrace] = []
+    func append(_ entry: SummaryGenerationTrace) { entries.append(entry) }
+}
+
 struct AppleSummaryGeneratorTests {
+    @Test("Each source fragment keeps its merchant, price and conditions in one evidence packet")
+    func fragmentFactsKeepTheirSharedReference() async throws {
+        let first = try article()
+        var second = first
+        second.id.remoteID = "second-offer"
+        second.text = "Other Store offers a kettle for EUR 44.90. Online only."
+        let firstText = first.text
+        let journal = ModelRequestJournal(factResponses: [
+            try modelJSON(["excerpts": [first.title, firstText]]),
+            try modelJSON(["excerpts": ["Other Store offers a kettle for EUR 44.90.", "Online only."]])
+        ], consolidation: { prompt in
+            let inputs = try JSONDecoder().decode([CapturedModelSource].self, from: Data(prompt.utf8))
+            #expect(inputs.count == 2)
+            #expect(inputs[0].text == first.title + "\n" + firstText)
+            #expect(inputs[1].text == "Other Store offers a kettle for EUR 44.90.\nOnline only.")
+            return #"{"groups":[{"title":"Offers","summary":"Other Store: EUR 44.90, online only.","sourceNumbers":[0,1]}]}"#
+        })
+        let result = try await AppleSummaryGenerator().generate([first, second], model: ControlledLanguageModel(journal: journal),
+                                                               capacity: 10000, count: { $0.count })
+        #expect(result.first?.sources == [first.id, second.id])
+    }
+
+    @Test("Opt-in evaluation captures rejected drafts without bypassing validation", arguments: [false, true])
+    func traceRetainsRejectedDraft(factFailure: Bool) async throws {
+        let invalid = factFailure ? #"{"excerpts":["A fabricated quote."]}"#
+            : #"{"groups":[{"title":"Offer","summary":"EUR 9999.","sourceNumbers":[0]}]}"#
+        let journal = ModelRequestJournal(response: factFailure ? nil : invalid,
+                                          factResponses: factFailure ? [invalid] : nil)
+        let trace = GenerationTraceJournal()
+        await #expect(throws: ReaderError.self) {
+            try await AppleSummaryGenerator().generate([try article()], model: ControlledLanguageModel(journal: journal),
+                                                      capacity: 10000, trace: { await trace.append($0) }, count: { $0.count })
+        }
+        let entries = await trace.entries
+        #expect(entries.map(\.stage) == (factFailure ? ["facts"] : ["facts", "consolidation"]))
+        let last = try #require(entries.last)
+        let captured = try JSONSerialization.jsonObject(with: Data(last.response.utf8)) as? NSDictionary
+        let expected = try JSONSerialization.jsonObject(with: Data(invalid.utf8)) as? NSDictionary
+        #expect(captured == expected)
+        let requests = await journal.requests
+        #expect(entries.map(\.prompt) == requests.map(modelPrompt))
+    }
+
+    @Test("Cancellation in an evaluation sink prevents validation and later requests")
+    func traceCancellationStopsGeneration() async throws {
+        let journal = ModelRequestJournal()
+        let task = Task {
+            try await AppleSummaryGenerator().generate([try article()], model: ControlledLanguageModel(journal: journal),
+                                                      capacity: 10000, trace: { _ in
+                withUnsafeCurrentTask { $0?.cancel() }
+            }, count: { $0.count })
+        }
+        await #expect(throws: CancellationError.self) { try await task.value }
+        #expect(!Task.isCancelled)
+        #expect(await journal.requests.count == 1)
+    }
+
     @Test("Matching source facts merge without losing stored source identities", arguments: [false, true])
     func equalFactsKeepEverySourceIdentity(foreignAccount: Bool) async throws {
         let journal = ModelRequestJournal(response: """
@@ -504,8 +566,8 @@ private actor ControlledGenerator: SummaryGenerator {
 }
 
 struct DigestTests {
-    @Test("An unchanged valid cache from the earlier generator is regenerated under the staged policy")
-    func previousGenerationCacheIsRegenerated() async throws {
+    @Test("Unchanged valid caches from source-only and first-stage policies are regenerated", arguments: ["", "reader-source-facts-consolidation-v1\n"])
+    func previousGenerationCacheIsRegenerated(policyPrefix: String) async throws {
         let (store, feed, articles) = try await fixture()
         let coordinator = DigestCoordinator(repository: store, generator: FixtureGenerator())
         var cached = try #require(try await coordinator.generate(feed: feed).first)
@@ -522,7 +584,9 @@ struct DigestTests {
         let previous = articles.sorted { $0.id.id < $1.id.id }.map {
             PreviousSource(id: $0.id, title: $0.title, text: $0.text, html: $0.html, url: $0.url)
         }
-        cached.sourceFingerprint = SHA256.hash(data: try encoder.encode(previous)).map { String(format: "%02x", $0) }.joined()
+        var previousBytes = Data(policyPrefix.utf8)
+        previousBytes.append(try encoder.encode(previous))
+        cached.sourceFingerprint = SHA256.hash(data: previousBytes).map { String(format: "%02x", $0) }.joined()
         try await store.saveDigest(cached)
         let regenerated = try #require(try await coordinator.generate(feed: feed).first)
         #expect(regenerated.revision != cached.revision)
