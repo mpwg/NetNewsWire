@@ -1,0 +1,67 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "63278d018a6f8b74fb33ceeb957db7a2dc609a1e",
+        "deviceName" : "My Mac",
+        "modelName" : "Virtual Machine",
+        "osBuildNumber" : "26A434",
+        "osVersion" : "27.0.1",
+        "platform" : "macOS"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 1,
+      "passedTests" : 404,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "Reader · Built with macOS 27.0.1",
+  "expectedFailures" : 0,
+  "failedTests" : 1,
+  "finishTime" : 1792984613.453,
+  "passedTests" : 207,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+    {
+      "issueType" : "Runtime Warning",
+      "message" : "Safety guardrails were triggered. If this is unexpected, please use `LanguageModelSession.logFeedbackAttachment(sentiment:issues:desiredOutput:)` to export the feedback attachment and file a feedback report at https://feedbackassistant.apple.com.",
+      "sourceURL" : "file:///Users/runner/work/NetNewsWire/NetNewsWire/Reader/ReaderTests/ReaderIntelligenceTests/DigestTests.swift"
+    }
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1792984076.964,
+  "statistics" : [
+    {
+      "subtitle" : "266 test runs",
+      "title" : "69 tests ran with dynamic parameters"
+    },
+    {
+      "subtitle" : "1 test run",
+      "title" : "1 test collected performance metrics"
+    }
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "XCTAssertEqual failed: (\"[\"Timeline article 298\"]\") is not equal to (\"[\"Timeline article 299\", \"Timeline article 298\"]\") - Actual VoiceOver must reach both adjacent article titles: [\"Welcome to macOS. VoiceOver is on.\", \"In All articles table Row 1 of 201 Unread image, Timeline articl\", \"Unread image, Timeline article 298, Representative content for k\", \"Unread image, Timeline article 297, Representative content for k\", \"Unread image, Timeline article 297, Representative content for k\", \"Unread image, Timeline article 296, Representative content for k\", \"Unread image, Timeline article 295, Representative content for k\", \"Unread image, Timeline article 294, Representative content for k\", \"Unread image, Timeline article 293, Representative content for k\", \"Unread image, Timeline article 292, Representative content for k\", \"Unread image, Timeline article 291, Representative content for k\", \"Unread image, Timeline article 290, Representative content for k\", \"Unread image, Timeline article 289, Representative content for k\", \"Unread image, Timeline article 288, Representative content for k\", \"Unread image, Timeline article 287, Representative content for k\", \"Unread image, Timeline article 286, Representative content for k\", \"Unread image, Timeline article 285, Representative content for k\", \"Unread image, Timeline article 284, Representative content for k\", \"Unread image, Timeline article 283, Representative content for k\", \"Unread image, Timeline article 282, Representative content for k\", \"Unread image, Timeline article 281, Representative content for k\", \"Unread image, Timeline article 280, Representative content for k\"]",
+      "targetName" : "ReaderUITests",
+      "testIdentifier" : 207,
+      "testIdentifierString" : "ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus()",
+      "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus",
+      "testName" : "testVoiceOverAnnouncesReaderAndMovesFocus()"
+    }
+  ],
+  "title" : "Test - Reader",
+  "topInsights" : [
+    {
+      "category" : "Longest Test Runs",
+      "impact" : "18% of duration",
+      "text" : "4 longest test runs with outlier durations exceeding 1.34s (three standard deviations)"
+    }
+  ],
+  "totalTestCount" : 208
+}

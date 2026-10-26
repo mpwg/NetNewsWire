@@ -80,7 +80,9 @@ final class ReaderSmokeTests: XCTestCase {
             try captureSpeech("current") { try voiceOver.currentSpeech() },
             try captureSpeech("enter timeline") { try voiceOver.moveIn() }
         ]
-        let expectedTitles = ["Timeline article 299", "Timeline article 298"]
+        // Table-entry speech includes container context and can clip the first row title.
+        // Require complete titles from two adjacent rows reached by forward navigation.
+        let expectedTitles = ["Timeline article 298", "Timeline article 297"]
         var announcedTitles = Set(expectedTitles.filter { title in speech.contains { $0.contains(title) } })
         for step in 1...20 {
             if announcedTitles.count == expectedTitles.count { break }

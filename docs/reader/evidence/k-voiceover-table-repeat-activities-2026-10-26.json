@@ -1,0 +1,1111 @@
+{
+  "testIdentifier" : "ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus()",
+  "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus",
+  "testName" : "testVoiceOverAnnouncesReaderAndMovesFocus()",
+  "testRuns" : [
+    {
+      "activities" : [
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Screen Recording 2026-10-26 at 04.14.17 AM.mp4",
+              "payloadId" : "0~b8ohtbZ79WD7gbDb9mY7GrkPD2x3g9S96SgAjSjUFbGtOBXsLte4e9vlwJgWL8VxuWFlVGMJocLLdq3VLhCRYw==",
+              "timestamp" : 1792984457.058,
+              "uuid" : "4D25E367-D91B-48EC-9114-62913BBB8D1B"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984457.058,
+              "title" : "kXCTAttachmentScreenRecording"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984456.946,
+          "title" : "Start Test at 2026-10-26 03:14:16.946"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984457.076,
+          "title" : "Set Up"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792984457.089,
+                  "title" : "Terminate eu.mpwg.reader.debug:83099"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792984458.629,
+                  "title" : "Wait for accessibility to load"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792984459.279,
+                  "title" : "Setting up automation session"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792984459.299,
+                  "title" : "Wait for eu.mpwg.reader.debug to idle"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984457.088,
+              "title" : "Launch eu.mpwg.reader.debug"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984457.083,
+          "title" : "Open eu.mpwg.reader.debug"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792984460.328,
+                  "title" : "Checking existence of `Window (First Match)`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984460.327,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object Window (First Match)`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984459.302,
+          "title" : "Waiting 10.0s for Window (First Match) to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984460.36,
+          "title" : "Get number of matches for: Descendants matching type Window"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984461.334,
+          "title" : "Get number of matches for: Descendants matching type Window"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "XCUITest window setup_0_0EC38C5E-3D85-45EB-A840-10EB5A6219F1.txt",
+              "payloadId" : "0~pQADtM1fsLg5gLb30CxAjOi1j7lLpKoLChkIOkUw2RbN-PNhdhqTHpzNnHuMDuKXkC02IhsreRiXBJU5XYK30g==",
+              "timestamp" : 1792984462.447,
+              "uuid" : "DE03936B-6D22-4256-BED3-892591DAF6CE"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984462.447,
+              "title" : "XCUITest window setup"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984462.447,
+          "title" : "Added attachment named 'XCUITest window setup'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984463.523,
+              "title" : "Find the \"timelineFixturePhase\" StaticText"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984463.521,
+          "title" : "Checking `Expect predicate `value == \"ready\"` for object \"timelineFixturePhase\" StaticText`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984465.531,
+              "title" : "Find the \"Timeline article 299\" StaticText"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984465.531,
+          "title" : "Checking `Expect predicate `hittable == 1` for object \"Timeline article 299\" StaticText`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Native VoiceOver initial state_0_8AC79FED-4F65-4819-9C86-939EB2E07D97.txt",
+              "payloadId" : "0~R2nzJHWXPNgoY8PlsqOyn9026XGP3wuxlWp85XH_y_itffKFuPWGoSxLNzceo-rtdwkNmORh8rGeYfuhOsJbkQ==",
+              "timestamp" : 1792984465.645,
+              "uuid" : "571DDE78-113B-4184-832D-43740052883A"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984465.645,
+              "title" : "Native VoiceOver initial state"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984465.645,
+          "title" : "Added attachment named 'Native VoiceOver initial state'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Native VoiceOver service before activation_0_DC5FB605-DF5B-48C0-ADC9-76D94D6A25A5.txt",
+              "payloadId" : "0~6yJMPwcGRskLrcxkduMyKPllHFFlFLs-_QKHpgXFkcRN9dI5rgUCIz3uVQl7COcOW_f4tjA40J1b2qK5987VAg==",
+              "timestamp" : 1792984465.646,
+              "uuid" : "EF15BBDB-BFE2-4BC5-B6B3-72A3B459C9FD"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984465.646,
+              "title" : "Native VoiceOver service before activation"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984465.646,
+          "title" : "Added attachment named 'Native VoiceOver service before activation'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Synthesized Event 2026-10-26 at 04.14.35 AM",
+              "payloadId" : "0~p1Z_EptaCkl_AI2iFLIdEKfs5nMXmgvBuOOqXu-Jwh4uPO3vDX2qA2n-gnup4FmhJu1bONif6Rnetfywj1zTfQ==",
+              "timestamp" : 1792984475.056,
+              "uuid" : "D1684691-52E2-4AD6-83B1-32768F61E8B9"
+            }
+          ],
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984472.884,
+              "title" : "Wait for eu.mpwg.reader.debug to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984474.074,
+              "title" : "Find the \"Timeline article 299\" StaticText"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984474.194,
+              "title" : "Check for interrupting elements affecting \"Timeline article 299\" StaticText"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "attachments" : [
+                {
+                  "lifetime" : "deleteOnSuccess",
+                  "name" : "Synthesized Event 2026-10-26 at 04.14.35 AM",
+                  "payloadId" : "0~p1Z_EptaCkl_AI2iFLIdEKfs5nMXmgvBuOOqXu-Jwh4uPO3vDX2qA2n-gnup4FmhJu1bONif6Rnetfywj1zTfQ==",
+                  "timestamp" : 1792984475.056,
+                  "uuid" : "D1684691-52E2-4AD6-83B1-32768F61E8B9"
+                }
+              ],
+              "childActivities" : [
+                {
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792984475.056,
+                  "title" : "kXCTAttachmentLegacySynthesizedEvent"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984474.312,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984475.059,
+              "title" : "Wait for eu.mpwg.reader.debug to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984472.883,
+          "title" : "Click \"Timeline article 299\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.userCreated",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Native VoiceOver service before current_0_064EC888-7953-4DC6-8F01-AC62DF55799E.txt",
+              "payloadId" : "0~pj1zd2fH3wQWCuA0tOtEGe57Bb6Mzl_QZLCLuT2oVw6bjYWu70S3zLfLiCOs2r5mJaeC7-M-FK2depL_iocLCQ==",
+              "timestamp" : 1792984475.084,
+              "uuid" : "71F1215E-DB63-401F-9279-DDB9509918CB"
+            },
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Actual native VoiceOver current_1_064EC888-7953-4DC6-8F01-AC62DF55799E.txt",
+              "payloadId" : "0~Aw_JWuXYLKb_KAeZvZUz8PcX45ab44DKbG5QUtIXYN_ItBB2e-8OB8PdWk2HXqRddhmubdbefJ1wjXioEMtBLg==",
+              "timestamp" : 1792984475.087,
+              "uuid" : "9232103F-09A6-471C-872A-840DA9DA6840"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984475.084,
+              "title" : "Native VoiceOver service before current"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984475.087,
+              "title" : "Actual native VoiceOver current"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984475.073,
+          "title" : "Native VoiceOver current"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.userCreated",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Native VoiceOver service before enter timeline_0_550AA759-41A0-4514-949F-4B060E5E0987.txt",
+              "payloadId" : "0~pj1zd2fH3wQWCuA0tOtEGe57Bb6Mzl_QZLCLuT2oVw6bjYWu70S3zLfLiCOs2r5mJaeC7-M-FK2depL_iocLCQ==",
+              "timestamp" : 1792984475.089,
+              "uuid" : "884F0B5A-4B6E-4B06-AD13-BF8B16E3B60A"
+            },
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Actual native VoiceOver enter timeline_1_550AA759-41A0-4514-949F-4B060E5E0987.txt",
+              "payloadId" : "0~FalohAGKzafXLLgAVJvQVX7blNw2r4J2vuWpm4Vp0tCfHuDuWkrrFNsRqqC7AoO69bEHRuukP9uveiR2XyFZKg==",
+              "timestamp" : 1792984484.295,
+              "uuid" : "A0F76DB8-7ABA-44D5-B9F0-F97BA0D3A2D6"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984475.089,
+              "title" : "Native VoiceOver service before enter timeline"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984484.295,
+              "title" : "Actual native VoiceOver enter timeline"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984475.088,
+          "title" : "Native VoiceOver enter timeline"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.userCreated",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Native VoiceOver service before forward 1_0_C5D3ABAD-DDB4-4231-A237-6A6B1643DB1C.txt",
+              "payloadId" : "0~pj1zd2fH3wQWCuA0tOtEGe57Bb6Mzl_QZLCLuT2oVw6bjYWu70S3zLfLiCOs2r5mJaeC7-M-FK2depL_iocLCQ==",
+              "timestamp" : 1792984484.297,
+              "uuid" : "923B99CF-3ADA-49AD-949E-39AF6D77E55C"
+            },
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Actual native VoiceOver forward 1_1_C5D3ABAD-DDB4-4231-A237-6A6B1643DB1C.txt",
+              "payloadId" : "0~utMOF9pgB8nwVm0lE0oNwEO1alLQYi_XCZqtAe0gdjWl9ztd8aCdZMABbtWoHDxN3pyo0HYofg-38ZqZYEYb1g==",
+              "timestamp" : 1792984486.913,
+              "uuid" : "C6ECCF2A-764E-4A5A-8A0E-EA84E6F8F581"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984484.297,
+              "title" : "Native VoiceOver service before forward 1"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984486.913,
+              "title" : "Actual native VoiceOver forward 1"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984484.295,
+          "title" : "Native VoiceOver forward 1"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.userCreated",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Native VoiceOver service before forward 2_0_D7DF86ED-229F-43DF-98B2-99C37219C538.txt",
+              "payloadId" : "0~pj1zd2fH3wQWCuA0tOtEGe57Bb6Mzl_QZLCLuT2oVw6bjYWu70S3zLfLiCOs2r5mJaeC7-M-FK2depL_iocLCQ==",
+              "timestamp" : 1792984486.917,
+              "uuid" : "BDB219CF-E09E-43C8-9F8C-CE6B75C5DC27"
+            },
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Actual native VoiceOver forward 2_1_D7DF86ED-229F-43DF-98B2-99C37219C538.txt",
+              "payloadId" : "0~xNu69G9-5hjp0Lj9yqd_M2gSBolS2qHuofIYeg7IbUGr4a6z2MrIdlAZJn-l7DYSXh-Fi4qVLt9K7318I8FJAQ==",
+              "timestamp" : 1792984489.529,
+              "uuid" : "0F489B0E-00B8-4DCC-95D1-BAA0BC6AA180"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984486.917,
+              "title" : "Native VoiceOver service before forward 2"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984489.529,
+              "title" : "Actual native VoiceOver forward 2"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984486.914,
+          "title" : "Native VoiceOver forward 2"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.userCreated",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Native VoiceOver service before forward 3_0_C4066BA7-1F1D-40E1-885B-7F3923DA23B6.txt",
+              "payloadId" : "0~pj1zd2fH3wQWCuA0tOtEGe57Bb6Mzl_QZLCLuT2oVw6bjYWu70S3zLfLiCOs2r5mJaeC7-M-FK2depL_iocLCQ==",
+              "timestamp" : 1792984489.535,
+              "uuid" : "434EC913-4CA7-4CC9-91C6-5CDD57AED1E3"
+            },
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Actual native VoiceOver forward 3_1_C4066BA7-1F1D-40E1-885B-7F3923DA23B6.txt",
+              "payloadId" : "0~xNu69G9-5hjp0Lj9yqd_M2gSBolS2qHuofIYeg7IbUGr4a6z2MrIdlAZJn-l7DYSXh-Fi4qVLt9K7318I8FJAQ==",
+              "timestamp" : 1792984496.855,
+              "uuid" : "21C0F218-3E55-46B5-BFD1-193154C288DC"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984489.535,
+              "title" : "Native VoiceOver service before forward 3"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984496.855,
+              "title" : "Actual native VoiceOver forward 3"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984489.531,
+          "title" : "Native VoiceOver forward 3"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.userCreated",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Native VoiceOver service before forward 4_0_5F98A58C-2FC6-4AC2-82E8-D17B7E7F1C61.txt",
+              "payloadId" : "0~pj1zd2fH3wQWCuA0tOtEGe57Bb6Mzl_QZLCLuT2oVw6bjYWu70S3zLfLiCOs2r5mJaeC7-M-FK2depL_iocLCQ==",
+              "timestamp" : 1792984496.859,
+              "uuid" : "4A5E2CC3-A5D5-48CF-B99C-F8F9B6245CAE"
+            },
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Actual native VoiceOver forward 4_1_5F98A58C-2FC6-4AC2-82E8-D17B7E7F1C61.txt",
+              "payloadId" : "0~Ax0Ob_ulVe5XAm9u17MmkoKF8rHq7T9hG_xHlVo8z9Gjc1cJZaEqTCYHZt_VUUQLNdKy8GyUdS8V6jNdxbFkjQ==",
+              "timestamp" : 1792984497.365,
+              "uuid" : "CEC81A13-F9D7-49C2-B030-890F4CD1A977"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984496.859,
+              "title" : "Native VoiceOver service before forward 4"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984497.365,
+              "title" : "Actual native VoiceOver forward 4"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984496.856,
+          "title" : "Native VoiceOver forward 4"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.userCreated",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Native VoiceOver service before forward 5_0_E8112DD7-3F77-4065-B337-D89C5F8CE7B8.txt",
+              "payloadId" : "0~pj1zd2fH3wQWCuA0tOtEGe57Bb6Mzl_QZLCLuT2oVw6bjYWu70S3zLfLiCOs2r5mJaeC7-M-FK2depL_iocLCQ==",
+              "timestamp" : 1792984497.369,
+              "uuid" : "953F3080-18ED-48C5-A840-DF1E73CD13FD"
+            },
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Actual native VoiceOver forward 5_1_E8112DD7-3F77-4065-B337-D89C5F8CE7B8.txt",
+              "payloadId" : "0~cA2COMdOouHnMi7ZXy1nie48VHM5Q8iAibee14zXok4UQo9Hf3tYBfkR-vr-MRpFE4-ySoERT9lRch9TY_61xw==",
+              "timestamp" : 1792984500.04,
+              "uuid" : "6752AF72-6FB7-41E2-868C-FDED09951329"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984497.369,
+              "title" : "Native VoiceOver service before forward 5"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984500.04,
+              "title" : "Actual native VoiceOver forward 5"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984497.367,
+          "title" : "Native VoiceOver forward 5"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.userCreated",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Native VoiceOver service before forward 6_0_5EF494A2-8823-448C-9B6B-8BC9FBB301A6.txt",
+              "payloadId" : "0~pj1zd2fH3wQWCuA0tOtEGe57Bb6Mzl_QZLCLuT2oVw6bjYWu70S3zLfLiCOs2r5mJaeC7-M-FK2depL_iocLCQ==",
+              "timestamp" : 1792984500.042,
+              "uuid" : "1F2B0FC7-DB70-4A43-9385-AE71ADFB9331"
+            },
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Actual native VoiceOver forward 6_1_5EF494A2-8823-448C-9B6B-8BC9FBB301A6.txt",
+              "payloadId" : "0~EKNFp0YDUIuQw-1mVLtW3ovvlIkSjX3TGUjcXpqzQKQLSb07Z9I60ErU3tRvJhrPFzeMY1HUBj7GXlUptrzHzw==",
+              "timestamp" : 1792984500.731,
+              "uuid" : "51186D86-A6A6-445F-B0C6-507E12264FAD"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984500.042,
+              "title" : "Native VoiceOver service before forward 6"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984500.731,
+              "title" : "Actual native VoiceOver forward 6"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984500.041,
+          "title" : "Native VoiceOver forward 6"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.userCreated",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Native VoiceOver service before forward 7_0_78CEE54C-E034-41E4-B13D-302758EE3C20.txt",
+              "payloadId" : "0~pj1zd2fH3wQWCuA0tOtEGe57Bb6Mzl_QZLCLuT2oVw6bjYWu70S3zLfLiCOs2r5mJaeC7-M-FK2depL_iocLCQ==",
+              "timestamp" : 1792984500.732,
+              "uuid" : "759C17F0-1314-4B36-8C53-15379ADCDB9B"
+            },
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Actual native VoiceOver forward 7_1_78CEE54C-E034-41E4-B13D-302758EE3C20.txt",
+              "payloadId" : "0~bfbphUuva5tiezjBHJlOuVk-8kjZCoM1S1y7ZDkMb-UCDGGopPI0siykUiAlEi3VpLvyOadFQrCh7j6at5cmew==",
+              "timestamp" : 1792984501.351,
+              "uuid" : "6FC5B873-B7DB-49AC-AE67-3D82B970B0D2"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984500.732,
+              "title" : "Native VoiceOver service before forward 7"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984501.351,
+              "title" : "Actual native VoiceOver forward 7"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984500.731,
+          "title" : "Native VoiceOver forward 7"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.userCreated",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Native VoiceOver service before forward 8_0_DE6474BB-5540-4090-9605-7F83AB2CD763.txt",
+              "payloadId" : "0~pj1zd2fH3wQWCuA0tOtEGe57Bb6Mzl_QZLCLuT2oVw6bjYWu70S3zLfLiCOs2r5mJaeC7-M-FK2depL_iocLCQ==",
+              "timestamp" : 1792984501.352,
+              "uuid" : "67F0E505-CD80-477C-B32A-6E40C5741792"
+            },
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Actual native VoiceOver forward 8_1_DE6474BB-5540-4090-9605-7F83AB2CD763.txt",
+              "payloadId" : "0~0npeTfFxv8tVIfau3FhIlarN11U5MHU24nlT-SFmafIVMm0qlmMjHTpaoh9Brgp_9e-xqnCQR1StUaHZibINwQ==",
+              "timestamp" : 1792984504.233,
+              "uuid" : "587517E4-76AD-4ED1-894D-752C78D0670F"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984501.352,
+              "title" : "Native VoiceOver service before forward 8"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984504.233,
+              "title" : "Actual native VoiceOver forward 8"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984501.351,
+          "title" : "Native VoiceOver forward 8"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.userCreated",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Native VoiceOver service before forward 9_0_0AA4663C-9DE7-4C64-852E-6384A8DD64FE.txt",
+              "payloadId" : "0~pj1zd2fH3wQWCuA0tOtEGe57Bb6Mzl_QZLCLuT2oVw6bjYWu70S3zLfLiCOs2r5mJaeC7-M-FK2depL_iocLCQ==",
+              "timestamp" : 1792984504.235,
+              "uuid" : "D539B83E-7D22-4299-BBB0-84C5499C1847"
+            },
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Actual native VoiceOver forward 9_1_0AA4663C-9DE7-4C64-852E-6384A8DD64FE.txt",
+              "payloadId" : "0~MeirfwGSxJobOU7GMdX1mmAl3ybLsdgI8mtimRdi8ToJyCZVkJPvSQvPUusguoDs-3x4a6K2uW8a82kwwm0Wag==",
+              "timestamp" : 1792984506.984,
+              "uuid" : "8D1B8BEC-327B-4F11-AB3B-013403D710C7"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984504.235,
+              "title" : "Native VoiceOver service before forward 9"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984506.984,
+              "title" : "Actual native VoiceOver forward 9"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984504.234,
+          "title" : "Native VoiceOver forward 9"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.userCreated",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Native VoiceOver service before forward 10_0_CA8C0174-ED67-41ED-A173-222014BD9CBE.txt",
+              "payloadId" : "0~pj1zd2fH3wQWCuA0tOtEGe57Bb6Mzl_QZLCLuT2oVw6bjYWu70S3zLfLiCOs2r5mJaeC7-M-FK2depL_iocLCQ==",
+              "timestamp" : 1792984506.988,
+              "uuid" : "CCD77AED-4D54-407E-9A58-14A1467484D0"
+            },
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Actual native VoiceOver forward 10_1_CA8C0174-ED67-41ED-A173-222014BD9CBE.txt",
+              "payloadId" : "0~XdYERTPGa7izNajwT2cJq24okC69-gnqP2vIQuicwUgk7tM4fnyK3xO32IpWdLdpBWRU7HqQ66iqLWrdaEtKjQ==",
+              "timestamp" : 1792984511.765,
+              "uuid" : "68959E22-BDB6-455E-8456-7443E707B15E"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984506.988,
+              "title" : "Native VoiceOver service before forward 10"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984511.765,
+              "title" : "Actual native VoiceOver forward 10"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984506.985,
+          "title" : "Native VoiceOver forward 10"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.userCreated",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Native VoiceOver service before forward 11_0_5B4189B8-89A1-4F72-A292-614CD0871EC0.txt",
+              "payloadId" : "0~pj1zd2fH3wQWCuA0tOtEGe57Bb6Mzl_QZLCLuT2oVw6bjYWu70S3zLfLiCOs2r5mJaeC7-M-FK2depL_iocLCQ==",
+              "timestamp" : 1792984511.767,
+              "uuid" : "58797B65-0FF9-4B68-9F06-1F76C163CCCE"
+            },
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Actual native VoiceOver forward 11_1_5B4189B8-89A1-4F72-A292-614CD0871EC0.txt",
+              "payloadId" : "0~U0YwAfTNXKRuzE4PQPqDN-VUUnF5kTvd1DiLT-Utlz-Uanl6nxTBPPhyRmkMEvmOyQRtD-bm--kSnWsfU6JWJQ==",
+              "timestamp" : 1792984514.328,
+              "uuid" : "9AED186A-9719-4E92-8A2B-891D412D6B4B"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984511.767,
+              "title" : "Native VoiceOver service before forward 11"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984514.328,
+              "title" : "Actual native VoiceOver forward 11"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984511.766,
+          "title" : "Native VoiceOver forward 11"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.userCreated",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Native VoiceOver service before forward 12_0_05956B18-6690-4092-A714-E84B53118279.txt",
+              "payloadId" : "0~pj1zd2fH3wQWCuA0tOtEGe57Bb6Mzl_QZLCLuT2oVw6bjYWu70S3zLfLiCOs2r5mJaeC7-M-FK2depL_iocLCQ==",
+              "timestamp" : 1792984514.331,
+              "uuid" : "C3B006C3-11FB-4F40-BAF0-1797C5FEAAA8"
+            },
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Actual native VoiceOver forward 12_1_05956B18-6690-4092-A714-E84B53118279.txt",
+              "payloadId" : "0~f3xeRrACk9uxTWvmZxOM_IyeAzdBjobf1ywiyIUHsDZuLCKSKd-V1bymYaHJIPA-klMWd_SnS-zxUQGSmzBh5g==",
+              "timestamp" : 1792984514.903,
+              "uuid" : "5E280FB0-1C34-44BF-B211-C4130325C4C2"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984514.331,
+              "title" : "Native VoiceOver service before forward 12"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984514.903,
+              "title" : "Actual native VoiceOver forward 12"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984514.329,
+          "title" : "Native VoiceOver forward 12"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.userCreated",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Native VoiceOver service before forward 13_0_0CB56D27-BA0B-4E55-971B-79FC08295A44.txt",
+              "payloadId" : "0~pj1zd2fH3wQWCuA0tOtEGe57Bb6Mzl_QZLCLuT2oVw6bjYWu70S3zLfLiCOs2r5mJaeC7-M-FK2depL_iocLCQ==",
+              "timestamp" : 1792984514.907,
+              "uuid" : "A0F5E4E8-D128-497B-BC13-CB6C8EE77DCA"
+            },
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Actual native VoiceOver forward 13_1_0CB56D27-BA0B-4E55-971B-79FC08295A44.txt",
+              "payloadId" : "0~RRu5uSf2vKbbRsmn4kqPYktttsYG0-NF7jdKxurbMDfLSO85cAduidLerRK9iQtloZWIf1nCrcIBUelj6Ai8CA==",
+              "timestamp" : 1792984515.427,
+              "uuid" : "5E4E662B-C3C1-4905-AF2B-F666E2F31953"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984514.907,
+              "title" : "Native VoiceOver service before forward 13"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984515.427,
+              "title" : "Actual native VoiceOver forward 13"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984514.904,
+          "title" : "Native VoiceOver forward 13"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.userCreated",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Native VoiceOver service before forward 14_0_84B01517-ADFE-4770-9920-528529D4696C.txt",
+              "payloadId" : "0~pj1zd2fH3wQWCuA0tOtEGe57Bb6Mzl_QZLCLuT2oVw6bjYWu70S3zLfLiCOs2r5mJaeC7-M-FK2depL_iocLCQ==",
+              "timestamp" : 1792984515.431,
+              "uuid" : "A7239EB6-1E45-40CE-92FA-E40241A5232E"
+            },
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Actual native VoiceOver forward 14_1_84B01517-ADFE-4770-9920-528529D4696C.txt",
+              "payloadId" : "0~03W_y_xxnF5OHdrFybhMnPFQiB7lneOB7rb0-CmpSPy_UwfVig-81yiH1GbZrpGufR6_cV95gpwPJer9U-muIw==",
+              "timestamp" : 1792984522.504,
+              "uuid" : "5AD2DC58-757D-42DA-A21E-E0E3D139E9DE"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984515.431,
+              "title" : "Native VoiceOver service before forward 14"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984522.504,
+              "title" : "Actual native VoiceOver forward 14"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984515.428,
+          "title" : "Native VoiceOver forward 14"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.userCreated",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Native VoiceOver service before forward 15_0_21EB237D-1296-478D-936B-0E1707776909.txt",
+              "payloadId" : "0~pj1zd2fH3wQWCuA0tOtEGe57Bb6Mzl_QZLCLuT2oVw6bjYWu70S3zLfLiCOs2r5mJaeC7-M-FK2depL_iocLCQ==",
+              "timestamp" : 1792984522.506,
+              "uuid" : "A6FFB7CD-611F-4FA3-B0E8-4156C1595625"
+            },
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Actual native VoiceOver forward 15_1_21EB237D-1296-478D-936B-0E1707776909.txt",
+              "payloadId" : "0~1zLCrtXyK1RxalFM3-T2zMsa5aOHggRRAtaXEZpiI2Tlikj7wRQg2PnPj9H8vsazuNV01HeY4UaMVHMRjkS9cw==",
+              "timestamp" : 1792984525.217,
+              "uuid" : "FD0B9323-92B4-43FB-9A04-8E5997C6CBAF"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984522.506,
+              "title" : "Native VoiceOver service before forward 15"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984525.217,
+              "title" : "Actual native VoiceOver forward 15"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984522.505,
+          "title" : "Native VoiceOver forward 15"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.userCreated",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Native VoiceOver service before forward 16_0_9DD3E542-89AD-4B4E-9ED9-A562E580F1AC.txt",
+              "payloadId" : "0~pj1zd2fH3wQWCuA0tOtEGe57Bb6Mzl_QZLCLuT2oVw6bjYWu70S3zLfLiCOs2r5mJaeC7-M-FK2depL_iocLCQ==",
+              "timestamp" : 1792984525.22,
+              "uuid" : "39C1DF62-3E71-4C47-BA19-8BD856F76DAB"
+            },
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Actual native VoiceOver forward 16_1_9DD3E542-89AD-4B4E-9ED9-A562E580F1AC.txt",
+              "payloadId" : "0~PNQay2Y8UVgHX4tzyp9Mh-nrYTV4JXlbllpoKSJ7pwSFT1FkWr6MJQLgKcAeC3k8dCKHHjBq0GAo2_ts5SX_Gw==",
+              "timestamp" : 1792984532.189,
+              "uuid" : "D66BF4CC-5158-4E87-A460-5A8D76AE0E30"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984525.22,
+              "title" : "Native VoiceOver service before forward 16"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984532.189,
+              "title" : "Actual native VoiceOver forward 16"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984525.218,
+          "title" : "Native VoiceOver forward 16"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.userCreated",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Native VoiceOver service before forward 17_0_1A67C946-1FD4-4185-87D2-54CEE6972316.txt",
+              "payloadId" : "0~pj1zd2fH3wQWCuA0tOtEGe57Bb6Mzl_QZLCLuT2oVw6bjYWu70S3zLfLiCOs2r5mJaeC7-M-FK2depL_iocLCQ==",
+              "timestamp" : 1792984532.193,
+              "uuid" : "5DE2383C-2DF6-40D1-8D85-D62CB73095A6"
+            },
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Actual native VoiceOver forward 17_1_1A67C946-1FD4-4185-87D2-54CEE6972316.txt",
+              "payloadId" : "0~S5gnow91B-fnB4KqKV9XtVGyna0hpnLOrQc3gGacr0JLMW6Yu36SVjsFzQrhC3C_cag0Y7xNIVuSvsEiKoX5hQ==",
+              "timestamp" : 1792984539.081,
+              "uuid" : "2CCC4ECF-B9FF-4A80-BBDC-3712E8B62FB1"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984532.193,
+              "title" : "Native VoiceOver service before forward 17"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984539.081,
+              "title" : "Actual native VoiceOver forward 17"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984532.19,
+          "title" : "Native VoiceOver forward 17"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.userCreated",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Native VoiceOver service before forward 18_0_3F0EC32F-5ED4-4F8E-A941-B3867DB15E2E.txt",
+              "payloadId" : "0~pj1zd2fH3wQWCuA0tOtEGe57Bb6Mzl_QZLCLuT2oVw6bjYWu70S3zLfLiCOs2r5mJaeC7-M-FK2depL_iocLCQ==",
+              "timestamp" : 1792984539.086,
+              "uuid" : "270BAA7F-9737-4B61-BD66-3C1E3188E9DD"
+            },
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Actual native VoiceOver forward 18_1_3F0EC32F-5ED4-4F8E-A941-B3867DB15E2E.txt",
+              "payloadId" : "0~7qAN5Qk1gEkb05uximIM1Frt6jrS4STu9vvNzSbIXXH-SNR2pOXMhArC_IBYYVTYBMNz2fUtFde4Pv0qd7_K9Q==",
+              "timestamp" : 1792984543.866,
+              "uuid" : "CF790ABC-B938-4005-AB2C-DD48F71E8645"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984539.086,
+              "title" : "Native VoiceOver service before forward 18"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984543.866,
+              "title" : "Actual native VoiceOver forward 18"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984539.083,
+          "title" : "Native VoiceOver forward 18"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.userCreated",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Native VoiceOver service before forward 19_0_873C1238-7BE4-452C-9305-3D3BCA059E86.txt",
+              "payloadId" : "0~pj1zd2fH3wQWCuA0tOtEGe57Bb6Mzl_QZLCLuT2oVw6bjYWu70S3zLfLiCOs2r5mJaeC7-M-FK2depL_iocLCQ==",
+              "timestamp" : 1792984543.871,
+              "uuid" : "7BCB8F0A-DAE8-4CF6-BDBA-8189B20965BC"
+            },
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Actual native VoiceOver forward 19_1_873C1238-7BE4-452C-9305-3D3BCA059E86.txt",
+              "payloadId" : "0~A97liJMEsu6h2Rz7AxB7Jjva8y_BvLr1-N7D8cSXhU3kmzNem8Y6hMmbmdbf5G1a5oreD_gIdhPY8Rhw89XJkQ==",
+              "timestamp" : 1792984548.555,
+              "uuid" : "09C45213-94C3-4108-9F4A-D8072451A5DD"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984543.871,
+              "title" : "Native VoiceOver service before forward 19"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984548.555,
+              "title" : "Actual native VoiceOver forward 19"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984543.868,
+          "title" : "Native VoiceOver forward 19"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.userCreated",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Native VoiceOver service before forward 20_0_BCC24666-99DF-49FC-866D-370EDB2CF007.txt",
+              "payloadId" : "0~pj1zd2fH3wQWCuA0tOtEGe57Bb6Mzl_QZLCLuT2oVw6bjYWu70S3zLfLiCOs2r5mJaeC7-M-FK2depL_iocLCQ==",
+              "timestamp" : 1792984548.558,
+              "uuid" : "D68EEBDD-7AD3-49FB-BD09-EB4B767ED411"
+            },
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Actual native VoiceOver forward 20_1_BCC24666-99DF-49FC-866D-370EDB2CF007.txt",
+              "payloadId" : "0~ZiQxc1Eex37vXYtJ6Vf8OS5-fZXGzVC6d3t2LA3GV6Tanqn2tn-kDpQ0QNPVraF7ADzIQh0I-VVW2Z1HLu_nkg==",
+              "timestamp" : 1792984549.057,
+              "uuid" : "F4ABA1FA-7FE0-4562-AA2F-8C305FDADC82"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984548.558,
+              "title" : "Native VoiceOver service before forward 20"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984549.057,
+              "title" : "Actual native VoiceOver forward 20"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984548.556,
+          "title" : "Native VoiceOver forward 20"
+        },
+        {
+          "attachments" : [
+            {
+              "lifetime" : "",
+              "name" : "Complete Issue Description.txt",
+              "uuid" : "6807CCED-A2B0-4F02-9DDD-4C2E1348CE5F"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "title" : "Complete Issue Description"
+            },
+            {
+              "isAssociatedWithFailure" : false,
+              "title" : ""
+            }
+          ],
+          "isAssociatedWithFailure" : true,
+          "startTime" : 1792984549.06,
+          "title" : "XCTAssertEqual failed: (\"[\"Timeline article 298\"]\") is not equal to (\"[\"Timeline article 299\", \"Timeline article 298\"]\") - Actual VoiceOver must reach both adjacent article titles: [\"Welcome to macOS. VoiceOver is on.\", \"In All articles table Row 1 of 201 Unread image, Timeline articl\", \"Unread image, Timeline article 298, Representative content for k\", \"Unread image, Timeline article 297, Representative content for k\", \"Unread image, Timeline article 297, Representative content for k\", \"Unread image, Timeline article 296, Representative content for k\", \"Unread image, Timeline article 295, Representative content for k\", \"Unread image, Timeline article 294, Representative content for k\", \"Unread image, Timeline article 293, Representative content for k\", \"Unread image, Timeline article 292, Representative content for k\", \"Unread image, Timeline article 291, Representative content for k\", \"Unread image, Timeline article 290, Representative content for k\", \"Unread image, Timeline article 289, Representative content for k\", \"Unread image, Timeline article 288, Representative content for k\", \"Unread image, Timeline article 287, Representative content for k\", \"Unread image, Timeline article 286, Representative content for k\", \"Unread image, Timeline article 285, Representative content for k\", \"Unread image, Timeline article 284, Representative content for k\", \"Unread image, Timeline article 283, Representative content for k\", \"Unread image, Timeline article 282, Representative content for k\", \"Unread image, Timeline article 281, Representative content for k\", \"Unread image, Timeline article 280, Representative content for k\"]"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Native VoiceOver restored state_0_D9E9B388-385F-4FB9-B5CF-A2BF5A43FC51.txt",
+              "payloadId" : "0~PNgbI5xob68JweL-cVYjoeNn91Rli5GX-XeiFFXD6nj8aXqRIXXhygNG9dTxtQAuMuUI9_-_SghedNuV1pumWA==",
+              "timestamp" : 1792984551.271,
+              "uuid" : "2160CCBD-E255-4D60-AAF8-4253363E56AB"
+            },
+            {
+              "lifetime" : "keepAlways",
+              "name" : "Native VoiceOver service after restoration_1_D9E9B388-385F-4FB9-B5CF-A2BF5A43FC51.txt",
+              "payloadId" : "0~6yJMPwcGRskLrcxkduMyKPllHFFlFLs-_QKHpgXFkcRN9dI5rgUCIz3uVQl7COcOW_f4tjA40J1b2qK5987VAg==",
+              "timestamp" : 1792984551.28,
+              "uuid" : "40550382-0E9D-4844-9814-A3C63A336FFD"
+            }
+          ],
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.userCreated",
+              "attachments" : [
+                {
+                  "lifetime" : "keepAlways",
+                  "name" : "Native VoiceOver restored state_0_D9E9B388-385F-4FB9-B5CF-A2BF5A43FC51.txt",
+                  "payloadId" : "0~PNgbI5xob68JweL-cVYjoeNn91Rli5GX-XeiFFXD6nj8aXqRIXXhygNG9dTxtQAuMuUI9_-_SghedNuV1pumWA==",
+                  "timestamp" : 1792984551.271,
+                  "uuid" : "2160CCBD-E255-4D60-AAF8-4253363E56AB"
+                },
+                {
+                  "lifetime" : "keepAlways",
+                  "name" : "Native VoiceOver service after restoration_1_D9E9B388-385F-4FB9-B5CF-A2BF5A43FC51.txt",
+                  "payloadId" : "0~6yJMPwcGRskLrcxkduMyKPllHFFlFLs-_QKHpgXFkcRN9dI5rgUCIz3uVQl7COcOW_f4tjA40J1b2qK5987VAg==",
+                  "timestamp" : 1792984551.28,
+                  "uuid" : "40550382-0E9D-4844-9814-A3C63A336FFD"
+                }
+              ],
+              "childActivities" : [
+                {
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792984551.271,
+                  "title" : "Native VoiceOver restored state"
+                },
+                {
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1792984551.28,
+                  "title" : "Native VoiceOver service after restoration"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1792984551.226,
+              "title" : "Restore native VoiceOver state"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1792984549.074,
+          "title" : "Tear Down"
+        }
+      ],
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "63278d018a6f8b74fb33ceeb957db7a2dc609a1e",
+        "deviceName" : "My Mac",
+        "modelName" : "Virtual Machine",
+        "osBuildNumber" : "26A434",
+        "osVersion" : "27.0.1",
+        "platform" : "macOS"
+      },
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ]
+}

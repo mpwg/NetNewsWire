@@ -1,6 +1,14 @@
 # K: native navigation roles and section heading — 2026-10-26
 
-## Native VoiceOver service — table navigation passes; broader acceptance open
+## Repeated table run — clipped entry title exposes an over-specific assertion
+
+[Reader CI 40262371415](https://github.com/mpwg/NetNewsWire/actions/runs/40262371415), source 185675f95, fails one assertion: 404 executions pass (all 395 code and nine UI), one UI fails, zero skips. Runtime/test/build/workflow bytes are identical to the successful 24d81f8cf run below. The complete [unaltered summary](k-voiceover-table-repeat-red-2026-10-26.json), [activities](k-voiceover-table-repeat-activities-2026-10-26.json) and [original speech/state journal with checksums](k-voiceover-table-repeat-journal-2026-10-26.json) remain evidence of the failure. The deliberate model-guardrail warning remains. Lint, runner contracts, process recovery and report collection/upload pass. No matching native crash report is present in the uploaded artifact; this does not establish a daemon repair.
+
+Table entry returns exactly `In All articles table Row 1 of 201 Unread image, Timeline articl`, without the complete 299 title. Forward 1 and 2 return complete `Timeline article 298` and `Timeline article 297` titles respectively. Navigation continues through article 280 without an operation error, but the fixed 299/298 assertion cannot recover the clipped first-row title after moving past it. The method fails after 94.443 seconds; the following window method passes in 58.517 seconds. Initial/restored mode is false, with service descriptions disabled before activation and after restoration.
+
+The next candidate keeps the actual two-adjacent-title criterion but explicitly targets 298 and 297, reached by forward navigation after entry. The clipped entry payload is retained as diagnostic output, never treated as a complete title or replaced by an AX label. Setup, nonempty/distinct speech, twenty-step bound, propagation of every native error and explicit state restoration remain unchanged. No retry, delay, expected failure, disabled test, new UI method or product-code change is introduced. Xcode MCP build-for-testing at 04:19 local time and strict SwiftLint pass. Fresh execution of the changed assertion is still required; the earlier green result is not relabelled as proof of this candidate. The physical-Mac comparison remains pending owner coordination and the normal Reader process is preserved.
+
+## Native VoiceOver service — earlier table navigation passes; broader acceptance open
 
 ### Verified table-navigation checkpoint at 24d81f8cf
 
