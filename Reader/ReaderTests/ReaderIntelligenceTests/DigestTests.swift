@@ -1,4 +1,5 @@
 import Foundation
+import CryptoKit
 import Testing
 import ReaderDomain
 import ReaderPersistence
@@ -32,38 +33,129 @@ private struct ControlledModelExecutor: LanguageModelExecutor {
     }
 }
 
+private func modelPrompt(_ request: LanguageModelExecutorGenerationRequest) -> String {
+    request.transcript.compactMap { entry -> String? in
+        guard case .prompt(let prompt) = entry else { return nil }
+        return prompt.segments.compactMap { segment -> String? in
+            guard case .text(let text) = segment else { return nil }
+            return text.content
+        }.joined()
+    }.joined()
+}
+
+private func modelInstructions(_ request: LanguageModelExecutorGenerationRequest) -> String {
+    request.transcript.compactMap { entry -> String? in
+        guard case .instructions(let instructions) = entry else { return nil }
+        return instructions.segments.compactMap { segment -> String? in
+            guard case .text(let text) = segment else { return nil }
+            return text.content
+        }.joined()
+    }.joined()
+}
+
+private struct CapturedModelSource: Decodable {
+    let sourceNumber: Int
+    let text: String
+}
+
+private func modelJSON(_ value: [String: Any]) throws -> String {
+    String(decoding: try JSONSerialization.data(withJSONObject: value, options: [.sortedKeys]), as: UTF8.self)
+}
+
+private func consolidationJSON(_ prompt: String, text: String = "A sourced summary.") throws -> String {
+    let inputs = try JSONDecoder().decode([CapturedModelSource].self, from: Data(prompt.utf8))
+    return try modelJSON(["groups": [["title": "Sources", "summary": text, "sourceNumbers": inputs.map(\.sourceNumber)]]])
+}
+
 private actor ModelRequestJournal {
-    let response: String
+    let response: String?
+    let factResponses: [String]?
+    let consolidation: (@Sendable (String) throws -> String)?
     let failure: (any Error)?
+    let failureRequest: Int
+    private var nextFact = 0
     private(set) var requests: [LanguageModelExecutorGenerationRequest] = []
-    init(response: String = #"{"groups":[]}"#, failure: (any Error)? = nil) {
+
+    init(response: String? = nil, factResponses: [String]? = nil,
+         consolidation: (@Sendable (String) throws -> String)? = nil,
+         failure: (any Error)? = nil, failureRequest: Int = 0) {
         self.response = response
+        self.factResponses = factResponses
+        self.consolidation = consolidation
         self.failure = failure
+        self.failureRequest = failureRequest
     }
+
     func record(_ request: LanguageModelExecutorGenerationRequest) throws -> String {
+        let ordinal = requests.count
         requests.append(request)
-        if let failure { throw failure }
-        return response
+        if let failure, ordinal == failureRequest { throw failure }
+        let prompt = modelPrompt(request)
+        if let source = try? JSONDecoder().decode(CapturedModelSource.self, from: Data(prompt.utf8)) {
+            if let factResponses {
+                guard nextFact < factResponses.count else { throw ReaderError.invalidResponse }
+                defer { nextFact += 1 }
+                return factResponses[nextFact]
+            }
+            return try modelJSON(["excerpts": [String(source.text.prefix(128))]])
+        }
+        if let consolidation { return try consolidation(prompt) }
+        if let response { return response }
+        return try consolidationJSON(prompt)
+    }
+}
+
+struct SourceFactValidationTests {
+    // Multilingual source-text fixtures; test code and descriptions remain English.
+    @Test("Source excerpts preserve Unicode, merchant names and numeric punctuation",
+          arguments: [
+            ("A notebook from Example Store costs EUR 29.99.", "Example Store costs EUR 29.99."),
+            ("Bei Beispielmarkt kostet es EUR 29,99.", "Beispielmarkt kostet es EUR 29,99."),
+            ("Café offer 🧪 costs EUR 2.99.", "Café offer 🧪"),
+            ("Cafe\u{301} offer costs EUR 2.99.", "Cafe\u{301} offer"),
+            ("商店の価格は 29.99 EUR。", "29.99 EUR")
+          ])
+    func excerptsRemainVerbatim(fragment: String, excerpt: String) throws {
+        let result = try SourceFactValidation.excerpts([excerpt, " \n" + excerpt + "\t"], in: fragment)
+        #expect(result == [excerpt])
+    }
+
+    @Test("Empty, fabricated, reformatted and excessive source excerpts are rejected",
+          arguments: [
+            [], [""], [" \n\t"], ["Example Shop costs EUR 29.99."],
+            ["Example Store costs EUR 29,99."], ["EUR 999"],
+            ["A notebook", "An invented fact"], Array(repeating: "A notebook", count: 9)
+          ])
+    func invalidExcerptsAreRejected(excerpts: [String]) {
+        #expect(throws: ReaderError.self) {
+            try SourceFactValidation.excerpts(excerpts, in: "A notebook from Example Store costs EUR 29.99.")
+        }
+    }
+
+    @Test("The bounded fact set retains its original order")
+    func maximumFactSetKeepsItsOrder() throws {
+        let excerpts = (0..<8).map { "Fact \($0)." }
+        #expect(try SourceFactValidation.excerpts(excerpts, in: excerpts.joined(separator: " ")) == excerpts)
     }
 }
 
 struct AppleSummaryGeneratorTests {
-
-    @Test("Equal summaries from different stored sources retain both source identities")
-    func equalTextFromDifferentSourcesRemainsDistinct() async throws {
+    @Test("Matching source facts merge without losing stored source identities", arguments: [false, true])
+    func equalFactsKeepEverySourceIdentity(foreignAccount: Bool) async throws {
         let journal = ModelRequestJournal(response: """
-        {"groups":[
-          {"title":"Notebook","summary":"Example Store: EUR 29.99.","sourceNumbers":[0]},
-          {"title":"Notebook","summary":"Example Store: EUR 29.99.","sourceNumbers":[1]}
-        ]}
+        {"groups":[{"title":"Notebook","summary":"Example Store: EUR 29.99.","sourceNumbers":[0]}]}
         """)
         let first = try article()
         var second = first
-        second.id = ArticleKey(accountID: first.id.accountID, remoteID: "other-stored")
+        second.id = ArticleKey(accountID: foreignAccount ? UUID() : first.id.accountID,
+                               remoteID: foreignAccount ? first.id.remoteID : "other-stored")
         let result = try await AppleSummaryGenerator().generate([first, second], model: ControlledLanguageModel(journal: journal),
                                                                capacity: 10000, count: { $0.count })
-        #expect(result.map(\.sources) == [[first.id], [second.id]])
-        #expect(result.allSatisfy { $0.text == "Example Store: EUR 29.99." })
+        #expect(result == [DigestSection(title: "Notebook", text: "Example Store: EUR 29.99.", sources: [first.id, second.id])])
+        let requests = await journal.requests
+        #expect(requests.count == 3)
+        let consolidation = try JSONDecoder().decode([CapturedModelSource].self, from: Data(modelPrompt(try #require(requests.last)).utf8))
+        #expect(consolidation.count == 1)
     }
 
     @Test("Exact repeated summary sentences and sections do not duplicate the same claim", arguments: ["en_AT", "de_AT"])
@@ -80,27 +172,24 @@ struct AppleSummaryGeneratorTests {
         #expect(result == [DigestSection(title: "Notebook", text: "Example Store: EUR 29.99.", sources: [source.id])])
     }
 
-    @Test("Model instructions name the requested language explicitly", arguments: [("en_AT", "English"), ("de_AT", "German")])
+    @Test("Only consolidation translates; source extraction remains verbatim", arguments: [("en_AT", "English"), ("de_AT", "German")])
     func instructionsNameRequestedLanguage(localeID: String, language: String) async throws {
         let journal = ModelRequestJournal()
-        let source = try article()
-        _ = try await AppleSummaryGenerator().generate([source], model: ControlledLanguageModel(journal: journal),
+        _ = try await AppleSummaryGenerator().generate([try article()], model: ControlledLanguageModel(journal: journal),
                                                       capacity: 10000, locale: Locale(identifier: localeID), count: { $0.count })
-        let request = try #require(await journal.requests.first)
-        let instructions = request.transcript.compactMap { entry -> String? in
-            guard case .instructions(let instructions) = entry else { return nil }
-            return instructions.segments.compactMap { segment -> String? in
-                guard case .text(let text) = segment else { return nil }
-                return text.content
-            }.joined()
-        }.joined()
-        #expect(instructions.contains("in " + language + "."))
-        #expect(instructions.contains("at most two sentences"))
-        #expect(instructions.contains("Do not repeat"))
-        #expect(instructions.contains("Cover every supplied source"))
+        let requests = await journal.requests
+        #expect(requests.count == 2)
+        let extraction = modelInstructions(try #require(requests.first))
+        let consolidation = modelInstructions(try #require(requests.last))
+        #expect(extraction.contains("verbatim"))
+        #expect(extraction.contains("Do not rewrite or translate"))
+        #expect(consolidation.contains("in " + language + "."))
+        #expect(consolidation.contains("at most two sentences"))
+        #expect(consolidation.contains("Do not repeat"))
+        #expect(consolidation.contains("Cover every supplied source"))
     }
 
-    @Test("Long source text reaches native sessions without loss within the runtime budget", arguments: [3500, 4500])
+    @Test("Every raw source character reaches extraction and every stage respects its runtime budget", arguments: [3500, 4500])
     func longSourceChunksPreserveContent(capacity: Int) async throws {
         let journal = ModelRequestJournal()
         var source = try article()
@@ -108,73 +197,66 @@ struct AppleSummaryGeneratorTests {
         _ = try await AppleSummaryGenerator().generate([source], model: ControlledLanguageModel(journal: journal),
                                                       capacity: capacity, count: { $0.count })
         let requests = await journal.requests
-        #expect(requests.count > 1)
         var reconstructed = ""
+        var consolidations = 0
         for request in requests {
-            let prompt = request.transcript.compactMap { entry -> String? in
-                guard case .prompt(let prompt) = entry else { return nil }
-                return prompt.segments.compactMap { segment -> String? in
-                    guard case .text(let text) = segment else { return nil }
-                    return text.content
-                }.joined()
-            }.joined()
-            let instructions = request.transcript.compactMap { entry -> String? in
-                guard case .instructions(let instructions) = entry else { return nil }
-                return instructions.segments.compactMap { segment -> String? in
-                    guard case .text(let text) = segment else { return nil }
-                    return text.content
-                }.joined()
-            }.joined()
+            let prompt = modelPrompt(request)
+            if let input = try? JSONDecoder().decode(CapturedModelSource.self, from: Data(prompt.utf8)) {
+                #expect(input.sourceNumber == 0)
+                reconstructed += input.text
+            } else {
+                consolidations += 1
+            }
             #expect(!prompt.isEmpty)
-            #expect(prompt.count <= capacity - instructions.count - 2000)
+            #expect(prompt.count <= capacity - modelInstructions(request).count - 2000)
             #expect(request.enabledToolDefinitions.isEmpty)
-            reconstructed += prompt.replacingOccurrences(of: "Source 0:\n", with: "").replacingOccurrences(of: "\n", with: "")
+            #expect(request.schema != nil)
+            #expect(request.generationOptions.maximumResponseTokens == 1200)
         }
-        #expect(reconstructed == (source.title + source.text).replacingOccurrences(of: "\n", with: ""))
+        #expect(consolidations >= 1)
+        #expect(reconstructed == source.title + "\n" + source.text)
     }
 
-    @Test("An unconfigured PCC backend rejects before consent or a model request")
+    @Test("Unconfigured PCC rejects before consent or a model request")
     func unconfiguredCloudIsNeverRequested() async {
         await #expect(throws: ReaderError.self) {
             try await AppleSummaryGenerator().cloudSummary([], permission: { throw CancellationError() })
         }
     }
 
-    @Test("Revoked cloud consent is rejected before instantiating the PCC model")
+    @Test("Revoked cloud consent is rejected before instantiating PCC")
     func cloudRequiresLiveConsentBeforeInstantiation() async {
         await #expect(throws: ReaderError.self) {
             try await AppleSummaryGenerator(privateCloudComputeEnabled: true).cloudSummary([], permission: { false })
         }
     }
 
-    @Test("Native framework errors propagate unchanged from the shipping session",
-          arguments: [0, 1, 2, 3])
-    func frameworkErrorsPropagate(kind: Int) async throws {
+    @Test("Native framework errors propagate unchanged from both shipping stages",
+          arguments: [0, 1, 2, 3], [0, 1])
+    func frameworkErrorsPropagate(kind: Int, stage: Int) async throws {
         let failure = nativeModelFailure(kind)
-        let journal = ModelRequestJournal(failure: failure)
-        let source = try article()
+        let journal = ModelRequestJournal(failure: failure, failureRequest: stage)
         let received = await #expect(throws: (any Error).self) {
-            try await AppleSummaryGenerator().generate([source], model: ControlledLanguageModel(journal: journal),
+            try await AppleSummaryGenerator().generate([try article()], model: ControlledLanguageModel(journal: journal),
                                                       capacity: 10000, count: { $0.count })
         }
         let error = try #require(received)
         #expect(String(reflecting: type(of: error)) == String(reflecting: type(of: failure)))
         #expect(error.localizedDescription == failure.localizedDescription)
-        #expect(await journal.requests.count == 1)
+        #expect(await journal.requests.count == stage + 1)
     }
 
-    @Test("An insufficient runtime context budget fails before requesting model output")
+    @Test("Insufficient context budget fails before any model request")
     func insufficientBudgetMakesNoRequest() async throws {
         let journal = ModelRequestJournal()
-        let source = try article()
         await #expect(throws: ReaderError.self) {
-            try await AppleSummaryGenerator().generate([source], model: ControlledLanguageModel(journal: journal),
+            try await AppleSummaryGenerator().generate([try article()], model: ControlledLanguageModel(journal: journal),
                                                       capacity: 2200, count: { $0.count })
         }
         #expect(await journal.requests.isEmpty)
     }
 
-    @Test("Cloud permission is rechecked before each chunk and prevents later requests")
+    @Test("Cloud permission is rechecked before every fragment")
     func revokedPermissionStopsLaterChunks() async throws {
         let journal = ModelRequestJournal()
         var source = try article()
@@ -187,23 +269,47 @@ struct AppleSummaryGeneratorTests {
         #expect(await journal.requests.count == 1)
     }
 
-    @Test("Cancellation from the native model remains cancellation")
-    func modelCancellationPropagates() async throws {
-        let journal = ModelRequestJournal(failure: CancellationError())
-        let source = try article()
-        await #expect(throws: CancellationError.self) {
-            try await AppleSummaryGenerator().generate([source], model: ControlledLanguageModel(journal: journal),
-                                                      capacity: 10000, count: { $0.count })
+    @Test("Cloud consent revoked after fact extraction prevents consolidation")
+    func revokedPermissionStopsConsolidation() async throws {
+        let journal = ModelRequestJournal()
+        await #expect(throws: ReaderError.self) {
+            try await AppleSummaryGenerator().generate([try article()], model: ControlledLanguageModel(journal: journal),
+                                                      capacity: 10000, cloudPermission: { await journal.requests.isEmpty },
+                                                      count: { $0.count })
         }
         #expect(await journal.requests.count == 1)
     }
-    private func article() throws -> ArticleSnapshot {
-        let url = try #require(URL(string: "https://stored.test/article"))
-        return ArticleSnapshot(id: ArticleKey(accountID: UUID(), remoteID: "stored"), feedID: "feed/1",
-                               title: "Stored offer", text: "A notebook from Example Store costs EUR 29.99.", url: url)
+
+    @Test("Native cancellation remains cancellation in either stage", arguments: [0, 1])
+    func modelCancellationPropagates(stage: Int) async throws {
+        let journal = ModelRequestJournal(failure: CancellationError(), failureRequest: stage)
+        await #expect(throws: CancellationError.self) {
+            try await AppleSummaryGenerator().generate([try article()], model: ControlledLanguageModel(journal: journal),
+                                                      capacity: 10000, count: { $0.count })
+        }
+        #expect(await journal.requests.count == stage + 1)
     }
 
-    @Test("Native structured generation maps source numbers only to stored article identities")
+    @Test("Cancelling a held token count prevents all model requests", .timeLimit(.minutes(1)))
+    func cancellationDuringBudgetingPreventsRequests() async throws {
+        let gate = RequestGate()
+        let journal = ModelRequestJournal()
+        let source = try article()
+        let task = Task {
+            try await AppleSummaryGenerator().generate([source], model: ControlledLanguageModel(journal: journal),
+                                                      capacity: 10000, count: { text in
+                try await gate.pause()
+                return text.count
+            })
+        }
+        defer { task.cancel(); Task { await gate.open() } }
+        try await gate.waitUntilEntered()
+        task.cancel()
+        await #expect(throws: CancellationError.self) { try await task.value }
+        #expect(await journal.requests.isEmpty)
+    }
+
+    @Test("Structured consolidation maps references only through validated source facts")
     func structuredGenerationUsesStoredSources() async throws {
         let source = try article()
         let journal = ModelRequestJournal(response: """
@@ -212,15 +318,15 @@ struct AppleSummaryGeneratorTests {
         let result = try await AppleSummaryGenerator().generate([source], model: ControlledLanguageModel(journal: journal),
                                                                capacity: 10000, count: { $0.count })
         #expect(result == [DigestSection(title: "Notebook", text: "Example Store: EUR 29.99.", sources: [source.id])])
-        let request = try #require(await journal.requests.first)
-        #expect(request.enabledToolDefinitions.isEmpty)
-        #expect(request.schema != nil)
-        #expect(request.generationOptions.maximumResponseTokens == 1200)
-        #expect(await journal.requests.count == 1)
+        let requests = await journal.requests
+        #expect(requests.count == 2)
+        #expect(requests.allSatisfy { $0.enabledToolDefinitions.isEmpty && $0.schema != nil })
+        #expect(requests.allSatisfy { $0.generationOptions.maximumResponseTokens == 1200 })
     }
 
-    @Test("Native structured generation rejects invalid sources, unsupported numbers and model-written links",
+    @Test("Consolidation rejects invalid references, unsupported numbers, links and blank output",
           arguments: [
+            #"{"groups":[]}"#,
             #"{"groups":[{"title":"Offer","summary":"Stored offer","sourceNumbers":[]}]}"#,
             #"{"groups":[{"title":"Offer","summary":"Stored offer","sourceNumbers":[-1]}]}"#,
             #"{"groups":[{"title":"Offer","summary":"Stored offer","sourceNumbers":[1]}]}"#,
@@ -235,12 +341,121 @@ struct AppleSummaryGeneratorTests {
           ])
     func structuredGenerationRejectsUntrustedOutput(response: String) async throws {
         let journal = ModelRequestJournal(response: response)
-        let source = try article()
         await #expect(throws: ReaderError.self) {
-            try await AppleSummaryGenerator().generate([source], model: ControlledLanguageModel(journal: journal),
+            try await AppleSummaryGenerator().generate([try article()], model: ControlledLanguageModel(journal: journal),
                                                       capacity: 10000, count: { $0.count })
         }
+        #expect(await journal.requests.count == 2)
+    }
+
+    @Test("Facts cannot borrow text from another source or a later fragment", arguments: [false, true])
+    func factsRemainBoundToTheirOwnFragment(laterFragment: Bool) async throws {
+        var source = try article()
+        if laterFragment { source.text = String(repeating: "Leading source material. ", count: 200) + "Other Store costs EUR 10.00." }
+        let journal = ModelRequestJournal(factResponses: [try modelJSON(["excerpts": ["Other Store costs EUR 10.00."]])])
+        await #expect(throws: ReaderError.self) {
+            try await AppleSummaryGenerator().generate([source], model: ControlledLanguageModel(journal: journal),
+                                                      capacity: laterFragment ? 4000 : 10000, count: { $0.count })
+        }
         #expect(await journal.requests.count == 1)
+    }
+
+    @Test("Consolidation cannot omit a supplied fact packet")
+    func consolidationRequiresCompleteCoverage() async throws {
+        let sources = try distinctSources(count: 2)
+        let journal = ModelRequestJournal(response: #"{"groups":[{"title":"Notes","summary":"A sourced summary.","sourceNumbers":[0]}]}"#)
+        await #expect(throws: ReaderError.self) {
+            try await AppleSummaryGenerator().generate(sources, model: ControlledLanguageModel(journal: journal),
+                                                      capacity: 10000, count: { $0.count })
+        }
+        #expect(await journal.requests.count == 3)
+    }
+
+    @Test("Packet indices and other packets cannot justify generated prices", arguments: ["0", "10.00"])
+    func generatedNumbersRequireTheirReferencedFacts(number: String) async throws {
+        var sources = try distinctSources(count: 2)
+        sources[0].title = "First offer"
+        sources[1].title = "Second offer"
+        sources[1].text = "An adapter from Other Store costs EUR 10.00."
+        let response = try modelJSON(["groups": [
+            ["title": "Offer", "summary": "EUR " + number, "sourceNumbers": [0]],
+            ["title": "Other", "summary": "Another sourced offer.", "sourceNumbers": [1]]
+        ]])
+        let journal = ModelRequestJournal(response: response)
+        await #expect(throws: ReaderError.self) {
+            try await AppleSummaryGenerator().generate(sources, model: ControlledLanguageModel(journal: journal),
+                                                      capacity: 10000, count: { $0.count })
+        }
+    }
+
+    @Test("Many distinct sources use bounded hierarchical consolidation without losing identities", .timeLimit(.minutes(1)))
+    func hierarchicalConsolidationKeepsEverySource() async throws {
+        let sources = try distinctSources(count: 40)
+        let journal = ModelRequestJournal()
+        let result = try await AppleSummaryGenerator().generate(sources, model: ControlledLanguageModel(journal: journal),
+                                                               capacity: 100000, count: { $0.count })
+        #expect(result.count == 1)
+        #expect(Set(result.flatMap(\.sources)) == Set(sources.map(\.id)))
+        let requests = await journal.requests
+        let consolidations = requests.filter { modelPrompt($0).first == "[" }
+        #expect(consolidations.count == 3)
+        #expect(requests.count == 43)
+        for request in consolidations {
+            let inputs = try JSONDecoder().decode([CapturedModelSource].self, from: Data(modelPrompt(request).utf8))
+            #expect((1...32).contains(inputs.count))
+        }
+    }
+
+    @Test("Later consolidation cannot recover numbers absent from its supplied evidence")
+    func laterStagesCannotReachBackToDiscardedNumbers() async throws {
+        let sources = try distinctSources(count: 40)
+        let journal = ModelRequestJournal(consolidation: { prompt in
+            let inputs = try JSONDecoder().decode([CapturedModelSource].self, from: Data(prompt.utf8))
+            return try consolidationJSON(prompt, text: inputs.count == 1 ? "EUR 29.99." : "A sourced summary.")
+        })
+        await #expect(throws: ReaderError.self) {
+            try await AppleSummaryGenerator().generate(sources, model: ControlledLanguageModel(journal: journal),
+                                                      capacity: 100000, count: { $0.count })
+        }
+        #expect(await journal.requests.count == 43)
+    }
+
+    @Test("Nonshrinking consolidation fails within a bounded first reduction", .timeLimit(.minutes(1)))
+    func nonshrinkingConsolidationDoesNotLoop() async throws {
+        var sources = try distinctSources(count: 8)
+        for index in sources.indices { sources[index].text = String(repeating: "Source evidence words ", count: 20) }
+        let journal = ModelRequestJournal(consolidation: { prompt in
+            let inputs = try JSONDecoder().decode([CapturedModelSource].self, from: Data(prompt.utf8))
+            let label = String(try #require(inputs.first).text.prefix(20))
+            let groups = ["Alpha", "Beta", "Gamma", "Delta"].map {
+                ["title": $0 + " " + label,
+                 "summary": String(repeating: "Source evidence words ", count: 8) + ".",
+                 "sourceNumbers": inputs.map(\.sourceNumber)] as [String: Any]
+            }
+            return try modelJSON(["groups": groups])
+        })
+        await #expect(throws: ReaderError.self) {
+            try await AppleSummaryGenerator().generate(sources, model: ControlledLanguageModel(journal: journal),
+                                                      capacity: 4000, count: { $0.count })
+        }
+        let count = await journal.requests.count
+        #expect(count > 8 && count <= 16)
+    }
+
+    private func distinctSources(count: Int) throws -> [ArticleSnapshot] {
+        let original = try article()
+        return (0..<count).map { index in
+            var source = original
+            source.id = ArticleKey(accountID: original.id.accountID, remoteID: "stored-\(index)")
+            source.title = "Stored offer \(index)"
+            return source
+        }
+    }
+
+    private func article() throws -> ArticleSnapshot {
+        let url = try #require(URL(string: "https://stored.test/article"))
+        return ArticleSnapshot(id: ArticleKey(accountID: UUID(), remoteID: "stored"), feedID: "feed/1",
+                               title: "Stored offer", text: "A notebook from Example Store costs EUR 29.99.", url: url)
     }
 }
 
@@ -255,6 +470,15 @@ private struct FixtureGenerator: SummaryGenerator {
         if invalid { return [DigestSection(title: "Invalid", text: "", sources: [ArticleKey(accountID: UUID(), remoteID: "wrong")])] }
         let sources = omitLast ? Array(articles.dropLast()) : articles
         return [DigestSection(title: "Offers", text: blank ? " \n\t" : "Sourced digest", sources: sources.map(\.id))]
+    }
+}
+
+private struct StagedFixtureGenerator: SummaryGenerator {
+    let journal: ModelRequestJournal
+
+    func summarize(_ articles: [ArticleSnapshot], cloudAllowed: Bool) async throws -> [DigestSection] {
+        try await AppleSummaryGenerator().generate(articles, model: ControlledLanguageModel(journal: journal),
+                                                  capacity: 10000, count: { $0.count })
     }
 }
 
@@ -280,6 +504,52 @@ private actor ControlledGenerator: SummaryGenerator {
 }
 
 struct DigestTests {
+    @Test("An unchanged valid cache from the earlier generator is regenerated under the staged policy")
+    func previousGenerationCacheIsRegenerated() async throws {
+        let (store, feed, articles) = try await fixture()
+        let coordinator = DigestCoordinator(repository: store, generator: FixtureGenerator())
+        var cached = try #require(try await coordinator.generate(feed: feed).first)
+        // Frozen pre-staged wire format, independent of the current coordinator's fingerprint.
+        struct PreviousSource: Encodable {
+            let id: ArticleKey
+            let title: String
+            let text: String
+            let html: String
+            let url: URL?
+        }
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.sortedKeys]
+        let previous = articles.sorted { $0.id.id < $1.id.id }.map {
+            PreviousSource(id: $0.id, title: $0.title, text: $0.text, html: $0.html, url: $0.url)
+        }
+        cached.sourceFingerprint = SHA256.hash(data: try encoder.encode(previous)).map { String(format: "%02x", $0) }.joined()
+        try await store.saveDigest(cached)
+        let regenerated = try #require(try await coordinator.generate(feed: feed).first)
+        #expect(regenerated.revision != cached.revision)
+        #expect(regenerated.sourceFingerprint != cached.sourceFingerprint)
+        #expect(regenerated.warning == nil)
+        #expect(Set(regenerated.sources) == Set(articles.map(\.id)))
+        for article in articles { #expect(try await store.article(article.id) == article) }
+        #expect(try await store.pendingChanges(accountID: feed.id.accountID).isEmpty)
+    }
+    @Test("A late staged failure keeps warned originals and cannot change their stored state", arguments: [false, true])
+    func stagedFailuresPreserveOriginalsAndOutbox(invalidOutput: Bool) async throws {
+        let (store, feed, articles) = try await fixture()
+        let journal: ModelRequestJournal
+        if invalidOutput {
+            journal = ModelRequestJournal(response: #"{"groups":[{"title":"Offer","summary":"EUR 999","sourceNumbers":[0,1]}]}"#)
+        } else {
+            journal = ModelRequestJournal(failure: nativeModelFailure(1), failureRequest: articles.count)
+        }
+        let coordinator = DigestCoordinator(repository: store, generator: StagedFixtureGenerator(journal: journal))
+        let digest = try #require(try await coordinator.generate(feed: feed).first)
+        #expect(digest.warning != nil)
+        #expect(Set(digest.sources) == Set(articles.map(\.id)))
+        #expect(Set(digest.sections.flatMap(\.sources)) == Set(articles.map(\.id)))
+        for article in articles { #expect(try await store.article(article.id) == article) }
+        #expect(try await store.pendingChanges(accountID: feed.id.accountID).isEmpty)
+        #expect(await journal.requests.count == articles.count + 1)
+    }
 
     @Test("Cache reuse requires complete nonblank sections bound to stored sources", arguments: [0, 1, 2, 3, 4, 5, 6])
     func cachedClaimsRequireValidContentAndSources(kind: Int) async throws {

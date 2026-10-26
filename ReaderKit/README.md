@@ -28,9 +28,9 @@ Intelligence preferences and digests stay on the device. FreshRSS subscriptions 
 
 ## Foundation Models
 
-Foundation Models uses structured sessions with source references tied to stored article identities. Validation rejects generated links, unsupported numeric claims and blank content. Literal duplicate sentences/sections are removed without merging distinct source identities. New results, existing cache reuse and startup publication share content/source rules: invalid cards cannot hide originals, and originals-only cards require an explicit warning. Model and presentation-state contracts use Swift Testing; actual UI interactions remain separate.
+Foundation Models first selects validated verbatim excerpts from bounded source-text fragments, then consolidates those facts through structured sessions. Matching facts keep every stored source identity. Larger inputs use bounded hierarchical consolidation; missing evidence or nonshrinking output fails explicitly. Validation rejects unsupported numbers, generated HTTP(S) links and blank content. Every request checks cancellation and permitted cloud requests check live consent. The generation-policy fingerprint refreshes older digest caches on the next generation request. New results, cache reuse and startup publication retain their content/source rules; originals-only cards require an explicit warning. Model and presentation-state contracts use Swift Testing; actual UI interactions remain separate.
 
-[I evidence](../docs/reader/evidence/i-generator-2026-10-25.md) retains reproduced failures and real local observations. German offer generation and semantic long-text quality remain unresolved; the multi-stage pipeline decision is pending. PCC requires approved Apple entitlement/provisioning and is disabled in this build. Full product acceptance remains open.
+[Current staged candidate and criterion matrix](../docs/reader/evidence/i-staged-2026-10-26.md) distinguish compilation from pending runtime/model acceptance. [Earlier I evidence](../docs/reader/evidence/i-generator-2026-10-25.md) retains reproduced failures and real local observations at their original generator fingerprints. German offer and semantic long-text quality remain unresolved. PCC requires approved Apple entitlement/provisioning and is disabled in this build. Full product acceptance remains open.
 
 ## OPML
 
