@@ -1,6 +1,6 @@
 # I: literal source quotations with token boundaries — policy v10
 
-Status: **implemented on main and code-tested on Mac; full source CI pending**. This is an independently verified quotation-validation correction. The failed typed-offer and sentence-selection generators remain separate, and source-facts display retains its existing v7 data contract.
+Status: **implemented on main; current source Reader CI passes all521 Mac executions**. This is an independently verified quotation-validation correction. The failed typed-offer and sentence-selection generators remain separate, and source-facts display retains its existing v7 data contract.
 
 Plain substring matching can accept29.99 from129.99 or SAVE5 from SAVE50 as an exact source excerpt. Consolidation then treats the clipped number as source evidence. The new matcher requires literal source spelling and ASCII-token/decimal boundaries at the matched occurrence. It searches later occurrences when an earlier partial match is rejected, preserves exact decomposed Unicode and permits currency text adjacent to Japanese text. It does not normalize changed quotations, classify prices, resolve merchant/product relationships or establish semantic completeness. A whole value elsewhere in an article still does not prove its role in a selected claim.
 
@@ -14,7 +14,7 @@ Policy v10 regenerates older cache fingerprints on their next generation request
 | Cached source facts use the same quotation rules | Fulfilled for current Mac code | A cached excerpt clipped from an original word is rejected and regenerated; existing foreign/empty/content/citation cases remain covered. |
 | Older policies refresh without article/read/outbox changes | Fulfilled for current Mac code | All frozen earlier policy prefixes, complete original snapshots and empty outbox assertions pass. |
 | Current Mac code, compiler and lint checks | Fulfilled for named boundary | Xcode MCP build19:23:15 and native code selection19:23:45 pass236 functions /511 executions, zero failures/skips. Strict SwiftLint0.65.1 and whitespace checks pass; Approachable Concurrency/warnings-as-errors stay enabled. |
-| Full current hosted plan | Open | Discovery246 enabled/zero disabled is not execution; a changed-source hosted result remains pending. |
+| Full current hosted Reader plan | Fulfilled for named Mac scope | Reader40378018800 at5cfc8458714a64e6b26221a7e18f18fa8ba6db0a passes521 executions:511 code and ten native,246 distinct, no failures/skips. Lint, probe/runner and process recovery pass. |
 | Compact, reliable offer facts/selected free prose | Open | Typed-copy candidate0/4 public configurations and prior sentence-selection failures are preserved; neither is integrated. |
 | PCC/final devices/offline/full accessibility/performance/Swift CodeQL | Open | Existing separate prerequisites/deferrals remain. |
 
@@ -24,4 +24,14 @@ Current generator SHA-256 `232acb3f91661f39ec31ad4ea54bdfd98a4e2f62dbe69f9301988
 
 The typed-source prototype is retained at `codex/reader-offer-fields`; acf4ee290 is its original tested/modelled source, with the later validation correction and534-code receipt on the branch. [Every typed-offer outcome and exact sources](i-offer-fields-v9-2026-10-26.md). All four fixed configurations reject rewritten offer values; qualifying-newspaper price assignment and per-product coupon relationships also remain wrong in the captured drafts. No source text is repaired or model result selected by retry. The local unpublished prototype commit is preserved on that branch before restoring main; no remote main history is rewritten.
 
-No live-model semantic rerun or quality acceptance is inferred from stricter validation. Next replace copied typed field values with bounded Reader-owned source references while preserving explicit per-offer roles; another global sentence-selection prompt does not address the observed field/condition errors. Full product acceptance remains open and no issue closes.
+No live-model semantic rerun or quality acceptance is inferred from stricter validation. The bounded word-reference follow-up also fails every fixed configuration; [complete rejection evidence](i-offer-references-v11-2026-10-26.md) remains separate. Neither copied fields nor numeric word mapping is accepted. Further quality work must preserve explicit per-offer roles and original support. Full product acceptance remains open and no issue closes.
+
+## Terminal v10 CI and restored main
+
+[Reader40378018800](https://github.com/mpwg/NetNewsWire/actions/runs/40378018800) is terminal success at exact main `5cfc8458714a64e6b26221a7e18f18fa8ba6db0a`:521 executions (511 Swift Testing code, ten native UI),246 distinct, zero failures/skips. The original [summary](i-quotation-v10-ci-summary-2026-10-26.json), [all case nodes](i-quotation-v10-ci-cases-2026-10-26.json) and [process-recovery report](i-quotation-v10-ci-recovery-2026-10-26.json) are preserved unchanged. The two controlled guardrail runtime warnings remain in the summary; no compiler warning is waived. Recovery kills a committed10000-article seed process and verifies state in two new processes; it does not prove the deferred normal-app offline restart.
+
+Artifact `12678141147` (`reader-macos-results`,129774594 bytes) downloads to `/tmp/reader-v10-ci.zip`; SHA-256 `5213a73eebdff1869b61522297ef7e02b3482d3a7cdd4b1eb592db8f6fa526c0` matches GitHub. Extracted original bundle: `/tmp/reader-v10-ci-results/reader-results/macos.xcresult`. Counts are independently recomputed from actual case/argument nodes, not inferred from discovery or the distinct-test total.
+
+Independent [CodeQL40378018719](https://github.com/mpwg/NetNewsWire/actions/runs/40378018719) is terminal failure: Actions, Python and JavaScript/TypeScript succeed; Swift fails at Autobuild and its analysis is skipped. This step receipt does not establish a new crash cause. All checks remain enabled. A passing Reader native plan does not repair the preserved VoiceOver/testmanagerd failures or accept full accessibility/performance.
+
+After preserving rejected v11 at `codex/reader-offer-fields` /111646be0, main's unchanged source is restored. Xcode MCP package/probe20:03:57 and app/test20:04:16 builds pass; Reader/My Mac is selected. No normal Reader/probe process was running before these builds and no normal app is launched. The source hashes above still identify active v10; typed offers and the word-reference helper remain absent from main. No new source tests are needed for this documentation/receipt-only checkpoint.

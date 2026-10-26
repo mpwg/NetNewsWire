@@ -1,0 +1,418 @@
+{
+  "sourceCommit": "e7835f5ea30364467cd7b1be75ee4ffe33f464e6",
+  "policy": "v11",
+  "adopted": false,
+  "sourceHashes": [
+    "1aee7811e6b3e6732abb9134a8bc18955b3255248cfade48f9d2db45ee244516  ReaderKit/Sources/ReaderIntelligence/AppleSummaryGenerator.swift",
+    "f323c2810158827363ed1c577dd1e9b0794f0f1d1d353d8efc9531d49632e87d  ReaderKit/Sources/ReaderIntelligence/SourceWordReferences.swift",
+    "6f4cfd7e1f13501ecdb286bbf7f0515b952c4272916f673307e0a7734f7e4c1b  ReaderKit/Sources/ReaderIntelligence/DigestCoordinator.swift",
+    "8d0a2c1fcdcb5293fb619a6873eb5741e0c166321343d58a3464a803ac527632  ReaderKit/Probes/ReaderInferenceProbe/Probe.swift"
+  ],
+  "inputScope": "Unchanged first six public RSS text projections, one six-source group and three fixed pairs; not FreshRSS/native Readability/full articles.",
+  "evaluations": [
+    {
+      "configuration": "pair-1",
+      "rawReportSHA256": "186d87cbdd37054c2b9fc58b96aef3cdf1224e7b5ceb96a0de29e90977908a72",
+      "elapsedSeconds": 4.696177083,
+      "error": "ReaderDomain.ReaderError.invalidResponse",
+      "sectionCount": 0,
+      "sourceCount": 2,
+      "modelAvailable": true,
+      "locale": "de_AT",
+      "privateCloudComputeEnabled": false,
+      "traces": [
+        {
+          "stage": "facts",
+          "sourceNumber": 0,
+          "catalogCount": 100,
+          "offerCount": 1,
+          "fields": [
+            {
+              "field": "product",
+              "firstWord": 0,
+              "lastWord": 33,
+              "wordOrPunctuationUnits": 34,
+              "withinCatalog": true,
+              "withinLengthLimit": false
+            },
+            {
+              "field": "merchant",
+              "firstWord": 47,
+              "lastWord": 51,
+              "wordOrPunctuationUnits": 5,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            },
+            {
+              "field": "price",
+              "firstWord": 12,
+              "lastWord": 14,
+              "wordOrPunctuationUnits": 3,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            },
+            {
+              "field": "conditions",
+              "firstWord": 22,
+              "lastWord": 25,
+              "wordOrPunctuationUnits": 4,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            },
+            {
+              "field": "conditions",
+              "firstWord": 25,
+              "lastWord": 27,
+              "wordOrPunctuationUnits": 3,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "configuration": "pair-2",
+      "rawReportSHA256": "b19bfd5572dae0cbfd12f3807978a9c49c9d20daf1a086fa6d2d9d0747000db7",
+      "elapsedSeconds": 15.514684708,
+      "error": "ReaderDomain.ReaderError.invalidResponse",
+      "sectionCount": 0,
+      "sourceCount": 2,
+      "modelAvailable": true,
+      "locale": "de_AT",
+      "privateCloudComputeEnabled": false,
+      "traces": [
+        {
+          "stage": "facts",
+          "sourceNumber": 0,
+          "catalogCount": 349,
+          "offerCount": 2,
+          "fields": [
+            {
+              "field": "product",
+              "firstWord": 190,
+              "lastWord": 201,
+              "wordOrPunctuationUnits": 12,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            },
+            {
+              "field": "merchant",
+              "firstWord": 232,
+              "lastWord": 238,
+              "wordOrPunctuationUnits": 7,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            },
+            {
+              "field": "price",
+              "firstWord": 254,
+              "lastWord": 259,
+              "wordOrPunctuationUnits": 6,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            },
+            {
+              "field": "conditions",
+              "firstWord": 234,
+              "lastWord": 240,
+              "wordOrPunctuationUnits": 7,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            },
+            {
+              "field": "conditions",
+              "firstWord": 241,
+              "lastWord": 247,
+              "wordOrPunctuationUnits": 7,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            },
+            {
+              "field": "product",
+              "firstWord": 248,
+              "lastWord": 253,
+              "wordOrPunctuationUnits": 6,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            },
+            {
+              "field": "merchant",
+              "firstWord": 241,
+              "lastWord": 247,
+              "wordOrPunctuationUnits": 7,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            },
+            {
+              "field": "price",
+              "firstWord": 256,
+              "lastWord": 261,
+              "wordOrPunctuationUnits": 6,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            },
+            {
+              "field": "conditions",
+              "firstWord": 247,
+              "lastWord": 253,
+              "wordOrPunctuationUnits": 7,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            }
+          ]
+        },
+        {
+          "stage": "facts",
+          "sourceNumber": 1,
+          "catalogCount": 42,
+          "offerCount": 1,
+          "fields": [
+            {
+              "field": "product",
+              "firstWord": 20,
+              "lastWord": 21,
+              "wordOrPunctuationUnits": 2,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            },
+            {
+              "field": "merchant",
+              "firstWord": 0,
+              "lastWord": 11,
+              "wordOrPunctuationUnits": 12,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            },
+            {
+              "field": "price",
+              "firstWord": 4,
+              "lastWord": 18,
+              "wordOrPunctuationUnits": 15,
+              "withinCatalog": true,
+              "withinLengthLimit": false
+            },
+            {
+              "field": "conditions",
+              "firstWord": 24,
+              "lastWord": 27,
+              "wordOrPunctuationUnits": 4,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            },
+            {
+              "field": "conditions",
+              "firstWord": 29,
+              "lastWord": 31,
+              "wordOrPunctuationUnits": 3,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "configuration": "pair-3",
+      "rawReportSHA256": "0b0b56048a3ea3a784bd1b55e4d5ef311f3f6a83af901211c45d82272f242b2c",
+      "elapsedSeconds": 13.832245625,
+      "error": "ReaderDomain.ReaderError.invalidResponse",
+      "sectionCount": 0,
+      "sourceCount": 2,
+      "modelAvailable": true,
+      "locale": "de_AT",
+      "privateCloudComputeEnabled": false,
+      "traces": [
+        {
+          "stage": "facts",
+          "sourceNumber": 0,
+          "catalogCount": 174,
+          "offerCount": 1,
+          "fields": [
+            {
+              "field": "product",
+              "firstWord": 9,
+              "lastWord": 17,
+              "wordOrPunctuationUnits": 9,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            },
+            {
+              "field": "merchant",
+              "firstWord": 22,
+              "lastWord": 29,
+              "wordOrPunctuationUnits": 8,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            },
+            {
+              "field": "price",
+              "firstWord": 46,
+              "lastWord": 50,
+              "wordOrPunctuationUnits": 5,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            },
+            {
+              "field": "conditions",
+              "firstWord": 6,
+              "lastWord": 20,
+              "wordOrPunctuationUnits": 15,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            },
+            {
+              "field": "conditions",
+              "firstWord": 116,
+              "lastWord": 130,
+              "wordOrPunctuationUnits": 15,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            },
+            {
+              "field": "conditions",
+              "firstWord": 145,
+              "lastWord": 164,
+              "wordOrPunctuationUnits": 20,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            }
+          ]
+        },
+        {
+          "stage": "facts",
+          "sourceNumber": 1,
+          "catalogCount": 340,
+          "offerCount": 1,
+          "fields": [
+            {
+              "field": "product",
+              "firstWord": 0,
+              "lastWord": 299,
+              "wordOrPunctuationUnits": 300,
+              "withinCatalog": true,
+              "withinLengthLimit": false
+            },
+            {
+              "field": "merchant",
+              "firstWord": 12,
+              "lastWord": 21,
+              "wordOrPunctuationUnits": 10,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            },
+            {
+              "field": "price",
+              "firstWord": 9,
+              "lastWord": 12,
+              "wordOrPunctuationUnits": 4,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            },
+            {
+              "field": "conditions",
+              "firstWord": 14,
+              "lastWord": 38,
+              "wordOrPunctuationUnits": 25,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            },
+            {
+              "field": "conditions",
+              "firstWord": 17,
+              "lastWord": 30,
+              "wordOrPunctuationUnits": 14,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            },
+            {
+              "field": "conditions",
+              "firstWord": 12,
+              "lastWord": 17,
+              "wordOrPunctuationUnits": 6,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "configuration": "six",
+      "rawReportSHA256": "c53502c80e3c137e69dc981bed5dba52bfff7d5056470827e7bdc01ff9be42c5",
+      "elapsedSeconds": 5.738100458,
+      "error": "ReaderDomain.ReaderError.invalidResponse",
+      "sectionCount": 0,
+      "sourceCount": 6,
+      "modelAvailable": true,
+      "locale": "de_AT",
+      "privateCloudComputeEnabled": false,
+      "traces": [
+        {
+          "stage": "facts",
+          "sourceNumber": 0,
+          "catalogCount": 100,
+          "offerCount": 1,
+          "fields": [
+            {
+              "field": "product",
+              "firstWord": 0,
+              "lastWord": 33,
+              "wordOrPunctuationUnits": 34,
+              "withinCatalog": true,
+              "withinLengthLimit": false
+            },
+            {
+              "field": "merchant",
+              "firstWord": 15,
+              "lastWord": 22,
+              "wordOrPunctuationUnits": 8,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            },
+            {
+              "field": "price",
+              "firstWord": 12,
+              "lastWord": 13,
+              "wordOrPunctuationUnits": 2,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            },
+            {
+              "field": "conditions",
+              "firstWord": 24,
+              "lastWord": 25,
+              "wordOrPunctuationUnits": 2,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            },
+            {
+              "field": "conditions",
+              "firstWord": 28,
+              "lastWord": 30,
+              "wordOrPunctuationUnits": 3,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            },
+            {
+              "field": "conditions",
+              "firstWord": 43,
+              "lastWord": 44,
+              "wordOrPunctuationUnits": 2,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            },
+            {
+              "field": "conditions",
+              "firstWord": 47,
+              "lastWord": 48,
+              "wordOrPunctuationUnits": 2,
+              "withinCatalog": true,
+              "withinLengthLimit": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
