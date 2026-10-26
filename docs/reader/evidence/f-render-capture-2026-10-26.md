@@ -1,6 +1,8 @@
 # F: actual hosted article pixels — 2026-10-26
 
-Status: **open**. Fresh [Reader CI 40281918990](https://github.com/mpwg/NetNewsWire/actions/runs/40281918990) is live at **f1682366e**, including pixel candidate 748df7c8d and the workflow path refinement. This candidate narrows the existing hosted capture uncertainty without accepting it. In Reader CI 40278721330 at 846b16357, the actual Starred route, original selection and AX heading queries pass, but the inspected window screenshot leaves the WebKit body white. [Original capture and scope](b-star-retention-2026-10-26.md). A DOM string, accessible heading or hittable element is not painted-text proof.
+Status: **open**. [Reader CI 40281918990](https://github.com/mpwg/NetNewsWire/actions/runs/40281918990) has completed at **f1682366e**: **428 passed / four failed of 432**, 217 distinct tests, no skips. All four failures are the added OCR calls, throwing e5rtError("e5rt_e5_compiler_compile call failed", 11). All ten native methods pass. This does not establish a rendering pass or a cause for Vision's compiler failure. [Original summary](f-pixels-default-ci-summary-2026-10-26.json) · [original case nodes](f-pixels-default-ci-cases-2026-10-26.json).
+
+Current follow-up configures a CPU advertised by Vision for every supported OCR compute stage. It compiles through Xcode MCP and passes lint, but has not executed yet. Expected-heading, image, timeout, removal and lifetime assertions remain unchanged. No production or UI-test source is changed. A DOM string, accessible heading or hittable element is not painted-text proof.
 
 ## Candidate and criterion
 
@@ -10,15 +12,21 @@ This uses Apple's [WebPage.exported(as:)](https://developer.apple.com/documentat
 
 | Criterion | Status | Evidence |
 |---|---|---|
-| Candidate compiles with compiler safeguards | Fulfilled | Xcode MCP build-for-testing at 07:37:37 local time succeeds; no errors/warnings. The subsequent edit changes only the @Test display description. |
+| Candidate compiles with compiler safeguards | Fulfilled | Initial pixel candidate builds at 07:37:37 local time. The supported-CPU follow-up builds through Xcode MCP at 08:02:43 with no errors; warnings remain errors. |
 | Strict lint and whitespace | Fulfilled | Strict SwiftLint and git diff --check pass after the pixel-test addition. |
-| Expected text appears in native WebKit image for all four outcomes | Open | New assertions have not executed yet. Preserve original image/OCR attachments and exact case results from fresh CI. |
+| Expected text appears in native WebKit image for all four outcomes | Open | Default OCR throws in all four cases. Inspected exports show expected text for success/failure/cancelled, but the empty-result export is white. Supported-CPU OCR and all four expected-heading assertions require fresh execution; no image is substituted. |
 | Actual app-window body pixels | Open | A WebPage image export is a separate capture path. Even if it passes, it does not replace the still-white native app-window screenshot or prove its cause. |
-| Lifetime and cancellation under added capture work | Open | Existing four cases must pass again on this changed source; earlier passes do not prove the added work. |
+| Lifetime and cancellation under added capture work | Open | Default OCR errors occur before the removal/weak-release assertions; no full lifetime pass is claimed for that candidate. All four cases must pass again on the CPU-configured source. |
 | Held normal Reader is preserved | Fulfilled | No local test/relaunch is performed; PID 24529 remains present after the Xcode build. |
 | Reader CI path refinement | Fulfilled for observed main pushes and parsed configuration | Functional/workflow push f1682366e starts Reader CI 40281918990. Later documentation/Reader README receipt 3765df0eb creates only CodeQL 40282086844, without starting/cancelling Reader CI; the original Reader handle remains live. Both push/PR configurations lose exactly four documentation trigger paths in the tracked-file comparison. No live PR event is claimed. |
 
 Source-equivalent [CI 40280649483](https://github.com/mpwg/NetNewsWire/actions/runs/40280649483) at **14d85474e** is now complete and passes **432 executions (422 code, ten native)**, 217 distinct tests, no failures/skips. [Original summary](b-star-policy-confirmation-summary-2026-10-26.json) · [policy/native case nodes](b-star-policy-confirmation-cases-2026-10-26.json). Artifact 12632208878, ZIP SHA-256 1727c6eec13a183b527b14a347f5c96767d8144ef5945db927277b5b525bccbf. Runtime/test/probe source is unchanged from 846b16357. This pass does not explain or repair the preceding native crash, and predates the new pixel assertions committed at **748df7c8d**. Fresh CI is required for those assertions. Complete local app restart, actual offline, final iPhone/iPad, accessibility and distribution remain independently open.
+
+## Default-device failure and inspected image exports
+
+Functional source f1682366e, job 121436895579, artifact 12633311708, ZIP SHA-256 192d63840d0e3917a723bd718fcf96a373eaa419511298a1a35a2d9dbc32afa1. The original [attachment manifest](f-pixels-default-ci-manifest-2026-10-26.json) maps each argument to its original exported filename and timestamp. Copied images retain their original bytes: [success](f-pixels-default-success-2026-10-26.png), [HTTP failure](f-pixels-default-failure-2026-10-26.png), [empty extraction](f-pixels-default-empty-2026-10-26.png), [held cancellation](f-pixels-default-cancelled-2026-10-26.png). All four are inspected. Success paints Extracted native article; failure/cancelled paint Saved native article. The empty-result image is white. No OCR text attachment is produced because recognition throws first. The native Starred method passes in 71.984 seconds, but its [same-run window capture](f-pixels-default-native-window-2026-10-26.png) again omits body pixels. VoiceOver passes in 24.141 seconds; this does not repair the earlier daemon crashes.
+
+The supported-CPU candidate uses Apple's [supportedComputeStageDevices](https://developer.apple.com/documentation/vision/visionrequest/supportedcomputestagedevices) and [setComputeDevice(_:for:)](https://developer.apple.com/documentation/vision/visionrequest/setcomputedevice(_:for:)). It requires at least one stage and an advertised CPU for each stage, assigns that device before recognition and attaches the stage names. Unavailable CPU support, native recognition errors, blank images and missing expected headings all remain failures. This is one explicit compute configuration, not a caught-error retry or a fallback to DOM text. No cause is established for the default-device compiler error, the empty export or the white app-window capture.
 
 ## CI trigger scope
 

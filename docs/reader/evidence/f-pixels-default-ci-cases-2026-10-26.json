@@ -1,0 +1,103 @@
+[
+  {
+    "children": [
+      {
+        "children": [
+          {
+            "name": "Caught error: .e5rtError(\"e5rt_e5_compiler_compile call failed\", 11)",
+            "nodeType": "Failure Message",
+            "sourceLocation": {
+              "filePath": "/Users/runner/work/NetNewsWire/NetNewsWire/Reader/ReaderTests/ReaderPresentationTests/ReaderArticleViewTests.swift",
+              "lineNumber": 17
+            }
+          }
+        ],
+        "duration": "1s",
+        "durationInSeconds": 1.5100977420806885,
+        "name": ".cancelled",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderArticleViewTests/removingHostedArticleReleasesItsGraph(outcome:)?args=2e63616e63656c6c6564",
+        "nodeType": "Arguments",
+        "result": "Failed"
+      },
+      {
+        "children": [
+          {
+            "name": "Caught error: .e5rtError(\"e5rt_e5_compiler_compile call failed\", 11)",
+            "nodeType": "Failure Message",
+            "sourceLocation": {
+              "filePath": "/Users/runner/work/NetNewsWire/NetNewsWire/Reader/ReaderTests/ReaderPresentationTests/ReaderArticleViewTests.swift",
+              "lineNumber": 17
+            }
+          }
+        ],
+        "duration": "1s",
+        "durationInSeconds": 1.544740915298462,
+        "name": ".empty",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderArticleViewTests/removingHostedArticleReleasesItsGraph(outcome:)?args=2e656d707479",
+        "nodeType": "Arguments",
+        "result": "Failed"
+      },
+      {
+        "children": [
+          {
+            "name": "Caught error: .e5rtError(\"e5rt_e5_compiler_compile call failed\", 11)",
+            "nodeType": "Failure Message",
+            "sourceLocation": {
+              "filePath": "/Users/runner/work/NetNewsWire/NetNewsWire/Reader/ReaderTests/ReaderPresentationTests/ReaderArticleViewTests.swift",
+              "lineNumber": 17
+            }
+          }
+        ],
+        "duration": "1s",
+        "durationInSeconds": 1.3610529899597168,
+        "name": ".failure",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderArticleViewTests/removingHostedArticleReleasesItsGraph(outcome:)?args=2e6661696c757265",
+        "nodeType": "Arguments",
+        "result": "Failed"
+      },
+      {
+        "children": [
+          {
+            "name": "Caught error: .e5rtError(\"e5rt_e5_compiler_compile call failed\", 11)",
+            "nodeType": "Failure Message",
+            "sourceLocation": {
+              "filePath": "/Users/runner/work/NetNewsWire/NetNewsWire/Reader/ReaderTests/ReaderPresentationTests/ReaderArticleViewTests.swift",
+              "lineNumber": 17
+            }
+          }
+        ],
+        "duration": "1s",
+        "durationInSeconds": 1.930156946182251,
+        "name": ".success",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderArticleViewTests/removingHostedArticleReleasesItsGraph(outcome:)?args=2e73756363657373",
+        "nodeType": "Arguments",
+        "result": "Failed"
+      }
+    ],
+    "duration": "1s",
+    "durationInSeconds": 1.5865121483802795,
+    "name": "The actual hosted article paints saved or extracted text and releases its graph",
+    "nodeIdentifier": "ReaderArticleViewTests/removingHostedArticleReleasesItsGraph(outcome:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderArticleViewTests/removingHostedArticleReleasesItsGraph(outcome:)",
+    "nodeType": "Test Case",
+    "result": "Failed"
+  },
+  {
+    "duration": "1min 11s",
+    "durationInSeconds": 71.98425996303558,
+    "name": "testLoadedTimelineScrollingMetrics()",
+    "nodeIdentifier": "ReaderSmokeTests/testLoadedTimelineScrollingMetrics()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testLoadedTimelineScrollingMetrics",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "24s",
+    "durationInSeconds": 24.140627026557922,
+    "name": "testVoiceOverAnnouncesReaderAndMovesFocus()",
+    "nodeIdentifier": "ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  }
+]

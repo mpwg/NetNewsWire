@@ -1,0 +1,56 @@
+[
+  {
+    "attachments" : [
+      {
+        "arguments" : [
+          ".success"
+        ],
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "f8c99a6c81292746d5b186aefdbdd7966154f057",
+        "deviceName" : "My Mac",
+        "exportedFileName" : "E82DB288-64D7-4532-85F8-3A2017C3B149.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "Hosted article WebKit pixels success_0_A604B5F5-BC9D-4FDE-8DF0-6CBB5577EF40.png",
+        "timestamp" : 1792997458.456
+      },
+      {
+        "arguments" : [
+          ".failure"
+        ],
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "f8c99a6c81292746d5b186aefdbdd7966154f057",
+        "deviceName" : "My Mac",
+        "exportedFileName" : "1133913E-326E-4D9F-8D4C-9A015617CB76.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "Hosted article WebKit pixels failure_0_A65CD2D9-275C-4BBD-BD73-4F066799A750.png",
+        "timestamp" : 1792997460.044
+      },
+      {
+        "arguments" : [
+          ".empty"
+        ],
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "f8c99a6c81292746d5b186aefdbdd7966154f057",
+        "deviceName" : "My Mac",
+        "exportedFileName" : "1D85E9BE-7C64-48D3-B05C-9EFC6FA26075.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "Hosted article WebKit pixels empty_0_BE9D8C53-73F5-43D0-A5B7-E547B1422D49.png",
+        "timestamp" : 1792997461.546
+      },
+      {
+        "arguments" : [
+          ".cancelled"
+        ],
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "f8c99a6c81292746d5b186aefdbdd7966154f057",
+        "deviceName" : "My Mac",
+        "exportedFileName" : "967E8F1F-58FE-4D26-82A0-ADA09319CC3C.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "Hosted article WebKit pixels cancelled_0_12662A50-7E78-43AB-830A-90C5DEBD4BE0.png",
+        "timestamp" : 1792997463.053
+      }
+    ],
+    "testIdentifier" : "ReaderArticleViewTests/removingHostedArticleReleasesItsGraph(outcome:)",
+    "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/ReaderArticleViewTests/removingHostedArticleReleasesItsGraph(outcome:)"
+  }
+]

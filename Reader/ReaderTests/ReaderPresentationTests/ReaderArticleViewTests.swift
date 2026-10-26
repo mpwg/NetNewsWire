@@ -76,6 +76,17 @@ struct ReaderArticleViewTests {
         Attachment.record(image, named: "Hosted article WebKit pixels \(outcome)", as: .png)
         var recognition = RecognizeTextRequest()
         recognition.recognitionLevel = .accurate
+        let stages = recognition.supportedComputeStageDevices
+        try #require(!stages.isEmpty)
+        for (stage, devices) in stages {
+            let cpu = try #require(devices.first { device in
+                if case .cpu = device { return true }
+                return false
+            }, Comment(rawValue: "CPU unavailable for OCR stage \(stage)"))
+            recognition.setComputeDevice(cpu, for: stage)
+        }
+        Attachment.record(stages.keys.map { String(describing: $0) }.sorted().joined(separator: ", "),
+                          named: "CPU OCR stages \(outcome)")
         let observations = try await recognition.perform(on: imageData)
         let paintedText = observations.compactMap { $0.topCandidates(1).first?.string }.joined(separator: "\n")
         Attachment.record(paintedText, named: "Hosted article recognized pixels \(outcome)")
