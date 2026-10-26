@@ -1,0 +1,87 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "00006040-000A51392100801C",
+      "deviceName" : "My Mac",
+      "modelName" : "MacBook Pro",
+      "osBuildNumber" : "26B123",
+      "osVersion" : "27.2",
+      "platform" : "macOS"
+    }
+  ],
+  "testNodes" : [
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "children" : [
+                {
+                  "children" : [
+                    {
+                      "duration" : "1s",
+                      "durationInSeconds" : 1.7513163089752197,
+                      "name" : "false, false",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/LiteralSchemaDiagnostics/nativeSchemaWithoutQuotes(largeCatalog:responseLimit:)?args=2cb9cd7a6e5c6b9715ab5cf29594cc7e9ac403a4b11f069b25cc08d470e85e8c",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "1s",
+                      "durationInSeconds" : 1.4088008403778076,
+                      "name" : "false, true",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/LiteralSchemaDiagnostics/nativeSchemaWithoutQuotes(largeCatalog:responseLimit:)?args=fb81853b6da15e1c6b215c7d5bbdc041502ac5845645d53117102670260da0f9",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "9s",
+                      "durationInSeconds" : 9.290067911148071,
+                      "name" : "true, false",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/LiteralSchemaDiagnostics/nativeSchemaWithoutQuotes(largeCatalog:responseLimit:)?args=c597e9971e116a16e33e49d9c3ca3bd8c92cc910f859de3e71f24df7c80048bc",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "9s",
+                      "durationInSeconds" : 9.27167010307312,
+                      "name" : "true, true",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/LiteralSchemaDiagnostics/nativeSchemaWithoutQuotes(largeCatalog:responseLimit:)?args=cf9b5ecf10f3e4cdc87754898380ed1d707ec4f70d44d7606755a90c603de577",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    }
+                  ],
+                  "duration" : "5s",
+                  "durationInSeconds" : 5.430463790893555,
+                  "name" : "Native model output with unquoted literals",
+                  "nodeIdentifier" : "LiteralSchemaDiagnostics/nativeSchemaWithoutQuotes(largeCatalog:responseLimit:)",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/LiteralSchemaDiagnostics/nativeSchemaWithoutQuotes(largeCatalog:responseLimit:)",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "LiteralSchemaDiagnostics",
+              "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/LiteralSchemaDiagnostics",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            }
+          ],
+          "name" : "ReaderTests",
+          "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests",
+          "nodeType" : "Unit test bundle",
+          "result" : "Passed"
+        }
+      ],
+      "name" : "Reader",
+      "nodeType" : "Test Plan",
+      "result" : "Passed"
+    }
+  ],
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Test Scheme Action"
+    }
+  ]
+}

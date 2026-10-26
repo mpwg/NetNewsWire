@@ -39,6 +39,9 @@ Native VoiceOver has both named passing runs and retained failures; full menu/fo
 
 ## Model verification
 
+A native synthetic diagnostic reproduces malformed JSON for an exact schema choice containing double quotes in four combinations; unquoted controls pass. This identifies a specific failure boundary, not semantic acceptance or a universal framework defect. [Results and constraints](docs/reader/evidence/i-dynamic-schema-quotes-2026-10-26.md).
+
+
 The source-literal-choice v12 research candidate is not integrated: all four fixed public configurations fail despite148 passing controlled intelligence executions and strict lint. [Complete candidate results](docs/reader/evidence/i-literal-offers-v12-2026-10-26.md). Compact offer facts, correct semantic roles and complete purchase conditions remain open.
 
 
