@@ -50,7 +50,9 @@ struct ReaderInferenceProbe {
             let generator = AppleSummaryGenerator(privateCloudComputeEnabled: false)
             if arguments.contains("--trace") {
                 report.sections = try await generator.generate(articles, model: model, capacity: model.contextSize,
-                                                               trace: { await journal.append($0) }, count: { @Sendable text in
+                                                               trace: { await journal.append($0) },
+                                                               isolateSelectedEvidence: arguments.contains("--isolate"),
+                                                               count: { @Sendable text in
                     try await model.tokenCount(for: text)
                 })
             } else {

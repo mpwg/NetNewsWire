@@ -71,6 +71,7 @@ private func consolidationJSON(_ prompt: String, text: String = "A sourced summa
 private actor ModelRequestJournal {
     let response: String?
     let factResponses: [String]?
+    let selection: (@Sendable (String) throws -> String)?
     let consolidation: (@Sendable (String) throws -> String)?
     let failure: (any Error)?
     let failureRequest: Int
@@ -78,10 +79,12 @@ private actor ModelRequestJournal {
     private(set) var requests: [LanguageModelExecutorGenerationRequest] = []
 
     init(response: String? = nil, factResponses: [String]? = nil,
+         selection: (@Sendable (String) throws -> String)? = nil,
          consolidation: (@Sendable (String) throws -> String)? = nil,
          failure: (any Error)? = nil, failureRequest: Int = 0) {
         self.response = response
         self.factResponses = factResponses
+        self.selection = selection
         self.consolidation = consolidation
         self.failure = failure
         self.failureRequest = failureRequest
@@ -99,6 +102,10 @@ private actor ModelRequestJournal {
                 return factResponses[nextFact]
             }
             return try modelJSON(["excerpts": [String(source.text.prefix(128))]])
+        }
+        if modelInstructions(request).hasPrefix("Select evidence groups") {
+            guard let selection else { throw ReaderError.invalidResponse }
+            return try selection(prompt)
         }
         if let consolidation { return try consolidation(prompt) }
         if let response { return response }
@@ -146,6 +153,109 @@ private actor GenerationTraceJournal {
 }
 
 struct AppleSummaryGeneratorTests {
+    @Test("An isolated draft receives only selected evidence and keeps its actual original identity")
+    func isolatedDraftExcludesUnselectedPackets() async throws {
+        let sources = try distinctSources(count: 2)
+        let journal = ModelRequestJournal(response: #"{"title":"Selected","summary":"A sourced summary.","sourceNumbers":[0]}"#,
+            selection: { _ in #"{"groups":[{"sourceNumbers":[1]}]}"# })
+        let sections = try await AppleSummaryGenerator().generate(
+            sources, model: ControlledLanguageModel(journal: journal), capacity: 10000,
+            isolateSelectedEvidence: true, count: { $0.count })
+        #expect(sections.count == 1)
+        #expect(sections.first?.sources == [sources[1].id])
+        let requests = await journal.requests
+        #expect(requests.count == 4)
+        let plan = try #require(requests.dropFirst(2).first)
+        let supplied = try JSONDecoder().decode([CapturedModelSource].self, from: Data(modelPrompt(plan).utf8))
+        #expect(supplied.count == 2)
+        let draft = try #require(requests.last)
+        let selected = try JSONDecoder().decode([CapturedModelSource].self, from: Data(modelPrompt(draft).utf8))
+        #expect(selected.count == 1)
+        #expect(selected.first?.sourceNumber == 0)
+        #expect(selected.first?.articleNumbers == [1])
+        #expect(selected.first?.text == supplied[1].text)
+        #expect(selected.first?.text != supplied[0].text)
+        for request in requests {
+            #expect(modelInstructions(request).count + modelPrompt(request).count <= 8000)
+        }
+    }
+
+    @Test("Invalid evidence plans cannot start an isolated drafting request", arguments: [0, 1, 2])
+    func invalidIsolationPlansStopBeforeDrafting(kind: Int) async throws {
+        let plan = switch kind {
+        case 0: #"{"groups":[]}"#
+        case 1: #"{"groups":[{"sourceNumbers":[]}]}"#
+        default: #"{"groups":[{"sourceNumbers":[99]}]}"#
+        }
+        let journal = ModelRequestJournal(selection: { _ in plan })
+        await #expect(throws: ReaderError.self) {
+            try await AppleSummaryGenerator().generate(
+                distinctSources(count: 2), model: ControlledLanguageModel(journal: journal), capacity: 10000,
+                isolateSelectedEvidence: true, count: { $0.count })
+        }
+        #expect(await journal.requests.count == 3)
+    }
+
+    @Test("Isolated drafts cannot borrow unselected prices or packet indices", arguments: [false, true])
+    func isolatedDraftsKeepIndependentValidation(invalidIndex: Bool) async throws {
+        var sources = try distinctSources(count: 2)
+        sources[0].text = "Selected material costs EUR 10."
+        sources[1].text = "Excluded material costs EUR 9999."
+        let output = invalidIndex
+            ? #"{"title":"Selected","summary":"Selected material.","sourceNumbers":[1]}"#
+            : #"{"title":"Selected","summary":"EUR 9999.","sourceNumbers":[0]}"#
+        let journal = ModelRequestJournal(response: output, selection: { _ in #"{"groups":[{"sourceNumbers":[0]}]}"# })
+        await #expect(throws: ReaderError.self) {
+            try await AppleSummaryGenerator().generate(
+                sources, model: ControlledLanguageModel(journal: journal), capacity: 10000,
+                isolateSelectedEvidence: true, count: { $0.count })
+        }
+        #expect(await journal.requests.count == 4)
+    }
+
+    @Test("Revoking live permission after selection prevents isolated drafting")
+    func isolatedDraftChecksLivePermission() async throws {
+        let journal = ModelRequestJournal(selection: { _ in #"{"groups":[{"sourceNumbers":[0]}]}"# })
+        await #expect(throws: ReaderError.self) {
+            try await AppleSummaryGenerator().generate(
+                distinctSources(count: 2), model: ControlledLanguageModel(journal: journal), capacity: 10000,
+                cloudPermission: { await journal.requests.count < 3 },
+                isolateSelectedEvidence: true, count: { $0.count })
+        }
+        #expect(await journal.requests.count == 3)
+    }
+
+    @Test("Cancellation after selection prevents isolated drafting")
+    func isolatedDraftChecksCancellation() async throws {
+        let sources = try distinctSources(count: 2)
+        let journal = ModelRequestJournal(selection: { _ in #"{"groups":[{"sourceNumbers":[0]}]}"# })
+        let task = Task {
+            try await AppleSummaryGenerator().generate(
+                sources, model: ControlledLanguageModel(journal: journal), capacity: 10000,
+                trace: { entry in
+                    if entry.stage == "selection" { withUnsafeCurrentTask { $0?.cancel() } }
+                }, isolateSelectedEvidence: true, count: { $0.count })
+        }
+        await #expect(throws: CancellationError.self) { try await task.value }
+        #expect(await journal.requests.count == 3)
+    }
+
+    @Test("Selection and isolated drafting each count their actual instruction budget", arguments: [false, true])
+    func isolatedRequestsEnforceActualBudgets(draft: Bool) async throws {
+        let journal = ModelRequestJournal(selection: { _ in #"{"groups":[{"sourceNumbers":[0]}]}"# })
+        await #expect(throws: ReaderError.self) {
+            try await AppleSummaryGenerator().generate(
+                distinctSources(count: 2), model: ControlledLanguageModel(journal: journal), capacity: 10000,
+                isolateSelectedEvidence: true, count: { text in
+                    if draft ? text.contains("Write one group using only") : text.hasPrefix("Select evidence groups") {
+                        return 10000
+                    }
+                    return text.count
+                })
+        }
+        #expect(await journal.requests.count == (draft ? 3 : 2))
+    }
+
     @Test("Each source fragment keeps its merchant, price and conditions in one evidence packet")
     func fragmentFactsKeepTheirSharedReference() async throws {
         let first = try article()
