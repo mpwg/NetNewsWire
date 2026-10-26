@@ -4,6 +4,8 @@ The populated native VoiceOver candidate e9e109696 fails in [Reader CI 402537267
 
 The existing scrolling method passes with app-targeted XCTHitchMetric and pre/post native geometry attachments. The three hitch fields each contain five zeros; geometry is unchanged. Those observations do not establish representative smoothness, calibrated sampling or energy. No new UI method is added for these rendering diagnostics; business/query timing observations remain in Swift Testing. Raw samples, geometry and the window image are retained in the load evidence.
 
+Crash diagnostics must include the native hosted DiagnosticReports directories: exported xcresult diagnostics omitted a testmanagerd .ips file whose generation is proved in unified logs. The CI collection addition copies only new Reader/testmanagerd .ips/.crash files after the app test action into the existing artifact, including on test failure. It changes no test status, order, retry or runtime source. Static workflow/shell checks pass; actual report collection and crash-stack analysis still require hosted evidence. [Generation events and collection scope](evidence/k-accessibility-navigation-2026-10-26.md#native-crash-report-collection).
+
 ## Current load-test boundary — 2026-10-26
 
 The current native UI boundary was reviewed through Xcode MCP at e9e109696: ten methods remain in one XCTest class. The 198 Swift Testing functions cover business, store, transport, validation and ownership contracts. Counts describe the suite, not code coverage or product acceptance.

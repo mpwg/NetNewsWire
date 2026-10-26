@@ -20,6 +20,12 @@ The [scoped original unified-log fields](k-voiceover-populated-daemon-segv-2026-
 
 Later b0b42974d and dc19ead6c change only README/test-review documentation; runtime, tests and build sources match e9e109696. No further source correction is claimed from this diagnostic receipt. Normal local Reader PID 53387 remains untouched.
 
+### Native crash-report collection
+
+Read-only inspection of the same archive finds [ReportCrash's original generation events](k-voiceover-populated-report-generation-2026-10-26.json): at 01:29:21.243072 UTC it records /Users/runner/Library/Logs/DiagnosticReports/testmanagerd-2026-10-26-012920.ips, with generation taking about seventeen seconds. That file is absent from the exported xcresult diagnostics. This proves a missing artifact collection path, not that no crash report existed or that its stack is already known.
+
+The Reader workflow is extended to mark the start of its app test action and, afterward even on failure, preserve newly written Reader/testmanagerd .ips/.crash reports from the native user/system DiagnosticReports directories. Only matching files newer than that marker are copied into reader-native-diagnostics/user or system within the existing results artifact. There is no daemon operation, application restart, test retry, test ordering change or altered test exit status. Workflow YAML parsing, shell syntax and whitespace checks pass; a fresh hosted run must verify the collection step and inspect any resulting report. Existing run 40254660895 predates this workflow change and is allowed to reach its terminal result before the new workflow is pushed.
+
 ### Container result at c7867dbae and revised test contract
 
 [Reader CI 40252765687](https://github.com/mpwg/NetNewsWire/actions/runs/40252765687), job 121348036209, fails with **404 passed executions and one failure**, zero skips and one deliberate guardrail warning. All 395 code executions and all nine earlier UI methods pass; the following window method passes in 55.131 seconds. Lint, runner failure propagation and process recovery pass. [Unaltered native summary](k-voiceover-container-ci-red-2026-10-26.json) · [recovery](k-voiceover-container-ci-recovery-2026-10-26.json).

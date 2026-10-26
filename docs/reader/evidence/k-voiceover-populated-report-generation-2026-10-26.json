@@ -1,0 +1,27 @@
+{
+  "sourceRun": 40253726796,
+  "sourceRevision": "e9e109696abb8e4e7746bfbeb4f08f01234b6778",
+  "rangeUTC": [
+    "2026-10-26 01:29:03",
+    "2026-10-26 01:29:33"
+  ],
+  "predicate": "process == ReportCrash AND eventMessage contains testmanagerd",
+  "events": [
+    {
+      "processImagePath": "/System/Library/CoreServices/ReportCrash",
+      "timestamp": "2026-10-26 01:29:21.243072+0000",
+      "eventMessage": "recordCrashEvent; isBeta false, log: '/Users/runner/Library/Logs/DiagnosticReports/testmanagerd-2026-10-26-012920.ips'"
+    },
+    {
+      "processImagePath": "/System/Library/CoreServices/ReportCrash",
+      "timestamp": "2026-10-26 01:29:21.243166+0000",
+      "eventMessage": "logGenerationTiming: sending CA event for testmanagerd[309] elapsedTime=17.033"
+    },
+    {
+      "processImagePath": "/System/Library/CoreServices/ReportCrash",
+      "timestamp": "2026-10-26 01:29:21.243252+0000",
+      "eventMessage": "logGenerationTiming: payload builder invoked, payload={\n    bugType = 309;\n    elapsedTime = \"17.03266096115112\";\n    procName = testmanagerd;\n}"
+    }
+  ],
+  "scope": "ReportCrash records generation of a native ips file in the hosted user DiagnosticReports directory. The file is not part of the exported xcresult diagnostics; its stack has not been read."
+}

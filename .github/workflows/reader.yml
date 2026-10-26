@@ -56,7 +56,30 @@ jobs:
         if: matrix.platform == 'macos'
         run: python3 scripts/verify-reader-store.py --results-dir "$RUNNER_TEMP/reader-store-recovery"
       - name: Test Reader
-        run: READER_RESULTS_DIR="$RUNNER_TEMP/reader-results" bash scripts/test-reader.sh '${{ matrix.platform }}'
+        run: |
+          touch "$RUNNER_TEMP/reader-native-diagnostics-start"
+          READER_RESULTS_DIR="$RUNNER_TEMP/reader-results" bash scripts/test-reader.sh '${{ matrix.platform }}'
+      - name: Preserve native crash reports
+        if: always() && matrix.platform == 'macos'
+        shell: bash
+        run: |
+          marker="$RUNNER_TEMP/reader-native-diagnostics-start"
+          output="$RUNNER_TEMP/reader-native-diagnostics"
+          [[ -f "$marker" ]] || exit 0
+          shopt -s nullglob
+          for scope in user system; do
+            if [[ "$scope" == user ]]; then
+              directory="$HOME/Library/Logs/DiagnosticReports"
+            else
+              directory=/Library/Logs/DiagnosticReports
+            fi
+            for report in "$directory"/testmanagerd*.ips "$directory"/testmanagerd*.crash \
+                          "$directory"/Reader*.ips "$directory"/Reader*.crash; do
+              [[ -f "$report" && "$report" -nt "$marker" ]] || continue
+              mkdir -p "$output/$scope"
+              cp "$report" "$output/$scope/"
+            done
+          done
       - uses: actions/upload-artifact@v7
         if: always()
         with:
@@ -65,4 +88,5 @@ jobs:
             ${{ runner.temp }}/reader-results/*.xcresult
             ${{ runner.temp }}/reader-store-recovery/report.json
             ${{ runner.temp }}/reader-store-recovery/*.log
+            ${{ runner.temp }}/reader-native-diagnostics/
           if-no-files-found: warn
