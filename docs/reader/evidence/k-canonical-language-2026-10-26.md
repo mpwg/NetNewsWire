@@ -16,15 +16,25 @@ The owner requires English code and documentation; German belongs in translation
 | [#9](https://github.com/mpwg/NetNewsWire/issues/9) | Atom processing discards valid prefixed article fields | Title and full body translated | Closed, not planned |
 | [#10](https://github.com/mpwg/NetNewsWire/issues/10) | Metadata parsing and image scaling execute synchronously on the UI actor | Already English; reviewed | Open; remaining requirements unchanged |
 | [#11](https://github.com/mpwg/NetNewsWire/issues/11) | A global serial parser queue couples independent feed refreshes | Title and full body translated | Closed, not planned |
+| [#12](https://github.com/mpwg/NetNewsWire/issues/12) | macOS feed switching waits synchronously for the entire timeline query | Already English; reviewed | Closed, completed for the previously accepted Reader replacement contract |
+| [#13](https://github.com/mpwg/NetNewsWire/issues/13) | macOS sharing reports success before the URL is resolved and saved | Title and full body translated | Closed, not planned |
+| [#14](https://github.com/mpwg/NetNewsWire/issues/14) | The macOS Share extension reads the wrong App Group in Debug builds | Title and full body translated | Closed, not planned |
+| [#15](https://github.com/mpwg/NetNewsWire/issues/15) | Local build-and-test scripts omit iOS tests despite reporting success | Title and full body translated | Open; remaining requirements unchanged |
+| [#16](https://github.com/mpwg/NetNewsWire/issues/16) | Strong back references retain removed accounts and refreshers | Already English; reviewed | Closed, completed for the previously accepted Reader replacement contract |
+| [#17](https://github.com/mpwg/NetNewsWire/issues/17) | Refresh completion does not await parsing, persistence and status enqueue | Already English; reviewed | Closed, completed for the previously accepted Reader replacement contract |
+| [#18](https://github.com/mpwg/NetNewsWire/issues/18) | Optimistic CloudKit folder deletion loses feed references before remote reconciliation | Title and full body translated | Closed, not planned |
+| [#19](https://github.com/mpwg/NetNewsWire/issues/19) | Removing a CloudKit folder copy deletes data for a feed that remains subscribed | Title and full body translated | Closed, not planned |
+| [#20](https://github.com/mpwg/NetNewsWire/issues/20) | Initial CloudKit sync retains only the first folder of a feed with multiple memberships | Title and full body translated | Closed, not planned |
+| [#21](https://github.com/mpwg/NetNewsWire/issues/21) | ReaderAPI swallows feed-name and folder-membership mutation errors | Already English; reviewed | Closed, completed for the previously accepted Reader replacement contract |
 
-All ten receive a dated clarification linking owner-authorized source retirement at e61b2fa26. The stale retained-legacy statement in #10 is corrected; its replacement evidence and remaining platform requirements are unchanged. The original audit/reassessment remains historical: exclusion is not repair, earlier static evidence is not a runtime reproduction, and later deletion is not acceptance of unfinished Reader requirements.
+All twenty receive a dated clarification linking owner-authorized source retirement at e61b2fa26. The stale retained-legacy statement in #10 is corrected; its replacement evidence and remaining platform requirements are unchanged. The original audit/reassessment remains historical: exclusion is not repair, earlier static evidence is not a runtime reproduction, and later deletion is not acceptance of unfinished Reader requirements. Already-English replacement evidence in #12, #16, #17 and #21 is preserved verbatim. Issue #15 remains open; translating its original cross-platform script contract does not claim final iOS verification.
 
 Before each update the live issue title/body was compared with the reviewed snapshot. Every original URL, inline code identifier and fenced runtime-output block was verified present in the replacement body. Fenced output is checked separately from inline code so that translated surrounding prose cannot be mistaken for a code identifier. The update response was checked for the exact intended title/body and unchanged state/state reason. No labels, assignees, milestone or state fields were submitted. Historical source references remain pinned to 7e17aec6406263378f788812d452859016fcd1ed; no current source repair, migration, service call or new test result is asserted by a translation.
 
 ## Remaining work
 
-- Issues #12–#44 still need individual language review and translation where necessary. Some accepted replacement issues may already be English; do not rewrite their evidence unnecessarily.
+- Issues #22–#44 still need individual language review and translation where necessary. Some accepted replacement issues may already be English; do not rewrite their evidence unnecessarily.
 - Preserve dated findings, original code links, acceptance limits and later disposition. Do not reopen or close an issue as a side effect of language work.
-- Ten of the 43 historical descriptions are reviewed, with eight translated. It does not claim that every GitHub document is now English.
+- Twenty of the 43 historical descriptions are reviewed, with fourteen translated. It does not claim that every GitHub document is now English.
 
 README and the acceptance/handoff documents link this partial result. No app, test, build configuration or CI source changes in this language-only step. The active native VoiceOver diagnostic run remains independent; all accessibility, platform, model-quality and service requirements keep their existing status.
