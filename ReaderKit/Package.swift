@@ -15,8 +15,17 @@ let package = Package(
     platforms: [.macOS("27.0"), .iOS("27.0")],
     products: ["ReaderDomain", "ReaderPersistence", "ReaderSync", "ReaderContent", "ReaderIntelligence", "ReaderUI"].map {
         .library(name: $0, targets: [$0])
-    } + [.executable(name: "ReaderStoreRecoveryProbe", targets: ["ReaderStoreRecoveryProbe"])],
+    } + [
+        .executable(name: "ReaderStoreRecoveryProbe", targets: ["ReaderStoreRecoveryProbe"]),
+        .executable(name: "ReaderInferenceProbe", targets: ["ReaderInferenceProbe"])
+    ],
     targets: [
+        .executableTarget(
+            name: "ReaderInferenceProbe",
+            dependencies: ["ReaderDomain", "ReaderIntelligence"],
+            path: "Probes/ReaderInferenceProbe",
+            swiftSettings: readerSwiftSettings
+        ),
         .executableTarget(
             name: "ReaderStoreRecoveryProbe",
             dependencies: ["ReaderDomain", "ReaderPersistence"],

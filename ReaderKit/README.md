@@ -40,7 +40,7 @@ Import and export are available from Reader's menu. FreshRSS categories are flat
 
 ReaderDomain provides Sendable snapshots and protocols. ReaderPersistence owns SwiftData and atomic write contracts. ReaderSync owns FreshRSS, Keychain, OPML import and bounded icon requests. ReaderContent handles HTML and OPML; ReaderIntelligence owns model and digest jobs. ReaderUI provides shared views and scene state.
 
-**Approachable Concurrency and compiler warnings as errors are enabled for every Reader application/test target and all seven ReaderKit targets, in Debug and Release.** Swift 6 already enables three of Approachable Concurrency's five features; Package.swift explicitly enables `InferIsolatedConformances` and `NonisolatedNonsendingByDefault`, together with `.treatAllWarnings(as: .error)`. Library code retains its appropriate actor boundaries.
+**Approachable Concurrency and compiler warnings as errors are enabled for every Reader application/test target and all eight ReaderKit targets, in Debug and Release.** Swift 6 already enables three of Approachable Concurrency's five features; Package.swift explicitly enables `InferIsolatedConformances` and `NonisolatedNonsendingByDefault`, together with `.treatAllWarnings(as: .error)`. Library code retains its appropriate actor boundaries.
 
 All code-testable app and runner behavior uses unhosted Swift Testing under `Reader/ReaderTests/`. Function identifiers use English `lowerCamelCase` without spaces; `@Test("Readable description")` supplies display names. Native XCTest/XCUIAutomation is limited to window/sheet lifecycle, real keyboard/menu/scroll interaction, rendering and view-task cancellation. Business validation, queries, counters, synchronization and ownership stay in code tests. Fixtures need no personal credentials or model requests.
 
@@ -57,3 +57,7 @@ Current Mac evidence includes native/code/hosted query, menu, selection and coun
 Local extraction uses unmodified Mozilla Readability pinned to `ab4027a8b37669745016869a37a504727992b2ba`. Its source and Apache-2.0 license are under `Sources/ReaderContent/Resources/`. WebKit provides native HTML5 parsing and URL resolution. The superseded JSDOMParser resource was removed after Reader CI confirmed its replacement; Git history retains it. NetNewsWire's MIT license and copyright notices remain.
 
 Work plan: [umbrella #45](https://github.com/mpwg/NetNewsWire/issues/45), packages #46–#56.
+
+## Isolated local-model evaluation
+
+The optional macOS `ReaderInferenceProbe` executable calls the public shipping AppleSummaryGenerator with synthetic text and PCC disabled. Build its automatic package scheme through Xcode, then restore Reader/My Mac. The probe has no store, account, credential or article transport access. It emits JSON containing its actual locale, model availability/context, exact inputs, sections, missing source identities, elapsed time and any error. Use `--scenario offers`, `news`, `long` or `quoted-injection`; `-AppleLocale de_AT` requests the German Foundation locale, which must be verified in the report. Reports are observations, not automatic editorial or semantic acceptance. Preserve failed reports too. Do not run local app tests or relaunch the held Reader to obtain this evidence.
