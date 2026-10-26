@@ -36,6 +36,24 @@ struct IdentityTests {
 }
 
 struct DigestSourceFactsTests {
+    @Test("V7 source facts decode without typed offers and typed offers retain their identities")
+    func typedOfferFactsRemainBackwardCompatible() throws {
+        let data = Data(#"{"source":{"accountID":"99999999-9999-4999-8999-999999999999","remoteID":"offer"},"excerpts":["Original quote."]}"#.utf8)
+        let old = try JSONDecoder().decode(DigestSourceFacts.self, from: data)
+        #expect(old.offers == nil)
+        #expect(old.hasValidContent)
+        let offer = DigestOfferFact(product: "Lamp", merchant: "Example Store", price: "EUR 29.99", conditions: ["Code SAVE5.", "Not valid online."])
+        let facts = DigestSourceFacts(source: old.source, excerpts: offer.quotedValues, offers: [offer])
+        let decoded = try JSONDecoder().decode(DigestSourceFacts.self, from: JSONEncoder().encode(facts))
+        #expect(decoded == facts)
+        #expect(decoded.offers?.first?.id == offer.id)
+        #expect(decoded.offers?.first?.conditions == ["Code SAVE5.", "Not valid online."])
+        #expect(decoded.hasValidContent)
+        var duplicated = facts
+        duplicated.offers = [offer, offer]
+        #expect(!duplicated.hasValidContent)
+    }
+
     @Test("Historical digest sections decode without source facts")
     func historicalSectionsRemainReadable() throws {
         let data = Data(#"{"title":"Offer","text":"Original summary.","sources":[{"accountID":"99999999-9999-4999-8999-999999999999","remoteID":"offer"}]}"#.utf8)
@@ -78,6 +96,20 @@ struct DigestSourceFactsTests {
 
 // German strings below are intentional expected translations from the compiled catalogs.
 struct LocalizationTests {
+    @Test("Offer field resources use the requested language", arguments: [
+        ("en", ["Merchant", "Price or discount", "Conditions", "See original"]),
+        ("de", ["Händler", "Preis oder Rabatt", "Bedingungen", "Siehe Original"])
+    ])
+    func offerFieldsUseRequestedLanguage(localeID: String, expected: [String]) {
+        let resources: [LocalizedStringResource] = [.merchant, .priceOrDiscount, .conditions, .seeOriginal]
+        let values = resources.map { source in
+            var resource = source
+            resource.locale = Locale(identifier: localeID)
+            return String(localized: resource)
+        }
+        #expect(values == expected)
+    }
+
     @Test("Source fact headings use the requested resource language", arguments: [
         ("en", "Source facts"),
         ("de", "Fakten aus der Quelle")

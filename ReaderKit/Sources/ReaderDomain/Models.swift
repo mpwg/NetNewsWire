@@ -147,22 +147,50 @@ public struct RefreshSnapshot: Sendable {
     }
 }
 
+/// Source-language offer fields. Presence checks do not prove semantic completeness.
+public struct DigestOfferFact: Identifiable, Hashable, Codable, Sendable {
+    public var id: UUID
+    public var product: String
+    public var merchant: String?
+    public var price: String?
+    public var conditions: [String]
+
+    public init(id: UUID = UUID(), product: String, merchant: String? = nil, price: String? = nil, conditions: [String] = []) {
+        self.id = id; self.product = product; self.merchant = merchant; self.price = price; self.conditions = conditions
+    }
+
+    public var quotedValues: [String] { [product] + [merchant, price].compactMap { $0 } + conditions }
+
+    public var hasValidContent: Bool {
+        conditions.count <= 8 && Set(conditions).count == conditions.count &&
+        quotedValues.allSatisfy { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+    }
+
+    public func hasSameFields(as other: DigestOfferFact) -> Bool {
+        product == other.product && merchant == other.merchant && price == other.price && conditions == other.conditions
+    }
+}
+
 /// Original-language excerpts retained before free-text consolidation; not a completeness guarantee.
 public struct DigestSourceFacts: Identifiable, Hashable, Codable, Sendable {
     public var source: ArticleKey
     public var excerpts: [String]
+    public var offers: [DigestOfferFact]?
     public var id: ArticleKey { source }
 
-    public init(source: ArticleKey, excerpts: [String]) {
+    public init(source: ArticleKey, excerpts: [String], offers: [DigestOfferFact]? = nil) {
         self.source = source
         self.excerpts = excerpts
+        self.offers = offers
     }
 
     public var text: String { excerpts.joined(separator: " · ") }
 
     public var hasValidContent: Bool {
         !excerpts.isEmpty && Set(excerpts).count == excerpts.count &&
-        excerpts.allSatisfy { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+        excerpts.allSatisfy { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty } &&
+        (offers ?? []).allSatisfy(\.hasValidContent) &&
+        Set((offers ?? []).map(\.id)).count == (offers ?? []).count
     }
 }
 

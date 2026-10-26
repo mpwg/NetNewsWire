@@ -309,13 +309,14 @@ struct ReaderStoreTests {
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         defer { try? FileManager.default.removeItem(at: directory) }
         let url = directory.appendingPathComponent("Reader.store")
-        let original = article(text: "Example Store: EUR 29.99. Code SAVE5 required; not valid online.")
+        let original = article(text: "Example Store offers the Luma lamp for EUR 29.99. Code SAVE5 required; not valid online.")
         let store = try ReaderStore(url: url)
         try await store.applyRefresh(refresh(articles: [original]))
         try await store.setStatus([original.id], field: .starred, value: true)
         let stored = try #require(try await store.article(original.id))
         let pending = try await store.pendingChanges(accountID: accountID)
-        let facts = DigestSourceFacts(source: original.id, excerpts: [original.text])
+        let offer = DigestOfferFact(product: "Luma lamp", merchant: "Example Store", price: "EUR 29.99", conditions: ["Code SAVE5 required; not valid online."])
+        let facts = DigestSourceFacts(source: original.id, excerpts: [original.text], offers: [offer])
         let digest = DigestSnapshot(id: "facts-day", feed: feed.id, day: Date(timeIntervalSince1970: 0), timeZoneID: "UTC",
                                     sections: [DigestSection(title: "Offer", text: "A free summary.", sources: [original.id], sourceFacts: [facts])],
                                     sources: [original.id], sourceFingerprint: "source-facts-fixture")

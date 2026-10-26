@@ -180,6 +180,39 @@ enum ReaderArticleDocument {
     }
 }
 
+private struct DigestOfferFieldView: View {
+    let title: LocalizedStringResource
+    let value: String?
+
+    var body: some View {
+        LabeledContent {
+            if let value {
+                Text(verbatim: value).fixedSize(horizontal: false, vertical: true)
+            } else {
+                Text("See original", bundle: #bundle).foregroundStyle(.secondary)
+            }
+        } label: {
+            Text(title)
+        }
+    }
+}
+
+private struct DigestOfferFactsView: View {
+    let offer: DigestOfferFact
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(verbatim: offer.product).font(.callout.bold())
+            DigestOfferFieldView(title: LocalizedStringResource("Merchant", bundle: .atURL(#bundle.bundleURL)), value: offer.merchant)
+            DigestOfferFieldView(title: LocalizedStringResource("Price or discount", bundle: .atURL(#bundle.bundleURL)), value: offer.price)
+            DigestOfferFieldView(title: LocalizedStringResource("Conditions", bundle: .atURL(#bundle.bundleURL)),
+                                 value: offer.conditions.isEmpty ? nil : offer.conditions.joined(separator: " · "))
+        }
+        .font(.callout)
+        .textSelection(.enabled)
+    }
+}
+
 struct DigestSourceFactsView: View {
     let facts: DigestSourceFacts
 
@@ -188,10 +221,16 @@ struct DigestSourceFactsView: View {
             Text("Source facts", bundle: #bundle,
                  comment: "Heading for original-language quotations beside a free AI summary.")
                 .font(.caption.bold())
-            Text(verbatim: facts.text)
-                .font(.callout)
-                .textSelection(.enabled)
-                .fixedSize(horizontal: false, vertical: true)
+            if let offers = facts.offers, !offers.isEmpty {
+                ForEach(offers) { offer in
+                    DigestOfferFactsView(offer: offer)
+                }
+            } else {
+                Text(verbatim: facts.text)
+                    .font(.callout)
+                    .textSelection(.enabled)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
             Text("Quoted excerpts may omit terms. Check the original.", bundle: #bundle,
                  comment: "Source quotations are not a guarantee that all purchase conditions were extracted.")
                 .font(.caption).foregroundStyle(.secondary)

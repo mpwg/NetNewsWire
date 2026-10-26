@@ -98,11 +98,45 @@ private actor ModelRequestJournal {
                 defer { nextFact += 1 }
                 return factResponses[nextFact]
             }
-            return try modelJSON(["excerpts": [String(source.text.prefix(128))]])
+            return try modelJSON(["offers": [], "excerpts": [String(source.text.prefix(128))]])
         }
         if let consolidation { return try consolidation(prompt) }
         if let response { return response }
         return try consolidationJSON(prompt)
+    }
+}
+
+struct SourceOfferValidationTests {
+    @Test("Offer fields must all occur in their own source fragment", arguments: 0..<9)
+    func unsupportedOfferFieldsAreRejected(kind: Int) {
+        var offer = DigestOfferFact(product: "Luma lamp", merchant: "Example Store", price: "EUR 29.99",
+                                    conditions: ["Code SAVE5 required.", "Pickup only."])
+        switch kind {
+        case 0: offer.product = "Invented kettle"
+        case 1: offer.merchant = "Another Store"
+        case 2: offer.price = "EUR 999"
+        case 3: offer.conditions = ["Free shipping."]
+        case 4: offer.product = ""
+        case 5: offer.merchant = ""
+        case 6: offer.price = " "
+        case 7: offer.conditions = ["Pickup only.", "Pickup only."]
+        default: offer.conditions = Array(repeating: "Pickup only.", count: 9)
+        }
+        #expect(throws: ReaderError.invalidResponse) {
+            try SourceOfferValidation.validate(offer, in: "Example Store: Luma lamp, EUR 29.99. Code SAVE5 required. Pickup only.")
+        }
+    }
+
+    @Test("Missing offer fields remain unknown and exact quotes preserve negations", arguments: [false, true])
+    func offerFieldsKeepUnknownValuesAndSourceSpelling(unknown: Bool) throws {
+        let offer = DigestOfferFact(product: "Luma lamp", merchant: unknown ? nil : "Example Store",
+                                    price: unknown ? nil : "EUR 29.99", conditions: ["Don't combine offers; pickup only."])
+        let result = try SourceOfferValidation.validate(
+            offer, in: "Example Store: Luma lamp, EUR 29.99. Don't combine offers; pickup only.")
+        #expect(result == offer)
+        #expect(result.merchant == offer.merchant)
+        #expect(result.price == offer.price)
+        #expect(result.conditions == ["Don't combine offers; pickup only."])
     }
 }
 
@@ -158,6 +192,83 @@ private actor GenerationTraceJournal {
 }
 
 struct AppleSummaryGeneratorTests {
+    @Test("Native offer records retain each product's own price and conditions without Reader identifiers in model input")
+    func structuredOffersKeepTheirOwnTerms() async throws {
+        var source = try article()
+        source.text = "Example Store offers the Luma lamp for EUR 29.99. Code SAVE5 required; pickup only. Other Store offers the Vela kettle for EUR 44.90; online only."
+        let first: [String: Any] = ["product": "Luma lamp", "merchant": "Example Store", "price": "EUR 29.99",
+                                    "conditions": ["Code SAVE5 required", "pickup only"]]
+        let second: [String: Any] = ["product": "Vela kettle", "merchant": "Other Store", "price": "EUR 44.90",
+                                     "conditions": ["online only"]]
+        let journal = ModelRequestJournal(factResponses: [try modelJSON(["offers": [first, second], "excerpts": []])],
+                                          consolidation: { prompt in
+            let inputs = try JSONDecoder().decode([CapturedModelSource].self, from: Data(prompt.utf8))
+            #expect(inputs.count == 1)
+            let input = try #require(inputs.first)
+            let decoded = try JSONSerialization.jsonObject(with: Data(input.text.utf8))
+            let values = try #require(decoded as? [[String: Any]])
+            #expect(values.count == 2)
+            #expect(values[0]["product"] as? String == "Luma lamp")
+            #expect(values[0]["price"] as? String == "EUR 29.99")
+            #expect(values[0]["conditions"] as? [String] == ["Code SAVE5 required", "pickup only"])
+            #expect(values[1]["price"] as? String == "EUR 44.90")
+            #expect(values.allSatisfy { $0["id"] == nil })
+            return #"{"groups":[{"title":"Offers","summary":"Luma lamp: EUR 29.99; SAVE5 required, pickup only. Vela kettle: EUR 44.90, online only.","sourceNumbers":[0]}]}"#
+        })
+        let sections = try await AppleSummaryGenerator().generate(
+            [source], model: ControlledLanguageModel(journal: journal), capacity: 10000, count: { $0.count })
+        let facts = try #require(sections.first?.sourceFacts?.first)
+        let offers = try #require(facts.offers)
+        #expect(facts.source == source.id)
+        #expect(offers.count == 2)
+        #expect(offers[0].product == "Luma lamp")
+        #expect(offers[0].conditions == ["Code SAVE5 required", "pickup only"])
+        #expect(offers[1].merchant == "Other Store")
+        #expect(offers[1].price == "EUR 44.90")
+        #expect(Set(offers.map(\.id)).count == 2)
+        #expect(facts.excerpts.allSatisfy(source.text.contains))
+        #expect(await journal.requests.count == 2)
+    }
+
+    @Test("Hierarchical consolidation retains typed offers under all forty original identities")
+    func hierarchicalOffersKeepOriginalFieldRecords() async throws {
+        let sources = try distinctSources(count: 40)
+        let facts = try sources.map { source in
+            try modelJSON(["offers": [["product": source.title, "merchant": "Example Store", "price": "EUR 29.99", "conditions": []]],
+                           "excerpts": []])
+        }
+        let journal = ModelRequestJournal(factResponses: facts)
+        let sections = try await AppleSummaryGenerator().generate(
+            sources, model: ControlledLanguageModel(journal: journal), capacity: 100000, count: { $0.count })
+        let retained = try #require(sections.first?.sourceFacts)
+        #expect(retained.count == sources.count)
+        var identities: Set<UUID> = []
+        for source in sources {
+            let offers = try #require(retained.first { $0.source == source.id }?.offers)
+            #expect(offers.count == 1)
+            #expect(offers.first?.product == source.title)
+            #expect(offers.first?.merchant == "Example Store")
+            #expect(offers.first?.price == "EUR 29.99")
+            if let offer = offers.first { identities.insert(offer.id) }
+        }
+        #expect(identities.count == sources.count)
+        #expect(await journal.requests.filter { modelPrompt($0).first == "[" }.count == 3)
+    }
+
+    @Test("Native offer extraction rejects fabricated fields before consolidation")
+    func fabricatedOfferFieldsStopGeneration() async throws {
+        let source = try article()
+        let journal = ModelRequestJournal(factResponses: [try modelJSON([
+            "offers": [["product": "notebook", "merchant": "Invented Store", "price": "EUR 29.99", "conditions": []]],
+            "excerpts": []
+        ])])
+        await #expect(throws: ReaderError.invalidResponse) {
+            try await AppleSummaryGenerator().generate(
+                [source], model: ControlledLanguageModel(journal: journal), capacity: 10000, count: { $0.count })
+        }
+        #expect(await journal.requests.count == 1)
+    }
+
     @Test("Actual native output rejects invented bracket references while preserving copied bracket data", arguments: [false, true])
     func nativeNumericCitationsUseActualCitedText(copied: Bool) async throws {
         var source = try article()
@@ -187,8 +298,8 @@ struct AppleSummaryGeneratorTests {
         second.text = "Other Store offers a kettle for EUR 44.90. Online only."
         let firstText = first.text
         let journal = ModelRequestJournal(factResponses: [
-            try modelJSON(["excerpts": [first.title, firstText]]),
-            try modelJSON(["excerpts": ["Other Store offers a kettle for EUR 44.90.", "Online only."]])
+            try modelJSON(["offers": [], "excerpts": [first.title, firstText]]),
+            try modelJSON(["offers": [], "excerpts": ["Other Store offers a kettle for EUR 44.90.", "Online only."]])
         ], consolidation: { prompt in
             let inputs = try JSONDecoder().decode([CapturedModelSource].self, from: Data(prompt.utf8))
             #expect(inputs.count == 2)
@@ -207,7 +318,7 @@ struct AppleSummaryGeneratorTests {
 
     @Test("Opt-in evaluation captures rejected drafts without bypassing validation", arguments: [false, true])
     func traceRetainsRejectedDraft(factFailure: Bool) async throws {
-        let invalid = factFailure ? #"{"excerpts":["A fabricated quote."]}"#
+        let invalid = factFailure ? #"{"offers":[],"excerpts":["A fabricated quote."]}"#
             : #"{"groups":[{"title":"Offer","summary":"EUR 9999.","sourceNumbers":[0]}]}"#
         let journal = ModelRequestJournal(response: factFailure ? nil : invalid,
                                           factResponses: factFailure ? [invalid] : nil)
@@ -279,19 +390,18 @@ struct AppleSummaryGeneratorTests {
                                                                        excerpts: [String((source.title + "\n" + source.text).prefix(128))])])])
     }
 
-    @Test("Only consolidation translates; source extraction remains verbatim", arguments: [("en_AT", "English"), ("de_AT", "German")])
+    @Test("Language selection changes consolidation instructions while retaining original quotations", arguments: [("en_AT", "English"), ("de_AT", "German")])
     func instructionsNameRequestedLanguage(localeID: String, language: String) async throws {
         let journal = ModelRequestJournal()
-        _ = try await AppleSummaryGenerator().generate([try article()], model: ControlledLanguageModel(journal: journal),
-                                                      capacity: 10000, locale: Locale(identifier: localeID), count: { $0.count })
+        let source = try article()
+        let result = try await AppleSummaryGenerator().generate([source], model: ControlledLanguageModel(journal: journal),
+                                                               capacity: 10000, locale: Locale(identifier: localeID), count: { $0.count })
         let requests = await journal.requests
         #expect(requests.count == 2)
-        let extraction = modelInstructions(try #require(requests.first))
         let consolidation = modelInstructions(try #require(requests.last))
-        #expect(extraction.contains("verbatim"))
-        #expect(extraction.contains("Do not rewrite or translate"))
         #expect(consolidation.contains("in " + language + "."))
-        // Repetition and source coverage are verified through generated results, not prompt wording.
+        #expect(result.first?.sourceFacts?.first?.excerpts == [source.title + "\n" + source.text])
+        #expect(result.first?.sourceFacts?.first?.source == source.id)
     }
 
     @Test("Every raw source character reaches extraction and every stage respects its runtime budget", arguments: [3500, 4500])
@@ -459,7 +569,7 @@ struct AppleSummaryGeneratorTests {
     func factsRemainBoundToTheirOwnFragment(laterFragment: Bool) async throws {
         var source = try article()
         if laterFragment { source.text = String(repeating: "Leading source material. ", count: 200) + "Other Store costs EUR 10.00." }
-        let journal = ModelRequestJournal(factResponses: [try modelJSON(["excerpts": ["Other Store costs EUR 10.00."]])])
+        let journal = ModelRequestJournal(factResponses: [try modelJSON(["offers": [], "excerpts": ["Other Store costs EUR 10.00."]])])
         await #expect(throws: ReaderError.self) {
             try await AppleSummaryGenerator().generate([source], model: ControlledLanguageModel(journal: journal),
                                                       capacity: laterFragment ? 4000 : 10000, count: { $0.count })
@@ -666,7 +776,7 @@ private actor ControlledGenerator: SummaryGenerator {
 }
 
 struct DigestTests {
-    @Test("Unchanged caches from earlier generation and validation policies are regenerated", arguments: ["", "reader-source-facts-consolidation-v1\n", "reader-source-facts-consolidation-v2\n", "reader-source-facts-consolidation-v3\n", "reader-source-facts-consolidation-v4\n", "reader-source-facts-consolidation-v5\n", "reader-source-facts-consolidation-v6\n"])
+    @Test("Unchanged caches from earlier generation and validation policies are regenerated", arguments: ["", "reader-source-facts-consolidation-v1\n", "reader-source-facts-consolidation-v2\n", "reader-source-facts-consolidation-v3\n", "reader-source-facts-consolidation-v4\n", "reader-source-facts-consolidation-v5\n", "reader-source-facts-consolidation-v6\n", "reader-source-facts-consolidation-v7\n", "reader-source-facts-consolidation-v8\n"])
     func previousGenerationCacheIsRegenerated(policyPrefix: String) async throws {
         let (store, feed, articles) = try await fixture()
         let coordinator = DigestCoordinator(repository: store, generator: FixtureGenerator())
@@ -735,7 +845,7 @@ struct DigestTests {
         #expect(await journal.requests.count == articles.count + 1)
     }
 
-    @Test("Cache reuse requires complete nonblank sections and source-owned facts", arguments: 0..<10)
+    @Test("Cache reuse requires complete nonblank sections and source-owned facts", arguments: 0..<12)
     func cachedClaimsRequireValidContentAndSources(kind: Int) async throws {
         let (store, feed, articles) = try await fixture()
         let coordinator = DigestCoordinator(repository: store, generator: FixtureGenerator())
@@ -750,6 +860,10 @@ struct DigestTests {
         case 7: cached.sections[0].sourceFacts = [DigestSourceFacts(source: articles[0].id, excerpts: ["Invented terms."])]
         case 8: cached.sections[0].sourceFacts = [DigestSourceFacts(source: articles[0].id, excerpts: [articles[1].title])]
         case 9: cached.sections[0].sourceFacts = [DigestSourceFacts(source: articles[0].id, excerpts: [])]
+        case 10: cached.sections[0].sourceFacts = [DigestSourceFacts(source: articles[0].id, excerpts: [articles[0].title],
+                                                                   offers: [DigestOfferFact(product: articles[0].title, merchant: "Invented Store")])]
+        case 11: cached.sections[0].sourceFacts = [DigestSourceFacts(source: articles[0].id, excerpts: [articles[0].title],
+                                                                   offers: [DigestOfferFact(product: articles[0].title, conditions: [articles[1].title])])]
         default: break
         }
         try await store.saveDigest(cached)

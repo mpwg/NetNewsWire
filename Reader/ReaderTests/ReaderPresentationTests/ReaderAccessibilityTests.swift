@@ -166,6 +166,31 @@ struct ReaderAccessibilityTests {
         #expect(facts.excerpts == [quote])
     }
 
+    @Test("Hosted offer fields expose all literal values at narrow width without app UI automation",
+          arguments: ["en", "de"], [false, true])
+    func typedOfferFieldsExposeLiteralText(localeID: String, unknown: Bool) async throws {
+        let offer = DigestOfferFact(product: "Luma [lamp]", merchant: unknown ? nil : "Example Store",
+                                    price: unknown ? nil : "EUR 29.99",
+                                    conditions: ["Code SAVE5 required; not valid online.", "<script>doNotRun()</script>"])
+        let facts = DigestSourceFacts(source: ArticleKey(accountID: UUID(), remoteID: "offer"), excerpts: offer.quotedValues, offers: [offer])
+        let host = NSHostingView(rootView: DigestSourceFactsView(facts: facts).environment(\.locale, Locale(identifier: localeID)))
+        let window = makeWindow()
+        window.setContentSize(NSSize(width: 240, height: 650))
+        window.contentView = host
+        defer { window.contentView = nil; window.close() }
+        window.orderFront(nil)
+        let deadline = ContinuousClock.now.advanced(by: .seconds(3))
+        var text = ""
+        repeat {
+            host.layoutSubtreeIfNeeded()
+            text = accessibleText(in: host).joined(separator: "\n")
+            if offer.quotedValues.allSatisfy(text.contains) { break }
+            try await Task.sleep(for: .milliseconds(10))
+        } while ContinuousClock.now < deadline
+        #expect(offer.quotedValues.allSatisfy(text.contains))
+        #expect(facts.offers?.first?.id == offer.id)
+    }
+
     private func accessibleText(in element: any NSAccessibilityProtocol) -> [String] {
         let own = [element.accessibilityLabel(), element.accessibilityValue() as? String].compactMap { $0 }
         let children = (element.accessibilityChildren() ?? []).compactMap { $0 as? any NSAccessibilityProtocol }

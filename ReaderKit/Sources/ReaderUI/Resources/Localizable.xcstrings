@@ -1,6 +1,34 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Merchant" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Händler" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Merchant" } }
+      }
+    },
+    "Price or discount" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Preis oder Rabatt" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Price or discount" } }
+      }
+    },
+    "Conditions" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Bedingungen" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Conditions" } }
+      }
+    },
+    "See original" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Siehe Original" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "See original" } }
+      }
+    },
     "Source facts" : {
       "extractionState" : "manual",
       "localizations" : {
