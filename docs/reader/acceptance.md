@@ -19,6 +19,8 @@ Native accessibility failures and prior daemon/timeouts remain preserved. Warm c
 
 ## I staged-generation candidate
 
+**Current resumed code boundary:**4901a8577 preserves bounded original context and coalesces connected packet groups before drafting. Xcode MCP passes all60 intelligence functions /129 executions, zero failures/skips; no UI automation is added or run locally. Four fixed model cases still contain mixed-language/irrelevant-content defects, so no production adoption or semantic acceptance follows. [Complete criteria, raw native result and all model outcomes](evidence/i-context-preservation-2026-10-26.md). Earlier4bbf6f997 has its own live CI40340848512; it is not evidence for4901a8577.
+
 **Resumed candidate, not adopted:** retain the full bounded original fragment after validating selected sentence indices. Two new Swift Testing functions/seven cases and strengthened actual-request checks compile through Xcode MCP; current-source runtime and model quality remain open. [Context-preservation criteria](evidence/i-context-preservation-2026-10-26.md). Shipping main remains v5; no acceptance or issue closure follows.
 
 The source-first-field-order experiment has five structurally valid results in seven fixed configurations. Two public pairs retain all merchant/price combinations, but the news result still omits Thursday and cites an original without evening hours. The other supplied original/facts contain the condition. Context association and valid indices do not prove support for selected prose. This is not adopted; v5 source/binaries are restored. [Criteria, complete synthetic reports and public aggregate hashes](evidence/i-source-first-experiment-2026-10-26.md). No acceptance marker changes.

@@ -1,5 +1,7 @@
 # Native Reader application
 
+Current research at4901a8577 retains bounded source context and coalesces overlapping packet plans before separate drafts. All60 intelligence code-test functions /129 executions pass through Xcode MCP. The four fixed model observations still include mixed language and irrelevant quotation content; the candidate remains opt-in and unadopted. [Exact sources, runtime results and quality limits](../docs/reader/evidence/i-context-preservation-2026-10-26.md).
+
 The resumed research candidate preserves the complete bounded source fragment after sentence selection so adjacent conditions are not lost before drafting. It remains opt-in and unadopted. [Current criteria and native/model verification](../docs/reader/evidence/i-context-preservation-2026-10-26.md).
 
 The codex/reader-isolated-context branch evaluates an opt-in native selection request followed by fresh drafts containing only each selected evidence group. It preserves free app-language summaries and existing source validation; production/default behavior stays v5. Six additional Swift Testing functions inspect actual requests, references, budgets, invalid output, cancellation and live consent. [Candidate criteria and adoption limits](../docs/reader/evidence/i-isolated-context-candidate-2026-10-26.md). Build/discovery do not accept runtime or model quality.
