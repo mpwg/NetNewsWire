@@ -1,6 +1,6 @@
 # I: key statements with every original linked — 2026-10-26
 
-Status: **owner decision implemented; new runtime acceptance pending**.
+Status: **Mac code/identity/budget/cache contracts fulfilled; model/product acceptance open**.
 
 The owner explicitly selected the most important statements with links to every original article. Exhaustive preservation of every independent fact is not required. Selected assertions must still preserve their supporting source, numbers and attached conditions/negations. A valid reference list is not proof of semantic correctness. This supersedes the earlier all-facts interpretation, not the original reports or their observed wording.
 
@@ -13,7 +13,7 @@ The owner explicitly selected the most important statements with links to every 
 | Actual context budget and finite hierarchy | Implemented; runtime open | Each candidate batch counts its actual JSON and original-identity instructions; individual oversized packets split under their own computed budget. Reduction includes both instruction and JSON token counts. Native array guides remain 1–8 excerpts, 1–4 groups and 1–32 packet references. The hierarchy contract checks actual original sets, including more than 32 originals behind deduplicated packets. |
 | Prior cache refresh | Implemented; runtime open | Generation policy v4 refreshes source-only/v1/v2/v3 cards on the next generation request. No deletion, schema migration, read mutation or outbox write is introduced. |
 | Native compilation/compiler policy/lint | Fulfilled | Xcode MCP app/test build-for-testing 10:52:37 and probe build 10:53:10 pass. Strict SwiftLint and git diff --check pass. Approachable Concurrency/warnings as errors remain. Reader/My Mac restored, held normal PID 24529 present; no local tests/relaunch. |
-| New code execution | Open | Expected discovery is 224 Swift Testing functions / 466 code executions plus ten unchanged native methods, 476 total / 234 distinct. Compilation does not prove these new cases. |
+| New code execution | Fulfilled on eaf90aea6 | CI 40304336042 confirms all 224 Swift Testing functions / 466 code executions plus ten native methods: 476 total / 234 distinct, zero failures/skips. |
 | Representative model quality, PCC and final platforms | Open | The synthetic observations below retain actual failures/semantic defects. No real Preisjäger feed, cloud authorization, final device, deferred network-off/restart or distribution acceptance follows. |
 
 ## Actual local-model observations
@@ -45,3 +45,18 @@ The existing candidate history and current main receipts were merged as **eaf90a
 [Reader CI 40304336042](https://github.com/mpwg/NetNewsWire/actions/runs/40304336042) is confirmed in progress on that exact merged source. Expected 476 executions are still expectations; inspect the same handle and preserve actual discovery/cases before updating runtime criteria. No issue is closed and neither preceding green result is relabeled.
 
 Separate [CodeQL 40304336699](https://github.com/mpwg/NetNewsWire/actions/runs/40304336699), Swift job 121509616726, fails in preload_tracer/autobuild with exit 139 before analysis; the other three language jobs pass. The exact crash cause remains unproved. No security check is disabled and no complete Swift analysis is claimed.
+
+## Current-source native confirmation
+
+[Reader CI 40304336042](https://github.com/mpwg/NetNewsWire/actions/runs/40304336042) is **successful on eaf90aea62eb58a77e3bfc9d15192cb738d6e998**: all **476 executions (466 code, ten native)**, 234 distinct tests, no failures/skips. This confirms selected-fragment acceptance, rejection of prices borrowed from unused fragments, complete original/account identities, actual dynamic budgets and previous-policy cache refresh. Lint, isolated-probe build, direct runner and process recovery pass. [Original summary](i-key-ci-summary-2026-10-26.json), [I suite/case nodes](i-key-ci-cases-2026-10-26.json), [recovery](i-key-ci-recovery-2026-10-26.json). Artifact 12641619751 ZIP SHA-256 `2291c86c3088c8763852d83745a800740c62f297d936a6b7a5e544a97269864b`. Destination arm64 My Mac VM, macOS 27.0.1 (26A434). Earlier native failures remain unexplained.
+
+## Rejected condition-preservation experiments
+
+The new synthetic conditions probe scenario independently covers a museum's Friday-only late opening/other-day closing and gallery free admission limited to Tuesdays/local residents. It adds no app flow, store, credential access, article transport or UI test.
+
+1. **More explicit condition instructions**, generator SHA-256 `a6f2d064a60352688fa6349200b4ba7050f991bfea3724c06c452fc1e97aa766`, probe `55210536016a22be2b1656cd084623a42240dfe1236630d2edaaa2b650b03da6`: [all nine fixed reports](i-condition-prompt-series-2026-10-26.json), ordered news 1–3, conditions 1–3, offers 1–3. News has one unsupported evening-hours generalization, one valid selection and one source rejection. Conditions has one fully qualified output and two source rejections; offers has two valid outputs and one source rejection. This does not establish improvement. The instruction changes and experimental v5 cache tag are reverted; no v5 card was stored by the standalone probe.
+2. **Native greedy sampling with unchanged production instructions**, generator SHA-256 `a8a37e959919e8261ca3e6b9301ffd780ca4cbb7ecba37d33df64e09854baaad`, same probe: [all ten reports](i-greedy-series-2026-10-26.json), ordered news 1–3, conditions 1–3, offers 1–3, long. Apple documents [greedy sampling](https://developer.apple.com/documentation/foundationmodels/generationoptions/samplingmode-swift.struct/greedy) as choosing the most likely token. All three news outputs repeat the same unsupported generalization; all three condition outputs reject for missing sources; offers preserve both complete sets in three observations and the single long run passes literal numbers. Reproducibility does not prove fidelity. The sampling change is reverted, not adopted as a quality repair.
+
+Production generator bytes are restored exactly to SHA-256 `9a0bdb7a20e98d35d531e14c327fc532a788342052719d8f592e933a43b1dd4e` and cache policy v4; validators and code tests are unchanged from the proved checkpoint. Only the new probe fixture remains. Restored probe builds through Xcode MCP at 11:17:10; Reader/My Mac is restored and PID 24529 remains held. All experiment reports, including failures and misleading accepted prose, remain unedited. No repeated test solely for green, semantic waiver, new native UI method or OCR is introduced.
+
+Next evaluate whether a separate source-faithfulness check can detect the known condition/merchant counterexamples, using isolated text-only experiments before proposing any production architecture change. Do not keep tuning prompts or sampling and label that a factuality guarantee. Current model/representative Preisjäger quality, PCC authorization and final platforms remain open.

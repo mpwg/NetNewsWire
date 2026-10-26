@@ -95,6 +95,13 @@ struct ReaderInferenceProbe {
                 article("offer-b", title: "Angebot bei Donauhandel", text:
                     "Donauhandel bietet den Vela-Wasserkocher für EUR 44.90 an. Das Angebot gilt ausschließlich im Onlineshop; ein Enddatum ist nicht genannt.")
             ]
+        case "conditions":
+            return [
+                article("conditions-a", title: "Museum late opening", text:
+                    "The Alder museum stays open until 21:00 only on Fridays. On other days it closes at 17:00."),
+                article("conditions-b", title: "Gallery admission", text:
+                    "The Brook gallery offers free entry on Tuesdays only for local residents. Other visitors still pay the normal entrance fee.")
+            ]
         case "news":
             return [
                 article("news-a", title: "Library reopening", text:
