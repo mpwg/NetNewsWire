@@ -1,0 +1,75 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "734d273bb282e640f033636a5fa0bc200981de11",
+        "deviceName" : "My Mac",
+        "modelName" : "Virtual Machine",
+        "osBuildNumber" : "26A434",
+        "osVersion" : "27.0.1",
+        "platform" : "macOS"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 2,
+      "passedTests" : 403,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "Reader · Built with macOS 27.0.1",
+  "expectedFailures" : 0,
+  "failedTests" : 2,
+  "finishTime" : 1792978172.124,
+  "passedTests" : 206,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+    {
+      "issueType" : "Runtime Warning",
+      "message" : "Safety guardrails were triggered. If this is unexpected, please use `LanguageModelSession.logFeedbackAttachment(sentiment:issues:desiredOutput:)` to export the feedback attachment and file a feedback report at https://feedbackassistant.apple.com.",
+      "sourceURL" : "file:///Users/runner/work/NetNewsWire/NetNewsWire/Reader/ReaderTests/ReaderIntelligenceTests/DigestTests.swift"
+    }
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1792977723.434,
+  "statistics" : [
+    {
+      "subtitle" : "266 test runs",
+      "title" : "69 tests ran with dynamic parameters"
+    },
+    {
+      "subtitle" : "1 test run",
+      "title" : "1 test collected performance metrics"
+    }
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "failed: caught error: \"Error Domain=com.apple.xctest.voiceoverservice Code=3 \"No speech available\" UserInfo={NSLocalizedDescription=No speech available}\"",
+      "targetName" : "ReaderUITests",
+      "testIdentifier" : 207,
+      "testIdentifierString" : "ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus()",
+      "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus",
+      "testName" : "testVoiceOverAnnouncesReaderAndMovesFocus()"
+    },
+    {
+      "failureText" : "Lost connection to testmanagerd",
+      "targetName" : "ReaderUITests",
+      "testIdentifier" : 208,
+      "testIdentifierString" : "ReaderSmokeTests/testWindowSearchAndSelectionSurviveClosingAnotherWindow()",
+      "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testWindowSearchAndSelectionSurviveClosingAnotherWindow",
+      "testName" : "testWindowSearchAndSelectionSurviveClosingAnotherWindow()"
+    }
+  ],
+  "title" : "Test - Reader",
+  "topInsights" : [
+    {
+      "category" : "Longest Test Runs",
+      "impact" : "20% of duration",
+      "text" : "4 longest test runs with outlier durations exceeding 1.62s (three standard deviations)"
+    }
+  ],
+  "totalTestCount" : 208
+}

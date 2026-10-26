@@ -1,6 +1,24 @@
 # K: native navigation roles and section heading — 2026-10-26
 
-## Native VoiceOver service — populated navigation candidate pending
+## Native VoiceOver service — populated attempt failed; daemon crash recurs
+
+### Populated result at e9e109696
+
+[Reader CI 40253726796](https://github.com/mpwg/NetNewsWire/actions/runs/40253726796), job 121350960446, fails with **403 passed executions and two failures**, zero skips and one deliberate guardrail warning. All 395 code executions and eight UI methods pass. VoiceOver fails on its first forward operation; the following independent-window method loses testmanagerd connectivity. Lint, direct runner failure propagation and process recovery pass. [Unaltered summary](k-voiceover-populated-ci-red-2026-10-26.json) · [recovery](k-voiceover-populated-recovery-2026-10-26.json) · [exact native activities](k-voiceover-populated-activities-2026-10-26.json).
+
+The app launches, reports fixture readiness and completes the native first-row click before VoiceOver is enabled. The [actual current utterance](k-voiceover-populated-current-speech-2026-10-26.txt) is **Reader is not responding**. The first forward operation throws No speech available; neither required adjacent-title announcement is obtained. [Initial](k-voiceover-populated-initial-state-2026-10-26.txt) and [restored](k-voiceover-populated-restored-state-2026-10-26.txt) state are false. The negative utterance is an actual VoiceOver observation, not proof of a specific Reader deadlock, CPU stall or accessibility-code defect.
+
+The [scoped original unified-log fields](k-voiceover-populated-daemon-segv-2026-10-26.json) establish another testmanagerd SIGSEGV: launchd subsystem gui/501/com.apple.testmanagerd [7153] at **01:29:04.048165 UTC**. disableVoiceOver is called later at 01:29:04.153379 and disabled is reported at 01:29:06.033336. The crash again precedes restoration. Its trigger/stack and the cause of Reader's unresponsive announcement remain unproved. Launching the populated app before enabling VoiceOver therefore does not establish a fix for the older failure.
+
+| Current VoiceOver criterion | Status | Evidence or next required action |
+|---|---|---|
+| Observe actual native speech/state | Fulfilled for the recorded attempt | Original utterance, activities and state attachments above; no substituted AX label. |
+| Reach two adjacent article titles | Open | First forward operation returns no speech; both-title assertion is not reached. Establish a working native interaction from actual focus/group state before changing expectations. |
+| Restore initially disabled service | Fulfilled for this attempt | Retained false state and teardown assertion; this does not prove daemon health. |
+| Complete plan and stable automation service | Open | Two failures and proved daemon SIGSEGV. Obtain a matching crash/hang stack or another supported native diagnosis; no skip, reorder, expected failure, daemon restart or speculative assertion change is accepted as repair. |
+| Full populated VoiceOver-only journey | Open | Initial row selection uses a native click, and neither menu/form nor complete reading navigation is accepted. Pending owner journey remains independent. |
+
+Later b0b42974d and dc19ead6c change only README/test-review documentation; runtime, tests and build sources match e9e109696. No further source correction is claimed from this diagnostic receipt. Normal local Reader PID 53387 remains untouched.
 
 ### Container result at c7867dbae and revised test contract
 
