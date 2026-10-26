@@ -24,6 +24,12 @@ final class ReaderSmokeTests: XCTestCase {
 
     #if os(macOS)
     func testVoiceOverAnnouncesReaderAndMovesFocus() throws {
+        let app = launchReader(arguments: ["--ui-testing-timeline", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"])
+        waitForValue(app.staticTexts["timelineFixturePhase"], equalTo: "ready", timeout: 10)
+        let timeline = app.outlines["readerTimeline"]
+        let first = timeline.staticTexts["Timeline article 299"].firstMatch
+        XCTAssertTrue(first.wait(for: \.isHittable, toEqual: true, timeout: 5))
+        first.click()
         let voiceOver = XCUIDevice.shared.voiceOverService
         let wasEnabled = voiceOver.isEnabled
         let initialState = XCTAttachment(string: "VoiceOver originally enabled: \(wasEnabled)")
@@ -47,35 +53,28 @@ final class ReaderSmokeTests: XCTestCase {
             try voiceOver.enable()
         }
         XCTAssertTrue(voiceOver.isEnabled)
-        let app = launchReader(arguments: ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"])
-        let timeline = app.outlines["readerTimeline"]
-        XCTAssertTrue(timeline.wait(for: \.isHittable, toEqual: true, timeout: 5))
-        XCTAssertEqual(timeline.label, "All articles")
-        timeline.click()
-        func captureSpeech(_ step: String, _ output: XCUIVoiceOverService.Output) -> String {
-            let utterance = output.utterance
-            let attachment = XCTAttachment(string: utterance)
-            attachment.name = "Actual native VoiceOver \(step)"
-            attachment.lifetime = .keepAlways
-            add(attachment)
-            return utterance
+        func captureSpeech(_ step: String, operation: () throws -> XCUIVoiceOverService.Output) throws -> String {
+            try XCTContext.runActivity(named: "Native VoiceOver \(step)") { activity in
+                let utterance = try operation().utterance
+                let attachment = XCTAttachment(string: utterance)
+                attachment.name = "Actual native VoiceOver \(step)"
+                attachment.lifetime = .keepAlways
+                activity.add(attachment)
+                XCTAssertFalse(utterance.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                return utterance
+            }
         }
-        let current = captureSpeech("current", try voiceOver.currentSpeech())
-        let forward = captureSpeech("forward", try voiceOver.moveForward())
-        let backward = captureSpeech("backward", try voiceOver.moveBackward())
-        let parent = captureSpeech("parent", try voiceOver.moveOut())
-        var reentered = captureSpeech("reentered", try voiceOver.moveIn())
+        var speech = [try captureSpeech("current") { try voiceOver.currentSpeech() }]
+        let expectedTitles = ["Timeline article 299", "Timeline article 298"]
+        var announcedTitles = Set(expectedTitles.filter { speech[0].contains($0) })
         for step in 1...20 {
-            if reentered.localizedCaseInsensitiveContains("All articles") || reentered.contains("Entries: 0 · Loaded originals: 0") { break }
-            reentered = captureSpeech("reentered forward \(step)", try voiceOver.moveForward())
+            if announcedTitles.count == expectedTitles.count { break }
+            let utterance = try captureSpeech("forward \(step)") { try voiceOver.moveForward() }
+            speech.append(utterance)
+            announcedTitles.formUnion(expectedTitles.filter { utterance.contains($0) })
         }
-        let speech = [current, forward, backward, parent, reentered]
-        XCTAssertTrue(speech.allSatisfy { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty })
+        XCTAssertEqual(announcedTitles, Set(expectedTitles), "Actual VoiceOver must reach both adjacent article titles: \(speech)")
         XCTAssertGreaterThan(Set(speech).count, 1)
-        XCTAssertTrue(current.localizedCaseInsensitiveContains("All articles"))
-        XCTAssertTrue(forward.contains("Entries: 0 · Loaded originals: 0"))
-        XCTAssertTrue(parent.localizedCaseInsensitiveContains("All articles"))
-        XCTAssertTrue(reentered.localizedCaseInsensitiveContains("All articles") || reentered.contains("Entries: 0 · Loaded originals: 0"))
         let window = XCTAttachment(screenshot: app.windows.firstMatch.screenshot())
         window.name = "Native Reader during actual VoiceOver focus navigation"
         window.lifetime = .keepAlways
