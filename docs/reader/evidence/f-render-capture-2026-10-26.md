@@ -4,6 +4,8 @@
 
 On 2026-10-26 the owner explicitly stopped OCR work and requested text-only verification. The active four-case Swift Testing contract now reads text directly from the actual hosted ArticleDetailView's WebPage. Vision imports, recognition requests, compute-stage selection, page-image exports and their image/OCR attachments are removed. No further OCR or pixel-analysis variant is planned.
 
+Current text-test source: **6882228f316caa993ad29ecd43111076f432d13e**. Fresh [Reader CI 40285814983](https://github.com/mpwg/NetNewsWire/actions/runs/40285814983) is live; inspect this existing handle for the changed-source text/lifetime cases and full plan result.
+
 For successful extraction the actual document must contain the extracted heading and representative body text. HTTP failure, empty extraction and held cancellation must retain the saved heading and saved body text. Existing request/error/state/outbox checks, cancellation, view removal and weak graph-release assertions remain. No UI method, retry or timing workaround is added. Production rendering, parser isolation and article-resource restrictions are unchanged.
 
 The earlier OCR experiment is superseded by this owner instruction, not accepted as passing. Direct document text does not establish screenshot pixels; historical capture limitations are retained as observations. Existing native UI reading/accessibility and actual offline/restart/platform requirements remain separately scoped. The owner has changed the verification method, not approved unfinished product criteria.
