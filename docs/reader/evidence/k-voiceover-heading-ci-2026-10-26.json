@@ -1,0 +1,22 @@
+{
+  "runID": 40272303996,
+  "artifactID": 12628723881,
+  "sourceCommit": "762458591b59d24ca601498f19c9efbc5be1f072",
+  "description": "Literal UTF-8 contents collated from original xcresult attachments; the method later fails during its window snapshot after a testmanagerd crash.",
+  "sourceFiles": {
+    "initial": "2A9CC194-9A74-4FCC-8E67-EFB1E4728ABA.txt",
+    "enter": "203D9857-63B8-4CF2-9CF9-B830A07F2135.txt",
+    "forward1": "771CDBCC-46ED-4A1D-BB9F-FAA0268D5AED.txt",
+    "forward2": "934500BD-9D37-45FE-BC63-8CA24BF19819.txt",
+    "forward3": "5EA3BB85-EF9A-44F4-910C-AB8F11127548.txt",
+    "restored": "A7E1DF1D-504D-42DC-B622-7B76B5A6AACC.txt"
+  },
+  "outputs": {
+    "initial": "VoiceOver originally enabled: false",
+    "enter": "Timeline article 299",
+    "forward1": "Timeline article 299",
+    "forward2": "Unread image, Timeline article 298, Representative content for k",
+    "forward3": "Unread image, Timeline article 297, Representative content for k",
+    "restored": "VoiceOver enabled after restoration: false"
+  }
+}

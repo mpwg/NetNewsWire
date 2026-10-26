@@ -12,7 +12,7 @@ Debug uses `eu.mpwg.reader.debug`; Release uses `eu.mpwg.reader`. The store loca
 
 Downloaded articles remain available offline. Read/star changes and their versioned pending operations commit locally together and are sent during the next successful synchronization. A refresh succeeds only after all pages have been fetched and saved. Window activation uses a shared refresh coordinator; manual refresh remains available.
 
-Sidebar unread counts cover all stored original articles, independently of the current search or loaded page. Account/library totals include retained originals from removed subscriptions; folder totals deduplicate feed membership within the account. A reload publishes timeline, subscription metadata and counts from one committed store version. An intervening commit preserves the previous coherent presentation until the change observer reloads. [Count integration and current acceptance limits](../docs/reader/evidence/b-unread-counts-2026-10-26.md).
+Sidebar unread counts cover all stored original articles, independently of the current search or loaded page. Account/library totals include retained originals from removed subscriptions; folder totals deduplicate feed membership within the account. A reload publishes timeline, subscription metadata and counts from one committed store version. An intervening commit preserves the previous coherent presentation until the change observer reloads. The corresponding Reader Mac deletion/count contract is accepted at 82d5fe870; full native accessibility and final platforms remain separate. [Count evidence and scope](../docs/reader/evidence/b-unread-counts-2026-10-26.md).
 
 ## Daily digests
 

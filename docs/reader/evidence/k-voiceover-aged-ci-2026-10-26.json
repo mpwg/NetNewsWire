@@ -1,0 +1,24 @@
+{
+  "runID": 40273616220,
+  "artifactID": 12629243507,
+  "sourceCommit": "82d5fe870968bf94cdac1daeff62bddb3070d8af",
+  "description": "Literal UTF-8 original attachment contents. Forward 3 throws VoiceOver Code 3 No speech available; it has no completed speech attachment. No matching native crash report is collected.",
+  "sourceFiles": {
+    "initial": "9F2E4119-91A8-4B16-9514-80F116C4AD63.txt",
+    "current": "8AC5BFF1-455A-4F53-9154-B3D3EBE09AD0.txt",
+    "enter": "C0CE8528-7040-4849-AD06-A8DEF98D746F.txt",
+    "forward1": "B84D5F26-03D4-40BA-8AA3-9A39A7505A0C.txt",
+    "forward2": "CBBD550E-6BC3-4B4E-A68E-6D752822F92B.txt",
+    "beforeFailedForward3": "C5750537-86A8-4505-A0AA-0E7388EA3C41.txt",
+    "restored": "67B21EAB-65C1-4F4B-835C-46DE25438C72.txt"
+  },
+  "outputs": {
+    "initial": "VoiceOver originally enabled: false",
+    "current": "Welcome to macOS. VoiceOver is on.",
+    "enter": "Reader All articles window All articles table Row 1 of 201 Unrea",
+    "forward1": "Timeline article 299",
+    "forward2": "Entries: 200 · Loaded originals: 200",
+    "beforeFailedForward3": "<XCUIVoiceOverService: enabled=YES>",
+    "restored": "VoiceOver enabled after restoration: false"
+  }
+}
