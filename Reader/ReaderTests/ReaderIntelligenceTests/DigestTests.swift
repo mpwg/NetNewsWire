@@ -129,12 +129,45 @@ struct LiteralSchemaDiagnostics {
         try await inspectSchema(largeCatalog: largeCatalog, responseLimit: responseLimit, quoted: false)
     }
 
-    private func inspectSchema(largeCatalog: Bool, responseLimit: Bool, quoted: Bool) async throws {
+    @Test("Native model selects encoded quoted literals without changing the original",
+          .enabled(if: SystemLanguageModel.default.isAvailable),
+          arguments: [(false, false), (false, true), (true, false), (true, true)])
+    func nativeSchemaWithEncodedQuotes(largeCatalog: Bool, responseLimit: Bool) async throws {
+        try await inspectSchema(largeCatalog: largeCatalog, responseLimit: responseLimit, quoted: true, encoded: true)
+    }
+
+    @Test("Wire labels preserve exact Unicode bytes and reject unknown or colliding choices")
+    func labelsRoundTripAndRejectUnknown() throws {
+        let originals = ["Code \"SAVE\" required.", "100% off", "%22", "\\", "a\nb", "Café", "Cafe\u{301}"]
+        let labels = originals.map(wireLabel)
+        let mapping = Dictionary(uniqueKeysWithValues: zip(labels.map { Data($0.utf8) }, originals))
+        #expect(mapping.count == originals.count)
+        for (original, label) in zip(originals, labels) {
+            let resolved = try #require(mapping[Data(label.utf8)])
+            #expect(Array(resolved.utf8) == Array(original.utf8))
+        }
+        #expect(mapping[Data("Code %22SAVE%22 changed".utf8)] == nil)
+        #expect(wireLabel("%22") != wireLabel("\""))
+    }
+
+    private func wireLabel(_ input: String) -> String {
+        input.unicodeScalars.map { scalar in
+            if scalar.value == 0x22 || scalar.value == 0x25 || scalar.value == 0x5C ||
+                scalar.value < 0x20 || scalar.value == 0x7F {
+                return String(format: "%%%02X", scalar.value)
+            }
+            return String(scalar)
+        }.joined()
+    }
+
+    private func inspectSchema(largeCatalog: Bool, responseLimit: Bool, quoted: Bool, encoded: Bool = false) async throws {
         let model = SystemLanguageModel.default
         let condition = quoted ? "Code \"SAVE\" required." : "Code SAVE required."
         var choices = ["Luma lamp", "Example Store", "EUR 29.99", condition, "pickup only"]
         if largeCatalog { choices += (0..<180).map { "Synthetic option \($0)" } }
-        let literal = DynamicGenerationSchema(name: "OriginalLiteral", anyOf: choices)
+        let labels = encoded ? choices.map(wireLabel) : choices
+        let mapping = Dictionary(uniqueKeysWithValues: zip(labels.map { Data($0.utf8) }, choices))
+        let literal = DynamicGenerationSchema(name: "OriginalLiteral", anyOf: labels)
         let value = DynamicGenerationSchema(referenceTo: "OriginalLiteral")
         let offer = DynamicGenerationSchema(name: "Offer", representNilExplicitlyInGeneratedContent: true, properties: [
             .init(name: "product", schema: value),
@@ -151,7 +184,8 @@ struct LiteralSchemaDiagnostics {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys]
         let schemaText = String(decoding: try encoder.encode(schema), as: UTF8.self)
-        let instructions = "Extract the offer. Select exact literals. Preserve both conditions."
+        let instructions = "Extract the offer. Select exact literals. Preserve both conditions." +
+            (encoded ? " In the choices, %22 represents a double quote, %25 a percent sign and %5C a backslash." : "")
         let prompt = "Example Store sells the Luma lamp for EUR 29.99. " + condition + " Pickup only."
         let tokenEstimate = try await model.tokenCount(for: instructions + prompt + schemaText)
         print("SCHEMA_DIAGNOSTIC large=\(largeCatalog) limited=\(responseLimit) choices=\(choices.count) inputTokens=\(tokenEstimate)")
@@ -166,10 +200,15 @@ struct LiteralSchemaDiagnostics {
         let excerpts = try #require(object["excerpts"] as? [String])
         print("SCHEMA_DIAGNOSTIC_RESULT large=\(largeCatalog) limited=\(responseLimit) offers=\(offers.count) excerpts=\(excerpts.count)")
         let first = try #require(offers.first)
-        #expect(first["product"] as? String == "Luma lamp")
-        #expect(first["merchant"] as? String == "Example Store")
-        #expect(first["price"] as? String == "EUR 29.99")
-        let conditions = try #require(first["conditions"] as? [String])
+        func resolved(_ label: String?) -> String? {
+            label.flatMap { mapping[Data($0.utf8)] }
+        }
+        #expect(resolved(first["product"] as? String) == "Luma lamp")
+        #expect(resolved(first["merchant"] as? String) == "Example Store")
+        #expect(resolved(first["price"] as? String) == "EUR 29.99")
+        let conditionLabels = try #require(first["conditions"] as? [String])
+        let conditions = conditionLabels.compactMap { resolved($0) }
+        #expect(conditions.count == conditionLabels.count)
         #expect(Set(conditions).isSuperset(of: [condition, "pickup only"]))
     }
 }
