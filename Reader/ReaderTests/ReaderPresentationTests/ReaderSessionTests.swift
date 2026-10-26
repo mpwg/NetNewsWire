@@ -44,6 +44,71 @@ struct ReaderSessionTests {
         #expect(try await store.articles(ArticleQuery(unreadOnly: true)).count == articles.count)
         #expect(try await store.pendingChanges(accountID: feed.id.accountID).isEmpty)
     }
+    @Test("Canonical refresh keeps timeline, detail and search caches consistent",
+          .timeLimit(.minutes(1)), arguments: [false, true], [false, true])
+    func canonicalRefreshPublishesOneWholeVersion(existingArticle: Bool, reversedVersions: Bool) async throws {
+        let (store, services, feed, originals) = try await fixture(count: existingArticle ? 1 : 0)
+        let key = ArticleKey(accountID: feed.id.accountID, remoteID: "0")
+        let session = ReaderSession(services: services)
+        if let original = originals.first {
+            try await store.updateContent(original.id, html: "<p>Prior extracted content</p>", text: "Prior extracted content")
+        }
+        await session.reload()
+        session.selection = .article(key)
+        await session.loadSelectedArticle()
+        if existingArticle {
+            #expect(session.selectedArticle?.text == "Prior extracted content")
+            #expect(session.detailArticle?.text == "Prior extracted content")
+        } else {
+            #expect(session.articles.isEmpty)
+            #expect(session.selectedArticle == nil)
+        }
+
+        let first = ArticleSnapshot(id: key, feedID: feed.id.remoteID, title: "B", html: "<p>Alpha HTML</p>",
+                                    text: "Alpha body", url: URL(string: "https://example.invalid/alpha"),
+                                    datePublished: Date(timeIntervalSince1970: 120),
+                                    dateArrived: Date(timeIntervalSince1970: 200), read: true)
+        let second = ArticleSnapshot(id: key, feedID: feed.id.remoteID, title: "A", html: "<p>Beta HTML</p>",
+                                     text: "Beta body", url: URL(string: "https://example.invalid/beta"),
+                                     datePublished: Date(timeIntervalSince1970: 130),
+                                     dateArrived: Date(timeIntervalSince1970: 300), read: true)
+        let versions = reversedVersions ? [second, first] : [first, second]
+        var expected = try #require(versions.last)
+        expected.dateArrived = originals.first?.dateArrived ?? expected.dateArrived
+        expected.read = false
+        expected.starred = true
+        let stream = await store.changes()
+        var revisions = stream.makeAsyncIterator()
+        let before = try #require(await revisions.next())
+        try await store.applyRefresh(RefreshSnapshot(accountID: feed.id.accountID, feeds: [feed], folders: [],
+                                                    articles: versions, unreadIDs: [key.remoteID], starredIDs: [key.remoteID]))
+        #expect(await revisions.next() == before + 1)
+        await session.reload()
+        session.selection = .article(key)
+        await session.loadSelectedArticle()
+        #expect(session.articles == [expected])
+        #expect(session.selectedArticle == expected)
+        #expect(session.detailArticle == expected)
+        #expect(session.rows.count == 1)
+        #expect(session.rows.first?.id == .article(key))
+        #expect(session.rows.first?.title == expected.title)
+        #expect(session.rows.first?.subtitle == expected.text)
+        #expect(session.rows.first?.date == expected.datePublished)
+        #expect(session.rows.first?.unread == true)
+        #expect(session.rows.first?.starred == true)
+        session.search = expected.text
+        await session.reload(resetLimit: true)
+        #expect(session.articles == [expected])
+        #expect(session.rows.map(\.title) == [expected.title])
+        session.search = try #require(versions.first).text
+        await session.reload(resetLimit: true)
+        #expect(session.articles.isEmpty)
+        #expect(session.rows.isEmpty)
+        #expect(session.selectedArticle == nil)
+        #expect(session.detailArticle == nil)
+        #expect(session.errorMessage == nil)
+    }
+
     private func summarySections(_ keys: [ArticleKey]) -> [DigestSection] {
         [DigestSection(title: "Fixture summary", text: "Sourced fixture content", sources: keys)]
     }

@@ -29,6 +29,8 @@ Full product acceptance remains open. Real network-off/restart, final devices/iP
 
 ## Current verification
 
+The canonical article-identity follow-up for #29 adds code-level evidence: four complete-version store cases pass locally; four actual ReaderSession cache/detail/search cases compile and await CI. No UI method or product source changes. [Criteria, raw local result and limits](docs/reader/evidence/b-canonical-identity-2026-10-26.md).
+
 Latest Reader CI [40263583204](https://github.com/mpwg/NetNewsWire/actions/runs/40263583204) at ea3307312 passes all 395 code executions and nine UI methods, but native VoiceOver moveIn times out before the changed title assertion. Ordinary state restoration and the following window method pass. The current native candidate remains unaccepted; [original results and limitations](docs/reader/evidence/k-accessibility-navigation-2026-10-26.md) retain this failure alongside the earlier green run.
 
 [Reader CI 40259657192](https://github.com/mpwg/NetNewsWire/actions/runs/40259657192) passes at **24d81f8cf**: all **405 executions (395 code, ten native UI)**, 208 distinct tests, zero failures/skips and one deliberate guardrail warning. Actual VoiceOver table entry/forward navigation announces articles 299 and 298 and restores the initially disabled mode. Lint, runner contracts and 10,000-article process recovery pass. [Raw summary, speech/state, inspected window and scope](docs/reader/evidence/k-accessibility-navigation-2026-10-26.md).

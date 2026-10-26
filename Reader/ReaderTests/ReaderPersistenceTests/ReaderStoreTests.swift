@@ -56,18 +56,59 @@ struct ReaderStoreTests {
         #expect(try await store.pendingChanges(accountID: accountID).count == 2)
     }
 
-    @Test("Duplicate identities select one complete version and retain the arrival date") func duplicateIdentitiesSelectOneCompleteVersionAndRetainTheArrivalDate() async throws {
+    @Test("Duplicate identities publish one whole account-bound version",
+          .timeLimit(.minutes(1)), arguments: [false, true], [false, true])
+    func duplicateIdentitiesSelectOneCompleteVersionAndRetainTheArrivalDate(
+        existingArticle: Bool, reversedVersions: Bool
+    ) async throws {
         let store = try ReaderStore(inMemory: true)
-        try await store.applyRefresh(refresh(articles: [article(title: "A", text: "A")]))
-        try await store.applyRefresh(refresh(articles: [
-            article(title: "B", text: "A", arrived: Date(timeIntervalSince1970: 200)),
-            article(title: "A", text: "B", arrived: Date(timeIntervalSince1970: 300))
-        ]))
-        let records = try await store.articles(ArticleQuery())
-        #expect(records.count == 1)
-        #expect(records.first?.title == "A")
-        #expect(records.first?.text == "B")
-        #expect(records.first?.dateArrived == Date(timeIntervalSince1970: 100))
+        let original = article(title: "A", text: "Prior content")
+        if existingArticle { try await store.applyRefresh(refresh(articles: [original])) }
+
+        let foreignAccountID = UUID()
+        let foreignFeed = FeedSnapshot(id: FeedKey(accountID: foreignAccountID, remoteID: feed.id.remoteID),
+                                       title: "Foreign feed", url: fixtureURL)
+        let foreignArticle = ArticleSnapshot(id: ArticleKey(accountID: foreignAccountID, remoteID: original.id.remoteID),
+                                             feedID: foreignFeed.id.remoteID, title: "Foreign article", text: "Foreign body",
+                                             dateArrived: Date(timeIntervalSince1970: 50))
+        try await store.applyRefresh(RefreshSnapshot(accountID: foreignAccountID, feeds: [foreignFeed], folders: [],
+                                                    articles: [foreignArticle], unreadIDs: [foreignArticle.id.remoteID],
+                                                    starredIDs: []))
+        var first = article(title: "B", text: "Alpha body", read: true,
+                            arrived: Date(timeIntervalSince1970: 200))
+        first.html = "<p>Alpha HTML</p>"
+        first.url = URL(string: "https://example.invalid/alpha")
+        first.datePublished = Date(timeIntervalSince1970: 120)
+        var second = article(title: "A", text: "Beta body", read: true,
+                             arrived: Date(timeIntervalSince1970: 300))
+        second.html = "<p>Beta HTML</p>"
+        second.url = URL(string: "https://example.invalid/beta")
+        second.datePublished = Date(timeIntervalSince1970: 130)
+        let versions = reversedVersions ? [second, first] : [first, second]
+        let winner = try #require(versions.last)
+        let discarded = try #require(versions.first)
+        var expected = winner
+        expected.dateArrived = existingArticle ? original.dateArrived : winner.dateArrived
+        expected.read = false
+        expected.starred = true
+
+        let stream = await store.changes()
+        var revisions = stream.makeAsyncIterator()
+        var revision = try #require(await revisions.next())
+        for _ in 0..<2 {
+            try await store.applyRefresh(refresh(articles: versions, starred: [original.id.remoteID]))
+            #expect(await revisions.next() == revision + 1)
+            revision += 1
+            #expect(try await store.articles(ArticleQuery(accountID: accountID)) == [expected])
+            #expect(try await store.article(original.id) == expected)
+            #expect(try await store.articles(ArticleQuery(accountID: accountID, search: winner.text)) == [expected])
+            #expect(try await store.articles(ArticleQuery(accountID: accountID, search: discarded.text)).isEmpty)
+            #expect(try await store.articles(ArticleQuery(accountID: accountID, search: original.text)).isEmpty)
+            #expect(try await store.articles(ArticleQuery(accountID: accountID, starredOnly: true)) == [expected])
+            #expect(try await store.article(foreignArticle.id) == foreignArticle)
+            #expect(try await store.articles(ArticleQuery()).count == 2)
+            #expect(try await store.pendingChanges(accountID: accountID).isEmpty)
+        }
     }
 
     @Test("Empty authoritative folder lists remove old assignments") func emptyAuthoritativeFolderListsRemoveOldAssignments() async throws {

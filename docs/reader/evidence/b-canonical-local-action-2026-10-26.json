@@ -1,0 +1,66 @@
+{
+  "testAction": {
+    "activeTestPlanName": "Reader",
+    "counts": {
+      "expectedFailures": 0,
+      "failed": 0,
+      "notRun": 0,
+      "passed": 4,
+      "skipped": 0,
+      "total": 4
+    },
+    "fullConsoleLogsPath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/test-console-log-2026-10-26T04-36-54+01-00.txt",
+    "fullSummaryPath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/55FAEC6E-68B3-4091-9D52-96B90D9E8E7A.txt",
+    "results": [
+      {
+        "displayName": "false, false",
+        "errorMessages": [],
+        "identifier": "ReaderStoreTests/duplicateIdentitiesSelectOneCompleteVersionAndRetainTheArrivalDate(existingArticle:reversedVersions:)",
+        "state": "Passed",
+        "targetName": "ReaderTests"
+      },
+      {
+        "displayName": "false, true",
+        "errorMessages": [],
+        "identifier": "ReaderStoreTests/duplicateIdentitiesSelectOneCompleteVersionAndRetainTheArrivalDate(existingArticle:reversedVersions:)",
+        "state": "Passed",
+        "targetName": "ReaderTests"
+      },
+      {
+        "displayName": "true, false",
+        "errorMessages": [],
+        "identifier": "ReaderStoreTests/duplicateIdentitiesSelectOneCompleteVersionAndRetainTheArrivalDate(existingArticle:reversedVersions:)",
+        "state": "Passed",
+        "targetName": "ReaderTests"
+      },
+      {
+        "displayName": "true, true",
+        "errorMessages": [],
+        "identifier": "ReaderStoreTests/duplicateIdentitiesSelectOneCompleteVersionAndRetainTheArrivalDate(existingArticle:reversedVersions:)",
+        "state": "Passed",
+        "targetName": "ReaderTests"
+      }
+    ],
+    "schemeName": "Reader",
+    "summary": "4 tests: 4 passed, 0 failed, 0 skipped, 0 expected failures, 0 not run",
+    "totalResults": 4,
+    "truncated": false,
+    "xcresultBundlePath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/Test-Reader-2026.10.26_04-36-54-+0100.xcresult"
+  },
+  "sourceSHA256": {
+    "test": "82a1a39577fc5ef8e93060a8fe0cf0442959f272f9fc687d19a8f6ccbd3b22a4",
+    "store": "e775ca71e6edc0d7229f78a5863bf4ca765f1af0932f8ace53369d6d84c1b6b3"
+  },
+  "scope": "One native Swift Testing function, four isolated store cases; no UI test or personal-account fixture.",
+  "lifecycleObservation": {
+    "previousReaderPID": 53387,
+    "previousReaderPresentAfterTest": false,
+    "restoreAction": "Xcode MCP RunProject",
+    "restoredPID": 24529,
+    "restoredArguments": [
+      "-NSDocumentRevisionsDebugMode",
+      "YES"
+    ],
+    "limitation": "Empty TEST_HOST and BUNDLE_LOADER did not preserve the existing scheme run during RunSomeTests; do not infer non-disruption from hostless target settings."
+  }
+}
