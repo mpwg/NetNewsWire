@@ -39,7 +39,7 @@ Native VoiceOver has both named passing runs and retained failures; full menu/fo
 
 ## Model verification
 
-The current `codex/reader-offer-fields` candidate replaces copied offer values with bounded references to original words/punctuation. Main remains v10. All250 candidate Mac code functions /551 executions pass; actual model quality remains pending. [Current reference criteria](docs/reader/evidence/i-offer-references-v11-2026-10-26.md). Earlier typed-copy failures below remain historical evidence.
+The current `codex/reader-offer-fields` candidate replaces copied offer values with bounded references to original words/punctuation. Main remains v10. All250 candidate Mac code functions /551 executions pass, but all four fixed live-model configurations fail with oversized or misassigned fields. The candidate is rejected for integration. [Current reference criteria](docs/reader/evidence/i-offer-references-v11-2026-10-26.md). Earlier typed-copy failures below remain historical evidence.
 
 The separate typed-offer candidate retains per-offer product, merchant, price/discount and condition records beside free summaries. Unknown values point to the original. All246 final Mac code functions /534 executions pass, but all four fixed public configurations reject rewritten fields; it is not accepted for integration. [Complete typed-offer criteria and original results](docs/reader/evidence/i-offer-fields-v9-2026-10-26.md). Source copying and semantic quality remain open; the v7 receipt below remains the verified baseline.
 
