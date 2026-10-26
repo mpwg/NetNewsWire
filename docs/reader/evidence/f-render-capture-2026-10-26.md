@@ -1,6 +1,6 @@
 # F: actual hosted article pixels — 2026-10-26
 
-Status: **open**. This candidate narrows the existing hosted capture uncertainty without accepting it. In Reader CI 40278721330 at 846b16357, the actual Starred route, original selection and AX heading queries pass, but the inspected window screenshot leaves the WebKit body white. [Original capture and scope](b-star-retention-2026-10-26.md). A DOM string, accessible heading or hittable element is not painted-text proof.
+Status: **open**. Fresh [Reader CI 40281918990](https://github.com/mpwg/NetNewsWire/actions/runs/40281918990) is live at **f1682366e**, including pixel candidate 748df7c8d and the workflow path refinement. This candidate narrows the existing hosted capture uncertainty without accepting it. In Reader CI 40278721330 at 846b16357, the actual Starred route, original selection and AX heading queries pass, but the inspected window screenshot leaves the WebKit body white. [Original capture and scope](b-star-retention-2026-10-26.md). A DOM string, accessible heading or hittable element is not painted-text proof.
 
 ## Candidate and criterion
 
