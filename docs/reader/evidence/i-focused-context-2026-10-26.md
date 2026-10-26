@@ -32,3 +32,9 @@ No public source corpus is available for an exact-byte replay; no network, accou
 ## Shipping restoration
 
 Research is committed/pushed at94e7315c3 only. Main v5 generator/probe SHA-256 values are restored exactly to `604700192553e84b886a3a8246f2eb5631f6481745cfee8c96c1d9b57f0e260e` / `8d0a2c1fcdcb5293fb619a6873eb5741e0c166321343d58a3464a803ac527632`. A temporary/reversed Package.swift newline refreshes Xcode's cached candidate-file graph; the manifest has no diff. Xcode MCP app/test build16:20:34 and package probe build16:20:47 pass; Reader/My Mac is restored. No candidate implementation or normal app launch occurs on main. The same earlier-source CI40347228928 is confirmed live at this checkpoint, with native tests running and strict lint failed as documented above. No second run has been dispatched.
+
+## Terminal CI result
+
+CI40347228928 is now terminal **failure**, with its native Mac job **successful:528/528 executions, 245 Swift Testing functions /518 code plus ten native methods,255 distinct, zero failures/skips**. Native destination arm64 My Mac VM, macOS27.0.1(26A434). Runner propagation, probe build and10,000-article SIGKILL/process recovery pass. Strict lint alone fails the two documented optional-initialization rules;94e7315c3 fixes them and passes strict local SwiftLint0.65.1 plus145 local native executions. Do not call the original workflow green or treat a later pass as a native-reliability repair.
+
+[Original summary](i-focused-ci-summary-2026-10-26.json), [intelligence/native nodes](i-focused-ci-cases-2026-10-26.json), [recovery report](i-focused-ci-recovery-2026-10-26.json). Artifact12662602586 ZIP SHA-256 `f723a2b42d6eb5021dce3c9b826c9f2234e62409ce42b3a0a07647adddc5f210` matches downloaded bytes and GitHub's digest. The result and artifact are preserved before any changed-source follow-up. Earlier live/pending notes above are historical. No issue acceptance follows.

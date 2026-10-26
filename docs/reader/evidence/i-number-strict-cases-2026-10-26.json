@@ -1,0 +1,190 @@
+{
+  "helperSHA256": "2a91d0e30ea855af933786f144511972e65ad6e494aa4dcf3ae62031fbe70935",
+  "nativeNodes": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "duration": "0,00051s",
+              "durationInSeconds": 0.0005078315734863281,
+              "name": "\"⟦\"",
+              "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/SourceNumberReferenceTests/sourceReferencesCannotBeForged(text:)?args=f75d68fc34b079891ac5fb5ab63abf39e8eac09a4cd5fc4820f23045b8c2552e",
+              "nodeType": "Arguments",
+              "result": "Passed"
+            },
+            {
+              "duration": "0,00085s",
+              "durationInSeconds": 0.0008530616760253906,
+              "name": "\"⟦readerNumber:0:0⟧\"",
+              "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/SourceNumberReferenceTests/sourceReferencesCannotBeForged(text:)?args=0a6b8df81322cf44c0728f1ef2d4c984be7325459c177c3b4a4b948b9b62e9bf",
+              "nodeType": "Arguments",
+              "result": "Passed"
+            },
+            {
+              "duration": "0,00073s",
+              "durationInSeconds": 0.0007312297821044922,
+              "name": "\"⟦readerNumber\"",
+              "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/SourceNumberReferenceTests/sourceReferencesCannotBeForged(text:)?args=f00f8f7e78e4da9ac335294733b91686acfc8ec943e91332c476d54ab8b1f007",
+              "nodeType": "Arguments",
+              "result": "Passed"
+            },
+            {
+              "duration": "0,00015s",
+              "durationInSeconds": 0.00014829635620117188,
+              "name": "\"⟧\"",
+              "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/SourceNumberReferenceTests/sourceReferencesCannotBeForged(text:)?args=9e9a08eaa130f9bf182a53ac9f73963ff6c542b420af0610ffcdd4c2b4fe6270",
+              "nodeType": "Arguments",
+              "result": "Passed"
+            },
+            {
+              "duration": "0,00056s",
+              "durationInSeconds": 0.0005559921264648438,
+              "name": "\"29,99\"",
+              "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/SourceNumberReferenceTests/sourceReferencesCannotBeForged(text:)?args=af3e13ad37e47cb21a8b6fbb7a40634358f5b3f3a44756094f3d04fead9c75c1",
+              "nodeType": "Arguments",
+              "result": "Passed"
+            },
+            {
+              "duration": "0,00084s",
+              "durationInSeconds": 0.0008409023284912109,
+              "name": "\"EUR 9999\"",
+              "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/SourceNumberReferenceTests/sourceReferencesCannotBeForged(text:)?args=35b48cbbec87607a95a824a3835ff4967c82e0f9db3ec3f5f5e66c3519bf1707",
+              "nodeType": "Arguments",
+              "result": "Passed"
+            }
+          ],
+          "duration": "0,00061s",
+          "durationInSeconds": 0.0006062189737955729,
+          "name": "Source namespace collisions and numbers outside the packet are rejected",
+          "nodeIdentifier": "SourceNumberReferenceTests/sourceReferencesCannotBeForged(text:)",
+          "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/SourceNumberReferenceTests/sourceReferencesCannotBeForged(text:)",
+          "nodeType": "Test Case",
+          "result": "Passed"
+        },
+        {
+          "children": [
+            {
+              "duration": "0,00058s",
+              "durationInSeconds": 0.000576019287109375,
+              "name": "\"Budget EUR 250000. Repeated: 250000.\"",
+              "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/SourceNumberReferenceTests/numericReferencesKeepExactSourceText(text:)?args=194576cbfac546cd38a9392c6159d258b6d5a34c9e151d47a1b644d822dae920",
+              "nodeType": "Arguments",
+              "result": "Passed"
+            },
+            {
+              "duration": "0,0006s",
+              "durationInSeconds": 0.0006039142608642578,
+              "name": "\"Café 🧪 costs 29.99; café costs 29.99.\"",
+              "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/SourceNumberReferenceTests/numericReferencesKeepExactSourceText(text:)?args=d06e73b156923264c88de9fe3d7bff9115de8416702ff2a730f69edf627492b0",
+              "nodeType": "Arguments",
+              "result": "Passed"
+            },
+            {
+              "duration": "0,00046s",
+              "durationInSeconds": 0.0004589557647705078,
+              "name": "\"Hours 21:00–17:00; dates 2026-10-26.\"",
+              "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/SourceNumberReferenceTests/numericReferencesKeepExactSourceText(text:)?args=e6faae2d45bc39e6e4a7eee8a645b5ccb3d30a77cc1ad4db66222301aef52db2",
+              "nodeType": "Arguments",
+              "result": "Passed"
+            },
+            {
+              "duration": "0,00018s",
+              "durationInSeconds": 0.00017595291137695312,
+              "name": "\"No numeric values are present.\"",
+              "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/SourceNumberReferenceTests/numericReferencesKeepExactSourceText(text:)?args=c3020fc6b081e83bc31f7e873420a2021e44cb2309d3908f4342b70bc15ad6fd",
+              "nodeType": "Arguments",
+              "result": "Passed"
+            },
+            {
+              "duration": "0,00032s",
+              "durationInSeconds": 0.0003180503845214844,
+              "name": "\"Preis EUR 29,99; zusätzlich 2.500,50.\"",
+              "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/SourceNumberReferenceTests/numericReferencesKeepExactSourceText(text:)?args=010d616c75ac970a5324bd1238f67510b1f99f28463a5b5c0fcc5f6f2cab6dac",
+              "nodeType": "Arguments",
+              "result": "Passed"
+            }
+          ],
+          "duration": "0,00043s",
+          "durationInSeconds": 0.00042657852172851564,
+          "name": "Native numeric references round-trip exact literals and surrounding Unicode",
+          "nodeIdentifier": "SourceNumberReferenceTests/numericReferencesKeepExactSourceText(text:)",
+          "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/SourceNumberReferenceTests/numericReferencesKeepExactSourceText(text:)",
+          "nodeType": "Test Case",
+          "result": "Passed"
+        },
+        {
+          "children": [
+            {
+              "duration": "0,0002s",
+              "durationInSeconds": 0.00020170211791992188,
+              "name": "\"⟦0:0⟧\"",
+              "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/SourceNumberReferenceTests/invalidNumericReferencesFailClosed(text:)?args=d937b17d07ef20d5d5d824c50adb289d98190d9934265b19974a663d5fd30e29",
+              "nodeType": "Arguments",
+              "result": "Passed"
+            },
+            {
+              "duration": "0,00027s",
+              "durationInSeconds": 0.00026798248291015625,
+              "name": "\"⟦readerNumber:0:0\"",
+              "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/SourceNumberReferenceTests/invalidNumericReferencesFailClosed(text:)?args=06af24e6f88a717a647956629531f440fb649f458c3bd9d7f643a52ba8f961b0",
+              "nodeType": "Arguments",
+              "result": "Passed"
+            },
+            {
+              "duration": "0,00024s",
+              "durationInSeconds": 0.00023603439331054688,
+              "name": "\"⟦readerNumber:00:0⟧\"",
+              "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/SourceNumberReferenceTests/invalidNumericReferencesFailClosed(text:)?args=6b4a736d78c090b73cfd467a5cd04d66e3783d17632b0ec94a5f943cdcee7f7d",
+              "nodeType": "Arguments",
+              "result": "Passed"
+            },
+            {
+              "duration": "0,00038s",
+              "durationInSeconds": 0.0003790855407714844,
+              "name": "\"⟦readerNumber:0:0⟧⟧\"",
+              "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/SourceNumberReferenceTests/invalidNumericReferencesFailClosed(text:)?args=89bb2dc7b98a102e80b70373a1ea11d19fd3eabcb61b47e141c36b2148186ea3",
+              "nodeType": "Arguments",
+              "result": "Passed"
+            },
+            {
+              "duration": "0,00043s",
+              "durationInSeconds": 0.00042700767517089844,
+              "name": "\"⟦readerNumber:0:99⟧\"",
+              "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/SourceNumberReferenceTests/invalidNumericReferencesFailClosed(text:)?args=2a80cbf3589263f287013d9ea92b50fb952f138dd4329ed47997ecc6aaef3efb",
+              "nodeType": "Arguments",
+              "result": "Passed"
+            },
+            {
+              "duration": "0,00023s",
+              "durationInSeconds": 0.000225067138671875,
+              "name": "\"⟦readerNumber:1:0⟧\"",
+              "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/SourceNumberReferenceTests/invalidNumericReferencesFailClosed(text:)?args=7b17dcaf3ae494fea3ede573b2a9529f0e888e98261d8e4e63d95d7e1e665cf0",
+              "nodeType": "Arguments",
+              "result": "Passed"
+            },
+            {
+              "duration": "0,00022s",
+              "durationInSeconds": 0.00021600723266601562,
+              "name": "\"⟧\"",
+              "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/SourceNumberReferenceTests/invalidNumericReferencesFailClosed(text:)?args=9e9a08eaa130f9bf182a53ac9f73963ff6c542b420af0610ffcdd4c2b4fe6270",
+              "nodeType": "Arguments",
+              "result": "Passed"
+            }
+          ],
+          "duration": "0,00028s",
+          "durationInSeconds": 0.0002789837973458426,
+          "name": "Unknown, malformed and uncited packet references never restore",
+          "nodeIdentifier": "SourceNumberReferenceTests/invalidNumericReferencesFailClosed(text:)",
+          "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/SourceNumberReferenceTests/invalidNumericReferencesFailClosed(text:)",
+          "nodeType": "Test Case",
+          "result": "Passed"
+        }
+      ],
+      "name": "SourceNumberReferenceTests",
+      "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/SourceNumberReferenceTests",
+      "nodeType": "Test Suite",
+      "result": "Passed"
+    }
+  ]
+}
