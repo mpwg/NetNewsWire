@@ -10,7 +10,7 @@ Open **Reader/Reader.xcodeproj** in Xcode 27 and select the shared **Reader** sc
 - [ReaderKit](ReaderKit/README.md): six libraries and the standalone SwiftData recovery probe.
 - [Acceptance matrix](docs/reader/acceptance.md): criterion-specific evidence and outstanding product/platform work.
 - [Continuation handoff](docs/reader/handoff-2026-10-24.md): current work and owner decisions.
-- [Canonical language review](docs/reader/evidence/k-canonical-language-2026-10-26.md): historical GitHub audit descriptions being translated to English without changing their disposition.
+- [Canonical language review](docs/reader/evidence/k-canonical-language-2026-10-26.md): all 43 historical GitHub audit descriptions reviewed, with 28 translated to English and dispositions/evidence preserved.
 - scripts/test-reader.sh and scripts/verify-reader-store.py: current CI orchestration.
 
 The original NetNewsWire application, modules, extensions, assets, distribution tools and superseded Reader projects were removed on the owner's instruction. They remain recoverable in Git history. Only the native Reader project is an active application build entry point.
