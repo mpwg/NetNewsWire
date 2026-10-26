@@ -181,9 +181,9 @@ struct ReaderStoreTests {
         #expect(try await store.feeds().first?.folderIDs.isEmpty == true)
     }
 
-    @Test("Unsubscribing retains independent stars with or without other subscriptions",
-          arguments: [false, true])
-    func unsubscribingRetainsStarsAndRemovesUnprotectedArticles(keepsOtherSubscription: Bool) async throws {
+    @Test("Unsubscribing retains independent stars and follows authoritative unread membership",
+          arguments: [false, true], [false, true])
+    func unsubscribingRetainsStarsAndRemovesUnprotectedArticles(keepsOtherSubscription: Bool, serverKeepsUnread: Bool) async throws {
         let store = try ReaderStore(inMemory: true)
         let otherFeed = FeedSnapshot(id: FeedKey(accountID: accountID, remoteID: "feed/remaining"),
                                      title: "Still subscribed", url: fixtureURL)
@@ -196,15 +196,63 @@ struct ReaderStoreTests {
                                              unread: Set(initialArticles.map(\.id.remoteID)), starred: ["1"]))
         #expect(try await store.pendingChanges(accountID: accountID).isEmpty)
         let subscribedFeeds = keepsOtherSubscription ? [otherFeed] : []
-        try await store.applyRefresh(refresh(articles: [], feeds: subscribedFeeds, unread: ["3"], starred: []))
+        let remoteUnread: Set<String> = serverKeepsUnread ? ["1", "3"] : ["3"]
+        try await store.applyRefresh(refresh(articles: [], feeds: subscribedFeeds, unread: remoteUnread, starred: []))
         let remaining = try await store.articles(ArticleQuery(starredOnly: true))
         #expect(remaining.map(\.id.remoteID) == ["1"])
         #expect(remaining.first?.starred == true)
+        #expect(remaining.first?.read == !serverKeepsUnread)
+        #expect(try await store.articles(ArticleQuery(unreadOnly: true, starredOnly: true)).map(\.id.remoteID) ==
+                (serverKeepsUnread ? ["1"] : []))
+        #expect(try await store.unreadCounts()[feed.id, default: 0] == (serverKeepsUnread ? 1 : 0))
         #expect(try await store.article(article("2").id) == nil)
         #expect(Set(try await store.articles(ArticleQuery()).map(\.id.remoteID)) ==
                 (keepsOtherSubscription ? ["1", "3"] : ["1"]))
         #expect(try await store.feeds() == subscribedFeeds)
         #expect(try await store.pendingChanges(accountID: accountID).isEmpty)
+    }
+
+    @Test("Pending orphan read revisions survive refresh and yield to server membership only after acknowledgement",
+          .timeLimit(.minutes(1)), arguments: [false, true], [false, true])
+    func orphanReadRevisionsKeepPrecedenceUntilAcknowledged(localRead: Bool, serverKeepsUnread: Bool) async throws {
+        let store = try ReaderStore(inMemory: true)
+        let original = article("1")
+        try await store.applyRefresh(refresh(articles: [original], unread: localRead ? ["1"] : [], starred: ["1"]))
+        #expect(try await store.article(original.id)?.read == !localRead)
+        let foreignID = UUID()
+        let foreignFeed = FeedSnapshot(id: FeedKey(accountID: foreignID, remoteID: feed.id.remoteID),
+                                       title: "Foreign", url: fixtureURL)
+        let foreign = ArticleSnapshot(id: ArticleKey(accountID: foreignID, remoteID: "1"),
+                                      feedID: foreignFeed.id.remoteID, title: "Foreign original",
+                                      dateArrived: Date(timeIntervalSince1970: 777), starred: true)
+        try await store.applyRefresh(RefreshSnapshot(accountID: foreignID, feeds: [foreignFeed], folders: [],
+                                                    articles: [foreign], unreadIDs: ["1"], starredIDs: ["1"]))
+        #expect(try await store.article(foreign.id) == foreign)
+        try await store.setStatus([original.id], field: .read, value: localRead)
+        let pending = try await store.pendingChanges(accountID: accountID)
+        let revision = try #require(pending.first)
+        #expect(pending.count == 1)
+        #expect(revision.article == original.id && revision.field == .read && revision.value == localRead)
+        let remoteUnread: Set<String> = serverKeepsUnread ? ["1"] : []
+        let removal = refresh(articles: [], feeds: [], unread: remoteUnread, starred: [])
+        for _ in 0..<2 {
+            try await store.applyRefresh(removal)
+            let retained = try #require(try await store.article(original.id))
+            #expect(retained.starred && retained.read == localRead)
+            #expect(try await store.pendingChanges(accountID: accountID) == pending)
+            #expect(try await store.unreadCounts()[feed.id, default: 0] == (localRead ? 0 : 1))
+            #expect(try await store.article(foreign.id) == foreign)
+        }
+        try await store.acknowledge(pending)
+        #expect(try await store.pendingChanges(accountID: accountID).isEmpty)
+        #expect(try await store.article(original.id)?.read == localRead)
+        try await store.applyRefresh(removal)
+        let retained = try #require(try await store.article(original.id))
+        #expect(retained.starred && retained.read == !serverKeepsUnread)
+        #expect(try await store.unreadCounts()[feed.id, default: 0] == (serverKeepsUnread ? 1 : 0))
+        #expect(try await store.pendingChanges(accountID: accountID).isEmpty)
+        #expect(try await store.article(foreign.id) == foreign)
+        #expect(try await store.pendingChanges(accountID: foreignID).isEmpty)
     }
 
     @Test("Digests retain their original articles after unsubscribing") func digestsRetainTheirOriginalArticlesAfterUnsubscribing() async throws {

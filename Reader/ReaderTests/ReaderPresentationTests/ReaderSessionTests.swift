@@ -109,9 +109,9 @@ struct ReaderSessionTests {
         #expect(session.errorMessage == nil)
     }
 
-    @Test("Starred presentation retains unsubscribed originals and clears removed selection",
-          arguments: [false, true])
-    func starredPresentationRetainsUnsubscribedOriginals(keepsOtherSubscription: Bool) async throws {
+    @Test("Starred presentation follows authoritative orphan read state and clears removed selection",
+          arguments: [false, true], [false, true])
+    func starredPresentationRetainsUnsubscribedOriginals(keepsOtherSubscription: Bool, serverKeepsUnread: Bool) async throws {
         let (store, services, feed, originals) = try await fixture()
         let otherFeed = FeedSnapshot(id: FeedKey(accountID: feed.id.accountID, remoteID: "feed/remaining"),
                                      title: "Still subscribed", url: feed.url)
@@ -128,8 +128,9 @@ struct ReaderSessionTests {
         await session.loadSelectedArticle()
         #expect(session.selectedArticle?.id == originals[1].id)
         let remainingFeeds = keepsOtherSubscription ? [otherFeed] : []
+        let remoteUnread: Set<String> = serverKeepsUnread ? [originals[0].id.remoteID, otherArticle.id.remoteID] : [otherArticle.id.remoteID]
         try await store.applyRefresh(RefreshSnapshot(accountID: feed.id.accountID, feeds: remainingFeeds, folders: [],
-                                                    articles: [], unreadIDs: [otherArticle.id.remoteID], starredIDs: []))
+                                                    articles: [], unreadIDs: remoteUnread, starredIDs: []))
         await session.reload()
         let expectedKeys = keepsOtherSubscription ? [originals[0].id, otherArticle.id] : [originals[0].id]
         #expect(Set(session.articles.map(\.id)) == Set(expectedKeys))
@@ -142,13 +143,22 @@ struct ReaderSessionTests {
         #expect(session.articles.map(\.id) == [originals[0].id])
         #expect(session.rows.map(\.id) == [.article(originals[0].id)])
         #expect(session.rows.first?.starred == true)
+        #expect(session.rows.first?.unread == serverKeepsUnread)
+        #expect(session.unreadCounts.byFeed[feed.id, default: 0] == (serverKeepsUnread ? 1 : 0))
+        #expect(session.unreadCounts.total == (serverKeepsUnread ? 1 : 0) + (keepsOtherSubscription ? 1 : 0))
         session.selection = .article(originals[0].id)
         await session.loadSelectedArticle()
         let retained = try #require(try await store.article(originals[0].id))
         #expect(session.selectedArticle == retained)
         #expect(session.detailArticle == retained)
         #expect(retained.starred)
+        #expect(retained.read == !serverKeepsUnread)
         #expect(retained.text == originals[0].text)
+        session.sidebarSelection = "unread"
+        await session.reload(resetLimit: true)
+        let expectedUnread = (serverKeepsUnread ? [originals[0].id] : []) + (keepsOtherSubscription ? [otherArticle.id] : [])
+        #expect(Set(session.articles.map(\.id)) == Set(expectedUnread))
+        #expect(Set(session.rows.map(\.id)) == Set(expectedUnread.map(TimelineSelection.article)))
         #expect(try await store.pendingChanges(accountID: feed.id.accountID).isEmpty)
         #expect(session.errorMessage == nil)
     }

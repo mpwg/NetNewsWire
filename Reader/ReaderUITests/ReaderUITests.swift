@@ -170,6 +170,26 @@ final class ReaderSmokeTests: XCTestCase {
         library.name = "Native library and account counts after pure subscription deletion"
         library.lifetime = .keepAlways
         add(library)
+
+        XCTContext.runActivity(named: "Native global Starred opens an independently retained original") { activity in
+            search.click()
+            app.typeKey("a", modifierFlags: .command)
+            search.typeText("Load article 1020.")
+            sidebar.buttons["Starred"].click()
+            XCTAssertTrue(app.windows.firstMatch.wait(for: \.title, toEqual: "Starred", timeout: 5))
+            waitForValue(app.staticTexts["timelineCounts"], equalTo: "Entries: 1 · Loaded originals: 1")
+            let retained = timeline.staticTexts["Load article 1020"].firstMatch
+            XCTAssertTrue(retained.wait(for: \.isHittable, toEqual: true, timeout: 5))
+            retained.click()
+            waitForValue(app.staticTexts["articleDetailTitle"], equalTo: "Load article 1020")
+            let savedBody = app.webViews.firstMatch.staticTexts["Load article 1020"].firstMatch
+            XCTAssertTrue(savedBody.waitForExistence(timeout: 10))
+            XCTAssertTrue(savedBody.wait(for: \.isHittable, toEqual: true, timeout: 5))
+            let starred = XCTAttachment(screenshot: app.windows.firstMatch.screenshot())
+            starred.name = "Native global Starred renders an unsubscribed original with saved body"
+            starred.lifetime = .keepAlways
+            activity.add(starred)
+        }
     }
 
     func testOPMLExportUsesNativeSavePanel() throws {

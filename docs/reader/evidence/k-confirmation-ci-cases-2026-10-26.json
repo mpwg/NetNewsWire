@@ -1,0 +1,20 @@
+[
+  {
+    "duration": "1min 4s",
+    "durationInSeconds": 64.83027994632721,
+    "name": "testLoadedTimelineScrollingMetrics()",
+    "nodeIdentifier": "ReaderSmokeTests/testLoadedTimelineScrollingMetrics()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testLoadedTimelineScrollingMetrics",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "41s",
+    "durationInSeconds": 41.952149987220764,
+    "name": "testVoiceOverAnnouncesReaderAndMovesFocus()",
+    "nodeIdentifier": "ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  }
+]
