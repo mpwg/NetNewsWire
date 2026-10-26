@@ -64,9 +64,12 @@ final class ReaderSmokeTests: XCTestCase {
                 return utterance
             }
         }
-        var speech = [try captureSpeech("current") { try voiceOver.currentSpeech() }]
+        var speech = [
+            try captureSpeech("current") { try voiceOver.currentSpeech() },
+            try captureSpeech("enter timeline") { try voiceOver.moveIn() }
+        ]
         let expectedTitles = ["Timeline article 299", "Timeline article 298"]
-        var announcedTitles = Set(expectedTitles.filter { speech[0].contains($0) })
+        var announcedTitles = Set(expectedTitles.filter { title in speech.contains { $0.contains(title) } })
         for step in 1...20 {
             if announcedTitles.count == expectedTitles.count { break }
             let utterance = try captureSpeech("forward \(step)") { try voiceOver.moveForward() }

@@ -1,0 +1,196 @@
+{
+  "sourceRun": 40256276423,
+  "sourceRevision": "340e26407843dfe97a54ca42631ae387c5d4cb4c",
+  "artifactID": 12622483408,
+  "attachments": [
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "d3cc8ceaa2e757cc3d41bf44f84add007f096e4f",
+      "deviceName": "My Mac",
+      "exportedFileName": "5AA1239F-D636-4B67-A1AB-32220A774ECE.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Native VoiceOver initial state_0_D287E8F9-8236-43B2-9FD0-6E371A3A2452.txt",
+      "timestamp": 1792979987.873,
+      "text": "VoiceOver originally enabled: false",
+      "sha256": "4efebe1027172734623f2bb365c619485a3373a14c52fbb8cebd51b1b1a3e960"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "d3cc8ceaa2e757cc3d41bf44f84add007f096e4f",
+      "deviceName": "My Mac",
+      "exportedFileName": "29B74455-1AB2-4E46-ABDA-08B4CB38295E.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Actual native VoiceOver current_0_1177099E-34CF-4D8D-AFB0-21AF51A2E822.txt",
+      "timestamp": 1792979995.804,
+      "text": "Welcome to macOS. VoiceOver is on.",
+      "sha256": "519805b176a983542fe773f5d368b86e17c70f952e6275b644c6baf6e9102429"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "d3cc8ceaa2e757cc3d41bf44f84add007f096e4f",
+      "deviceName": "My Mac",
+      "exportedFileName": "C0B797E1-A0F5-4A61-845A-D738944B173A.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Actual native VoiceOver forward 1_0_C648AF0A-53FB-44E0-A61B-C80ABD887A6A.txt",
+      "timestamp": 1792980001.002,
+      "text": "Timeline article 299",
+      "sha256": "c0a7f1c278a83c01e795ba877096c3d536f8b86989608fd9860d4fbbbed37a0e"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "d3cc8ceaa2e757cc3d41bf44f84add007f096e4f",
+      "deviceName": "My Mac",
+      "exportedFileName": "79434307-8949-4754-8A95-C57B8E99BB74.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Actual native VoiceOver forward 2_0_4AF6DCE7-A4E8-4474-BA57-85CE352D07B5.txt",
+      "timestamp": 1792980008.498,
+      "text": "Entries: 200 · Loaded originals: 200",
+      "sha256": "ad2ceaeffe6f23551305ffd5663c6befb77667fa5e6f7c5bd0fd9b738ae89a43"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "d3cc8ceaa2e757cc3d41bf44f84add007f096e4f",
+      "deviceName": "My Mac",
+      "exportedFileName": "7CB3AF51-3B2E-49B6-AA63-E49E9DFE1183.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Actual native VoiceOver forward 3_0_46DD13AE-6823-4666-95E3-A328AD28E664.txt",
+      "timestamp": 1792980015.962,
+      "text": "Entries: 200 · Loaded originals: 200",
+      "sha256": "ad2ceaeffe6f23551305ffd5663c6befb77667fa5e6f7c5bd0fd9b738ae89a43"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "d3cc8ceaa2e757cc3d41bf44f84add007f096e4f",
+      "deviceName": "My Mac",
+      "exportedFileName": "F53FC0B2-FFA7-4836-BED4-08C45FFA142F.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Actual native VoiceOver forward 4_0_81A7A1C2-FDC7-40D7-A7A8-E75E339DC6A0.txt",
+      "timestamp": 1792980023.316,
+      "text": "Entries: 200 · Loaded originals: 200",
+      "sha256": "ad2ceaeffe6f23551305ffd5663c6befb77667fa5e6f7c5bd0fd9b738ae89a43"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "d3cc8ceaa2e757cc3d41bf44f84add007f096e4f",
+      "deviceName": "My Mac",
+      "exportedFileName": "CB754702-63A3-4901-B3DB-5E59FDBAFCAB.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Actual native VoiceOver forward 5_0_257E3926-94C8-403D-9A88-B142F61BCFCA.txt",
+      "timestamp": 1792980030.887,
+      "text": "Entries: 200 · Loaded originals: 200",
+      "sha256": "ad2ceaeffe6f23551305ffd5663c6befb77667fa5e6f7c5bd0fd9b738ae89a43"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "d3cc8ceaa2e757cc3d41bf44f84add007f096e4f",
+      "deviceName": "My Mac",
+      "exportedFileName": "66E4D850-D654-4F0C-8ADD-2B22CDED8F0D.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Actual native VoiceOver forward 6_0_10745336-AA54-4844-9E94-997EC662C407.txt",
+      "timestamp": 1792980038.403,
+      "text": "Entries: 200 · Loaded originals: 200",
+      "sha256": "ad2ceaeffe6f23551305ffd5663c6befb77667fa5e6f7c5bd0fd9b738ae89a43"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "d3cc8ceaa2e757cc3d41bf44f84add007f096e4f",
+      "deviceName": "My Mac",
+      "exportedFileName": "D1161EF9-EDF3-4D52-96A1-641ED615BE98.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Actual native VoiceOver forward 7_0_DC9E6ECD-EB14-4E15-A058-20215F9E03F2.txt",
+      "timestamp": 1792980045.784,
+      "text": "Entries: 200 · Loaded originals: 200",
+      "sha256": "ad2ceaeffe6f23551305ffd5663c6befb77667fa5e6f7c5bd0fd9b738ae89a43"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "d3cc8ceaa2e757cc3d41bf44f84add007f096e4f",
+      "deviceName": "My Mac",
+      "exportedFileName": "D366C12F-602B-44C7-8C58-F0721B46B104.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Actual native VoiceOver forward 8_0_B45F0A26-FFA0-4A0E-A7CE-A9228B653D05.txt",
+      "timestamp": 1792980053.261,
+      "text": "Entries: 200 · Loaded originals: 200",
+      "sha256": "ad2ceaeffe6f23551305ffd5663c6befb77667fa5e6f7c5bd0fd9b738ae89a43"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "d3cc8ceaa2e757cc3d41bf44f84add007f096e4f",
+      "deviceName": "My Mac",
+      "exportedFileName": "E21236B6-F5BF-4157-9D4F-E97EEFDB46DD.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Actual native VoiceOver forward 9_0_5FC8C352-2154-40EC-8C82-063986A832BD.txt",
+      "timestamp": 1792980060.897,
+      "text": "Entries: 200 · Loaded originals: 200",
+      "sha256": "ad2ceaeffe6f23551305ffd5663c6befb77667fa5e6f7c5bd0fd9b738ae89a43"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "d3cc8ceaa2e757cc3d41bf44f84add007f096e4f",
+      "deviceName": "My Mac",
+      "exportedFileName": "F2E16523-58F0-4719-B07C-171E4BD1D2CD.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Actual native VoiceOver forward 10_0_B9A2EF5F-C0D4-4CA5-B0C9-6C1B3A729572.txt",
+      "timestamp": 1792980068.347,
+      "text": "Entries: 200 · Loaded originals: 200",
+      "sha256": "ad2ceaeffe6f23551305ffd5663c6befb77667fa5e6f7c5bd0fd9b738ae89a43"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "d3cc8ceaa2e757cc3d41bf44f84add007f096e4f",
+      "deviceName": "My Mac",
+      "exportedFileName": "14E42BEB-0E31-4046-B911-22D7DD5D2ABF.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Actual native VoiceOver forward 11_0_CC256A4A-A36B-49C5-A7E5-E7FC21948842.txt",
+      "timestamp": 1792980075.762,
+      "text": "Entries: 200 · Loaded originals: 200",
+      "sha256": "ad2ceaeffe6f23551305ffd5663c6befb77667fa5e6f7c5bd0fd9b738ae89a43"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "d3cc8ceaa2e757cc3d41bf44f84add007f096e4f",
+      "deviceName": "My Mac",
+      "exportedFileName": "A83E1302-8420-44F9-8E25-FD0646DA5613.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Actual native VoiceOver forward 12_0_D6CC9D67-3BEB-4A8F-9812-342FF5098326.txt",
+      "timestamp": 1792980083.303,
+      "text": "Entries: 200 · Loaded originals: 200",
+      "sha256": "ad2ceaeffe6f23551305ffd5663c6befb77667fa5e6f7c5bd0fd9b738ae89a43"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "d3cc8ceaa2e757cc3d41bf44f84add007f096e4f",
+      "deviceName": "My Mac",
+      "exportedFileName": "DC5851A6-91CB-49D9-B784-032438A99EE5.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Actual native VoiceOver forward 13_0_11E77E8A-B2ED-4A5D-BA63-737A76DA131A.txt",
+      "timestamp": 1792980090.645,
+      "text": "Entries: 200 · Loaded originals: 200",
+      "sha256": "ad2ceaeffe6f23551305ffd5663c6befb77667fa5e6f7c5bd0fd9b738ae89a43"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "d3cc8ceaa2e757cc3d41bf44f84add007f096e4f",
+      "deviceName": "My Mac",
+      "exportedFileName": "57FAE9AF-2584-46DC-9103-DD599A7C1B94.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Actual native VoiceOver forward 14_0_E1B28463-C4C0-443E-8193-E85924050891.txt",
+      "timestamp": 1792980098.11,
+      "text": "Entries: 200 · Loaded originals: 200",
+      "sha256": "ad2ceaeffe6f23551305ffd5663c6befb77667fa5e6f7c5bd0fd9b738ae89a43"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "d3cc8ceaa2e757cc3d41bf44f84add007f096e4f",
+      "deviceName": "My Mac",
+      "exportedFileName": "67830DAC-6BD0-474F-A901-896A6CE6DFC5.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Native VoiceOver restored state_0_5F39C7AE-0123-4E43-86EF-048E0E093BEE.txt",
+      "timestamp": 1792980109.459,
+      "text": "VoiceOver enabled after restoration: false",
+      "sha256": "7ced859ebaedc9db9aec2d7ca64279bf43844b3b73069100131ae736c45351f4"
+    }
+  ],
+  "matchingArchivedNativeCrashReports": 0,
+  "scope": "Metadata and text payloads copied from native attachments without normalizing their contents. No original payload exists for forward 15, which throws No speech available. Zero archived reports is not proof that the earlier daemon fault is fixed."
+}
