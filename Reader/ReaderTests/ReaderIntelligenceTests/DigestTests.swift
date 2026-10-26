@@ -186,6 +186,7 @@ struct AppleSummaryGeneratorTests {
         #expect(captured == expected)
         let requests = await journal.requests
         #expect(entries.map(\.prompt) == requests.map(modelPrompt))
+        #expect(entries.compactMap(\.instructions) == requests.map(modelInstructions))
     }
 
     @Test("Cancellation in an evaluation sink prevents validation and later requests")
@@ -465,6 +466,12 @@ struct AppleSummaryGeneratorTests {
         for request in consolidations {
             let inputs = try JSONDecoder().decode([CapturedModelSource].self, from: Data(modelPrompt(request).utf8))
             #expect((1...32).contains(inputs.count))
+            let requiredLine = try #require(modelInstructions(request).components(separatedBy: "\n").first {
+                $0.hasPrefix("Required sourceNumbers: ")
+            })
+            let encodedReferences = requiredLine.replacingOccurrences(of: "Required sourceNumbers: ", with: "")
+            let required = try JSONDecoder().decode([Int].self, from: Data(encodedReferences.utf8))
+            #expect(required == inputs.map(\.sourceNumber))
         }
     }
 
@@ -566,7 +573,7 @@ private actor ControlledGenerator: SummaryGenerator {
 }
 
 struct DigestTests {
-    @Test("Unchanged valid caches from source-only and first-stage policies are regenerated", arguments: ["", "reader-source-facts-consolidation-v1\n"])
+    @Test("Unchanged valid caches from source-only and first-stage policies are regenerated", arguments: ["", "reader-source-facts-consolidation-v1\n", "reader-source-facts-consolidation-v2\n"])
     func previousGenerationCacheIsRegenerated(policyPrefix: String) async throws {
         let (store, feed, articles) = try await fixture()
         let coordinator = DigestCoordinator(repository: store, generator: FixtureGenerator())

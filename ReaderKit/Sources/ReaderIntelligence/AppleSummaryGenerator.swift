@@ -26,6 +26,7 @@ package struct SummaryGenerationTrace: Codable, Sendable {
     package var stage: String
     package var prompt: String
     package var response: String
+    package var instructions: String?
 }
 
 private struct SummaryEvidence: Sendable {
@@ -138,7 +139,14 @@ public actor AppleSummaryGenerator: SummaryGenerator {
         Do not write URLs. The app adds links to original articles.
         """
         let factBudget = capacity - (try await count(factInstructions)) - 2000
-        let summaryBudget = capacity - (try await count(summaryInstructions)) - 2000
+        // Tokenizers need not be monotonic: count each possible per-batch reference list.
+        var summaryInstructionTokens = 0
+        for packetCount in 1...32 {
+            try Task.checkCancellation()
+            let instructions = Self.consolidationInstructions(summaryInstructions, packetCount: packetCount)
+            summaryInstructionTokens = max(summaryInstructionTokens, try await count(instructions))
+        }
+        let summaryBudget = capacity - summaryInstructionTokens - 2000
         guard min(factBudget, summaryBudget) > 256 else { throw Self.contextBudgetError() }
 
         var evidence: [SummaryEvidence] = []
@@ -154,7 +162,7 @@ public actor AppleSummaryGenerator: SummaryGenerator {
                 try Task.checkCancellation()
                 if let trace {
                     await trace(SummaryGenerationTrace(stage: "facts", prompt: try Self.sourcePrompt(index: index, text: fragment),
-                                                       response: response.rawContent.jsonString))
+                                                       response: response.rawContent.jsonString, instructions: factInstructions))
                     try Task.checkCancellation()
                 }
                 let excerpts = try SourceFactValidation.excerpts(response.content.excerpts, in: fragment)
@@ -169,13 +177,14 @@ public actor AppleSummaryGenerator: SummaryGenerator {
             var groups: [ValidatedSummaryGroup] = []
             for batch in batches {
                 try await checkRequestPermission(cloudPermission)
-                let session = LanguageModelSession(model: model, instructions: summaryInstructions)
+                let instructions = Self.consolidationInstructions(summaryInstructions, packetCount: batch.count)
+                let session = LanguageModelSession(model: model, instructions: instructions)
                 let response = try await session.respond(to: Self.evidencePrompt(batch), generating: GeneratedOverview.self,
                                                          options: GenerationOptions(maximumResponseTokens: 1200))
                 try Task.checkCancellation()
                 if let trace {
                     await trace(SummaryGenerationTrace(stage: "consolidation", prompt: try Self.evidencePrompt(batch),
-                                                       response: response.rawContent.jsonString))
+                                                       response: response.rawContent.jsonString, instructions: instructions))
                     try Task.checkCancellation()
                 }
                 groups.append(contentsOf: try Self.validate(response.content.groups, evidence: batch, languageCode: languageCode))
@@ -259,6 +268,11 @@ public actor AppleSummaryGenerator: SummaryGenerator {
             total += try await count(Self.evidencePrompt(batch))
         }
         return total
+    }
+
+    private static func consolidationInstructions(_ base: String, packetCount: Int) -> String {
+        let references = (0..<packetCount).map(String.init).joined(separator: ",")
+        return base + "\nRequired sourceNumbers: [" + references + "]\nCheck every required value before finishing."
     }
 
     private static func sourcePrompt(index: Int, text: String) throws -> String {
