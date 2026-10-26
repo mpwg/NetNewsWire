@@ -39,7 +39,7 @@ Native VoiceOver has both named passing runs and retained failures; full menu/fo
 
 ## Model verification
 
-Policy v9 adds source-bound per-offer product, merchant, price/discount and condition records beside free summaries. Unknown values point to the original. Backward Codable/store compatibility, literal hosted fields and242 Mac code functions /520 executions pass. [Current typed-offer criteria](docs/reader/evidence/i-offer-fields-v9-2026-10-26.md). Real-source semantic quality/compactness and full v9 CI remain open; the v7 receipt below is the preceding verified baseline.
+The separate typed-offer candidate retains per-offer product, merchant, price/discount and condition records beside free summaries. Unknown values point to the original. All246 final Mac code functions /534 executions pass, but all four fixed public configurations reject rewritten fields; it is not accepted for integration. [Complete typed-offer criteria and original results](docs/reader/evidence/i-offer-fields-v9-2026-10-26.md). Source copying and semantic quality remain open; the v7 receipt below remains the verified baseline.
 
 Foundation Models uses structured sessions with source references tied to stored article identities. Validation rejects generated links, unsupported numeric claims and blank content. Literal duplicate sentences/sections are removed without merging distinct source identities. New results, existing cache reuse and startup publication share content/source rules: invalid cards cannot hide originals, and originals-only cards require an explicit warning. Model and presentation-state contracts use Swift Testing; actual UI interactions remain separate.
 

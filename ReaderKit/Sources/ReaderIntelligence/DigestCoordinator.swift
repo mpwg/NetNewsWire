@@ -113,7 +113,7 @@ public actor DigestCoordinator {
             (section.sourceFacts ?? []).allSatisfy { facts in
                 guard let source = sources.first(where: { $0.id == facts.source }) else { return false }
                 let text = source.text.isEmpty ? source.title : source.title + "\n" + source.text
-                return (facts.excerpts + (facts.offers ?? []).flatMap(\.quotedValues)).allSatisfy(text.contains)
+                return (facts.excerpts + (facts.offers ?? []).flatMap(\.quotedValues)).allSatisfy { SourceQuotationMatching.contains($0, in: text) }
             }
         }
     }

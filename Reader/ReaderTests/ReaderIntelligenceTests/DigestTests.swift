@@ -98,7 +98,14 @@ private actor ModelRequestJournal {
                 defer { nextFact += 1 }
                 return factResponses[nextFact]
             }
-            return try modelJSON(["offers": [], "excerpts": [String(source.text.prefix(128))]])
+            let prefix = String(source.text.prefix(128))
+            let excerpt: String
+            if source.text.count > 128, let boundary = prefix.lastIndex(where: \.isWhitespace) {
+                excerpt = String(prefix[..<boundary]).trimmingCharacters(in: .whitespacesAndNewlines)
+            } else {
+                excerpt = prefix
+            }
+            return try modelJSON(["offers": [], "excerpts": [excerpt]])
         }
         if let consolidation { return try consolidation(prompt) }
         if let response { return response }
@@ -107,6 +114,17 @@ private actor ModelRequestJournal {
 }
 
 struct SourceOfferValidationTests {
+    @Test("Partial-only numeric or identifier matches cannot become an extracted offer", arguments: [
+        ("29.99", "Luma lamp costs EUR 129.99."),
+        ("29", "Luma lamp costs EUR 29.99; batch 30."),
+        ("SAVE5", "Luma lamp uses SAVE50; batch 5."),
+        ("99", "Luma lamp costs EUR 29.99; model 98.")
+    ])
+    func partialSourceValuesAreRejected(value: String, source: String) {
+        let offer = DigestOfferFact(product: "Luma lamp", price: value)
+        #expect(throws: ReaderError.invalidResponse) { try SourceOfferValidation.validate(offer, in: source) }
+    }
+
     @Test("Offer fields must all occur in their own source fragment", arguments: 0..<9)
     func unsupportedOfferFieldsAreRejected(kind: Int) {
         var offer = DigestOfferFact(product: "Luma lamp", merchant: "Example Store", price: "EUR 29.99",
@@ -141,6 +159,17 @@ struct SourceOfferValidationTests {
 }
 
 struct SourceFactValidationTests {
+    // Explicit multilingual literal-source fixtures, not translated UI strings.
+    @Test("Source quotation matching rejects partial ASCII tokens and decimals while retaining exact Unicode", arguments: [
+        ("29.99", "EUR 129.99", false), ("29", "EUR 29.99", false), ("99", "EUR 29.99", false),
+        ("SAVE5", "Code SAVE50", false), ("EUR 29.99", "EUR 29.99.", true),
+        ("29.99 EUR", "商店の価格は29.99 EUR。", true), ("Cafe\u{301}", "Cafe\u{301} offer", true),
+        ("Café", "Cafe\u{301} offer", false)
+    ])
+    func quotationsNeedExactTokenBoundaries(value: String, source: String, valid: Bool) {
+        #expect(SourceQuotationMatching.contains(value, in: source) == valid)
+    }
+
     @Test("Numeric citation syntax must occur in the cited source, not merely share its digits", arguments: [
         ("A claim [1].", "Model 1.", true),
         ("A claim [ 1 ].", "Model 1.", true),
@@ -192,6 +221,33 @@ private actor GenerationTraceJournal {
 }
 
 struct AppleSummaryGeneratorTests {
+    @Test("A native source quote cannot authorize a smaller price clipped from an original")
+    func partialPriceQuotesStopBeforeConsolidation() async throws {
+        var source = try article()
+        source.text = "The price is EUR 129.99."
+        let journal = ModelRequestJournal(factResponses: [try modelJSON(["offers": [], "excerpts": ["29.99"]])])
+        await #expect(throws: ReaderError.invalidResponse) {
+            try await AppleSummaryGenerator().generate(
+                [source], model: ControlledLanguageModel(journal: journal), capacity: 10000, count: { $0.count })
+        }
+        #expect(await journal.requests.count == 1)
+    }
+
+    @Test("Native offer decoding preserves null fields without inventing a price")
+    func nativeOfferFieldsMayRemainUnknown() async throws {
+        var source = try article()
+        source.text = "The Luma lamp is available for pickup only."
+        let journal = ModelRequestJournal(
+            response: #"{"groups":[{"title":"Lamp","summary":"Luma lamp: pickup only.","sourceNumbers":[0]}]}"#,
+            factResponses: [try modelJSON(["offers": [["product": "Luma lamp", "merchant": NSNull(), "price": NSNull(), "conditions": ["pickup only"]]], "excerpts": []])])
+        let result = try await AppleSummaryGenerator().generate(
+            [source], model: ControlledLanguageModel(journal: journal), capacity: 10000, count: { $0.count })
+        let offer = try #require(result.first?.sourceFacts?.first?.offers?.first)
+        #expect(offer.merchant == nil)
+        #expect(offer.price == nil)
+        #expect(offer.conditions == ["pickup only"])
+    }
+
     @Test("Native offer records retain each product's own price and conditions without Reader identifiers in model input")
     func structuredOffersKeepTheirOwnTerms() async throws {
         var source = try article()
