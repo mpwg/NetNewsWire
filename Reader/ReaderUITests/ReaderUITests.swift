@@ -244,9 +244,13 @@ final class ReaderSmokeTests: XCTestCase {
         add(counters)
     }
 
-    private func waitForValue(_ element: XCUIElement, equalTo expected: String, timeout: TimeInterval = 5) {
+    private func waitForValue(_ element: XCUIElement, equalTo expected: String, timeout: TimeInterval = 5,
+                              file: StaticString = #filePath, line: UInt = #line) {
         let expectation = XCTNSPredicateExpectation(predicate: NSPredicate(format: "value == %@", expected), object: element)
-        XCTAssertEqual(XCTWaiter.wait(for: [expectation], timeout: timeout), .completed)
+        let result = XCTWaiter.wait(for: [expectation], timeout: timeout)
+        XCTAssertEqual(result, .completed,
+                       "Expected \(expected); observed \(element.exists ? String(describing: element.value) : "unavailable element")",
+                       file: file, line: line)
     }
 
     private func waitForPositiveValue(_ element: XCUIElement, timeout: TimeInterval = 20) {
