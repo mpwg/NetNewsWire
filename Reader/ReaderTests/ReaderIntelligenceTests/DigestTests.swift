@@ -159,6 +159,25 @@ struct SourceSentenceSelectionTests {
         #expect(try SourceSentenceSelection.excerpts([1, 0, 1], from: choices) == [choices[1], choices[0]])
     }
 
+    @Test("Selected claims retain restrictions and negations anywhere in their bounded source fragment",
+          arguments: [0, 1, 2])
+    func selectedClaimsKeepWholeFragmentContext(index: Int) throws {
+        let fragment = "Example Store offers a notebook for EUR 29.99.\n\nPickup only.\nOnline orders and shipping are excluded."
+        let choices = SourceSentenceSelection.choices(in: fragment)
+        #expect(choices.count == 3)
+        let result = try SourceSentenceSelection.contextualExcerpt([index], in: fragment)
+        #expect(result == fragment)
+        #expect(try SourceFactValidation.excerpts([result], in: fragment) == [fragment])
+    }
+
+    @Test("Context expansion rejects invalid selections before returning any source text",
+          arguments: [[], [-1], [3], Array(repeating: 0, count: 9)])
+    func contextExpansionRequiresValidSelection(indices: [Int]) {
+        #expect(throws: ReaderError.invalidResponse) {
+            try SourceSentenceSelection.contextualExcerpt(indices, in: "A price. A restriction. A negation.")
+        }
+    }
+
     @Test("Empty, negative, excessive and out-of-range sentence selections are rejected",
           arguments: [[], [-1], [2], Array(repeating: 0, count: 9)])
     func invalidSentenceSelectionsAreRejected(indices: [Int]) {
@@ -208,7 +227,7 @@ private actor GenerationTraceJournal {
 }
 
 struct AppleSummaryGeneratorTests {
-    @Test("Indexed facts pass exact original sentence text to consolidation", arguments: [false, true])
+    @Test("Indexed facts retain the selected claim and its complete bounded source context", arguments: [false, true])
     func indexedFactsKeepActualSourceText(isolated: Bool) async throws {
         var source = try article()
         source.title = "First statement."
@@ -219,7 +238,7 @@ struct AppleSummaryGeneratorTests {
             consolidation: { prompt in
                 let packets = try JSONDecoder().decode([CapturedModelSource].self, from: Data(prompt.utf8))
                 #expect(packets.count == 1)
-                #expect(packets.first?.text == "A merchant sells an item for EUR 29.99.")
+                #expect(packets.first?.text == "First statement.\nA merchant sells an item for EUR 29.99. Pickup only.")
                 let group = #"{"title":"Selected","summary":"EUR 29.99.","sourceNumbers":[0]}"#
                 return isolated ? group : #"{"groups":["# + group + "]}"
             })

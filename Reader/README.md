@@ -1,5 +1,7 @@
 # Native Reader application
 
+The resumed research candidate preserves the complete bounded source fragment after sentence selection so adjacent conditions are not lost before drafting. It remains opt-in and unadopted. [Current criteria and native/model verification](../docs/reader/evidence/i-context-preservation-2026-10-26.md).
+
 The codex/reader-isolated-context branch evaluates an opt-in native selection request followed by fresh drafts containing only each selected evidence group. It preserves free app-language summaries and existing source validation; production/default behavior stays v5. Six additional Swift Testing functions inspect actual requests, references, budgets, invalid output, cancellation and live consent. [Candidate criteria and adoption limits](../docs/reader/evidence/i-isolated-context-candidate-2026-10-26.md). Build/discovery do not accept runtime or model quality.
 
 See the [current acceptance matrix](../docs/reader/acceptance.md) for exact tested sources, original results and open requirements. Code contracts use native Swift Testing; the ten XCTest methods cover required real app/system interactions. Passing native VoiceOver table speech does not accept complete menu/form/body journeys, initially-on restoration or repair of the earlier daemon fault. Retained failures and capture limits remain in the [native evidence](../docs/reader/evidence/k-accessibility-navigation-2026-10-26.md). Verification counts and current candidate status live in the matrix rather than being duplicated here.

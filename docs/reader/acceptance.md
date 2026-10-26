@@ -19,6 +19,8 @@ Native accessibility failures and prior daemon/timeouts remain preserved. Warm c
 
 ## I staged-generation candidate
 
+**Resumed candidate, not adopted:** retain the full bounded original fragment after validating selected sentence indices. Two new Swift Testing functions/seven cases and strengthened actual-request checks compile through Xcode MCP; current-source runtime and model quality remain open. [Context-preservation criteria](evidence/i-context-preservation-2026-10-26.md). Shipping main remains v5; no acceptance or issue closure follows.
+
 The source-first-field-order experiment has five structurally valid results in seven fixed configurations. Two public pairs retain all merchant/price combinations, but the news result still omits Thursday and cites an original without evening hours. The other supplied original/facts contain the condition. Context association and valid indices do not prove support for selected prose. This is not adopted; v5 source/binaries are restored. [Criteria, complete synthetic reports and public aggregate hashes](evidence/i-source-first-experiment-2026-10-26.md). No acceptance marker changes.
 
 The isolated indexed-sentence experiment produces structurally valid sections in all six fixed probes but still changes selected claims (weekday and cable-free/wireless). It is not adopted; v5 source and binaries are restored. [Original synthetic reports, public aggregate hashes and criteria](evidence/i-indexed-selection-experiment-2026-10-26.md). Current-source CI [40314710783](https://github.com/mpwg/NetNewsWire/actions/runs/40314710783) succeeds on 32dc1126d: all 478 executions (468 code, ten native), 235 distinct, no failures/skips. Earlier native failures remain unexplained.

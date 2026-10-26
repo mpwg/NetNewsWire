@@ -261,8 +261,8 @@ public actor AppleSummaryGenerator: SummaryGenerator {
             try Task.checkCancellation()
         }
         let indices = try response.content.value([Int].self, forProperty: "sentenceNumbers")
-        let excerpts = try SourceSentenceSelection.excerpts(indices, from: choices)
-        return try SourceFactValidation.excerpts(excerpts, in: fragment)
+        let excerpt = try SourceSentenceSelection.contextualExcerpt(indices, in: fragment)
+        return try SourceFactValidation.excerpts([excerpt], in: fragment)
     }
 
     private func draftSelectedGroups<M: LanguageModel>(

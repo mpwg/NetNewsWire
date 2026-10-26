@@ -24,6 +24,13 @@ enum SourceSentenceSelection {
         return complete && !result.isEmpty ? result : [whole]
     }
 
+    static func contextualExcerpt(_ indices: [Int], in fragment: String) throws -> String {
+        _ = try excerpts(indices, from: choices(in: fragment))
+        // A sentence may depend on restrictions elsewhere in this bounded fragment.
+        // Keep the original context rather than treating sentence selection as semantic proof.
+        return fragment.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
     static func excerpts(_ indices: [Int], from choices: [String]) throws -> [String] {
         guard !indices.isEmpty, indices.count <= 8,
               indices.allSatisfy({ choices.indices.contains($0) }) else { throw ReaderError.invalidResponse }
