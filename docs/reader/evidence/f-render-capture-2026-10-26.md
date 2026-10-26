@@ -2,7 +2,7 @@
 
 Status: **open**. [Reader CI 40281918990](https://github.com/mpwg/NetNewsWire/actions/runs/40281918990) has completed at **f1682366e**: **428 passed / four failed of 432**, 217 distinct tests, no skips. All four failures are the added OCR calls, throwing e5rtError("e5rt_e5_compiler_compile call failed", 11). All ten native methods pass. This does not establish a rendering pass or a cause for Vision's compiler failure. [Original summary](f-pixels-default-ci-summary-2026-10-26.json) · [original case nodes](f-pixels-default-ci-cases-2026-10-26.json).
 
-Current follow-up configures a CPU advertised by Vision for every supported OCR compute stage. It compiles through Xcode MCP and passes lint, but has not executed yet. Expected-heading, image, timeout, removal and lifetime assertions remain unchanged. No production or UI-test source is changed. A DOM string, accessible heading or hittable element is not painted-text proof.
+Current follow-up **0cd248c0f88bb82ffbac4f3ea8366fdb8a40a972** configures a CPU advertised by Vision for every supported OCR compute stage. It compiles through Xcode MCP and passes lint; fresh [Reader CI 40283730920](https://github.com/mpwg/NetNewsWire/actions/runs/40283730920) is live. Expected-heading, image, timeout, removal and lifetime assertions remain unchanged. No production or UI-test source is changed. A DOM string, accessible heading or hittable element is not painted-text proof.
 
 ## Candidate and criterion
 
