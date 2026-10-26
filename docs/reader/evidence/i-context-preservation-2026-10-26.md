@@ -10,8 +10,8 @@ Generator SHA-256 `859c5cb569331b144a1a9376d891bbcb306fe81ea538dac1d2c15502e3d95
 
 | Criterion | Status | Evidence |
 |---|---|---|
-| Source restrictions cannot be discarded by sentence-index selection within one bounded fragment | Open | Helper and controlled-request tests compile; runtime result pending. |
-| Invalid indices, actual budgets, cancellation and consent | Open | Existing and new contracts compile; previous stable-label CI does not execute this changed source. |
+| Source restrictions cannot be discarded by sentence-index selection within one bounded fragment | Fulfilled on local Mac candidate | Actual helper and native executor requests pass in the current 60-function /129-execution module run. |
+| Invalid indices, actual budgets, cancellation and consent | Fulfilled for controlled Mac contracts | Existing and new contracts pass in that current module run; actual PCC/external errors remain separate. |
 | Free app-language summary quality and correct supporting originals | Open | Four fixed synthetic scenarios are being executed once each: news, conditions, offers and quoted injection. Retain all outcomes. |
 | Shipping isolation | Fulfilled | Separate candidate branch, default flags remain false; no adoption or production cache-policy change. |
 | PCC/final platforms/offline/accessibility/performance | Open | Existing external prerequisites and owner deferrals remain; no evidence substitution. |
@@ -25,6 +25,8 @@ The first news/injection observations repeat assertions because the selected pac
 Two further Swift Testing functions / seven cases verify duplicate/transitive/disjoint groups and actual native executor request count, labels and complete original identities for both verbatim and indexed extraction. Xcode MCP app/test build15:37:53 succeeds; discovery reports253 enabled distinct tests, none disabled (expected523 executions,513 code/ten native). The generator SHA-256 is now `e5fe86936d0b485fe6bc57526b63580b1c9da7bf475da1f8898f4c6083b26422`; earlier 4bbf6f997 model/CI evidence remains scoped to that earlier source.
 
 At resumption no Reader process is present (neither the former PID nor another process named Reader). The old prohibition protected that held process; after confirming its absence, focused local native code tests are safe without app launch. Xcode MCP passes all16 targeted executions, then **all60 intelligence test functions /129 executions**, no failures/skips, at15:38:55. [Complete MCP result and exact xcresult path](i-context-local-code-2026-10-26.json). This executes the actual FoundationModels controlled executor and store/coordinator contracts; it is not a live-model/GUI/device/PCC acceptance claim. No UI test runs locally and no normal app is launched.
+
+The changed-source probe builds through Xcode MCP at15:39:39. [All four complete follow-up model observations](i-context-coalesced-model-2026-10-26.json) run once each on4901a8577: news is a single section with Thursday and both originals; offers preserve the two merchants/prices and conditions in separate sections. The conditions output retains the conditions but mixes the English word `Tuesdays` into German. Quoted injection is labelled fictitious/nonofficial but still selects irrelevant quotation content, now without duplicate groups. The deterministic overlap defect is fixed at the tested request boundary; broader model quality is not accepted. No causal/representative quality guarantee or adoption follows from this four-case observation.
 
 ## Fixed real-model observations
 
