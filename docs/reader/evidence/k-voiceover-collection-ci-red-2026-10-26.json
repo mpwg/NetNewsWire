@@ -1,0 +1,75 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "7ae9d29ed4ba7b3217f69c97f765eb20200938d5",
+        "deviceName" : "My Mac",
+        "modelName" : "Virtual Machine",
+        "osBuildNumber" : "26A434",
+        "osVersion" : "27.0.1",
+        "platform" : "macOS"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 2,
+      "passedTests" : 403,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "Reader · Built with macOS 27.0.1",
+  "expectedFailures" : 0,
+  "failedTests" : 2,
+  "finishTime" : 1792979467.737,
+  "passedTests" : 206,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+    {
+      "issueType" : "Runtime Warning",
+      "message" : "Safety guardrails were triggered. If this is unexpected, please use `LanguageModelSession.logFeedbackAttachment(sentiment:issues:desiredOutput:)` to export the feedback attachment and file a feedback report at https://feedbackassistant.apple.com.",
+      "sourceURL" : "file:///Users/runner/work/NetNewsWire/NetNewsWire/Reader/ReaderTests/ReaderIntelligenceTests/DigestTests.swift"
+    }
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1792979049.948,
+  "statistics" : [
+    {
+      "subtitle" : "266 test runs",
+      "title" : "69 tests ran with dynamic parameters"
+    },
+    {
+      "subtitle" : "1 test run",
+      "title" : "1 test collected performance metrics"
+    }
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "Lost connection to testmanagerd",
+      "targetName" : "ReaderUITests",
+      "testIdentifier" : 207,
+      "testIdentifierString" : "ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus()",
+      "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus",
+      "testName" : "testVoiceOverAnnouncesReaderAndMovesFocus()"
+    },
+    {
+      "failureText" : "XCTAssertTrue failed",
+      "targetName" : "ReaderUITests",
+      "testIdentifier" : 208,
+      "testIdentifierString" : "ReaderSmokeTests/testWindowSearchAndSelectionSurviveClosingAnotherWindow()",
+      "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testWindowSearchAndSelectionSurviveClosingAnotherWindow",
+      "testName" : "testWindowSearchAndSelectionSurviveClosingAnotherWindow()"
+    }
+  ],
+  "title" : "Test - Reader",
+  "topInsights" : [
+    {
+      "category" : "Longest Test Runs",
+      "impact" : "15% of duration",
+      "text" : "3 longest test runs with outlier durations exceeding 1.23s (three standard deviations)"
+    }
+  ],
+  "totalTestCount" : 208
+}

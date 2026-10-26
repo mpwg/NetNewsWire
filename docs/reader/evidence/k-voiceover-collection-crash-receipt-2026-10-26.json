@@ -1,0 +1,158 @@
+{
+  "sourceRun": 40255516707,
+  "sourceRevision": "1e1a0b9d8f4d57734a1d248ed00ce36ff0049e59",
+  "artifactID": 12623060371,
+  "originalReportSHA256": "c7687e6d75dd5f4c26ee1db7af4ac6ee52abeec584fd7237095940facc73f305",
+  "reportFields": {
+    "osVersion": {
+      "train": "macOS 27.0.1",
+      "build": "26A434",
+      "releaseType": "User"
+    },
+    "captureTime": "2026-10-26 01:50:01.1277 +0000",
+    "pid": 26329,
+    "procName": "testmanagerd",
+    "procPath": "/usr/libexec/testmanagerd",
+    "bundleInfo": {
+      "CFBundleVersion": "25207.2",
+      "CFBundleShortVersionString": "27.0"
+    },
+    "exception": {
+      "codes": "0x0000000000000001, 0x000044aea5edebc8",
+      "rawCodes": [
+        1,
+        75516898831304
+      ],
+      "type": "EXC_BAD_ACCESS",
+      "signal": "SIGSEGV",
+      "subtype": "KERN_INVALID_ADDRESS at 0x000044aea5edebc8"
+    },
+    "termination": {
+      "flags": 0,
+      "code": 11,
+      "namespace": "SIGNAL",
+      "indicator": "Segmentation fault: 11",
+      "byProc": "exc handler",
+      "byPid": 26329
+    },
+    "faultingThread": 6
+  },
+  "crashedQueue": "com.apple.NSXPCConnection.user.com.apple.testmanagerd.30157",
+  "crashedFrames": [
+    {
+      "imageOffset": 31708,
+      "symbol": "objc_release",
+      "symbolLocation": 16,
+      "imageIndex": 11,
+      "imageName": "libobjc.A.dylib"
+    },
+    {
+      "imageOffset": 58644,
+      "symbol": "AutoreleasePoolPage::releaseUntil(objc_object**)",
+      "symbolLocation": 204,
+      "imageIndex": 11,
+      "imageName": "libobjc.A.dylib"
+    },
+    {
+      "imageOffset": 43136,
+      "symbol": "objc_autoreleasePoolPop",
+      "symbolLocation": 244,
+      "imageIndex": 11,
+      "imageName": "libobjc.A.dylib"
+    },
+    {
+      "imageOffset": 130420,
+      "symbol": "message_handler",
+      "symbolLocation": 136,
+      "imageIndex": 12,
+      "imageName": "Foundation"
+    },
+    {
+      "imageOffset": 61468,
+      "symbol": "_xpc_connection_call_event_handler",
+      "symbolLocation": 112,
+      "imageIndex": 13,
+      "imageName": "libxpc.dylib"
+    },
+    {
+      "imageOffset": 54280,
+      "symbol": "_xpc_connection_mach_event",
+      "symbolLocation": 1140,
+      "imageIndex": 13,
+      "imageName": "libxpc.dylib"
+    },
+    {
+      "imageOffset": 112104,
+      "symbol": "_dispatch_client_callout4",
+      "symbolLocation": 16,
+      "imageIndex": 8,
+      "imageName": "libdispatch.dylib"
+    },
+    {
+      "imageOffset": 122756,
+      "symbol": "_dispatch_mach_msg_invoke",
+      "symbolLocation": 480,
+      "imageIndex": 8,
+      "imageName": "libdispatch.dylib"
+    },
+    {
+      "imageOffset": 40484,
+      "symbol": "_dispatch_lane_serial_drain",
+      "symbolLocation": 332,
+      "imageIndex": 8,
+      "imageName": "libdispatch.dylib"
+    },
+    {
+      "imageOffset": 126172,
+      "symbol": "_dispatch_mach_invoke",
+      "symbolLocation": 472,
+      "imageIndex": 8,
+      "imageName": "libdispatch.dylib"
+    },
+    {
+      "imageOffset": 40484,
+      "symbol": "_dispatch_lane_serial_drain",
+      "symbolLocation": 332,
+      "imageIndex": 8,
+      "imageName": "libdispatch.dylib"
+    },
+    {
+      "imageOffset": 43764,
+      "symbol": "_dispatch_lane_invoke",
+      "symbolLocation": 448,
+      "imageIndex": 8,
+      "imageName": "libdispatch.dylib"
+    },
+    {
+      "imageOffset": 85848,
+      "symbol": "_dispatch_root_queue_drain_deferred_wlh",
+      "symbolLocation": 284,
+      "imageIndex": 8,
+      "imageName": "libdispatch.dylib"
+    },
+    {
+      "imageOffset": 84060,
+      "symbol": "_dispatch_workloop_worker_thread",
+      "symbolLocation": 720,
+      "imageIndex": 8,
+      "imageName": "libdispatch.dylib"
+    },
+    {
+      "imageOffset": 12188,
+      "symbol": "_pthread_wqthread",
+      "symbolLocation": 292,
+      "imageIndex": 7,
+      "imageName": "libsystem_pthread.dylib"
+    },
+    {
+      "imageOffset": 7392,
+      "symbol": "start_wqthread",
+      "symbolLocation": 8,
+      "imageIndex": 7,
+      "imageName": "libsystem_pthread.dylib"
+    }
+  ],
+  "readerImages": [],
+  "restorationAttachmentPresent": false,
+  "scope": "Observed invalid memory access in objc_release during XPC message autorelease-pool cleanup in the native testmanagerd process. The initiating object/lifetime error and Reader unresponsiveness cause are not established; restoration after transport loss is unproved."
+}
