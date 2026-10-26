@@ -35,26 +35,38 @@ final class ReaderSmokeTests: XCTestCase {
         initialState.name = "Native VoiceOver initial state"
         initialState.lifetime = .keepAlways
         add(initialState)
-        if !wasEnabled {
-            addTeardownBlock {
-                try await MainActor.run {
-                    let service = XCUIDevice.shared.voiceOverService
-                    if service.isEnabled { try service.disable() }
-                    XCTContext.runActivity(named: "Restore native VoiceOver state") { activity in
-                        let restored = XCTAttachment(string: "VoiceOver enabled after restoration: \(service.isEnabled)")
-                        restored.name = "Native VoiceOver restored state"
-                        restored.lifetime = .keepAlways
-                        activity.add(restored)
-                    }
-                    XCTAssertFalse(service.isEnabled)
+        let initialContext = XCTAttachment(string: voiceOver.debugDescription)
+        initialContext.name = "Native VoiceOver service before activation"
+        initialContext.lifetime = .keepAlways
+        add(initialContext)
+        addTeardownBlock {
+            try await MainActor.run {
+                let service = XCUIDevice.shared.voiceOverService
+                if service.isEnabled != wasEnabled {
+                    if wasEnabled { try service.enable() } else { try service.disable() }
                 }
+                XCTContext.runActivity(named: "Restore native VoiceOver state") { activity in
+                    let restored = XCTAttachment(string: "VoiceOver enabled after restoration: \(service.isEnabled)")
+                    restored.name = "Native VoiceOver restored state"
+                    restored.lifetime = .keepAlways
+                    activity.add(restored)
+                    let context = XCTAttachment(string: service.debugDescription)
+                    context.name = "Native VoiceOver service after restoration"
+                    context.lifetime = .keepAlways
+                    activity.add(context)
+                }
+                XCTAssertEqual(service.isEnabled, wasEnabled)
             }
-            try voiceOver.enable()
         }
+        try voiceOver.enable()
         XCTAssertTrue(voiceOver.isEnabled)
         first.click()
         func captureSpeech(_ step: String, operation: () throws -> XCUIVoiceOverService.Output) throws -> String {
             try XCTContext.runActivity(named: "Native VoiceOver \(step)") { activity in
+                let context = XCTAttachment(string: voiceOver.debugDescription)
+                context.name = "Native VoiceOver service before \(step)"
+                context.lifetime = .keepAlways
+                activity.add(context)
                 let utterance = try operation().utterance
                 let attachment = XCTAttachment(string: utterance)
                 attachment.name = "Actual native VoiceOver \(step)"

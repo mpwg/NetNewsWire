@@ -1,0 +1,31 @@
+{
+  "sourceRun": 40257526394,
+  "sourceRevision": "8ee61defdd82ce511d1c880282d58aa936f66145",
+  "artifactID": 12623194236,
+  "attachments": [
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "18a7045c04aeb7518d744472d2527f59f068604f",
+      "deviceName": "My Mac",
+      "exportedFileName": "074DAEC4-E13C-40B6-8A6C-D5F2B9A058C3.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Native VoiceOver initial state_0_8B332812-E5BB-49ED-A94B-B327C2BE853B.txt",
+      "timestamp": 1792981120.73,
+      "text": "VoiceOver originally enabled: false",
+      "sha256": "4efebe1027172734623f2bb365c619485a3373a14c52fbb8cebd51b1b1a3e960"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "18a7045c04aeb7518d744472d2527f59f068604f",
+      "deviceName": "My Mac",
+      "exportedFileName": "9ADA2787-6A2E-40AA-A386-44527B863A92.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Native VoiceOver restored state_0_03DB2C4D-1BAF-486B-98BC-A037C3955C7F.txt",
+      "timestamp": 1792981134.515,
+      "text": "VoiceOver enabled after restoration: false",
+      "sha256": "7ced859ebaedc9db9aec2d7ca64279bf43844b3b73069100131ae736c45351f4"
+    }
+  ],
+  "matchingArchivedNativeCrashReports": 0,
+  "scope": "The enable call throws an XCTFuture timeout before current/entry/forward activities. Native initial/restored state payloads are copied without normalization. No title-navigation result is available and zero archived reports does not repair the earlier daemon failure."
+}
