@@ -1,0 +1,123 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "00006040-000A51392100801C",
+      "deviceName" : "My Mac",
+      "modelName" : "MacBook Pro",
+      "osBuildNumber" : "26B123",
+      "osVersion" : "27.2",
+      "platform" : "macOS"
+    }
+  ],
+  "testNodes" : [
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "children" : [
+                {
+                  "children" : [
+                    {
+                      "duration" : "1s",
+                      "durationInSeconds" : 1.113825798034668,
+                      "name" : ".comparison",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/PriceAttributionDiagnostics/attributesAmountsFromSource(caseID:)?args=9cbd358b0235b3e9ae53cb67a196a8d1efc60d32d4bb8bf3770c6bcdefe6e3a5",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "children" : [
+                        {
+                          "name" : "Expectation failed: SourceQuotationMatching.contains(item.subject, in: caseID.source)\nitem.subject → \"die Zeitung\"\ncaseID.source → \"Der Eintritt ins Museum ist kostenlos, wenn Besucher eine Zeitung mitbringen. Die Zeitung kostet 3,30 €.\"",
+                          "nodeType" : "Failure Message",
+                          "sourceLocation" : {
+                            "filePath" : "/Users/mat/code/NetNewsWire/Reader/ReaderTests/ReaderIntelligenceTests/DigestTests.swift",
+                            "lineNumber" : 191
+                          }
+                        }
+                      ],
+                      "duration" : "0,75s",
+                      "durationInSeconds" : 0.7461652755737305,
+                      "name" : ".germanQualifying",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/PriceAttributionDiagnostics/attributesAmountsFromSource(caseID:)?args=8e62664c99c711ba7a1a9c507a16bbf8a85a6c8bf4a13678abd53af7906d3d06",
+                      "nodeType" : "Arguments",
+                      "result" : "Failed"
+                    },
+                    {
+                      "children" : [
+                        {
+                          "name" : "Expectation failed: amounts.contains { value in\n                value.amount == expected.amount && value.role == expected.role &&\n                    expected.subjects.contains { value.subject.localizedCaseInsensitiveContains($0) }\n            }: Missing or incorrectly attributed amount: EUR 3.30",
+                          "nodeType" : "Failure Message",
+                          "sourceLocation" : {
+                            "filePath" : "/Users/mat/code/NetNewsWire/Reader/ReaderTests/ReaderIntelligenceTests/DigestTests.swift",
+                            "lineNumber" : 194
+                          }
+                        }
+                      ],
+                      "duration" : "0,7s",
+                      "durationInSeconds" : 0.69602370262146,
+                      "name" : ".qualifying",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/PriceAttributionDiagnostics/attributesAmountsFromSource(caseID:)?args=7dc2f06ea3451122b53b5632e9b8920982e782ecfa1fbdeaf07e1e3ff072da8b",
+                      "nodeType" : "Arguments",
+                      "result" : "Failed"
+                    },
+                    {
+                      "duration" : "1s",
+                      "durationInSeconds" : 1.3524141311645508,
+                      "name" : ".simple",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/PriceAttributionDiagnostics/attributesAmountsFromSource(caseID:)?args=202edac05ccc3ac7e26f7bca60e01625b7737c15ae27fab859c53b9a501ed0ff",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "1s",
+                      "durationInSeconds" : 1.0784480571746826,
+                      "name" : ".twoPrices",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/PriceAttributionDiagnostics/attributesAmountsFromSource(caseID:)?args=4e10f6704c1dbb77d5e7f20bada3800efe4dbff99e3c4302e6ec4a171592078d",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "1s",
+                      "durationInSeconds" : 1.104175090789795,
+                      "name" : ".twoProducts",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/PriceAttributionDiagnostics/attributesAmountsFromSource(caseID:)?args=c7b11aef106f5c0a387436ac0fecde7033a350ebbfc44bddc89a9e563be009c4",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    }
+                  ],
+                  "duration" : "1s",
+                  "durationInSeconds" : 1.0151753425598145,
+                  "name" : "Native model attributes each source amount to its subject and purpose",
+                  "nodeIdentifier" : "PriceAttributionDiagnostics/attributesAmountsFromSource(caseID:)",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/PriceAttributionDiagnostics/attributesAmountsFromSource(caseID:)",
+                  "nodeType" : "Test Case",
+                  "result" : "Failed"
+                }
+              ],
+              "name" : "PriceAttributionDiagnostics",
+              "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests/PriceAttributionDiagnostics",
+              "nodeType" : "Test Suite",
+              "result" : "Failed"
+            }
+          ],
+          "name" : "ReaderTests",
+          "nodeIdentifierURL" : "test://com.apple.xcode/Reader/ReaderTests",
+          "nodeType" : "Unit test bundle",
+          "result" : "Failed"
+        }
+      ],
+      "name" : "Reader",
+      "nodeType" : "Test Plan",
+      "result" : "Failed"
+    }
+  ],
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Test Scheme Action"
+    }
+  ]
+}

@@ -113,6 +113,92 @@ private actor ModelRequestJournal {
     }
 }
 
+@Generable
+private enum DiagnosticAmountRole: String, Codable {
+    case offer, qualifying, comparison, unknown
+}
+
+@Generable
+private struct DiagnosticAttributedAmount {
+    @Guide(description: "Exact amount copied from the source, including currency.")
+    var amount: String
+    @Guide(description: "Exact source phrase naming the item that this amount pays for.")
+    var subject: String
+    @Guide(description: "offer, qualifying purchase, comparison price, or unknown.")
+    var role: DiagnosticAmountRole
+}
+
+@Generable
+private struct DiagnosticAmountList {
+    @Guide(description: "All monetary amounts with their own subjects and roles.", .maximumCount(8))
+    var amounts: [DiagnosticAttributedAmount]
+}
+
+private enum PriceAttributionCase: String, CaseIterable {
+    case simple, qualifying, germanQualifying, twoPrices, comparison, twoProducts
+
+    // Explicit German translation fixture, not a source-localization resource.
+    var source: String {
+        switch self {
+        case .simple:
+            "Example Store sells the Luma lamp for EUR 20.00."
+        case .qualifying:
+            "Admission to the Alder Museum is free if visitors bring a newspaper. The newspaper costs EUR 3.30."
+        case .germanQualifying:
+            "Der Eintritt ins Museum ist kostenlos, wenn Besucher eine Zeitung mitbringen. Die Zeitung kostet 3,30 €."
+        case .twoPrices:
+            "An Alder Museum entry ticket costs EUR 8.00. Visitors must also buy a newspaper for EUR 3.30."
+        case .comparison:
+            "The Luma lamp now costs EUR 20.00; its previous price was EUR 30.00."
+        case .twoProducts:
+            "The Luma lamp costs EUR 20.00. The Vela kettle costs EUR 30.00."
+        }
+    }
+
+    var expectations: [(amount: String, role: DiagnosticAmountRole, subjects: [String])] {
+        switch self {
+        case .simple: [("EUR 20.00", .offer, ["Luma lamp"])]
+        case .qualifying: [("EUR 3.30", .qualifying, ["newspaper"])]
+        case .germanQualifying: [("3,30 €", .qualifying, ["Zeitung"])]
+        case .twoPrices: [("EUR 8.00", .offer, ["entry ticket", "ticket"]),
+                          ("EUR 3.30", .qualifying, ["newspaper"])]
+        case .comparison: [("EUR 20.00", .offer, ["Luma lamp"]), ("EUR 30.00", .comparison, ["Luma lamp"])]
+        case .twoProducts: [("EUR 20.00", .offer, ["Luma lamp"]), ("EUR 30.00", .offer, ["Vela kettle"])]
+        }
+    }
+}
+
+@Suite(.serialized)
+private struct PriceAttributionDiagnostics {
+    @Test("Native model attributes each source amount to its subject and purpose",
+          .enabled(if: SystemLanguageModel.default.isAvailable), arguments: PriceAttributionCase.allCases)
+    func attributesAmountsFromSource(caseID: PriceAttributionCase) async throws {
+        let instructions = """
+        Extract each monetary amount and the exact source phrase naming the item that amount pays for.
+        Use offer for the current price of the offered item, qualifying for a separate purchase required to qualify,
+        comparison for a previous or reference price, and unknown if the role is unclear.
+        Free admission does not make the price of a required newspaper an admission price.
+        Preserve original amounts and subject phrases. Do not invent zero prices.
+        """
+        let session = LanguageModelSession(model: SystemLanguageModel.default, instructions: instructions)
+        let response = try await session.respond(to: caseID.source, generating: DiagnosticAmountList.self,
+                                                options: GenerationOptions(samplingMode: .greedy))
+        let amounts = response.content.amounts
+        print("PRICE_ATTRIBUTION case=\(caseID.rawValue) output=\(response.rawContent.jsonString)")
+        #expect(amounts.count == caseID.expectations.count)
+        for item in amounts {
+            #expect(SourceQuotationMatching.contains(item.amount, in: caseID.source))
+            #expect(SourceQuotationMatching.contains(item.subject, in: caseID.source))
+        }
+        for expected in caseID.expectations {
+            #expect(amounts.contains { value in
+                value.amount == expected.amount && value.role == expected.role &&
+                    expected.subjects.contains { value.subject.localizedCaseInsensitiveContains($0) }
+            }, "Missing or incorrectly attributed amount: \(expected.amount)")
+        }
+    }
+}
+
 struct SourceFactValidationTests {
     // Explicit multilingual literal-source fixtures, not translated UI strings.
     @Test("Source quotations reject partial ASCII tokens and decimals while retaining exact Unicode", arguments: [
