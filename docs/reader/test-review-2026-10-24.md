@@ -6,6 +6,20 @@ The existing scrolling method passes with app-targeted XCTHitchMetric and pre/po
 
 ## Current load-test boundary — 2026-10-26
 
+The current native UI boundary was reviewed through Xcode MCP at e9e109696: ten methods remain in one XCTest class. The 198 Swift Testing functions cover business, store, transport, validation and ownership contracts. Counts describe the suite, not code coverage or product acceptance.
+
+| Native UI scope | Why app automation is retained | Code-test boundary |
+|---|---|---|
+| Open/cancel connection form | Actual toolbar/sheet controls and labelled fields | Connection validation, credential errors and side effects stay in Swift Testing. |
+| VoiceOver navigation candidate | Actual system service, speech and focus cannot be established by comparing AX labels | The failed empty-table scripts are retained; the populated candidate still needs runtime proof. |
+| Loaded timeline scrolling metrics | Real outline movement and XCTest process metrics | Store/query/pagination correctness and direct timing observations stay in the parameterized code contract. |
+| OPML export Save panel | System panel, chosen filename, sandbox file-write boundary | Parsing, metadata, categories and serialization stay in code/server contracts. |
+| Input/menu during held timeline work; keyboard multiselection | Actual input dispatch, modal cancellation, Shift-Down and context-menu binding | Queueing, stale results, selection rules and mutation matrices stay in code tests. Native counters only confirm those UI actions reached the shipping boundary. |
+| Row image-task removal; article selection/extraction | Actual view disappearance, cancellation binding, WebView content and visible fallback | Detailed transport/extractor outcomes, graph lifetimes and foreign-content isolation stay in Swift Testing. |
+| Close/resize independent windows; simultaneous connection drafts | Real scene identity, focus, window events and per-window bindings | Shared/session state and ownership interleavings stay in code contracts. |
+
+No new business-rule matrix belongs in these UI methods. Passing native controls, CPU samples or isolated fixtures does not establish the pending populated VoiceOver-only journey, representative energy, actual offline/restart or final devices.
+
 Verified load/code-timing checkpoint ee2cefe14 passes [Reader CI 40247859999](https://github.com/mpwg/NetNewsWire/actions/runs/40247859999): 404 executions (395 code, all nine native UI), 207 distinct tests, zero failures/skips and one deliberate guardrail warning. Code timing attachments and caller-site UI diagnostics are included in this run. The preceding c29d13483 checkpoint separately proves exact query count 20/zero writes after Cancel, then the confirmed 300-row action and zero final Unread counts; those native checks remain green. The scrolling method passes with raw samples and an inspected window image; differences between runs do not prove optimization.
 
 At faaefe391, [Reader CI 40245263068](https://github.com/mpwg/NetNewsWire/actions/runs/40245263068) passes 198 Swift Testing functions / 395 code executions and eight native UI methods, with zero failures/skips. The added parameterized contract uses the shipping store and session at 1,000 and 10,000 articles. It checks all persisted keys through bounded pages and exercises library, flag, feed, folder, search and pagination transitions. Its original oversized-query assumption failed and was corrected without changing the repository's 1,000-row cap. The failed evidence remains versioned.
