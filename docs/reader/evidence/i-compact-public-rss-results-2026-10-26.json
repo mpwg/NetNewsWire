@@ -1,0 +1,171 @@
+{
+  "sourceCommit": "1eb3d62c917a2a3d8c3f09250af01fe5d0565d58",
+  "generatorSHA256": "b4d13d81d2862a4b6d28f6d2b11f6ccbc2628a5632c52481c88ec2a3cb474f25",
+  "helperSHA256": "c846e19d979f950a3b918d21542c18dcfe3647288d3e8afde018c9e8f34eec7f",
+  "probeSHA256": "d06efd78b8731aa87f7154138ad817749d83a96e6652f7b2cf3b0e5e757c1558",
+  "feedSHA256": "6717d25bafcec62b533e8a4b73269215ac95144a2ba986807071615e5b389139",
+  "protocol": "Four configurations fixed before inference, once each with --trace --isolate --sentences --numbers. No public prose/drafts published. Source-relative inspection is not independent human approval or a trusted production model reviewer.",
+  "semanticAcceptance": false,
+  "pendingProductDecision": "Both retain free app-language summaries: additional source-bound offer facts line versus affected incomplete offers shown only as originals. No dependent UI/fallback change is authorized by elapsed time.",
+  "configurations": [
+    {
+      "name": "six",
+      "inputSHA256": "104495438e1768ad323ea91ecb02bf0fd70dd9ad1c18f639db3d4069f05c7bf8",
+      "reportSHA256": "a577b3cc92b9f602b0d36e4a91da30841fcf995c867d272330284e7cd40af60b",
+      "elapsedSeconds": 21.944162708,
+      "inputTokens": 2397,
+      "contextTokens": 8192,
+      "error": "ReaderDomain.ReaderError.unavailable(\"The summary contains unsupported numbers or links. Original articles remain available.\")",
+      "sectionCount": 0,
+      "inputOriginalCount": 6,
+      "returnedOriginalCount": 0,
+      "allReturnedOriginalsBelongToInput": true,
+      "modelCoverageMissingCount": 6,
+      "stageCounts": {
+        "sentence-selection": 6,
+        "selection": 1,
+        "draft": 2
+      },
+      "findings": [
+        {
+          "code": "unowned_inline_packet_citation_numbers",
+          "sourcePositions": [
+            4,
+            5
+          ],
+          "unsupportedNumericTokenCount": 2,
+          "result": "rejected"
+        }
+      ]
+    },
+    {
+      "name": "pair-1",
+      "inputSHA256": "ccf83b34996dbd2cec898a47b568078172c4947fd02b135219472a74c4523501",
+      "reportSHA256": "874b2b63dd53021e1bca56a344dc7180df701b411864c66786a47179010daa49",
+      "elapsedSeconds": 10.503276375,
+      "inputTokens": 826,
+      "contextTokens": 8192,
+      "error": null,
+      "sectionCount": 2,
+      "inputOriginalCount": 2,
+      "returnedOriginalCount": 2,
+      "allReturnedOriginalsBelongToInput": true,
+      "modelCoverageMissingCount": 0,
+      "stageCounts": {
+        "sentence-selection": 2,
+        "selection": 1,
+        "draft": 2
+      },
+      "findings": [
+        {
+          "code": "required_coupon_omitted",
+          "sourcePositions": [
+            2
+          ]
+        },
+        {
+          "code": "supplying_merchant_omitted",
+          "sourcePositions": [
+            2
+          ]
+        },
+        {
+          "code": "admission_newspaper_date_hour_conditions_retained",
+          "sourcePositions": [
+            1
+          ],
+          "severity": "positive"
+        }
+      ]
+    },
+    {
+      "name": "pair-2",
+      "inputSHA256": "dec8b262f8bd48b1a58ffdeefb9a2db24cd0978232cb9f7dc72860124b490b22",
+      "reportSHA256": "d98edbb84d0bfe429a018d681dfdd7c03e92541223b90f7ab48b72c073124457",
+      "elapsedSeconds": 10.720172334,
+      "inputTokens": 744,
+      "contextTokens": 8192,
+      "error": null,
+      "sectionCount": 2,
+      "inputOriginalCount": 2,
+      "returnedOriginalCount": 2,
+      "allReturnedOriginalsBelongToInput": true,
+      "modelCoverageMissingCount": 0,
+      "stageCounts": {
+        "sentence-selection": 2,
+        "selection": 1,
+        "draft": 2
+      },
+      "findings": [
+        {
+          "code": "required_product_specific_coupon_codes_omitted",
+          "sourcePositions": [
+            3
+          ],
+          "conditionCount": 2
+        },
+        {
+          "code": "relative_today_phrase_without_date_anchor",
+          "sourcePositions": [
+            4
+          ],
+          "severity": "scope_note"
+        },
+        {
+          "code": "account_required_no_paid_subscription_retained",
+          "sourcePositions": [
+            4
+          ],
+          "severity": "positive"
+        }
+      ]
+    },
+    {
+      "name": "pair-3",
+      "inputSHA256": "e05318eb4f82f452cc48eaa7239f9cf888e899310c990a86da260fa139410555",
+      "reportSHA256": "16819bd31b7edd9ae402d76b0af9f0dce9413121fae91590febbe30af6698105",
+      "elapsedSeconds": 12.613384,
+      "inputTokens": 827,
+      "contextTokens": 8192,
+      "error": null,
+      "sectionCount": 2,
+      "inputOriginalCount": 2,
+      "returnedOriginalCount": 2,
+      "allReturnedOriginalsBelongToInput": true,
+      "modelCoverageMissingCount": 0,
+      "stageCounts": {
+        "sentence-selection": 2,
+        "selection": 1,
+        "draft": 2
+      },
+      "findings": [
+        {
+          "code": "exclusion_and_expiry_omitted",
+          "sourcePositions": [
+            5
+          ],
+          "conditionCount": 2
+        },
+        {
+          "code": "merchant_label_includes_source_greeting",
+          "sourcePositions": [
+            6
+          ]
+        },
+        {
+          "code": "unowned_inline_citation_matches_an_existing_source_number",
+          "sourcePositions": [
+            6
+          ]
+        },
+        {
+          "code": "discount_cap_coupon_and_noncombination_retained",
+          "sourcePositions": [
+            5
+          ],
+          "severity": "positive"
+        }
+      ]
+    }
+  ]
+}
