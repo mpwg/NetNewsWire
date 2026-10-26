@@ -2,6 +2,8 @@
 
 Native VoiceOver service candidate: one Mac-only UI method captures actual speech/focus through Apple's public XCUIVoiceOverService, with prior-state restoration. Xcode MCP build/strict lint pass; discovery reports 208 enabled, zero disabled. Actual runtime execution and full VoiceOver acceptance remain open. No local test or VoiceOver state change interrupts the pending owner journey. [Candidate evidence](evidence/k-accessibility-navigation-2026-10-26.md).
 
+The next local source adds XCTHitchMetric and pre/post native geometry to the existing scrolling case. Build/strict lint pass; no additional UI method is introduced and no runtime/representative hitch result is claimed yet. [Measurement scope](evidence/k-load-preparation-2026-10-26.md).
+
 K Mac load checkpoint **ee2cefe14** passes [Reader CI 40247859999](https://github.com/mpwg/NetNewsWire/actions/runs/40247859999): **404 executions (395 code, nine native UI)**, 207 distinct tests, zero failures/skips and one deliberate guardrail runtime warning. The isolated workload, corrected confirmation check, actual scrolling case, direct code timing attachments and caller-site UI diagnostics pass. Both 1,000/10,000-record payloads are inspected and retained. [Current criteria and raw evidence](evidence/k-load-preparation-2026-10-26.md).
 
 The timings are single warm in-memory observations and hosted Debug scrolling samples, without a calibrated budget or controlled rendering geometry. Representative latency, smoothness and energy remain open. Target feed/article volume and the basic manual VoiceOver journey await owner input; the normal Reader remains available. This receipt changes only documentation/evidence after the tested source.

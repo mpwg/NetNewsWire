@@ -80,13 +80,19 @@ final class ReaderSmokeTests: XCTestCase {
         timeline.scroll(byDeltaX: 0, deltaY: 500)
         XCTAssertTrue(first.wait(for: \.isHittable, toEqual: true, timeout: 5))
 
+        let geometryBefore = "window=\(app.windows.firstMatch.frame); timeline=\(timeline.frame)"
         let options = XCTMeasureOptions()
         options.iterationCount = 5
-        measure(metrics: [XCTClockMetric(), XCTCPUMetric(application: app), XCTMemoryMetric(application: app)], options: options) {
+        measure(metrics: [XCTClockMetric(), XCTCPUMetric(application: app), XCTMemoryMetric(application: app),
+                          XCTHitchMetric(application: app)], options: options) {
             timeline.scroll(byDeltaX: 0, deltaY: -500)
             timeline.scroll(byDeltaX: 0, deltaY: 500)
         }
         XCTAssertTrue(first.wait(for: \.isHittable, toEqual: true, timeout: 5))
+        let geometry = XCTAttachment(string: "Before: \(geometryBefore)\nAfter: window=\(app.windows.firstMatch.frame); timeline=\(timeline.frame)\n10000 stored articles; normal initial 200-row page; five recorded down/up pairs; no calibrated baseline.")
+        geometry.name = "Native loaded timeline measurement geometry"
+        geometry.lifetime = .keepAlways
+        add(geometry)
         let attachment = XCTAttachment(screenshot: app.windows.firstMatch.screenshot())
         attachment.name = "Native loaded timeline after measured scrolling"
         attachment.lifetime = .keepAlways

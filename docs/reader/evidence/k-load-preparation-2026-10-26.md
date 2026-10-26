@@ -2,6 +2,8 @@
 
 ## Status
 
+The next local source adds Apple's [XCTHitchMetric(application:)](https://developer.apple.com/documentation/xctest/xcthitchmetric/init(application:)) to the existing scrolling method, plus pre/post native window/outline CGRect attachments outside the measured interval. The official API metadata lists macOS 26 or later; Xcode MCP build-for-testing at 01:33:44 and strict lint pass on Mac 27. No additional UI function or workload is created. Actual hitch samples and geometry attachment are unverified until their own hosted execution; clock time is still not a rendering/frame-time statistic. A virtual-Mac zero or missing sample must not be accepted as representative smoothness without a usable measurement basis.
+
 The synthetic workload, native scrolling measurement, corrected modal-diagnostic check and code timing attachments pass at ee2cefe14. Full representative latency, scrolling, whole-app memory and energy acceptance remains **open**. The actual timing payloads are inspected below; no additional UI method is added for them.
 
 The new workload uses 100 synthetic feeds, ten folders, 20 root feeds and a default 10,000 articles spanning roughly seven days. Titles, bodies, IDs, dates and mixed read/star memberships are deterministic. Each body contains passive HTML/text; a sparse marker exercises body search. Feed homepages are nil, so icon requests are not started by these records. Data contains no credentials, account tokens or external article resources.

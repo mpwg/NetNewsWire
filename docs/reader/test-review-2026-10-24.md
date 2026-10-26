@@ -2,6 +2,8 @@
 
 The next Mac-only native UI method uses the public XCUIVoiceOverService for actual speech and focus movement, with initial-state capture and registered restoration. Native build/strict lint pass and discovery reports 208 enabled tests, zero disabled; runtime verification is pending. This cannot be replaced by a Swift Testing label/role check: it requires the actual assistive service. It adds no business-rule matrix or new test infrastructure, and does not establish a complete VoiceOver journey from compilation. [Candidate scope](evidence/k-accessibility-navigation-2026-10-26.md).
 
+The existing scrolling method is also extended with app-targeted XCTHitchMetric and pre/post native geometry attachments. Build/strict lint pass, actual samples remain pending. No new UI method is added for these rendering diagnostics; all business/query timing observations remain in Swift Testing. The diagnostic must yield usable native data before it can support any hitch claim. It is not an energy metric or an accepted performance budget.
+
 ## Current load-test boundary — 2026-10-26
 
 Current source ee2cefe14 passes [Reader CI 40247859999](https://github.com/mpwg/NetNewsWire/actions/runs/40247859999): 404 executions (395 code, all nine native UI), 207 distinct tests, zero failures/skips and one deliberate guardrail warning. Code timing attachments and caller-site UI diagnostics are included in this run. The preceding c29d13483 checkpoint separately proves exact query count 20/zero writes after Cancel, then the confirmed 300-row action and zero final Unread counts; those native checks remain green. The scrolling method passes with raw samples and an inspected window image; differences between runs do not prove optimization.
