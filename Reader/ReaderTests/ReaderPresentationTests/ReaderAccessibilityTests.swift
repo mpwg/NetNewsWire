@@ -170,7 +170,7 @@ struct ReaderAccessibilityTests {
           arguments: ["en", "de"], [false, true])
     func typedOfferFieldsExposeLiteralText(localeID: String, unknown: Bool) async throws {
         let offer = DigestOfferFact(product: "Luma [lamp]", merchant: unknown ? nil : "Example Store",
-                                    price: unknown ? nil : "EUR 29.99",
+                                    price: unknown ? nil : "EUR 29.99", priceSubject: unknown ? nil : "Luma [lamp]",
                                     conditions: ["Code SAVE5 required; not valid online.", "<script>doNotRun()</script>"])
         let facts = DigestSourceFacts(source: ArticleKey(accountID: UUID(), remoteID: "offer"), excerpts: offer.quotedValues, offers: [offer])
         let host = NSHostingView(rootView: DigestSourceFactsView(facts: facts).environment(\.locale, Locale(identifier: localeID)))

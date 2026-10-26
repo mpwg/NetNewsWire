@@ -201,13 +201,13 @@ struct SourceOfferValidationTests {
         ("99", "Luma lamp costs EUR 29.99; model 98.")
     ])
     func partialSourceValuesAreRejected(value: String, source: String) {
-        let offer = DigestOfferFact(product: "Luma lamp", price: value)
+        let offer = DigestOfferFact(product: "Luma lamp", price: value, priceSubject: "Luma lamp")
         #expect(throws: ReaderError.invalidResponse) { try SourceOfferValidation.validate(offer, in: source) }
     }
 
     @Test("Offer fields must all occur in their own source fragment", arguments: 0..<9)
     func unsupportedOfferFieldsAreRejected(kind: Int) {
-        var offer = DigestOfferFact(product: "Luma lamp", merchant: "Example Store", price: "EUR 29.99",
+        var offer = DigestOfferFact(product: "Luma lamp", merchant: "Example Store", price: "EUR 29.99", priceSubject: "Luma lamp",
                                     conditions: ["Code SAVE5 required.", "Pickup only."])
         switch kind {
         case 0: offer.product = "Invented kettle"
@@ -228,7 +228,7 @@ struct SourceOfferValidationTests {
     @Test("Missing offer fields remain unknown and exact quotes preserve negations", arguments: [false, true])
     func offerFieldsKeepUnknownValuesAndSourceSpelling(unknown: Bool) throws {
         let offer = DigestOfferFact(product: "Luma lamp", merchant: unknown ? nil : "Example Store",
-                                    price: unknown ? nil : "EUR 29.99", conditions: ["Don't combine offers; pickup only."])
+                                    price: unknown ? nil : "EUR 29.99", priceSubject: unknown ? nil : "Luma lamp", conditions: ["Don't combine offers; pickup only."])
         let result = try SourceOfferValidation.validate(
             offer, in: "Example Store: Luma lamp, EUR 29.99. Don't combine offers; pickup only.")
         #expect(result == offer)
@@ -352,6 +352,28 @@ struct AppleSummaryGeneratorTests {
         #expect(conditions == [condition, "pickup only"])
     }
 
+    @Test("A qualifying purchase price is withheld while the summary and source terms remain", arguments: [false, true])
+    func differentPriceSubjectIsNotPresented(missingSubject: Bool) async throws {
+        var source = try article()
+        source.text = "Museum entry is free with a newspaper. Newspaper costs EUR 3.30."
+        let subject: Any = missingSubject ? NSNull() : "Newspaper"
+        let journal = ModelRequestJournal(factResponses: [try modelJSON([
+            "offers": [["product": "Museum entry", "merchant": NSNull(), "price": "EUR 3.30",
+                        "priceSubject": subject, "conditions": ["newspaper"]]], "excerpts": []
+        ])])
+        let sections = try await AppleSummaryGenerator().generate(
+            [source], model: ControlledLanguageModel(journal: journal), capacity: 100000, count: { $0.count })
+        let offer = try #require(sections.first?.sourceFacts?.first?.offers?.first)
+        #expect(offer.product == "Museum entry")
+        #expect(offer.price == nil)
+        #expect(offer.priceSubject == nil)
+        #expect(offer.conditions == ["newspaper"])
+        #expect(sections.first?.text == "A sourced summary.")
+        let requests = await journal.requests
+        let consolidation = modelPrompt(try #require(requests.last))
+        #expect(!consolidation.contains("3.30"))
+    }
+
     @Test("A non-price source value cannot enter the price field")
     func roleMismatchStopsBeforeConsolidation() async throws {
         var source = try article()
@@ -371,9 +393,9 @@ struct AppleSummaryGeneratorTests {
     func structuredOffersKeepTheirOwnTerms() async throws {
         var source = try article()
         source.text = "Example Store offers the Luma lamp for EUR 29.99. Code SAVE5 required; pickup only. Other Store offers the Vela kettle for EUR 44.90; online only."
-        let first: [String: Any] = ["product": "Luma lamp", "merchant": "Example Store", "price": "EUR 29.99",
+        let first: [String: Any] = ["product": "Luma lamp", "merchant": "Example Store", "price": "EUR 29.99", "priceSubject": "Luma lamp",
                                     "conditions": ["Code SAVE5 required", "pickup only"]]
-        let second: [String: Any] = ["product": "Vela kettle", "merchant": "Other Store", "price": "EUR 44.90",
+        let second: [String: Any] = ["product": "Vela kettle", "merchant": "Other Store", "price": "EUR 44.90", "priceSubject": "Vela kettle",
                                      "conditions": ["online only"]]
         let journal = ModelRequestJournal(factResponses: [try modelJSON(["offers": [first, second], "excerpts": []])],
                                           consolidation: { prompt in
@@ -409,7 +431,7 @@ struct AppleSummaryGeneratorTests {
     func hierarchicalOffersKeepOriginalFieldRecords() async throws {
         let sources = try distinctSources(count: 40)
         let facts = try sources.map { source in
-            try modelJSON(["offers": [["product": source.title, "merchant": "Example Store", "price": "EUR 29.99", "conditions": []]],
+            try modelJSON(["offers": [["product": source.title, "merchant": "Example Store", "price": "EUR 29.99", "priceSubject": source.title, "conditions": []]],
                            "excerpts": []])
         }
         let journal = ModelRequestJournal(factResponses: facts)
@@ -969,7 +991,7 @@ private actor ControlledGenerator: SummaryGenerator {
 }
 
 struct DigestTests {
-    @Test("Unchanged caches from earlier generation and validation policies are regenerated", arguments: ["", "reader-source-facts-consolidation-v1\n", "reader-source-facts-consolidation-v2\n", "reader-source-facts-consolidation-v3\n", "reader-source-facts-consolidation-v4\n", "reader-source-facts-consolidation-v5\n", "reader-source-facts-consolidation-v6\n", "reader-source-facts-consolidation-v7\n", "reader-source-facts-consolidation-v8\n", "reader-source-facts-consolidation-v9\n", "reader-source-facts-consolidation-v10\n", "reader-source-facts-consolidation-v11\n", "reader-source-facts-consolidation-v12\n", "reader-source-facts-consolidation-v13\n"])
+    @Test("Unchanged caches from earlier generation and validation policies are regenerated", arguments: ["", "reader-source-facts-consolidation-v1\n", "reader-source-facts-consolidation-v2\n", "reader-source-facts-consolidation-v3\n", "reader-source-facts-consolidation-v4\n", "reader-source-facts-consolidation-v5\n", "reader-source-facts-consolidation-v6\n", "reader-source-facts-consolidation-v7\n", "reader-source-facts-consolidation-v8\n", "reader-source-facts-consolidation-v9\n", "reader-source-facts-consolidation-v10\n", "reader-source-facts-consolidation-v11\n", "reader-source-facts-consolidation-v12\n", "reader-source-facts-consolidation-v13\n", "reader-source-facts-consolidation-v14\n"])
     func previousGenerationCacheIsRegenerated(policyPrefix: String) async throws {
         let (store, feed, articles) = try await fixture()
         let coordinator = DigestCoordinator(repository: store, generator: FixtureGenerator())
@@ -1038,7 +1060,7 @@ struct DigestTests {
         #expect(await journal.requests.count == articles.count + 1)
     }
 
-    @Test("Cache reuse requires complete nonblank sections and source-owned facts", arguments: 0..<12)
+    @Test("Cache reuse requires complete nonblank sections and source-owned facts", arguments: 0..<14)
     func cachedClaimsRequireValidContentAndSources(kind: Int) async throws {
         let (store, feed, articles) = try await fixture()
         let coordinator = DigestCoordinator(repository: store, generator: FixtureGenerator())
@@ -1057,6 +1079,10 @@ struct DigestTests {
                                                                    offers: [DigestOfferFact(product: articles[0].title, merchant: "Invented Store")])]
         case 11: cached.sections[0].sourceFacts = [DigestSourceFacts(source: articles[0].id, excerpts: [articles[0].title],
                                                                    offers: [DigestOfferFact(product: articles[0].title, conditions: [articles[1].title])])]
+        case 12: cached.sections[0].sourceFacts = [DigestSourceFacts(source: articles[0].id, excerpts: [articles[0].title],
+            offers: [DigestOfferFact(product: articles[0].title, price: "0", priceSubject: "Source")])]
+        case 13: cached.sections[0].sourceFacts = [DigestSourceFacts(source: articles[0].id, excerpts: [articles[0].title],
+            offers: [DigestOfferFact(product: articles[0].title, price: "0")])]
         default: break
         }
         try await store.saveDigest(cached)

@@ -153,21 +153,37 @@ public struct DigestOfferFact: Identifiable, Hashable, Codable, Sendable {
     public var product: String
     public var merchant: String?
     public var price: String?
+    /// Source phrase naming the item to which the displayed price applies.
+    public var priceSubject: String?
     public var conditions: [String]
 
-    public init(id: UUID = UUID(), product: String, merchant: String? = nil, price: String? = nil, conditions: [String] = []) {
-        self.id = id; self.product = product; self.merchant = merchant; self.price = price; self.conditions = conditions
+    public init(id: UUID = UUID(), product: String, merchant: String? = nil, price: String? = nil,
+                priceSubject: String? = nil, conditions: [String] = []) {
+        self.id = id; self.product = product; self.merchant = merchant
+        self.price = price; self.priceSubject = priceSubject; self.conditions = conditions
     }
 
-    public var quotedValues: [String] { [product] + [merchant, price].compactMap { $0 } + conditions }
+    public var quotedValues: [String] {
+        var seen: Set<Data> = []
+        return ([product] + [merchant, price, priceSubject].compactMap { $0 } + conditions)
+            .filter { seen.insert(Data($0.utf8)).inserted }
+    }
+
+    /// Exact name agreement is a consistency check, not proof of semantic entailment.
+    public var hasConsistentPriceSubject: Bool {
+        guard price != nil else { return priceSubject == nil }
+        guard let priceSubject, !priceSubject.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return false }
+        return product.compare(priceSubject, options: [.caseInsensitive, .literal]) == .orderedSame
+    }
 
     public var hasValidContent: Bool {
-        conditions.count <= 8 && Set(conditions).count == conditions.count &&
+        hasConsistentPriceSubject && conditions.count <= 8 && Set(conditions).count == conditions.count &&
         quotedValues.allSatisfy { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
     }
 
     public func hasSameFields(as other: DigestOfferFact) -> Bool {
-        product == other.product && merchant == other.merchant && price == other.price && conditions == other.conditions
+        product == other.product && merchant == other.merchant && price == other.price &&
+        priceSubject == other.priceSubject && conditions == other.conditions
     }
 }
 

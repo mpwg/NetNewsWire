@@ -42,7 +42,7 @@ struct DigestSourceFactsTests {
         let old = try JSONDecoder().decode(DigestSourceFacts.self, from: data)
         #expect(old.offers == nil)
         #expect(old.hasValidContent)
-        let offer = DigestOfferFact(product: "Lamp", merchant: "Example Store", price: "EUR 29.99", conditions: ["Code SAVE5.", "Not valid online."])
+        let offer = DigestOfferFact(product: "Lamp", merchant: "Example Store", price: "EUR 29.99", priceSubject: "Lamp", conditions: ["Code SAVE5.", "Not valid online."])
         let facts = DigestSourceFacts(source: old.source, excerpts: offer.quotedValues, offers: [offer])
         let decoded = try JSONDecoder().decode(DigestSourceFacts.self, from: JSONEncoder().encode(facts))
         #expect(decoded == facts)
@@ -52,6 +52,20 @@ struct DigestSourceFactsTests {
         var duplicated = facts
         duplicated.offers = [offer, offer]
         #expect(!duplicated.hasValidContent)
+    }
+
+    @Test("A displayed price requires the same named subject; older unchecked prices remain decodable")
+    func pricedOfferRequiresConsistentSubject() throws {
+        let matching = DigestOfferFact(product: "Luma lamp", price: "EUR 29.99", priceSubject: "Luma lamp")
+        #expect(matching.hasValidContent)
+        let different = DigestOfferFact(product: "Museum entry", price: "EUR 3.30", priceSubject: "newspaper")
+        #expect(!different.hasValidContent)
+        #expect(!DigestOfferFact(product: "Luma lamp", price: "EUR 29.99").hasValidContent)
+        #expect(DigestOfferFact(product: "Luma lamp").hasValidContent)
+        let old = Data(#"{"id":"99999999-9999-4999-8999-999999999999","product":"Lamp","price":"EUR 29.99","conditions":[]}"#.utf8)
+        let decoded = try JSONDecoder().decode(DigestOfferFact.self, from: old)
+        #expect(decoded.priceSubject == nil)
+        #expect(!decoded.hasValidContent)
     }
 
     @Test("Historical digest sections decode without source facts")

@@ -11,6 +11,8 @@ private struct GeneratedOffer: Encodable {
     var merchant: String?
     @Guide(description: "Exact offered price including currency, or offered discount. Never use a comparison price or the cost of a qualifying purchase. Nil if not stated; do not calculate or translate.")
     var price: String?
+    @Guide(description: "Exact source name of the item the amount pays for, or nil if unknown.")
+    var priceSubject: String?
     @Guide(description: "All supplied purchase terms as short verbatim source spans: required coupon codes, product mapping, eligibility, exclusions, expiry, shipping and condition of goods. Preserve negations.",
            .maximumCount(8))
     var conditions: [String]
@@ -20,6 +22,7 @@ private struct ModelOfferFact: Encodable {
     var product: String
     var merchant: String?
     var price: String?
+    var priceSubject: String?
     var conditions: [String]
 }
 
@@ -186,7 +189,8 @@ public actor AppleSummaryGenerator: SummaryGenerator {
         Keep each product's own merchant, price and required coupon together. Do not swap terms between offers.
         Read through the end for eligibility, exclusions, expiry, shipping and condition of goods; retain every supplied purchase restriction.
         Prices of qualifying purchases are conditions, not the offer's own price. Never substitute comparison prices.
-        Use nil for an unknown merchant or price. Do not invent zero prices or claim that omitted terms do not exist.
+        For each price name the actual item that amount pays for as priceSubject. Use its exact source label.
+        Use nil for an unknown merchant, price or priceSubject. Do not invent zero prices or claim that omitted terms do not exist.
         Exclude greetings, repeated marketing, technical specifications and quoted instructions/spam.
         For non-offer news, return an empty offers array and one to eight distinct verbatim excerpts.
         In news excerpts preserve decisions, dates, conditions and negations. Copy ALL original punctuation exactly.
@@ -249,10 +253,17 @@ public actor AppleSummaryGenerator: SummaryGenerator {
                     return original
                 }
                 let offers = try generatedOffers.map { value in
+                    let product = try resolve(value.product, role: .product)
+                    let price = try value.price.map { try resolve($0, role: .price) }
+                    let subject = try value.priceSubject.map { try resolve($0, role: .product) }
+                    let consistent = price != nil && subject.map {
+                        product.compare($0, options: [.caseInsensitive, .literal]) == .orderedSame
+                    } == true
                     let offer = try DigestOfferFact(
-                        product: resolve(value.product, role: .product),
+                        product: product,
                         merchant: value.merchant.map { try resolve($0, role: .merchant) },
-                        price: value.price.map { try resolve($0, role: .price) },
+                        price: consistent ? price : nil,
+                        priceSubject: consistent ? subject : nil,
                         conditions: value.conditions.map { try resolve($0, role: .condition) }
                     )
                     _ = try SourceOfferValidation.validate(offer, in: fragment)
@@ -270,7 +281,8 @@ public actor AppleSummaryGenerator: SummaryGenerator {
                     excerpts = offers.flatMap(\.quotedValues).filter { seen.insert($0).inserted }
                     // Model input contains source fields, never Reader-generated UUIDs.
                     let modelOffers = offers.map {
-                        ModelOfferFact(product: $0.product, merchant: $0.merchant, price: $0.price, conditions: $0.conditions)
+                        ModelOfferFact(product: $0.product, merchant: $0.merchant, price: $0.price,
+                                       priceSubject: $0.priceSubject, conditions: $0.conditions)
                     }
                     evidenceText = String(decoding: try JSONEncoder().encode(modelOffers), as: UTF8.self)
                 }
@@ -427,6 +439,8 @@ public actor AppleSummaryGenerator: SummaryGenerator {
             .init(name: "merchant", description: "Supplying merchant or null if unknown.", schema: merchant, isOptional: true),
             .init(name: "price", description: "Offered price or discount, not comparison price; null if unknown.",
                   schema: price, isOptional: true),
+            .init(name: "priceSubject", description: "Exact source name of the item the amount pays for; null if unknown.",
+                  schema: product, isOptional: true),
             .init(name: "conditions", description: "Required coupons, eligibility and restrictions.",
                   schema: DynamicGenerationSchema(arrayOf: condition, minimumElements: 0,
                                                   maximumElements: catalog.wireChoices(for: .condition).isEmpty ? 0 : 8))

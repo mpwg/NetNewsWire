@@ -315,7 +315,7 @@ struct ReaderStoreTests {
         try await store.setStatus([original.id], field: .starred, value: true)
         let stored = try #require(try await store.article(original.id))
         let pending = try await store.pendingChanges(accountID: accountID)
-        let offer = DigestOfferFact(product: "Luma lamp", merchant: "Example Store", price: "EUR 29.99", conditions: ["Code SAVE5 required; not valid online."])
+        let offer = DigestOfferFact(product: "Luma lamp", merchant: "Example Store", price: "EUR 29.99", priceSubject: "Luma lamp", conditions: ["Code SAVE5 required; not valid online."])
         let facts = DigestSourceFacts(source: original.id, excerpts: [original.text], offers: [offer])
         let digest = DigestSnapshot(id: "facts-day", feed: feed.id, day: Date(timeIntervalSince1970: 0), timeZoneID: "UTC",
                                     sections: [DigestSection(title: "Offer", text: "A free summary.", sources: [original.id], sourceFacts: [facts])],
