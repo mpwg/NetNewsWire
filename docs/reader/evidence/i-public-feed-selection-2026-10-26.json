@@ -77,7 +77,8 @@
         "facts",
         "facts"
       ],
-      "semanticAcceptance": false
+      "semanticAcceptance": false,
+      "literalMentionChecks": []
     },
     {
       "policy": "v4",
@@ -95,7 +96,8 @@
         "facts",
         "consolidation"
       ],
-      "semanticAcceptance": false
+      "semanticAcceptance": false,
+      "literalMentionChecks": []
     },
     {
       "policy": "v4",
@@ -112,7 +114,8 @@
         "facts",
         "facts"
       ],
-      "semanticAcceptance": false
+      "semanticAcceptance": false,
+      "literalMentionChecks": []
     },
     {
       "policy": "v4",
@@ -128,7 +131,8 @@
       "stages": [
         "facts"
       ],
-      "semanticAcceptance": false
+      "semanticAcceptance": false,
+      "literalMentionChecks": []
     },
     {
       "policy": "v5",
@@ -144,7 +148,8 @@
       "stages": [
         "facts"
       ],
-      "semanticAcceptance": false
+      "semanticAcceptance": false,
+      "literalMentionChecks": []
     },
     {
       "policy": "v5",
@@ -162,7 +167,21 @@
         "facts",
         "consolidation"
       ],
-      "semanticAcceptance": false
+      "semanticAcceptance": false,
+      "literalMentionChecks": [
+        {
+          "sectionIndex": 0,
+          "originalRemoteID": "371286",
+          "merchantMentioned": false,
+          "listedPriceMentioned": true
+        },
+        {
+          "sectionIndex": 1,
+          "originalRemoteID": "371285",
+          "merchantMentioned": false,
+          "listedPriceMentioned": true
+        }
+      ]
     },
     {
       "policy": "v5",
@@ -178,7 +197,8 @@
       "stages": [
         "facts"
       ],
-      "semanticAcceptance": false
+      "semanticAcceptance": false,
+      "literalMentionChecks": []
     },
     {
       "policy": "v5",
@@ -194,8 +214,10 @@
       "stages": [
         "facts"
       ],
-      "semanticAcceptance": false
+      "semanticAcceptance": false,
+      "literalMentionChecks": []
     }
   ],
-  "conclusion": "V5 pair-1 is structurally valid but omits merchants. Seven other observations reject; no semantic quality acceptance or representative improvement established."
+  "conclusion": "V5 pair-1 is structurally valid but omits merchants. Seven other observations reject; no semantic quality acceptance or representative improvement established.",
+  "literalMentionScope": "Case-insensitive literal checks against public RSS merchant/price attributes; no equivalence normalization or semantic correctness proof."
 }

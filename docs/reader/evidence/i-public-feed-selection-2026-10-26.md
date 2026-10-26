@@ -39,6 +39,8 @@ Under v4 all four runs reject. One pair reaches consolidation with valid facts a
 
 Under v5 the first pair produces structurally valid summaries of both originals with the listed prices, but omits merchant names. It is not a semantic acceptance pass. The six-item group and both remaining pairs still fail exact excerpt validation. All eight original observations are accounted for in the aggregate receipt; selected successes do not erase failures or establish a representative quality improvement. Free-summary quality, attached conditions and reliable long inputs remain open.
 
+The aggregate receipt also independently checks literal merchant/price mentions against public RSS attributes for each referenced original. Checks are case-insensitive and include section titles, with no numerical/equivalence normalization; they are narrow omission diagnostics, not a semantic validator or proof that every unselected fact must appear.
+
 ## Preceding evaluation-tool CI, preserved before this change
 
 [Reader CI 40309420884](https://github.com/mpwg/NetNewsWire/actions/runs/40309420884), source c9c33ec4e11e8c5a3f6c103301f3246c1b30a544, is terminal failure: 475 passed / one failed execution of 476, 233 passed / one failed distinct test of 234, no skips. All 466 code executions and nine native methods pass. ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus() fails after losing the connection to the app/helper. The artifact also captures testmanagerd EXC_BAD_ACCESS/SIGSEGV (faulting thread 7, top frame objc_release). Co-occurrence is evidence of native infrastructure failure, not proof of its exact cause or a product repair. No retry or timeout waiver is used.

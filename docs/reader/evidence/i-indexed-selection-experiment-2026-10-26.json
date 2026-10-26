@@ -102,7 +102,33 @@
           ]
         }
       ],
-      "semanticAcceptance": false
+      "semanticAcceptance": false,
+      "literalMentionChecks": [
+        {
+          "sectionIndex": 0,
+          "originalRemoteID": "371286",
+          "merchantMentioned": false,
+          "listedPriceMentioned": false
+        },
+        {
+          "sectionIndex": 1,
+          "originalRemoteID": "371285",
+          "merchantMentioned": false,
+          "listedPriceMentioned": false
+        },
+        {
+          "sectionIndex": 2,
+          "originalRemoteID": "371283",
+          "merchantMentioned": false,
+          "listedPriceMentioned": false
+        },
+        {
+          "sectionIndex": 3,
+          "originalRemoteID": "371280",
+          "merchantMentioned": false,
+          "listedPriceMentioned": false
+        }
+      ]
     },
     {
       "scenario": "pair-1",
@@ -148,7 +174,21 @@
           ]
         }
       ],
-      "semanticAcceptance": false
+      "semanticAcceptance": false,
+      "literalMentionChecks": [
+        {
+          "sectionIndex": 0,
+          "originalRemoteID": "371286",
+          "merchantMentioned": false,
+          "listedPriceMentioned": false
+        },
+        {
+          "sectionIndex": 1,
+          "originalRemoteID": "371285",
+          "merchantMentioned": false,
+          "listedPriceMentioned": false
+        }
+      ]
     },
     {
       "scenario": "pair-2",
@@ -194,7 +234,21 @@
           ]
         }
       ],
-      "semanticAcceptance": false
+      "semanticAcceptance": false,
+      "literalMentionChecks": [
+        {
+          "sectionIndex": 0,
+          "originalRemoteID": "371283",
+          "merchantMentioned": false,
+          "listedPriceMentioned": false
+        },
+        {
+          "sectionIndex": 1,
+          "originalRemoteID": "371280",
+          "merchantMentioned": false,
+          "listedPriceMentioned": false
+        }
+      ]
     },
     {
       "scenario": "pair-3",
@@ -238,7 +292,15 @@
           ]
         }
       ],
-      "semanticAcceptance": false
+      "semanticAcceptance": false,
+      "literalMentionChecks": [
+        {
+          "sectionIndex": 0,
+          "originalRemoteID": "371281",
+          "merchantMentioned": true,
+          "listedPriceMentioned": true
+        }
+      ]
     }
   ],
   "syntheticObservations": [
@@ -393,5 +455,6 @@
       ]
     }
   ],
-  "conclusion": "All six requests are structurally valid; the known weekday omission persists. Public outputs omit merchants/prices and one changes cable-free motherboard support into wireless support. No semantic acceptance or production adoption."
+  "conclusion": "All six probe configurations are structurally valid; the known weekday omission persists. Public outputs omit merchants/prices and one changes cable-free motherboard support into wireless support. No semantic acceptance or production adoption.",
+  "literalMentionScope": "Case-insensitive literal checks against public RSS merchant/price attributes; no equivalence normalization or semantic correctness proof."
 }
