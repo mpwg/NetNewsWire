@@ -53,6 +53,7 @@ struct ReaderInferenceProbe {
                                                                trace: { await journal.append($0) },
                                                                isolateSelectedEvidence: arguments.contains("--isolate"),
                                                                selectSourceSentences: arguments.contains("--sentences"),
+                                                               protectNumericLiterals: arguments.contains("--numbers"),
                                                                count: { @Sendable text in
                     try await model.tokenCount(for: text)
                 })

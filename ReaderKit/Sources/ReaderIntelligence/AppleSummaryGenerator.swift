@@ -136,8 +136,10 @@ public actor AppleSummaryGenerator: SummaryGenerator {
                                             trace: (@Sendable (SummaryGenerationTrace) async -> Void)? = nil,
                                             isolateSelectedEvidence: Bool = false,
                                             selectSourceSentences: Bool = false,
+                                            protectNumericLiterals: Bool = false,
                                             count: (String) async throws -> Int) async throws -> [DigestSection] {
         guard !articles.isEmpty else { return [] }
+        guard !protectNumericLiterals || isolateSelectedEvidence else { throw ReaderError.invalidResponse }
         let languageCode = locale.language.languageCode?.identifier ?? "en"
         let languageName = Locale(identifier: "en").localizedString(forLanguageCode: languageCode) ?? languageCode
         let factInstructions = selectSourceSentences ? """
@@ -212,7 +214,7 @@ public actor AppleSummaryGenerator: SummaryGenerator {
                 if isolateSelectedEvidence {
                     groups.append(contentsOf: try await draftSelectedGroups(batch, model: model, capacity: capacity,
                         instructions: summaryInstructions, languageCode: languageCode, cloudPermission: cloudPermission,
-                        trace: trace, count: count))
+                        trace: trace, protectNumericLiterals: protectNumericLiterals, count: count))
                     continue
                 }
                 try await checkRequestPermission(cloudPermission)
@@ -281,6 +283,7 @@ public actor AppleSummaryGenerator: SummaryGenerator {
         _ batch: [SummaryEvidence], model: M, capacity: Int, instructions: String, languageCode: String,
         cloudPermission: (@Sendable () async throws -> Bool)?,
         trace: (@Sendable (SummaryGenerationTrace) async -> Void)?,
+        protectNumericLiterals: Bool,
         count: (String) async throws -> Int
     ) async throws -> [ValidatedSummaryGroup] {
         let selectionInstructions = """
@@ -314,9 +317,13 @@ public actor AppleSummaryGenerator: SummaryGenerator {
         var result: [ValidatedSummaryGroup] = []
         for selectedIndices in Self.coalescedSelections(selections) {
             let selected = selectedIndices.map { batch[$0] }
+            let literalInstructions = protectNumericLiterals ? """
+            \nCopy every numeric reference marker exactly instead of writing or formatting its value.
+            Reader restores source numbers after generation. Do not add inline citation numbers or other numbers.
+            """ : ""
             let draftInstructions = Self.consolidationInstructions(
-                instructions + "\nWrite one group using only these selected packets.", evidence: selected)
-            let draftPrompt = try Self.evidencePrompt(batch, indices: selectedIndices)
+                instructions + "\nWrite one group using only these selected packets." + literalInstructions, evidence: selected)
+            let draftPrompt = try Self.evidencePrompt(batch, indices: selectedIndices, protectNumericLiterals: protectNumericLiterals)
             guard try await count(draftInstructions) + count(draftPrompt) <= capacity - 2000 else {
                 throw Self.contextBudgetError()
             }
@@ -331,10 +338,17 @@ public actor AppleSummaryGenerator: SummaryGenerator {
                 try Task.checkCancellation()
             }
             let permitted = Set(selectedIndices)
-            guard draft.content.sourceNumbers.allSatisfy({ permitted.contains($0) }) else {
+            var group = draft.content
+            guard group.sourceNumbers.allSatisfy({ permitted.contains($0) }) else {
                 throw Self.invalidSourcesError()
             }
-            result.append(contentsOf: try Self.validate([draft.content], evidence: batch, languageCode: languageCode))
+            if protectNumericLiterals {
+                let tables = try selectedIndices.map { try SourceNumberReferences(packetNumber: $0, text: batch[$0].text) }
+                let cited = Set(group.sourceNumbers)
+                group.title = try SourceNumberReferences.restored(group.title, tables: tables, citedPackets: cited)
+                group.summary = try SourceNumberReferences.restored(group.summary, tables: tables, citedPackets: cited)
+            }
+            result.append(contentsOf: try Self.validate([group], evidence: batch, languageCode: languageCode))
         }
         return result
     }
@@ -455,13 +469,16 @@ public actor AppleSummaryGenerator: SummaryGenerator {
         return String(decoding: try encoder.encode(ModelSourceInput(sourceNumber: index, text: text)), as: UTF8.self)
     }
 
-    private static func evidencePrompt(_ evidence: [SummaryEvidence], indices: [Int]? = nil) throws -> String {
+    private static func evidencePrompt(_ evidence: [SummaryEvidence], indices: [Int]? = nil,
+                                       protectNumericLiterals: Bool = false) throws -> String {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys]
-        let inputs = (indices ?? Array(evidence.indices)).map { index in
-            ModelSourceInput(sourceNumber: index, text: evidence[index].text,
-                             articleNumbers: evidence[index].sourceNumbers.sorted(),
-                             selectedExcerpts: evidence[index].selectedExcerpts)
+        let inputs = try (indices ?? Array(evidence.indices)).map { index in
+            let table = protectNumericLiterals ? try SourceNumberReferences(packetNumber: index, text: evidence[index].text) : nil
+            let text = try table?.masked(evidence[index].text) ?? evidence[index].text
+            let focus = try evidence[index].selectedExcerpts?.map { try table?.masked($0) ?? $0 }
+            return ModelSourceInput(sourceNumber: index, text: text,
+                                    articleNumbers: evidence[index].sourceNumbers.sorted(), selectedExcerpts: focus)
         }
         return String(decoding: try encoder.encode(inputs), as: UTF8.self)
     }

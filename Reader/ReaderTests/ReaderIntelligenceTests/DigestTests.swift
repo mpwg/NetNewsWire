@@ -188,6 +188,43 @@ struct SourceSentenceSelectionTests {
     }
 }
 
+struct SourceNumberReferenceTests {
+    // Explicit multilingual and Unicode source fixtures.
+    @Test("Native numeric references round-trip exact literals and surrounding Unicode", arguments: [
+        "Budget EUR 250000. Repeated: 250000.",
+        "Preis EUR 29,99; zusätzlich 2.500,50.",
+        "Hours 21:00–17:00; dates 2026-10-26.",
+        "Café 🧪 costs 29.99; cafe\u{301} costs 29.99.",
+        "No numeric values are present."
+    ])
+    func numericReferencesKeepExactSourceText(text: String) throws {
+        let table = try SourceNumberReferences(packetNumber: 7, text: text)
+        let masked = try table.masked(text)
+        #expect(try SourceNumberReferences.restored(masked, tables: [table], citedPackets: [7]) == text)
+    }
+
+    @Test("Source namespace collisions and numbers outside the packet are rejected", arguments: [
+        "⟦readerNumber:0:0⟧", "⟦readerNumber", "EUR 9999", "29,99"
+    ])
+    func sourceReferencesCannotBeForged(text: String) {
+        #expect(throws: ReaderError.invalidResponse) {
+            let table = try SourceNumberReferences(packetNumber: 0, text: "EUR 29.99")
+            _ = try table.masked(text)
+        }
+    }
+
+    @Test("Unknown, malformed and uncited packet references never restore", arguments: [
+        "⟦readerNumber:0:99⟧", "⟦readerNumber:0:0", "⟦readerNumber:00:0⟧", "⟦readerNumber:1:0⟧"
+    ])
+    func invalidNumericReferencesFailClosed(text: String) throws {
+        let first = try SourceNumberReferences(packetNumber: 0, text: "EUR 29.99")
+        let other = try SourceNumberReferences(packetNumber: 1, text: "EUR 29.99")
+        #expect(throws: ReaderError.invalidResponse) {
+            try SourceNumberReferences.restored(text, tables: [first, other], citedPackets: [0])
+        }
+    }
+}
+
 struct SourceFactValidationTests {
     // Multilingual source-text fixtures; test code and descriptions remain English.
     @Test("Source excerpts preserve Unicode, merchant names and numeric punctuation",
@@ -228,6 +265,80 @@ private actor GenerationTraceJournal {
 }
 
 struct AppleSummaryGeneratorTests {
+    @Test("Native drafting receives opaque numbers and restores exact cited source literals")
+    func numericDraftsRestoreOnlyReaderOwnedValues() async throws {
+        var source = try article()
+        source.title = "Project."
+        source.text = "The budget is EUR 250000."
+        let journal = ModelRequestJournal(
+            sentenceSelection: { _ in #"{"sentenceNumbers":[1]}"# },
+            selection: { _ in #"{"groups":[{"sourceNumbers":[0]}]}"# },
+            consolidation: { prompt in
+                let packets = try JSONDecoder().decode([CapturedModelSource].self, from: Data(prompt.utf8))
+                #expect(packets.first?.text == "Project.\nThe budget is EUR ⟦readerNumber:0:0⟧.")
+                #expect(packets.first?.selectedExcerpts == ["The budget is EUR ⟦readerNumber:0:0⟧."])
+                #expect(packets.first?.articleNumbers == [0])
+                #expect(!prompt.contains("250000"))
+                return #"{"title":"Budget","summary":"The budget is EUR ⟦readerNumber:0:0⟧.","sourceNumbers":[0]}"#
+            })
+        let sections = try await AppleSummaryGenerator().generate(
+            [source], model: ControlledLanguageModel(journal: journal), capacity: 10000,
+            isolateSelectedEvidence: true, selectSourceSentences: true, protectNumericLiterals: true, count: { $0.count })
+        #expect(sections.first?.text == "The budget is EUR 250000.")
+        #expect(sections.first?.sources == [source.id])
+        #expect(await journal.requests.count == 3)
+    }
+
+    @Test("Numeric drafts reject unknown or uncited references, changed literals and inline citations", arguments: [
+        "EUR ⟦readerNumber:0:99⟧.", "EUR ⟦readerNumber:1:0⟧.", "EUR ⟦readerNumber:0:0.",
+        "EUR 250.000.", "EUR ⟦readerNumber:0:0⟧ (0)."
+    ])
+    func numericDraftsKeepIndependentSourceValidation(text: String) async throws {
+        var sources = try distinctSources(count: 2)
+        for index in sources.indices {
+            sources[index].title = "Project."
+            sources[index].text = index == 0 ? "The budget is EUR 250000." : "The budget is EUR 100."
+        }
+        let journal = ModelRequestJournal(
+            sentenceSelection: { _ in #"{"sentenceNumbers":[1]}"# },
+            selection: { _ in #"{"groups":[{"sourceNumbers":[0,1]}]}"# },
+            consolidation: { _ in try modelJSON(["title": "Budget", "summary": text, "sourceNumbers": [0]]) })
+        await #expect(throws: ReaderError.self) {
+            try await AppleSummaryGenerator().generate(
+                sources, model: ControlledLanguageModel(journal: journal), capacity: 10000,
+                isolateSelectedEvidence: true, selectSourceSentences: true, protectNumericLiterals: true, count: { $0.count })
+        }
+        #expect(await journal.requests.count == 4)
+    }
+
+    @Test("Numeric expansion counts the actual draft JSON before issuing a request")
+    func numericDraftBudgetUsesExpandedReferenceText() async throws {
+        let journal = ModelRequestJournal(
+            sentenceSelection: { _ in #"{"sentenceNumbers":[0]}"# },
+            selection: { _ in #"{"groups":[{"sourceNumbers":[0]}]}"# })
+        var source = try article()
+        source.title = "Budget EUR 250000."
+        source.text = ""
+        await #expect(throws: ReaderError.self) {
+            try await AppleSummaryGenerator().generate(
+                [source], model: ControlledLanguageModel(journal: journal), capacity: 10000,
+                isolateSelectedEvidence: true, selectSourceSentences: true, protectNumericLiterals: true,
+                count: { $0.contains("⟦readerNumber") ? 10000 : $0.count })
+        }
+        #expect(await journal.requests.count == 2)
+    }
+
+    @Test("Numeric references require independent selected-evidence drafting")
+    func numericReferencesRequireAnIsolatedDraft() async throws {
+        let journal = ModelRequestJournal()
+        await #expect(throws: ReaderError.invalidResponse) {
+            try await AppleSummaryGenerator().generate(
+                [article()], model: ControlledLanguageModel(journal: journal), capacity: 10000,
+                protectNumericLiterals: true, count: { $0.count })
+        }
+        #expect(await journal.requests.isEmpty)
+    }
+
     @Test("Overlapping evidence groups coalesce transitively while independent groups stay separate", arguments: [
         ([[0], [0]], [[0]]),
         ([[0, 1], [2, 3], [1, 2]], [[0, 1, 2, 3]]),
