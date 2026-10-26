@@ -28,7 +28,9 @@ enum ReaderStoreRecoveryProbe {
         case "verify":
             let state = try JSONDecoder().decode(RecoveryState.self, from: Data(contentsOf: stateURL))
             try await verifyRetained(store, state: state)
-            print("Further process restart passed: stars, digest sources and pending revisions retained.")
+            let receipt = try await retentionReceipt(store, state: state)
+            try JSONEncoder().encode(receipt).write(to: directory.appendingPathComponent("retention.json"), options: .atomic)
+            print("Further process restart passed: independent stars, another subscription, digest sources and pending revisions retained.")
         default: throw ProbeFailure("Unknown probe phase.")
         }
     }
@@ -39,6 +41,8 @@ enum ReaderStoreRecoveryProbe {
               let feedURL = URL(string: "https://recovery.invalid/feed") else { throw ProbeFailure("Invalid fixture URL.") }
         let account = ReaderAccount(id: accountID, serverURL: serverURL, username: "synthetic-probe")
         let feed = FeedSnapshot(id: FeedKey(accountID: accountID, remoteID: "feed/probe"), title: "Recovery", url: feedURL)
+        let remainingFeed = FeedSnapshot(id: FeedKey(accountID: accountID, remoteID: "feed/remaining"),
+                                         title: "Still subscribed", url: feedURL)
         let originals = (0..<10_000).map { index in
             ArticleSnapshot(id: ArticleKey(accountID: accountID, remoteID: String(index)), feedID: feed.id.remoteID,
                             title: "Article \(index)", text: "Synthetic text \(index)",
@@ -46,8 +50,8 @@ enum ReaderStoreRecoveryProbe {
         }
         let unread = Set(originals.map(\.id.remoteID))
         try await store.saveAccount(account)
-        try await store.applyRefresh(RefreshSnapshot(accountID: accountID, feeds: [feed], folders: [], articles: originals,
-                                                    unreadIDs: unread, starredIDs: []))
+        try await store.applyRefresh(RefreshSnapshot(accountID: accountID, feeds: [feed, remainingFeed], folders: [], articles: originals,
+                                                    unreadIDs: unread, starredIDs: ["3"]))
         var earlier = originals[2]
         earlier.title = "Earlier version"
         var canonical = originals[2]
@@ -58,8 +62,8 @@ enum ReaderStoreRecoveryProbe {
         canonical.datePublished = Date(timeIntervalSince1970: 1_780_000_000)
         var incoming = canonical
         incoming.dateArrived = Date(timeIntervalSince1970: 1_800_000_000)
-        try await store.applyRefresh(RefreshSnapshot(accountID: accountID, feeds: [feed], folders: [], articles: [earlier, incoming],
-                                                    unreadIDs: unread, starredIDs: []))
+        try await store.applyRefresh(RefreshSnapshot(accountID: accountID, feeds: [feed, remainingFeed], folders: [], articles: [earlier, incoming],
+                                                    unreadIDs: unread, starredIDs: ["3"]))
         try await store.setStatus([originals[0].id], field: .read, value: false)
         guard let staleRead = try await store.pendingChanges(accountID: accountID).first else { throw ProbeFailure("Missing initial revision.") }
         try await store.setStatus([originals[0].id], field: .read, value: true)
@@ -74,7 +78,7 @@ enum ReaderStoreRecoveryProbe {
             try await store.setStatus([originals[0].id, ArticleKey(accountID: accountID, remoteID: "zz-missing")], field: .read, value: false)
             throw ProbeFailure("An invalid batch change was accepted.")
         } catch ReaderError.invalidResponse { }
-        return RecoveryState(account: account, feed: feed, pending: try await store.pendingChanges(accountID: accountID),
+        return RecoveryState(account: account, feed: feed, remainingFeed: remainingFeed, pending: try await store.pendingChanges(accountID: accountID),
                              staleRead: staleRead, preferences: preferences, digest: digest, canonical: canonical, articleCount: originals.count)
     }
 
@@ -87,26 +91,42 @@ enum ReaderStoreRecoveryProbe {
         try require(changed?.read == true && changed?.starred == true, "Local status or rollback was lost.")
         try await verifyMetadata(store, state: state)
 
-        try await store.applyRefresh(RefreshSnapshot(accountID: state.account.id, feeds: [state.feed], folders: [], articles: [],
-                                                    unreadIDs: ["0"], starredIDs: []))
+        try await store.applyRefresh(RefreshSnapshot(accountID: state.account.id, feeds: [state.feed, state.remainingFeed], folders: [], articles: [],
+                                                    unreadIDs: ["0"], starredIDs: ["3"]))
         try await store.acknowledge([state.staleRead])
         let protected = try await store.article(changedKey)
         try require(protected?.read == true && protected?.starred == true, "Remote response overwrote pending status.")
         try await verifyMetadata(store, state: state)
 
-        // No incoming articles: deletion must retain stars, pending writes and digest originals.
-        try await store.applyRefresh(RefreshSnapshot(accountID: state.account.id, feeds: [], folders: [], articles: [],
+        // A different subscription remains; star 3 has no pending writes or digest reference.
+        try await store.applyRefresh(RefreshSnapshot(accountID: state.account.id, feeds: [state.remainingFeed], folders: [], articles: [],
                                                     unreadIDs: [], starredIDs: []))
         try await verifyRetained(store, state: state)
     }
 
     private static func verifyRetained(_ store: ReaderStore, state: RecoveryState) async throws {
         let articles = try await allArticles(store, accountID: state.account.id)
-        try require(Set(articles.map(\.id.remoteID)) == ["0", "1"], "Deletion or source retention is incorrect.")
-        try require(try await store.feeds().isEmpty, "Unsubscribed feed is still present.")
+        try require(Set(articles.map(\.id.remoteID)) == ["0", "1", "3"], "Deletion or source retention is incorrect.")
+        try require(try await store.feeds() == [state.remainingFeed], "The remaining subscription set is incorrect.")
         let starred = try await store.articles(ArticleQuery(starredOnly: true))
-        try require(starred.map(\.id.remoteID) == ["0"], "Starred article is inaccessible after unsubscribing.")
+        try require(Set(starred.map(\.id.remoteID)) == ["0", "3"], "Starred article is inaccessible after unsubscribing.")
+        let independentStar = try await store.article(ArticleKey(accountID: state.account.id, remoteID: "3"))
+        try require(independentStar?.starred == true && independentStar?.read == true, "Independent star status was lost.")
+        let pending = try await store.pendingChanges(accountID: state.account.id)
+        try require(!pending.contains { $0.article.remoteID == "3" }, "The independent star is accidentally protected by pending changes.")
+        try require(!state.digest.sources.contains { $0.remoteID == "3" }, "The independent star is accidentally protected by a digest.")
         try await verifyMetadata(store, state: state)
+    }
+
+    private static func retentionReceipt(_ store: ReaderStore, state: RecoveryState) async throws -> RetentionReceipt {
+        let articles = try await allArticles(store, accountID: state.account.id)
+        let pending = try await store.pendingChanges(accountID: state.account.id)
+        return RetentionReceipt(articleIDs: articles.map(\.id.remoteID).sorted(),
+                                starredIDs: articles.filter(\.starred).map(\.id.remoteID).sorted(),
+                                subscribedFeedIDs: try await store.feeds().map(\.id.remoteID).sorted(),
+                                readStatus: Dictionary(uniqueKeysWithValues: articles.map { ($0.id.remoteID, $0.read) }),
+                                pendingRevisions: pending.count,
+                                independentStarHasPendingChange: pending.contains { $0.article.remoteID == "3" })
     }
 
     private static func verifyMetadata(_ store: ReaderStore, state: RecoveryState) async throws {
@@ -133,12 +153,22 @@ enum ReaderStoreRecoveryProbe {
 private struct RecoveryState: Codable {
     let account: ReaderAccount
     let feed: FeedSnapshot
+    let remainingFeed: FeedSnapshot
     let pending: [PendingChange]
     let staleRead: PendingChange
     let preferences: FeedPreferences
     let digest: DigestSnapshot
     let canonical: ArticleSnapshot
     let articleCount: Int
+}
+
+private struct RetentionReceipt: Codable {
+    let articleIDs: [String]
+    let starredIDs: [String]
+    let subscribedFeedIDs: [String]
+    let readStatus: [String: Bool]
+    let pendingRevisions: Int
+    let independentStarHasPendingChange: Bool
 }
 
 private struct ProbeFailure: Error, CustomStringConvertible {

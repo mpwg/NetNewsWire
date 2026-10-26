@@ -109,6 +109,50 @@ struct ReaderSessionTests {
         #expect(session.errorMessage == nil)
     }
 
+    @Test("Starred presentation retains unsubscribed originals and clears removed selection",
+          arguments: [false, true])
+    func starredPresentationRetainsUnsubscribedOriginals(keepsOtherSubscription: Bool) async throws {
+        let (store, services, feed, originals) = try await fixture()
+        let otherFeed = FeedSnapshot(id: FeedKey(accountID: feed.id.accountID, remoteID: "feed/remaining"),
+                                     title: "Still subscribed", url: feed.url)
+        var otherArticle = originals[2]
+        otherArticle.feedID = otherFeed.id.remoteID
+        try await store.applyRefresh(RefreshSnapshot(accountID: feed.id.accountID, feeds: [feed, otherFeed], folders: [],
+                                                    articles: [originals[0], originals[1], otherArticle],
+                                                    unreadIDs: Set(originals.map(\.id.remoteID)),
+                                                    starredIDs: [originals[0].id.remoteID]))
+        let session = ReaderSession(services: services)
+        await session.reload()
+        #expect(session.articles.count == 3)
+        session.selection = .article(originals[1].id)
+        await session.loadSelectedArticle()
+        #expect(session.selectedArticle?.id == originals[1].id)
+        let remainingFeeds = keepsOtherSubscription ? [otherFeed] : []
+        try await store.applyRefresh(RefreshSnapshot(accountID: feed.id.accountID, feeds: remainingFeeds, folders: [],
+                                                    articles: [], unreadIDs: [otherArticle.id.remoteID], starredIDs: []))
+        await session.reload()
+        let expectedKeys = keepsOtherSubscription ? [originals[0].id, otherArticle.id] : [originals[0].id]
+        #expect(Set(session.articles.map(\.id)) == Set(expectedKeys))
+        #expect(Set(session.rows.map(\.id)) == Set(expectedKeys.map(TimelineSelection.article)))
+        #expect(session.selection == nil)
+        #expect(session.detailArticle == nil)
+        session.sidebarSelection = "starred"
+        await session.reload(resetLimit: true)
+        #expect(session.feeds == remainingFeeds)
+        #expect(session.articles.map(\.id) == [originals[0].id])
+        #expect(session.rows.map(\.id) == [.article(originals[0].id)])
+        #expect(session.rows.first?.starred == true)
+        session.selection = .article(originals[0].id)
+        await session.loadSelectedArticle()
+        let retained = try #require(try await store.article(originals[0].id))
+        #expect(session.selectedArticle == retained)
+        #expect(session.detailArticle == retained)
+        #expect(retained.starred)
+        #expect(retained.text == originals[0].text)
+        #expect(try await store.pendingChanges(accountID: feed.id.accountID).isEmpty)
+        #expect(session.errorMessage == nil)
+    }
+
     private func summarySections(_ keys: [ArticleKey]) -> [DigestSection] {
         [DigestSection(title: "Fixture summary", text: "Sourced fixture content", sources: keys)]
     }

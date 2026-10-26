@@ -29,6 +29,8 @@ Full product acceptance remains open. Real network-off/restart, final devices/iP
 
 ## Current verification
 
+An expanded standalone retention probe passes 10,000 articles, actual SIGKILL and two new processes with another subscription retained and a star protected independently of pending/digest data. [Exact results and open #40 status/presentation criteria](docs/reader/evidence/b-star-retention-2026-10-26.md).
+
 The canonical article-identity follow-up for #29 adds code-level evidence: four complete-version store cases pass locally; four actual ReaderSession cache/detail/search cases compile and await CI. No UI method or product source changes. [Criteria, raw local result and limits](docs/reader/evidence/b-canonical-identity-2026-10-26.md).
 
 Latest Reader CI [40263583204](https://github.com/mpwg/NetNewsWire/actions/runs/40263583204) at ea3307312 passes all 395 code executions and nine UI methods, but native VoiceOver moveIn times out before the changed title assertion. Ordinary state restoration and the following window method pass. The current native candidate remains unaccepted; [original results and limitations](docs/reader/evidence/k-accessibility-navigation-2026-10-26.md) retain this failure alongside the earlier green run.

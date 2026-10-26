@@ -65,9 +65,11 @@ def main():
                     process.wait(timeout=10)
         phases.append({"phase": phase, "pid": process.pid, "exitCode": code})
     state = json.loads((directory / "state.json").read_text())
+    retention = json.loads((directory / "retention.json").read_text())
     report = {"result": "passed", "syntheticArticles": state["articleCount"], "seedPID": seed.pid,
               "seedExitCode": seed.returncode, "walBytesBeforeKill": wal_bytes, "restarts": phases,
-              "retainedArticles": 2, "pendingRevisions": len(state["pending"]),
+              "retainedArticles": len(retention["articleIDs"]),
+              "pendingRevisions": retention["pendingRevisions"], "retention": retention,
               "durationSeconds": round(time.monotonic() - started, 3)}
     (directory / "report.json").write_text(json.dumps(report, indent=2) + "\n")
     print(json.dumps(report, indent=2))

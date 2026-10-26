@@ -122,14 +122,30 @@ struct ReaderStoreTests {
         #expect(try await store.feeds().first?.folderIDs.isEmpty == true)
     }
 
-    @Test("Unsubscribing retains stars and removes unprotected articles") func unsubscribingRetainsStarsAndRemovesUnprotectedArticles() async throws {
+    @Test("Unsubscribing retains independent stars with or without other subscriptions",
+          arguments: [false, true])
+    func unsubscribingRetainsStarsAndRemovesUnprotectedArticles(keepsOtherSubscription: Bool) async throws {
         let store = try ReaderStore(inMemory: true)
-        try await store.applyRefresh(refresh(articles: [article("1"), article("2")], unread: ["1", "2"], starred: ["1"]))
-        try await store.applyRefresh(refresh(articles: [], feeds: [], unread: [], starred: []))
+        let otherFeed = FeedSnapshot(id: FeedKey(accountID: accountID, remoteID: "feed/remaining"),
+                                     title: "Still subscribed", url: fixtureURL)
+        let otherArticle = ArticleSnapshot(id: ArticleKey(accountID: accountID, remoteID: "3"),
+                                          feedID: otherFeed.id.remoteID, title: "Other article",
+                                          dateArrived: Date(timeIntervalSince1970: 300))
+        let initialFeeds = keepsOtherSubscription ? [feed, otherFeed] : [feed]
+        let initialArticles = [article("1"), article("2")] + (keepsOtherSubscription ? [otherArticle] : [])
+        try await store.applyRefresh(refresh(articles: initialArticles, feeds: initialFeeds,
+                                             unread: Set(initialArticles.map(\.id.remoteID)), starred: ["1"]))
+        #expect(try await store.pendingChanges(accountID: accountID).isEmpty)
+        let subscribedFeeds = keepsOtherSubscription ? [otherFeed] : []
+        try await store.applyRefresh(refresh(articles: [], feeds: subscribedFeeds, unread: ["3"], starred: []))
         let remaining = try await store.articles(ArticleQuery(starredOnly: true))
         #expect(remaining.map(\.id.remoteID) == ["1"])
-        #expect(try await store.articles(ArticleQuery()).count == 1)
-        #expect(try await store.feeds().isEmpty)
+        #expect(remaining.first?.starred == true)
+        #expect(try await store.article(article("2").id) == nil)
+        #expect(Set(try await store.articles(ArticleQuery()).map(\.id.remoteID)) ==
+                (keepsOtherSubscription ? ["1", "3"] : ["1"]))
+        #expect(try await store.feeds() == subscribedFeeds)
+        #expect(try await store.pendingChanges(accountID: accountID).isEmpty)
     }
 
     @Test("Digests retain their original articles after unsubscribing") func digestsRetainTheirOriginalArticlesAfterUnsubscribing() async throws {
