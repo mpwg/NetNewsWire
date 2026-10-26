@@ -1,5 +1,7 @@
 # Native Reader application
 
+Current separate research preserves exact selected assertions alongside complete bounded source context. All62 intelligence Swift Testing functions /145 executions and strict local lint pass. Four fixed model cases are correct; long-text number formatting/inline citation digits remain rejected, so the candidate is unadopted. Main v5 source/binaries are restored and build successfully. [Current criteria and every outcome](../docs/reader/evidence/i-focused-context-2026-10-26.md).
+
 Current research remains separate from shipping main: bounded source context and coalesced evidence groups pass all60 intelligence Swift Testing functions /129 executions through Xcode MCP. Mixed-language and irrelevant-content model defects keep the candidate unadopted. Main v5 app/test and probe builds are restored. [Current criteria and all outcomes](../docs/reader/evidence/i-context-preservation-2026-10-26.md).
 
 At the owner's stopping point, main v5 source/binaries are restored and compile through Xcode MCP. The separate stable-label candidate passes488/488 native-plan executions; it is not adopted because model quality remains open. Further sentence-selection research is saved only on its branch. [Final status and receipts](../docs/reader/evidence/i-isolated-ci-2026-10-26.md#owner-requested-stopping-point).
