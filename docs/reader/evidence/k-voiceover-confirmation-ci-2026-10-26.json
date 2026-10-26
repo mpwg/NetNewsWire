@@ -1,0 +1,138 @@
+{
+  "runID": 40277268079,
+  "source": "3341e99b1a6c0baa99dec8778de401fdbad9b9b7",
+  "artifactID": 12631320153,
+  "testIdentifier": "ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus()",
+  "attachments": [
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "e242c8009edba2e0fef1ca5d52e3504ced21b8cd",
+      "deviceName": "My Mac",
+      "exportedFileName": "E61A4694-305F-4E8C-9934-066DAB595877.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Native VoiceOver restored state_0_7B7F72F5-A180-4A75-A3B3-C8BDFD0C149C.txt",
+      "timestamp": 1792994939.764,
+      "text": "VoiceOver enabled after restoration: false"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "e242c8009edba2e0fef1ca5d52e3504ced21b8cd",
+      "deviceName": "My Mac",
+      "exportedFileName": "325C88F4-9F5A-42CB-9B23-90108097BDD9.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Native VoiceOver service after restoration_1_7B7F72F5-A180-4A75-A3B3-C8BDFD0C149C.txt",
+      "timestamp": 1792994939.768,
+      "text": "<XCUIVoiceOverService: enabled=NO>"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "e242c8009edba2e0fef1ca5d52e3504ced21b8cd",
+      "deviceName": "My Mac",
+      "exportedFileName": "4C0C1BF7-906C-4150-8F0C-763ADF5A59E7.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Native VoiceOver service before forward 2_0_904C10C1-F762-4D8D-9704-56CD73E1FBFC.txt",
+      "timestamp": 1792994930.768,
+      "text": "<XCUIVoiceOverService: enabled=YES>"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "e242c8009edba2e0fef1ca5d52e3504ced21b8cd",
+      "deviceName": "My Mac",
+      "exportedFileName": "07726ABF-4F62-44D5-9B0F-A4E52A716EF9.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Actual native VoiceOver forward 2_1_904C10C1-F762-4D8D-9704-56CD73E1FBFC.txt",
+      "timestamp": 1792994937.536,
+      "text": "Unread image, Timeline article 297, Representative content for k"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "e242c8009edba2e0fef1ca5d52e3504ced21b8cd",
+      "deviceName": "My Mac",
+      "exportedFileName": "2F5067EF-C4EC-4CD1-9C06-7668E0971176.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Native VoiceOver service before forward 1_0_3746CA96-E5D3-45F5-B48D-A4944A2E807D.txt",
+      "timestamp": 1792994923.918,
+      "text": "<XCUIVoiceOverService: enabled=YES>"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "e242c8009edba2e0fef1ca5d52e3504ced21b8cd",
+      "deviceName": "My Mac",
+      "exportedFileName": "15D25D47-FFA2-4C08-8ECE-57D77C0A0578.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Actual native VoiceOver forward 1_1_3746CA96-E5D3-45F5-B48D-A4944A2E807D.txt",
+      "timestamp": 1792994930.765,
+      "text": "Unread image, Timeline article 298, Representative content for k"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "e242c8009edba2e0fef1ca5d52e3504ced21b8cd",
+      "deviceName": "My Mac",
+      "exportedFileName": "459DEF1F-D1AD-45BF-80D7-A2FA8620A873.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Native VoiceOver service before enter timeline_0_2BBEEEFD-A47A-406C-B727-40ED646AB505.txt",
+      "timestamp": 1792994914.627,
+      "text": "<XCUIVoiceOverService: enabled=YES>"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "e242c8009edba2e0fef1ca5d52e3504ced21b8cd",
+      "deviceName": "My Mac",
+      "exportedFileName": "0759F7BF-C6B4-46C6-BDDB-26C011C64C34.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Actual native VoiceOver enter timeline_1_2BBEEEFD-A47A-406C-B727-40ED646AB505.txt",
+      "timestamp": 1792994923.916,
+      "text": "In All articles table Row 1 of 201 Unread image, Timeline articl"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "e242c8009edba2e0fef1ca5d52e3504ced21b8cd",
+      "deviceName": "My Mac",
+      "exportedFileName": "13823CA9-6002-4809-9923-89FCBF85D5E3.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Native VoiceOver service before current_0_77F3AD21-2A53-4959-8B1C-3685F672B0E2.txt",
+      "timestamp": 1792994914.622,
+      "text": "<XCUIVoiceOverService: enabled=YES>"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "e242c8009edba2e0fef1ca5d52e3504ced21b8cd",
+      "deviceName": "My Mac",
+      "exportedFileName": "7410297C-0812-47FC-B97B-27B4185B3D68.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Actual native VoiceOver current_1_77F3AD21-2A53-4959-8B1C-3685F672B0E2.txt",
+      "timestamp": 1792994914.624,
+      "text": "Welcome to macOS. VoiceOver is on."
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "e242c8009edba2e0fef1ca5d52e3504ced21b8cd",
+      "deviceName": "My Mac",
+      "exportedFileName": "FEF3FDD9-FB3C-4279-A2B5-0154C3B91656.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Native VoiceOver service before activation_0_BE6132A7-FC5A-4BD7-AACC-9D0D4053E1AB.txt",
+      "timestamp": 1792994905.89,
+      "text": "<XCUIVoiceOverService: enabled=NO>"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "e242c8009edba2e0fef1ca5d52e3504ced21b8cd",
+      "deviceName": "My Mac",
+      "exportedFileName": "AA79B231-61A2-4E50-948A-46FC02ACF53E.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "Native VoiceOver initial state_0_18174263-1733-4EFE-9CC6-AD6E1EA904FE.txt",
+      "timestamp": 1792994905.889,
+      "text": "VoiceOver originally enabled: false"
+    },
+    {
+      "configurationName": "Test Scheme Action",
+      "deviceId": "e242c8009edba2e0fef1ca5d52e3504ced21b8cd",
+      "deviceName": "My Mac",
+      "exportedFileName": "FE06CB2F-5E51-46D0-A7DD-53574E40A840.txt",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "XCUITest window setup_0_5C90B50B-73A3-48E5-BFBF-927B15104AE1.txt",
+      "timestamp": 1792994902.819,
+      "text": "readyWindowCount=1"
+    }
+  ]
+}
