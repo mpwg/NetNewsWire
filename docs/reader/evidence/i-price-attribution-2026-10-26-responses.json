@@ -1,0 +1,89 @@
+[
+  {
+    "case": "simple",
+    "response": {
+      "amounts": [
+        {
+          "amount": "EUR 20.00",
+          "subject": "Luma lamp",
+          "role": "offer"
+        }
+      ]
+    }
+  },
+  {
+    "case": "qualifying",
+    "response": {
+      "amounts": [
+        {
+          "subject": "newspaper",
+          "amount": "EUR 3.30",
+          "role": "offer"
+        }
+      ]
+    }
+  },
+  {
+    "case": "germanQualifying",
+    "response": {
+      "amounts": [
+        {
+          "subject": "die Zeitung",
+          "role": "qualifying",
+          "amount": "3,30 €"
+        }
+      ]
+    }
+  },
+  {
+    "case": "twoPrices",
+    "response": {
+      "amounts": [
+        {
+          "role": "offer",
+          "amount": "EUR 8.00",
+          "subject": "Alder Museum entry ticket"
+        },
+        {
+          "subject": "newspaper",
+          "role": "qualifying",
+          "amount": "EUR 3.30"
+        }
+      ]
+    }
+  },
+  {
+    "case": "comparison",
+    "response": {
+      "amounts": [
+        {
+          "subject": "Luma lamp",
+          "role": "offer",
+          "amount": "EUR 20.00"
+        },
+        {
+          "subject": "Luma lamp",
+          "role": "comparison",
+          "amount": "EUR 30.00"
+        }
+      ]
+    }
+  },
+  {
+    "case": "twoProducts",
+    "response": {
+      "amounts": [
+        {
+          "role": "offer",
+          "amount": "EUR 20.00",
+          "subject": "Luma lamp"
+        },
+        {
+          "subject": "Vela kettle",
+          "role": "offer",
+          "amount": "EUR 30.00"
+        }
+      ]
+    }
+  }
+]

@@ -39,6 +39,9 @@ Native VoiceOver has both named passing runs and retained failures; full menu/fo
 
 ## Model verification
 
+The price-subject v15 candidate is not integrated:553 Mac code executions pass, but the fixed public pair still assigns a qualifying purchase amount to an unrelated selected product. [Controlled and model evidence](docs/reader/evidence/i-price-subject-v15-2026-10-26.md).
+
+
 The bounded role-catalog v14 candidate is not integrated:154 controlled intelligence executions pass, but the fixed first public pair uses a qualifying newspaper purchase as the offer price. [Candidate results and limits](docs/reader/evidence/i-role-catalog-v14-2026-10-26.md).
 
 

@@ -1,0 +1,36 @@
+{
+  "policy": "v15",
+  "sourceCommit": "9c50e6162c21d4f0b77e9344487c86083e3f4515",
+  "adopted": false,
+  "operatingSystem": "Version 27.2 (Build 26B123)",
+  "inputSHA256": "ccf83b34996dbd2cec898a47b568078172c4947fd02b135219472a74c4523501",
+  "rawReportSHA256": "3b0253f65fa1fa810846ebb76fbc2682495cd23b1e0246c8a60c204c4ca22327",
+  "sourceHashes": [
+    "9c6d6ea1eb30df8ebfd96a18f73cf400cc123484650c877f2652ed97eb1a981a  ReaderKit/Sources/ReaderIntelligence/AppleSummaryGenerator.swift",
+    "a9cc630be8a090ea83afb1432f95a027af2625fd8238ea1a0a73649a7ac4d0d7  ReaderKit/Sources/ReaderIntelligence/SourceLiteralCatalog.swift",
+    "8b79e09bde35936ff1f53f6ef4853246cf62aba310f7258e80d4b8ea5e663949  ReaderKit/Sources/ReaderIntelligence/DigestCoordinator.swift",
+    "284fbec295d4f01fce1a7d756e148a83f7618b164529c6c811ada222979a64bc  ReaderKit/Sources/ReaderDomain/Models.swift",
+    "8d0a2c1fcdcb5293fb619a6873eb5741e0c166321343d58a3464a803ac527632  ReaderKit/Probes/ReaderInferenceProbe/Probe.swift"
+  ],
+  "fixedInput": "Frozen two-source public RSS text projection; not FreshRSS, native Readability, full articles or UI.",
+  "elapsedSeconds": 118.796026459,
+  "error": null,
+  "sectionCount": 4,
+  "sourceCount": 2,
+  "sourcesMissingFromGeneratorSections": 0,
+  "stages": {
+    "facts": 10,
+    "consolidation": 1
+  },
+  "displayedOfferOccurrences": 34,
+  "uniqueOfferIdentities": 17,
+  "missingPrices": 13,
+  "firstSourceQualifyingAmountUsedAsOfferPrice": 1,
+  "wrongPriceOffersProductEqualsSubject": 1,
+  "wrongPriceOffersProductContainsMuseumOrNewspaperName": 0,
+  "wrongPriceOfferProductCharacterCounts": [
+    4
+  ],
+  "equalProductMerchant": 2,
+  "otherConfigurations": "Not run after the first pair demonstrated incorrect price assignment and extraneous offer records; no results claimed."
+}
