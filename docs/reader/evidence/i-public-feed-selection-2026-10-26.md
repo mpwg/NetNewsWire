@@ -1,6 +1,6 @@
 # I: public feed text and selection boundary — 2026-10-26
 
-Status: **selection/store boundary implemented; new runtime verification pending; model quality open**.
+Status: **Mac selection/store boundary fulfilled on 32dc1126d; model quality and full acceptance open**.
 
 The owner retains free summaries in the app language. Important statements may be selected, but every original must remain linked. This is an end-to-end digest requirement; it does not require model prose to claim evidence from every article.
 
@@ -8,9 +8,9 @@ The owner retains free summaries in the app language. Important statements may b
 
 | Criterion | Status | Evidence |
 |---|---|---|
-| Permit key-statement selection with exact supporting provenance | Open | v5 implementation and two-account native controlled-model case compile; actual new-source runtime result pending. |
-| Every original remains linked; stored articles/outbox unchanged | Open | New native controlled-model/ReaderStore integration compiles; actual runtime result pending. Existing coordinator fallback remains unchanged. |
-| Invalid references, numbers, URLs, blank text, budgets and old caches | Open | Validators remain; v4 cache case added. Current-source runtime result pending. |
+| Permit key-statement selection with exact supporting provenance | Fulfilled on Mac | CI 40314710783 passes the v5 two-account native controlled-model selection contract. |
+| Every original remains linked; stored articles/outbox unchanged | Fulfilled on Mac | The new native controlled-model/ReaderStore integration passes in the same run, including complete snapshot/outbox comparisons and explicit originals fallback. |
+| Invalid references, numbers, URLs, blank text, budgets and old caches | Fulfilled on Mac | Current v5 native suite passes, including the new v4 cache-upgrade case and unchanged negative validators. |
 | Native compilation, lint and README | Fulfilled | Xcode MCP app/test and probe builds, strict lint and whitespace pass. ReaderKit README documents selected prose versus all-original links and bounded corpus input. |
 | Representative semantic model quality | Open | Public fixed corpus retains excerpt failures and missing merchants; earlier conditional-fidelity counterexamples remain. |
 | PCC and final-platform/device/operational prerequisites | Open | No authorized PCC entitlement or final-device acceptance. Actual offline/persistent-app restart remains owner-deferred. |
@@ -23,7 +23,7 @@ Policy v5 removes that contradictory completeness requirement from model instruc
 
 Swift Testing adds a native controlled-model/real in-memory ReaderStore integration: one selected article produces the model section plus an originals section for the other article; the digest retains both keys, remains displayable, warns about incomplete AI coverage, and leaves complete article snapshots and the outbox unchanged. The two-account provenance case now accepts a valid selection without assigning the unselected identity to its prose. Existing invalid-reference, borrowed-price and failure contracts remain.
 
-Xcode MCP app/test build-for-testing 12:20:17 and probe build 12:20:27 pass. Strict SwiftLint and git diff --check pass. Discovery reports 235 enabled distinct tests, none disabled; expected execution count is 478 (468 code plus ten unchanged native methods), pending actual CI. Reader/My Mac is restored and held normal Reader PID 24529 remains; no local app tests/relaunch occur.
+Xcode MCP app/test build-for-testing 12:20:17 and probe build 12:20:27 pass. Strict SwiftLint and git diff --check pass. Discovery reports 235 enabled distinct tests, none disabled; the current-source confirmation below now proves all 478 executions (468 code plus ten unchanged native methods). Reader/My Mac is restored and held normal Reader PID 24529 remains; no local app tests/relaunch occur.
 
 Generator SHA-256: `604700192553e84b886a3a8246f2eb5631f6481745cfee8c96c1d9b57f0e260e`. Probe SHA-256: `8d0a2c1fcdcb5293fb619a6873eb5741e0c166321343d58a3464a803ac527632`.
 
@@ -48,3 +48,9 @@ The aggregate receipt also independently checks literal merchant/price mentions 
 [Original summary](i-review-tool-ci-summary-2026-10-26.json), [I/native case nodes](i-review-tool-ci-cases-2026-10-26.json), [process recovery](i-review-tool-ci-recovery-2026-10-26.json). Artifact 12644443365 ZIP SHA-256 `8d26c37aa99ed2d7112bb6107d9df99e93cec8dd2e4952c815e15815624fb058`. Destination arm64 My Mac VM, macOS 27.0.1 (26A434). The full crash report remains in the artifact. Earlier eaf90aea6 / CI 40304336042 is the named all-476 pass; it does not verify policy v5 or erase later native failures.
 
 No package or issue is closed. PCC, final devices, owner-deferred offline/restart, full accessibility/performance/distribution and complete Swift CodeQL remain open independently.
+
+## Current v5 native confirmation
+
+[Reader CI 40314710783](https://github.com/mpwg/NetNewsWire/actions/runs/40314710783) succeeds on **32dc1126d00772350726f9cbb04cdb0c6713025b**: **478/478 executions**, comprising **225 Swift Testing functions in 34 suites / 468 code executions plus ten native methods**. There are 235 distinct tests, no failures or skips. Lint, isolated-probe build, direct runner and process recovery pass. Destination arm64 My Mac VM, macOS 27.0.1 (26A434). Later commits change only documentation/evidence; owning source is unchanged.
+
+[Original summary](i-v5-ci-summary-2026-10-26.json), [I/native case nodes](i-v5-ci-cases-2026-10-26.json), [process recovery](i-v5-ci-recovery-2026-10-26.json). Artifact 12646273462 ZIP SHA-256 `685cb9638714bff7360727427b6c044ffd41156bf3612ea65ce4a28df8cce75a`. The new selection/complete-originals/unchanged-store integration and two-account provenance case pass, as do previous-policy cache refresh, hierarchy and negative checks. This establishes the scoped Mac code boundary, not semantic model quality, a native-service repair or full platform/product acceptance. Earlier VoiceOver/daemon/removal failures remain preserved and unexplained; no unchanged retry was used.
