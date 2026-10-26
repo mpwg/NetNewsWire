@@ -1,0 +1,115 @@
+[
+  {
+    "children": [
+      {
+        "children": [
+          {
+            "name": "Caught error: .e5rtError(\"e5rt_e5_compiler_compile call failed\", 11)",
+            "nodeType": "Failure Message",
+            "sourceLocation": {
+              "filePath": "/Users/runner/work/NetNewsWire/NetNewsWire/Reader/ReaderTests/ReaderPresentationTests/ReaderArticleViewTests.swift",
+              "lineNumber": 17
+            }
+          }
+        ],
+        "duration": "1s",
+        "durationInSeconds": 1.1962668895721436,
+        "name": ".cancelled",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderArticleViewTests/removingHostedArticleReleasesItsGraph(outcome:)?args=2e63616e63656c6c6564",
+        "nodeType": "Arguments",
+        "result": "Failed"
+      },
+      {
+        "children": [
+          {
+            "name": "Caught error: .e5rtError(\"e5rt_e5_compiler_compile call failed\", 11)",
+            "nodeType": "Failure Message",
+            "sourceLocation": {
+              "filePath": "/Users/runner/work/NetNewsWire/NetNewsWire/Reader/ReaderTests/ReaderPresentationTests/ReaderArticleViewTests.swift",
+              "lineNumber": 17
+            }
+          }
+        ],
+        "duration": "0,38s",
+        "durationInSeconds": 0.37787699699401855,
+        "name": ".empty",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderArticleViewTests/removingHostedArticleReleasesItsGraph(outcome:)?args=2e656d707479",
+        "nodeType": "Arguments",
+        "result": "Failed"
+      },
+      {
+        "children": [
+          {
+            "name": "Caught error: .e5rtError(\"e5rt_e5_compiler_compile call failed\", 11)",
+            "nodeType": "Failure Message",
+            "sourceLocation": {
+              "filePath": "/Users/runner/work/NetNewsWire/NetNewsWire/Reader/ReaderTests/ReaderPresentationTests/ReaderArticleViewTests.swift",
+              "lineNumber": 17
+            }
+          }
+        ],
+        "duration": "1s",
+        "durationInSeconds": 1.2238380908966064,
+        "name": ".failure",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderArticleViewTests/removingHostedArticleReleasesItsGraph(outcome:)?args=2e6661696c757265",
+        "nodeType": "Arguments",
+        "result": "Failed"
+      },
+      {
+        "children": [
+          {
+            "name": "Caught error: .e5rtError(\"e5rt_e5_compiler_compile call failed\", 11)",
+            "nodeType": "Failure Message",
+            "sourceLocation": {
+              "filePath": "/Users/runner/work/NetNewsWire/NetNewsWire/Reader/ReaderTests/ReaderPresentationTests/ReaderArticleViewTests.swift",
+              "lineNumber": 17
+            }
+          }
+        ],
+        "duration": "1s",
+        "durationInSeconds": 1.8418331146240234,
+        "name": ".success",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderArticleViewTests/removingHostedArticleReleasesItsGraph(outcome:)?args=2e73756363657373",
+        "nodeType": "Arguments",
+        "result": "Failed"
+      }
+    ],
+    "duration": "1s",
+    "durationInSeconds": 1.159953773021698,
+    "name": "The actual hosted article paints saved or extracted text and releases its graph",
+    "nodeIdentifier": "ReaderArticleViewTests/removingHostedArticleReleasesItsGraph(outcome:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderArticleViewTests/removingHostedArticleReleasesItsGraph(outcome:)",
+    "nodeType": "Test Case",
+    "result": "Failed"
+  },
+  {
+    "duration": "1min 29s",
+    "durationInSeconds": 89.6837409734726,
+    "name": "testLoadedTimelineScrollingMetrics()",
+    "nodeIdentifier": "ReaderSmokeTests/testLoadedTimelineScrollingMetrics()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testLoadedTimelineScrollingMetrics",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "children": [
+      {
+        "name": "Failed to get matching snapshots: Lost connection to the application (pid 24368). (Underlying Error: Couldn’t communicate with a helper application. Try your operation again. If that fails, quit and relaunch the application and try again. The connection to service created from an endpoint was invalidated: Failed to check-in, peer may have been unloaded: mach_error=10000003.)",
+        "nodeType": "Failure Message",
+        "sourceLocation": {
+          "filePath": "/Users/runner/work/NetNewsWire/NetNewsWire/Reader/ReaderUITests/ReaderUITests.swift",
+          "lineNumber": 95
+        }
+      },
+      {
+        "name": "Lost connection to testmanagerd",
+        "nodeType": "Failure Message"
+      }
+    ],
+    "name": "testVoiceOverAnnouncesReaderAndMovesFocus()",
+    "nodeIdentifier": "ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus",
+    "nodeType": "Test Case",
+    "result": "Failed"
+  }
+]
