@@ -1,0 +1,136 @@
+{
+  "sourceRun": 40249789414,
+  "sourceRevision": "69f14a8c383b439ff2e395becad89d8e75006480",
+  "sourceArchive": "test-session-systemlogs-2026.10.26_00-33-21-+0000.logarchive",
+  "scope": "Selected original unified-log fields for daemon exit and VoiceOver enable/disable chronology; no stack trace",
+  "events": [
+    {
+      "timestamp": "2026-10-26 00:38:46.736330+0000",
+      "processImagePath": "/usr/libexec/runningboardd",
+      "processID": 166,
+      "subsystem": "com.apple.runningboard",
+      "category": "ttl",
+      "eventMessage": "Invalidating assertion 166-451-2792 (target:[osservice<com.apple.testmanagerd(501)>:48360]) from originator [osservice<com.apple.replayd(501)>:451]"
+    },
+    {
+      "timestamp": "2026-10-26 00:38:46.820945+0000",
+      "processImagePath": "/usr/libexec/testmanagerd",
+      "processID": 48360,
+      "subsystem": "com.apple.Accessibility",
+      "category": "AXVOAutomation",
+      "eventMessage": "enableVoiceOver called, isEnabled=0"
+    },
+    {
+      "timestamp": "2026-10-26 00:38:47.568837+0000",
+      "processImagePath": "/usr/libexec/runningboardd",
+      "processID": 166,
+      "subsystem": "",
+      "category": "",
+      "eventMessage": "RBSStateCaptureSet Segment 39\n<RBConnectionClient| 53096 name:osservice<com.apple.applespell(501)> entitlements:<RBEntitlements| [\n\t\t\tcom.apple.assertiond.app-state-monitor\n\t\t\t]> inheritanceManager:<RBClientInheritanceManager| >><RBAssertion| identifier:166-134-2784 target:[osservice<com.apple.uikitsystemapp(501)>:547] explanation:\"notification:547\" active originator:[osservice<com.apple.coreservices.launchservicesd>:134] transientState:<RBAssertionTransientState| policies:[\n\t\n\t]> intransientState:<RBAssertionIntransientState| strt:Fixed end:Invalidate nvld:5.00 warn:0.00dom prevSus runningReason:20206 legRes:0 doms:com.apple.launchservicesd:LSNotification invOnConds:(null)> processState:<RBProcessState| role:UserInteractiveNonFocal> suspended: attributes:[\n\t<RBSDomainAttribute| domain:\"com.apple.launchservicesd\" name:\"LSNotification\" sourceEnvironment:\"(null)\">\n\t]><RBAssertion| identifier:166-134-2787 target:[extension<com.apple.weather.widget[config:6E69CA09-34E3-3493-B8FC-B5021E1ACB71]((null):365)(501)>[uuid:82E119CC-A5C3-4166-8169-8D95E095BAC9]:586] explanation:\"notification:586\" active originator:[osservice<com.apple.coreservices.launchservicesd>:134] transientState:<RBAssertionTransientState| policies:[\n\t\n\t]> intransientState:<RBAssertionIntransientState| strt:Fixed end:Invalidate nvld:5.00 warn:0.00dom prevSus runningReason:20206 legRes:0 doms:com.apple.launchservicesd:LSNotification invOnConds:(null)> processState:<RBProcessState| role:UserInteractiveNonFocal> suspended: attributes:[\n\t<RBSDomainAttribute| domain:\"com.apple.launchservicesd\" name:\"LSNotification\" sourceEnvironment:\"(null)\">\n\t]><RBAssertion| identifier:166-134-2786 target:[extension<com.apple.podcasts.widget[config:6E69CA09-34E3-3493-B8FC-B5021E1ACB71]((null):365)(501)>[uuid:82E119CC-A5C3-4166-8169-8D95E095BAC9]:593] explanation:\"notification:593\" active originator:[osservice<com.apple.coreservices.launchservicesd>:134] transientState:<RBAssertionTransientState| policies:[\n\t\n\t]> intransientState:<RBAssertionIntransientState| strt:Fixed end:Invalidate nvld:5.00 warn:0.00dom prevSus runningReason:20206 legRes:0 doms:com.apple.launchservicesd:LSNotification invOnConds:(null)> processState:<RBProcessState| role:UserInteractiveNonFocal> suspended: attributes:[\n\t<RBSDomainAttribute| domain:\"com.apple.launchservicesd\" name:\"LSNotification\" sourceEnvironment:\"(null)\">\n\t]><RBAssertion| identifier:166-134-2782 target:[extension<com.apple.news.widget[config:6E69CA09-34E3-3493-B8FC-B5021E1ACB71]((null):365)(501)>[uuid:82E119CC-A5C3-4166-8169-8D95E095BAC9]:605] explanation:\"notification:605\" active originator:[osservice<com.apple.coreservices.launchservicesd>:134] transientState:<RBAssertionTransientState| policies:[\n\t\n\t]> intransientState:<RBAssertionIntransientState| strt:Fixed end:Invalidate nvld:5.00 warn:0.00dom prevSus runningReason:20206 legRes:0 doms:com.apple.launchservicesd:LSNotification invOnConds:(null)> processState:<RBProcessState| role:UserInteractiveNonFocal> suspended: attributes:[\n\t<RBSDomainAttribute| domain:\"com.apple.launchservicesd\" name:\"LSNotification\" sourceEnvironment:\"(null)\">\n\t]><RBAssertion| identifier:166-134-2783 target:[extension<com.apple.Home.HomeEnergyWidgets[config:6E69CA09-34E3-3493-B8FC-B5021E1ACB71]((null):365)(501)>[uuid:82E119CC-A5C3-4166-8169-8D95E095BAC9]:609] explanation:\"notification:609\" active originator:[osservice<com.apple.coreservices.launchservicesd>:134] transientState:<RBAssertionTransientState| policies:[\n\t\n\t]> intransientState:<RBAssertionIntransientState| strt:Fixed end:Invalidate nvld:5.00 warn:0.00dom prevSus runningReason:20206 legRes:0 doms:com.apple.launchservicesd:LSNotification invOnConds:(null)> processState:<RBProcessState| role:UserInteractiveNonFocal> suspended: attributes:[\n\t<RBSDomainAttribute| domain:\"com.apple.launchservicesd\" name:\"LSNotification\" sourceEnvironment:\"(null)\">\n\t]><RBAssertion| identifier:166-134-2791 target:[extension<com.apple.Batteries.BatteriesAvocadoWidgetExtension[config:6E69CA09-34E3-3493-B8FC-B5021E1ACB71]((null):365)(501)>[uuid:82E119CC-A5C3-4166-8169-8D95E095BAC9]:597] explanation:\"notification:597\" active originator:[osservice<com.apple.coreservices.launchservicesd>:134] transientState:<RBAssertionTransientState| policies:[\n\t\n\t]> intransientState:<RBAssertionIntransientState| strt:Fixed end:Invalidate nvld:5.00 warn:0.00dom prevSus runningReason:20206 legRes:0 doms:com.apple.launchservicesd:LSNotification invOnConds:(null)> processState:<RBProcessState| role:UserInteractiveNonFocal> suspended: attributes:[\n\t<RBSDomainAttribute| domain:\"com.apple.launchservicesd\" name:\"LSNotification\" sourceEnvironment:\"(null)\">\n\t]><RBConnectionClient| 51933 name:osservice<com.apple.dt.AutomationModeUI(501)> entitlements:<RBEntitlements| [\n\t\t\tcom.apple.assertiond.app-state-monitor\n\t\t\t]> inheritanceManager:<RBClientInheritanceManager|  inheritances:[\n\t<RBSInheritance| environment:(none) name:com.apple.launchservices.userfacing origID:166-134-2282 0>\n\t]>><RBConnectionClient| 451 name:osservice<com.apple.replayd(501)> entitlements:<RBEntitlements| [\n\t\t\tcom.apple.runningboard.listallassertions,\n\t\t\tcom.apple.runningboard.cameracapture,\n\t\t\tcom.apple.assertiond.app-state-monitor,\n\t\t\tcom.apple.runningboard.process-state\n\t\t\t]> inheritanceManager:<RBClientInheritanceManager| >><RBAssertion| identifier:166-134-2789 target:[extension<com.apple.journal.widgets.secure[config:6E69CA09-34E3-3493-B8FC-B5021E1ACB71]((null):365)(501)>[uuid:82E119CC-A5C3-4166-8169-8D95E095BAC9]:607] explanation:\"notification:607\" active originator:[osservice<com.apple.coreservices.launchservicesd>:134] transientState:<RBAssertionTransientState| policies:[\n\t\n\t]> intransientState:<RBAssertionIntransientState| strt:Fixed end:Invalidate nvld:5.00 warn:0.00dom prevSus runningReason:20206 legRes:0 doms:com.apple.launchservicesd:LSNotification invOnConds:(null)> processState:<RBProcessState| role:UserInteractiveNonFocal> suspended: attributes:[\n\t<RBSDomainAttribute| domain:\"com.apple.launchservicesd\" name:\"LSNotification\" sourceEnvironment:\"(null)\">\n\t]><RBAssertion| identifier:166-134-2788 target:[extension<com.apple.news.tag[config:6E69CA09-34E3-3493-B8FC-B5021E1ACB71]((null):365)(501)>[uuid:82E119CC-A5C3-4166-8169-8D95E095BAC9]:604] explanation:\"notification:604\" active originator:[osservice<com.apple.coreservices.launchservicesd>:134] transientState:<RBAssertionTransientState| policies:[\n\t\n\t]> intransientState:<RBAssertionIntransientState| strt:Fixed end:Invalidate nvld:5.00 warn:0.00dom prevSus runningReason:20206 legRes:0 doms:com.apple.launchservicesd:LSNotification invOnConds:(null)> processState:<RBProcessState| role:UserInteractiveNonFocal> suspended: attributes:[\n\t<RBSDomainAttribute| domain:\"com.apple.launchservicesd\" name:\"LSNotification\" sourceEnvironment:\"(null)\">\n\t]><RBAssertion| identifier:166-134-2790 target:[extension<com.apple.clock.WorldClockWidget[config:6E69CA09-34E3-3493-B8FC-B5021E1ACB71]((null):365)(501)>[uuid:82E119CC-A5C3-4166-8169-8D95E095BAC9]:614] explanation:\"notification:614\" active originator:[osservice<com.apple.coreservices.launchservicesd>:134] transientState:<RBAssertionTransientState| policies:[\n\t\n\t]> intransientState:<RBAssertionIntransientState| strt:Fixed end:Invalidate nvld:5.00 warn:0.00dom prevSus runningReason:20206 legRes:0 doms:com.apple.launchservicesd:LSNotification invOnConds:(null)> processState:<RBProcessState| role:UserInteractiveNonFocal> suspended: attributes:[\n\t<RBSDomainAttribute| domain:\"com.apple.launchservicesd\" name:\"LSNotification\" sourceEnvironment:\"(null)\">\n\t]><RBAssertion| identifier:166-134-2796 target:[osservice<com.apple.AccessibilityVisualsAgent(501)>:62274] explanation:\"uielement:62274\" active originator:[osservice<com.apple.coreservices.launchservicesd>:134] transientState:<RBAssertionTransientState| policies:[\n\t\n\t]> intransientState:<RBAssertionIntransientState| strt:Unspecified end:WarnOnly nvld:0.00 warn:0.00dom prevSus runningReason:20246 legRes:0 doms:com.apple.launchservicesd:RoleUserInteractive invOnConds:(null)> processState:<RBProcessState| role:UserInteractive> suspended: attributes:[\n\t<RBSDomainAttribute| domain:\"com.apple.launchservicesd\" name:\"RoleUserInteractive\" sourceEnvironment:\"(null)\">\n\t]><RBAssertion| identifier:166-134-2785 target:[extension<com.apple.journal.widgets[config:6E69CA09-34E3-3493-B8FC-B5021E1ACB71]((null):365)(501)>[uuid:82E119CC-A5C3-4166-8169-8D95E095BAC9]:584] explanation:\"notification:584\" active originator:[osservice<com.apple.coreservices.launchservicesd>:134] transientState:<RBAssertionTransientState| policies:[\n\t\n\t]> intransientState:<RBAssertionIntransientState| strt:Fixed end:Invalidate nvld:5.00 warn:0.00dom prevSus runningReason:20206 legRes:0 doms:com.apple.launchservicesd:LSNotification invOnConds:(null)> processState:<RBProcessState| role:UserInteractiveNonFocal> suspended: attributes:[\n\t<RBSDomainAttribute| domain:\"com.apple.launchservicesd\" name:\"LSNotification\" sourceEnvironment:\"(null)\">\n\t]><RBAssertion| identifier:166-134-2282 target:[osservice<com.apple.dt.AutomationModeUI(501)>:51933] explanation:\"uielement:51933\" active originator:[osservice<com.apple.coreservices.launchservicesd>:134] transientState:<RBAssertionTransientState| policies:[\n\t\n\t]> intransientState:<RBAssertionIntransientState| strt:Unspecified end:WarnOnly nvld:0.00 warn:0.00dom prevSus runningReason:20246 legRes:0 doms:com.apple.launchservicesd:RoleUserInteractive invOnConds:(null)> processState:<RBProcessState| role:UserInteractive> suspended: attributes:[\n\t<RBSDomainAttribute| domain:\"com.apple.launchservicesd\" name:\"RoleUserInteractive\" sourceEnvironment:\"(null)\">\n\t]><RBProcessMonitorObserver| qos:17 qos:<RBSProcessStateDescriptor| values:1> configs:{\n\t\t9=\"M451-9\"\n\t}><RBAssertion| identifier:166-134-2280 target:[osservice<com.apple.testmanagerd(501)>:48360] explanation:\"backgroundApp:48360\" active originator:[osservice<com.apple.coreservices.launchservicesd>:134] transientState:<RBAssertionTransientState| policies:[\n\t\n\t]> intransientState:<RBAssertionIntransientState| strt:Unspecified end:WarnOnly nvld:0.00 warn:0.00dom prevSus runningReason:20249 legRes:0 doms:com.apple.launchservicesd:RoleNonUserInteractive invOnConds:(null)> processState:<RBProcessState| role:NonUserInteractive> suspended: attributes:[\n\t<RBSDomainAttribute| domain:\"com.apple.launchservicesd\" name:\"RoleNonUserInteractive\" sourceEnvironment:\"(null)\">\n\t]><RBConnectionClient| 53097 name:osservice<com.apple.keyboardservicesd(501)> entitlements:<RBEntitlements| [\n\t\t\tcom.apple.assertiond.app-state-monitor\n\t\t\t]> inheritanceManager:<RBClientInheritanceManager| >>"
+    },
+    {
+      "timestamp": "2026-10-26 00:38:53.755760+0000",
+      "processImagePath": "/usr/libexec/testmanagerd",
+      "processID": 48360,
+      "subsystem": "com.apple.Accessibility",
+      "category": "AXVOAutomation",
+      "eventMessage": "VoiceOver enabled"
+    },
+    {
+      "timestamp": "2026-10-26 00:39:00.582455+0000",
+      "processImagePath": "/usr/libexec/runningboardd",
+      "processID": 166,
+      "subsystem": "com.apple.runningboard",
+      "category": "process",
+      "eventMessage": "XPC connection invalidated: [osservice<com.apple.testmanagerd(501)>:48360]"
+    },
+    {
+      "timestamp": "2026-10-26 00:39:00.587279+0000",
+      "processImagePath": "/usr/libexec/runningboardd",
+      "processID": 166,
+      "subsystem": "com.apple.runningboard",
+      "category": "assertion",
+      "eventMessage": "ignoring [osservice<com.apple.testmanagerd(501)>:48360] as candidate for concrete target as it is terminating"
+    },
+    {
+      "timestamp": "2026-10-26 00:39:00.588176+0000",
+      "processImagePath": "/sbin/launchd",
+      "processID": 1,
+      "subsystem": "gui/501/com.apple.testmanagerd [48360]",
+      "category": "",
+      "eventMessage": "exited due to SIGSEGV | sent by exc handler[48360], ran for 368868ms"
+    },
+    {
+      "timestamp": "2026-10-26 00:39:00.588186+0000",
+      "processImagePath": "/sbin/launchd",
+      "processID": 1,
+      "subsystem": "gui/501/com.apple.testmanagerd [48360]",
+      "category": "",
+      "eventMessage": "process exited in a dirty state"
+    },
+    {
+      "timestamp": "2026-10-26 00:39:00.588188+0000",
+      "processImagePath": "/sbin/launchd",
+      "processID": 1,
+      "subsystem": "gui/501/com.apple.testmanagerd [48360]",
+      "category": "",
+      "eventMessage": "service has crashed 1 times in a row (last was dirty)"
+    },
+    {
+      "timestamp": "2026-10-26 00:39:00.588190+0000",
+      "processImagePath": "/sbin/launchd",
+      "processID": 1,
+      "subsystem": "gui/501/com.apple.testmanagerd [48360]",
+      "category": "",
+      "eventMessage": "service state: exited"
+    },
+    {
+      "timestamp": "2026-10-26 00:39:00.588192+0000",
+      "processImagePath": "/sbin/launchd",
+      "processID": 1,
+      "subsystem": "gui/501/com.apple.testmanagerd [48360]",
+      "category": "",
+      "eventMessage": "internal event: EXITED, code = 0"
+    },
+    {
+      "timestamp": "2026-10-26 00:39:00.588194+0000",
+      "processImagePath": "/sbin/launchd",
+      "processID": 1,
+      "subsystem": "gui/501/com.apple.testmanagerd [48360]",
+      "category": "",
+      "eventMessage": "job state = exited"
+    },
+    {
+      "timestamp": "2026-10-26 00:39:00.592579+0000",
+      "processImagePath": "/usr/libexec/runningboardd",
+      "processID": 166,
+      "subsystem": "com.apple.runningboard",
+      "category": "ttl",
+      "eventMessage": "[osservice<com.apple.testmanagerd(501)>:48360] termination reported by launchd (2, 11, 11)"
+    },
+    {
+      "timestamp": "2026-10-26 00:39:00.592673+0000",
+      "processImagePath": "/usr/libexec/runningboardd",
+      "processID": 166,
+      "subsystem": "com.apple.runningboard",
+      "category": "process",
+      "eventMessage": "Removing assertions for terminated process: [osservice<com.apple.testmanagerd(501)>:48360]"
+    },
+    {
+      "timestamp": "2026-10-26 00:39:01.035051+0000",
+      "processImagePath": "/usr/libexec/testmanagerd",
+      "processID": 62691,
+      "subsystem": "com.apple.Accessibility",
+      "category": "AXVOAutomation",
+      "eventMessage": "disableVoiceOver called"
+    },
+    {
+      "timestamp": "2026-10-26 00:39:02.876963+0000",
+      "processImagePath": "/usr/libexec/testmanagerd",
+      "processID": 62691,
+      "subsystem": "com.apple.Accessibility",
+      "category": "AXVOAutomation",
+      "eventMessage": "VoiceOver disabled"
+    }
+  ]
+}
