@@ -1,0 +1,88 @@
+[
+  {
+    "children": [
+      {
+        "duration": "0,012s",
+        "durationInSeconds": 0.011511802673339844,
+        "name": "false, false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderSessionTests/canonicalRefreshPublishesOneWholeVersion(existingArticle:reversedVersions:)?args=2cb9cd7a6e5c6b9715ab5cf29594cc7e9ac403a4b11f069b25cc08d470e85e8c",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,01s",
+        "durationInSeconds": 0.010400772094726562,
+        "name": "false, true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderSessionTests/canonicalRefreshPublishesOneWholeVersion(existingArticle:reversedVersions:)?args=fb81853b6da15e1c6b215c7d5bbdc041502ac5845645d53117102670260da0f9",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,011s",
+        "durationInSeconds": 0.011377811431884766,
+        "name": "true, false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderSessionTests/canonicalRefreshPublishesOneWholeVersion(existingArticle:reversedVersions:)?args=c597e9971e116a16e33e49d9c3ca3bd8c92cc910f859de3e71f24df7c80048bc",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,011s",
+        "durationInSeconds": 0.01137685775756836,
+        "name": "true, true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderSessionTests/canonicalRefreshPublishesOneWholeVersion(existingArticle:reversedVersions:)?args=cf9b5ecf10f3e4cdc87754898380ed1d707ec4f70d44d7606755a90c603de577",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "0,011s",
+    "durationInSeconds": 0.011166810989379883,
+    "name": "Canonical refresh keeps timeline, detail and search caches consistent",
+    "nodeIdentifier": "ReaderSessionTests/canonicalRefreshPublishesOneWholeVersion(existingArticle:reversedVersions:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderSessionTests/canonicalRefreshPublishesOneWholeVersion(existingArticle:reversedVersions:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "children": [
+      {
+        "duration": "0,014s",
+        "durationInSeconds": 0.013850212097167969,
+        "name": "false, false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderStoreTests/duplicateIdentitiesSelectOneCompleteVersionAndRetainTheArrivalDate(existingArticle:reversedVersions:)?args=2cb9cd7a6e5c6b9715ab5cf29594cc7e9ac403a4b11f069b25cc08d470e85e8c",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,011s",
+        "durationInSeconds": 0.011406898498535156,
+        "name": "false, true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderStoreTests/duplicateIdentitiesSelectOneCompleteVersionAndRetainTheArrivalDate(existingArticle:reversedVersions:)?args=fb81853b6da15e1c6b215c7d5bbdc041502ac5845645d53117102670260da0f9",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,013s",
+        "durationInSeconds": 0.013456106185913086,
+        "name": "true, false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderStoreTests/duplicateIdentitiesSelectOneCompleteVersionAndRetainTheArrivalDate(existingArticle:reversedVersions:)?args=c597e9971e116a16e33e49d9c3ca3bd8c92cc910f859de3e71f24df7c80048bc",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,013s",
+        "durationInSeconds": 0.013276100158691406,
+        "name": "true, true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderStoreTests/duplicateIdentitiesSelectOneCompleteVersionAndRetainTheArrivalDate(existingArticle:reversedVersions:)?args=cf9b5ecf10f3e4cdc87754898380ed1d707ec4f70d44d7606755a90c603de577",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "0,013s",
+    "durationInSeconds": 0.012997329235076904,
+    "name": "Duplicate identities publish one whole account-bound version",
+    "nodeIdentifier": "ReaderStoreTests/duplicateIdentitiesSelectOneCompleteVersionAndRetainTheArrivalDate(existingArticle:reversedVersions:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ReaderStoreTests/duplicateIdentitiesSelectOneCompleteVersionAndRetainTheArrivalDate(existingArticle:reversedVersions:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  }
+]

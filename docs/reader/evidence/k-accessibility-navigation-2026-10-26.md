@@ -1,5 +1,13 @@
 # K: native navigation roles and section heading — 2026-10-26
 
+## Corrected complete-title case passes at 43829790a
+
+[Reader CI 40265223444](https://github.com/mpwg/NetNewsWire/actions/runs/40265223444) passes **412 executions (402 code and ten native UI)**, 209 distinct tests, zero failures/skips and one deliberate model-guardrail warning. [Unaltered full summary](b-canonical-ci-summary-2026-10-26.json). The extra code cases concern mapped identity audit #29; the native UI suite remains ten methods.
+
+The [original speech/state journal with checksums](k-voiceover-forward-ci-journal-2026-10-26.json) and [activities](k-voiceover-forward-ci-activities-2026-10-26.json) confirm welcome speech, entry title 299, repeated 299 on forward 1, complete title 298 on forwards 2/3, and complete title 297 on forward 4. Both required adjacent titles are real service outputs. Initial/restored state is false with enabled=NO descriptions before/after. The method passes in 44.589 seconds. No matching native crash report is archived; this does not establish repair of the earlier daemon fault or sustained backend stability.
+
+The [inspected window capture](k-voiceover-forward-ci-window-2026-10-26.png) shows native selection/focus on row 297, matching detail title and actual VoiceOver caption. The article-body pane is blank at this capture; no body-paint/reading criterion is claimed. This accepts the corrected two-title entered-table scenario at its named source, not complete VoiceOver-only library/menu/form/body journeys, the initially-on branch, actual local comparison or final platforms. Earlier red runs remain below. The later #40 source needs its separate hosted confirmation.
+
 ## Current candidate — native table-entry timeout before the title assertion
 
 [Reader CI 40263583204](https://github.com/mpwg/NetNewsWire/actions/runs/40263583204), source ea3307312, passes all 395 code executions and nine UI methods, but the VoiceOver method fails before any forward navigation. Its current-speech payload is `Welcome to macOS. VoiceOver is on.`; public moveIn then throws `com.apple.dt.XCTest.XCTFuture` code 1000, `Timed out while moving VoiceOver in.` No entry utterance or forward payload is returned. The changed 298/297 assertion is not reached, so this run neither accepts nor disproves that assertion.

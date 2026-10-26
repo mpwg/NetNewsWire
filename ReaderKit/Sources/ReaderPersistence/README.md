@@ -14,7 +14,7 @@ Status and outbox changes commit together. Acknowledgements remove only the exac
 
 Search normalizes title/text and filters in the store, with at most 1,000 results per page. It is substring search without relevance ranking, ordered by descending arrival and stable identity. Folder queries require an account ID and consider only that account's feed memberships. Empty folders return no articles. `article(_:)` loads an exact account-scoped identity outside the visible page.
 
-The presentation follow-up compiles four additional Swift Testing cases against the actual ReaderSession reload path, checking warmed full-text caches, complete timeline/detail snapshots and search after canonical refresh. Runtime confirmation of that consumer matrix is still pending; store-only success is not its acceptance.
+The presentation follow-up passes four additional Swift Testing cases against the actual ReaderSession reload path, checking warmed full-text caches, complete timeline/detail snapshots and search after canonical refresh. Reader CI 40265223444 at 43829790a confirms all eight store/consumer cases and the complete 412-execution Mac plan. This accepts the corresponding #29 canonical-version contract on the exercised Mac boundary; final platforms and unrelated retention/accessibility criteria remain separate.
 
 `changes()` provides a buffered revision stream with an initial value and a new revision after committed writes. Multiple windows observe the same commits. Ending observation does not retain the store in a cycle. Failed operations publish no success revision.
 

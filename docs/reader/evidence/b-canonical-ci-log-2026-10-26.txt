@@ -1,0 +1,12 @@
+2026-10-26T03:43:01.0753770Z ◇ Test "Canonical refresh keeps timeline, detail and search caches consistent" started.
+2026-10-26T03:43:01.0756340Z ◇ Test case passing 2 arguments existingArticle → false, reversedVersions → false to "Canonical refresh keeps timeline, detail and search caches consistent" started.
+2026-10-26T03:43:01.0859790Z ​◇ Test case passing 2 arguments existingArticle → false, reversedVersions → true to "Canonical refresh keeps timeline, detail and search caches consistent" started.
+2026-10-26T03:43:01.0965530Z ​◇ Test case passing 2 arguments existingArticle → true, reversedVersions → false to "Canonical refresh keeps timeline, detail and search caches consistent" started.
+2026-10-26T03:43:01.1080980Z ​◇ Test case passing 2 arguments existingArticle → true, reversedVersions → true to "Canonical refresh keeps timeline, detail and search caches consistent" started.
+2026-10-26T03:43:01.1194530Z ​✔ Test "Canonical refresh keeps timeline, detail and search caches consistent" with 4 test cases passed after 0.045 seconds.
+2026-10-26T03:43:03.2641780Z ◇ Test "Duplicate identities publish one whole account-bound version" started.
+2026-10-26T03:43:03.2642690Z ◇ Test case passing 2 arguments existingArticle → false, reversedVersions → false to "Duplicate identities publish one whole account-bound version" started.
+2026-10-26T03:43:03.2775190Z ​◇ Test case passing 2 arguments existingArticle → false, reversedVersions → true to "Duplicate identities publish one whole account-bound version" started.
+2026-10-26T03:43:03.2890930Z ​◇ Test case passing 2 arguments existingArticle → true, reversedVersions → false to "Duplicate identities publish one whole account-bound version" started.
+2026-10-26T03:43:03.3027850Z ​◇ Test case passing 2 arguments existingArticle → true, reversedVersions → true to "Duplicate identities publish one whole account-bound version" started.
+2026-10-26T03:43:03.3163950Z ​✔ Test "Duplicate identities publish one whole account-bound version" with 4 test cases passed after 0.052 seconds.
