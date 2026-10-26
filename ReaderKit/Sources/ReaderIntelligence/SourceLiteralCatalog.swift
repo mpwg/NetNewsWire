@@ -4,17 +4,19 @@ import NaturalLanguage
 /// Candidate values are copied from the source; membership does not prove their semantic role.
 struct SourceLiteralCatalog {
     let choices: [String]
+    let wireChoices: [String]
+    private let originalByLabel: [Data: String]
 
     init(fragment: String, original: String) {
         var values: [String] = []
-        var seen: Set<String> = []
+        var seen: Set<Data> = []
 
         func add(_ raw: String) {
             let value = raw.trimmingCharacters(in: .whitespacesAndNewlines)
             guard !value.isEmpty, value.count <= 320,
                   SourceQuotationMatching.contains(value, in: fragment),
                   SourceQuotationMatching.contains(value, in: original),
-                  seen.insert(value).inserted else { return }
+                  seen.insert(Data(value.utf8)).inserted else { return }
             values.append(value)
         }
 
@@ -35,6 +37,9 @@ struct SourceLiteralCatalog {
             add(String(fragment[wordRanges[index]]))
             if index + 1 < wordRanges.count {
                 add(String(fragment[wordRanges[index].lowerBound..<wordRanges[index + 1].upperBound]))
+            }
+            if index + 2 < wordRanges.count {
+                add(String(fragment[wordRanges[index].lowerBound..<wordRanges[index + 2].upperBound]))
             }
         }
 
@@ -59,6 +64,36 @@ struct SourceLiteralCatalog {
             guard let match, let range = Range(match.range, in: fragment) else { return }
             add(String(fragment[range]))
         }
+        var originals: [Data: String] = [:]
+        var labels: [String] = []
+        var collision = false
+        for value in values {
+            let label = Self.wireLabel(value)
+            let key = Data(label.utf8)
+            if let existing = originals[key], Data(existing.utf8) != Data(value.utf8) {
+                collision = true
+                break
+            }
+            originals[key] = value
+            labels.append(label)
+        }
         choices = values
+        wireChoices = collision ? [] : labels
+        originalByLabel = collision ? [:] : originals
+    }
+
+    /// Encoding is only a transport label; recovery requires an exact catalog entry.
+    static func wireLabel(_ input: String) -> String {
+        input.unicodeScalars.map { scalar in
+            if scalar.value == 0x22 || scalar.value == 0x25 || scalar.value == 0x5C ||
+                scalar.value < 0x20 || scalar.value == 0x7F {
+                return String(format: "%%%02X", scalar.value)
+            }
+            return String(scalar)
+        }.joined()
+    }
+
+    func resolve(_ label: String) -> String? {
+        originalByLabel[Data(label.utf8)]
     }
 }

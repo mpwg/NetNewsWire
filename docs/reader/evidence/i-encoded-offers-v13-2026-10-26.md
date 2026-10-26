@@ -1,0 +1,16 @@
+# I: lossless source-label offer candidate — policy v13
+
+Status: **research branch; controlled Mac checks pass, fixed live-model and complete acceptance pending**. Shipping main remains v10. This extends the rejected v12 typed-offer prototype with a reversible transport for characters that reproduced the Foundation Models guided-choice JSON failure.
+
+Reader creates candidate spans from each original fragment, encodes double quotes, percent signs, backslashes and ASCII control characters in the model's constrained choice labels, and retains a mapping from exact label UTF-8 bytes to the exact original source text. Unknown labels or a collision fail closed; no model text is repaired or guessed. Percent escaping is itself escaped, so a source `%22` cannot collide with a source double quote. The selected original is independently checked against both its fragment and whole article. Consolidation receives the original selected offer fields without internal labels or Reader UUIDs. Literal ownership alone does not prove the merchant/product/price/condition role or completeness.
+
+The synthetic native model diagnostic on `codex/reader-schema-diagnostic` /b0f50ac16 passed all four encoded-quote configurations and a byte-identity/unknown-label control; unencoded quoted equivalents failed and unquoted controls passed. Its fixture does not prove real source semantics. [Diagnostic and original results](i-dynamic-schema-quotes-2026-10-26.md) are on main; quoted and unquoted control receipts remain unchanged.
+
+| Criterion | Status | Evidence |
+|---|---|---|
+| Original identity and fail-closed label lookup | Fulfilled for candidate Mac code | Tests cover quotes, percent sequences, composed/decomposed Unicode, foreign labels and original offer text in consolidation. |
+| Selected Intelligence code contracts | Fulfilled for candidate Mac code | Xcode MCP20:55:34:60 functions /151 executions pass, zero failures/skips, including source boundaries, runtime budget, prior-cache regeneration, read/outbox and consent/cancellation. [Summary](i-encoded-offers-v13-code-summary-2026-10-26.json), [case nodes](i-encoded-offers-v13-code-cases-2026-10-26.json); strict SwiftLint0.65.1 passes. |
+| Actual public-model quality, field roles and complete conditions | Open | Evaluate each unchanged public configuration once under this changed protocol. Do not select an unchanged retry or treat literal support as semantic proof. |
+| Complete current code/native plan, CI and external gates | Open | A selected code pass does not prove hosted CI, PCC, devices, accessibility, offline/restart, performance or Swift CodeQL. |
+
+Original code result bundle: `/Users/mat/Library/Developer/Xcode/DerivedData/Reader-fuevgxanyutuuihcfejpioljllaa/Logs/Test/Test-Reader-2026.10.26_20-55-34-+0100.xcresult`. An earlier module run had one fixture failure because its fake model included trailing whitespace not present in the constrained catalog; the fixture now selects the trimmed candidate actually offered by the schema. One catalog test also exposed a missing three-word candidate; native extraction now includes adjacent three-word spans and the encoded schema is counted against the unchanged runtime context budget. These code changes were rechecked by the full selected module. No issue closes and no shipping-source result is implied.

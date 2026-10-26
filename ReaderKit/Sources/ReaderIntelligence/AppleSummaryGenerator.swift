@@ -16,6 +16,13 @@ private struct GeneratedOffer: Encodable {
     var conditions: [String]
 }
 
+private struct ModelOfferFact: Encodable {
+    var product: String
+    var merchant: String?
+    var price: String?
+    var conditions: [String]
+}
+
 /// Exact source spelling plus ASCII-token and decimal boundaries; not semantic entailment.
 enum SourceQuotationMatching {
     static func contains(_ value: String, in source: String) -> Bool {
@@ -174,7 +181,8 @@ public actor AppleSummaryGenerator: SummaryGenerator {
         let factInstructions = """
         Extract source-bound facts from the supplied JSON source fragment.
         For offers, fill the offers array with separate product/merchant/price/conditions records; leave excerpts empty.
-        Choose each field from the supplied exact source literals. Do not rewrite spelling, punctuation, currency or coupon codes.
+        Choose each field from the supplied source labels. Do not rewrite spelling, punctuation, currency or coupon codes.
+        In labels, %22 represents a double quote, %25 a percent sign and %5C a backslash. Keep these labels unchanged.
         Keep each product's own merchant, price and required coupon together. Do not swap terms between offers.
         Read through the end for eligibility, exclusions, expiry, shipping and condition of goods; retain every supplied purchase restriction.
         Prices of qualifying purchases are conditions, not the offer's own price. Never substitute comparison prices.
@@ -236,25 +244,32 @@ public actor AppleSummaryGenerator: SummaryGenerator {
                     throw ReaderError.invalidResponse
                 }
                 guard generatedOffers.count <= 8 else { throw ReaderError.invalidResponse }
+                func resolve(_ label: String) throws -> String {
+                    guard let original = catalog.resolve(label) else { throw ReaderError.invalidResponse }
+                    return original
+                }
                 let offers = try generatedOffers.map { value in
-                    let offer = DigestOfferFact(product: value.product, merchant: value.merchant,
-                                                price: value.price, conditions: value.conditions)
-                    guard offer.quotedValues.allSatisfy(catalog.choices.contains) else { throw ReaderError.invalidResponse }
+                    let offer = try DigestOfferFact(product: resolve(value.product),
+                                                    merchant: value.merchant.map(resolve), price: value.price.map(resolve),
+                                                    conditions: value.conditions.map(resolve))
                     _ = try SourceOfferValidation.validate(offer, in: fragment)
                     return try SourceOfferValidation.validate(offer, in: source)
                 }
                 let excerpts: [String]
                 let evidenceText: String
                 if offers.isEmpty {
-                    guard generatedExcerpts.allSatisfy(catalog.choices.contains) else { throw ReaderError.invalidResponse }
-                    let fragmentExcerpts = try SourceFactValidation.excerpts(generatedExcerpts, in: fragment)
+                    let resolvedExcerpts = try generatedExcerpts.map(resolve)
+                    let fragmentExcerpts = try SourceFactValidation.excerpts(resolvedExcerpts, in: fragment)
                     excerpts = try SourceFactValidation.excerpts(fragmentExcerpts, in: source)
                     evidenceText = excerpts.joined(separator: "\n")
                 } else {
                     var seen: Set<String> = []
                     excerpts = offers.flatMap(\.quotedValues).filter { seen.insert($0).inserted }
                     // Model input contains source fields, never Reader-generated UUIDs.
-                    evidenceText = String(decoding: try JSONEncoder().encode(generatedOffers), as: UTF8.self)
+                    let modelOffers = offers.map {
+                        ModelOfferFact(product: $0.product, merchant: $0.merchant, price: $0.price, conditions: $0.conditions)
+                    }
+                    evidenceText = String(decoding: try JSONEncoder().encode(modelOffers), as: UTF8.self)
                 }
                 for offer in offers where !(originalOffers[index] ?? []).contains(where: { $0.hasSameFields(as: offer) }) {
                     originalOffers[index, default: []].append(offer)
@@ -390,8 +405,8 @@ public actor AppleSummaryGenerator: SummaryGenerator {
     }
 
     static func literalFactsSchema(_ catalog: SourceLiteralCatalog) throws -> GenerationSchema {
-        guard !catalog.choices.isEmpty else { throw ReaderError.invalidResponse }
-        let literal = DynamicGenerationSchema(name: "OriginalLiteral", anyOf: catalog.choices)
+        guard !catalog.wireChoices.isEmpty else { throw ReaderError.invalidResponse }
+        let literal = DynamicGenerationSchema(name: "OriginalLiteral", anyOf: catalog.wireChoices)
         let value = DynamicGenerationSchema(referenceTo: "OriginalLiteral")
         let offer = DynamicGenerationSchema(name: "Offer", representNilExplicitlyInGeneratedContent: true, properties: [
             .init(name: "product", description: "Short product or benefit name.", schema: value),
