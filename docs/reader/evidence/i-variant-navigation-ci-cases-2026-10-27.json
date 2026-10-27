@@ -1,0 +1,195 @@
+[
+  {
+    "children": [
+      {
+        "duration": "0,0083s",
+        "durationInSeconds": 0.008316993713378906,
+        "name": "\"AirPods Pro Wireless Earbuds\", \"AirPods are available.\", true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/namedProductKeepsSourceVariant(sourceTitle:summary:rejected:)?args=97ff948028155a3e585517816fa2f5a85572ff78bfd24674df0040789515abf1",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,0077s",
+        "durationInSeconds": 0.0077211856842041016,
+        "name": "\"AirPods Pro Wireless Earbuds\", \"AirPods Pro are available.\", false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/namedProductKeepsSourceVariant(sourceTitle:summary:rejected:)?args=41c5404cf367280996b1ee31dc86ffbf2d205f8df0e713f23fd5c0cca4d10c33",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,0034s",
+        "durationInSeconds": 0.0033712387084960938,
+        "name": "\"DualSense Edge Wireless Controller\", \"A controller is available.\", false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/namedProductKeepsSourceVariant(sourceTitle:summary:rejected:)?args=3ce91559e74bacc38471ee4321fe99f0294e138ae3d36fb048c1546253127b03",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,096s",
+        "durationInSeconds": 0.0960688591003418,
+        "name": "\"DualSense Edge Wireless Controller\", \"DualSense Controller is available.\", true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/namedProductKeepsSourceVariant(sourceTitle:summary:rejected:)?args=7f9b8f1cd32ccb5b356199241259db3340c53692600602c943b7b1b0802387c7",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,017s",
+        "durationInSeconds": 0.01676201820373535,
+        "name": "\"DualSense Edge Wireless Controller\", \"DualSense Edge Controller is available.\", false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/namedProductKeepsSourceVariant(sourceTitle:summary:rejected:)?args=c9f78e3d63134ad3a7617d0e6236c472a1819f8f290ad3a2bde4047a73dde5c9",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,0036s",
+        "durationInSeconds": 0.0035903453826904297,
+        "name": "\"DualSense Edge Wireless Controller\", \"DualSense is available. Edge was mentioned elsewhere.\", true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/namedProductKeepsSourceVariant(sourceTitle:summary:rejected:)?args=add7a215a4cbb51df7551d97c99ee322e825cd5cd22050f217528423dfd0d8e7",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,0051s",
+        "durationInSeconds": 0.005063056945800781,
+        "name": "\"Library opening on Thursday\", \"The library is available.\", false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/namedProductKeepsSourceVariant(sourceTitle:summary:rejected:)?args=b08ec3bd005903cc02af859e9c97e5957faad2b8efe2c716623c446a0eea3fff",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "0,02s",
+    "durationInSeconds": 0.020127671105521067,
+    "name": "A named product claim retains a recognized adjacent source-title variant",
+    "nodeIdentifier": "AppleSummaryGeneratorTests/namedProductKeepsSourceVariant(sourceTitle:summary:rejected:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/namedProductKeepsSourceVariant(sourceTitle:summary:rejected:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "children": [
+      {
+        "duration": "0,011s",
+        "durationInSeconds": 0.010585784912109375,
+        "name": "false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/productVariantUsesReferencedSource(referenced:)?args=fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,0053s",
+        "durationInSeconds": 0.005257844924926758,
+        "name": "true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/productVariantUsesReferencedSource(referenced:)?args=b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "0,0079s",
+    "durationInSeconds": 0.007921814918518066,
+    "name": "A product variant applies only to the source referenced by the claim",
+    "nodeIdentifier": "AppleSummaryGeneratorTests/productVariantUsesReferencedSource(referenced:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/productVariantUsesReferencedSource(referenced:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "0,044s",
+    "durationInSeconds": 0.044303178787231445,
+    "name": "An invalid source-fact response keeps other originals eligible for a summary",
+    "nodeIdentifier": "AppleSummaryGeneratorTests/invalidFactResponseIsolatesItsOriginal()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/invalidFactResponseIsolatesItsOriginal()",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "0,0085s",
+    "durationInSeconds": 0.008547067642211914,
+    "name": "A failed later fragment discards every fact from its original",
+    "nodeIdentifier": "AppleSummaryGeneratorTests/invalidLaterFragmentDiscardsEarlierFacts()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/invalidLaterFragmentDiscardsEarlierFacts()",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "0,008s",
+    "durationInSeconds": 0.00798487663269043,
+    "name": "A model request error is not treated as a rejected source quotation",
+    "nodeIdentifier": "AppleSummaryGeneratorTests/modelRequestFailureDoesNotSkipAnOriginal()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/modelRequestFailureDoesNotSkipAnOriginal()",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "0,0056s",
+    "durationInSeconds": 0.005621910095214844,
+    "name": "Cancellation during a later original is never converted to a partial result",
+    "nodeIdentifier": "AppleSummaryGeneratorTests/cancellationDuringLaterOriginalDoesNotPublish()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/cancellationDuringLaterOriginalDoesNotPublish()",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "0,019s",
+    "durationInSeconds": 0.019465923309326172,
+    "name": "A rejected duplicate identity cannot retain a summary through another copy",
+    "nodeIdentifier": "AppleSummaryGeneratorTests/rejectedDuplicateIdentityCannotLeakFacts()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/rejectedDuplicateIdentityCannotLeakFacts()",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "children": [
+      {
+        "duration": "0,036s",
+        "durationInSeconds": 0.036371707916259766,
+        "name": "false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/DigestTests/omittedProductVariantCannotBypassPublicationOrCache(cached:)?args=fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,019s",
+        "durationInSeconds": 0.0192410945892334,
+        "name": "true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/DigestTests/omittedProductVariantCannotBypassPublicationOrCache(cached:)?args=b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "0,028s",
+    "durationInSeconds": 0.027806401252746582,
+    "name": "Publication and cache retain a recognized source-title product variant",
+    "nodeIdentifier": "DigestTests/omittedProductVariantCannotBypassPublicationOrCache(cached:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/DigestTests/omittedProductVariantCannotBypassPublicationOrCache(cached:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "0,024s",
+    "durationInSeconds": 0.0238800048828125,
+    "name": "An invalid article fact response keeps other summaries and warns with all originals",
+    "nodeIdentifier": "DigestTests/invalidFactResponsePreservesOtherSourcesAndStore()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/DigestTests/invalidFactResponsePreservesOtherSourcesAndStore()",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "1min 11s",
+    "durationInSeconds": 71.65935790538788,
+    "name": "testOfferFallbackAppearsInActualDigest()",
+    "nodeIdentifier": "ReaderSmokeTests/testOfferFallbackAppearsInActualDigest()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testOfferFallbackAppearsInActualDigest",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "28s",
+    "durationInSeconds": 28.996330976486206,
+    "name": "testVoiceOverAnnouncesReaderAndMovesFocus()",
+    "nodeIdentifier": "ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  }
+]
