@@ -123,6 +123,36 @@ enum ArticleHTMLParser {
         }
     }
 
+    /// Returns only a literal, bounded leading emphasis as a candidate quotation, never an offer-field assertion.
+    static func feedLead(html: String, page: WebPage) async throws -> String? {
+        try Task.checkCancellation()
+        guard html.utf8.count <= 4_000_000 else { throw ReaderError.invalidResponse }
+        guard html.trimmingCharacters(in: .whitespacesAndNewlines).lowercased().hasPrefix("<strong>"),
+              html.range(of: "<script", options: .caseInsensitive) == nil else { return nil }
+        defer { page.stopLoading() }
+        return try await withTaskCancellationHandler {
+            _ = try await ReaderWebContentPolicy.contentRules()
+            for try await _ in page.load(html: ReaderWebContentPolicy.blankDocument) { try Task.checkCancellation() }
+            let script = #"""
+            const source = new DOMParser().parseFromString(sourceHTML, 'text/html');
+            if (source.getElementsByTagName('*').length > 50000) throw new Error('Document element limit exceeded');
+            const first = Array.from(source.body.childNodes).find(node =>
+              node.nodeType === Node.ELEMENT_NODE || (node.nodeType === Node.TEXT_NODE && node.textContent.trim()));
+            if (!first || first.nodeType !== Node.ELEMENT_NODE || first.localName !== 'strong') return null;
+            const passive = new Set(['strong', 'b', 'em', 'i', 'span']);
+            if (Array.from(first.querySelectorAll('*')).some(element =>
+                element.namespaceURI !== 'http://www.w3.org/1999/xhtml' || !passive.has(element.localName))) return null;
+            return first.textContent.trim();
+            """#
+            let value = try await page.callJavaScript(script, arguments: ["sourceHTML": html], contentWorld: .defaultClient)
+            try Task.checkCancellation()
+            guard let text = value as? String, !text.isEmpty, text.utf8.count <= 256 else { return nil }
+            return text
+        } onCancel: {
+            Task { @MainActor [weak page] in page?.stopLoading() }
+        }
+    }
+
     static func inertDocument(html: String, baseURL: URL) -> String {
         let base = baseURL.absoluteString.replacingOccurrences(of: "&", with: "&amp;")
             .replacingOccurrences(of: "\"", with: "&quot;").replacingOccurrences(of: "<", with: "&lt;").replacingOccurrences(of: ">", with: "&gt;")
