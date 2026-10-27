@@ -20,3 +20,9 @@ This is a narrow rejection rule, not semantic entailment. It does not detect eve
 | Hosted CI / native UI / overall package quality | Open | [Reader CI 40489627369](https://github.com/mpwg/NetNewsWire/actions/runs/40489627369) is queued on exact source `1cfddb8a5b0ed38a2526f4c47d122b4ed5ca0e21`. Earlier VoiceOver/helper failure and owner-deferred local window comparison remain separate. No real-feed app/UI, PCC, device, offline, performance or semantic acceptance follows. |
 
 README, acceptance matrix and handoff are updated for this correction. #54 remains open.
+
+## Feed-revision and source-identity control
+
+A separate Swift Testing control covers a full-text revision that no longer contains the original condition: the condition appears only in `sourceText` from the original feed. When the model references that source, the known upgrade is rejected; when only a different source carries the condition, a summary referencing the first source is not rejected on that basis. Both parameterized cases pass in the 68-execution `AppleSummaryGeneratorTests` selection through Xcode MCP (`Test-Reader-2026.10.27_11-46-34-+0100.xcresult`), with strict lint and whitespace checks.
+
+The first version of this control mistakenly used identical extracted text for both articles; the existing evidence merger correctly combined their source identities and the negative case failed. The two articles now use different extracted text, so the control actually tests a single referenced source. This is test-fixture correction, not an application repair or a general proof of semantic attribution. The earlier running hosted CI tests `1cfddb8a5` and does not include this later test-only change.

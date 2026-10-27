@@ -224,6 +224,31 @@ struct AppleSummaryGeneratorTests {
         }
     }
 
+    @Test("Original feed condition is checked only against the source referenced by the summary", arguments: [false, true])
+    func conditionCheckUsesReferencedFeedRevision(referenced: Bool) async throws {
+        var first = try article()
+        first.text = "The extracted article describes an item."
+        // Explicit German feed fixture is distinct from the subsequently extracted English text.
+        first.sourceText = referenced ? "Im neuwertigen Zustand." : nil
+        var second = first
+        second.id.remoteID = "other"
+        second.text = "The other extracted article describes a separate item."
+        second.sourceText = referenced ? nil : "Im neuwertigen Zustand."
+        let journal = ModelRequestJournal(response: #"{"groups":[{"title":"Item","summary":"Available in new condition.","sourceNumbers":[0]}]}"#)
+        let generator = AppleSummaryGenerator()
+        if referenced {
+            await #expect(throws: ReaderError.invalidResponse) {
+                try await generator.generate([first, second], model: ControlledLanguageModel(journal: journal),
+                                             capacity: 10000, count: { $0.count })
+            }
+        } else {
+            let sections = try await generator.generate([first, second], model: ControlledLanguageModel(journal: journal),
+                                                        capacity: 10000, count: { $0.count })
+            #expect(sections.first?.sources == [first.id])
+            #expect(sections.first?.text == "Available in new condition.")
+        }
+    }
+
     @Test("Native extraction rejects prices and coupons clipped from longer source literals", arguments: [
         ("29.99", "129.99"), ("SAVE5", "SAVE50")
     ])
