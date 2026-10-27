@@ -1,0 +1,32 @@
+[
+  {
+    "duration": "1min 17s",
+    "durationInSeconds": 77.56609296798706,
+    "name": "testOfferFallbackAppearsInActualDigest()",
+    "nodeIdentifier": "ReaderSmokeTests/testOfferFallbackAppearsInActualDigest()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testOfferFallbackAppearsInActualDigest",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "children": [
+      {
+        "name": "Failed to get matching snapshots: Lost connection to the application (pid 41319). (Underlying Error: Couldn’t communicate with a helper application. Try your operation again. If that fails, quit and relaunch the application and try again. The connection to service created from an endpoint was invalidated: Failed to check-in, peer may have been unloaded: mach_error=10000003.)",
+        "nodeType": "Failure Message",
+        "sourceLocation": {
+          "filePath": "/Users/runner/work/NetNewsWire/NetNewsWire/Reader/ReaderUITests/ReaderUITests.swift",
+          "lineNumber": 95
+        }
+      },
+      {
+        "name": "Lost connection to testmanagerd",
+        "nodeType": "Failure Message"
+      }
+    ],
+    "name": "testVoiceOverAnnouncesReaderAndMovesFocus()",
+    "nodeIdentifier": "ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus",
+    "nodeType": "Test Case",
+    "result": "Failed"
+  }
+]

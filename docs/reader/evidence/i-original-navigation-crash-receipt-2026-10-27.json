@@ -1,0 +1,170 @@
+[
+  {
+    "report": "testmanagerd-2026-10-27-095645.000.ips",
+    "procName": "testmanagerd",
+    "captureTime": "2026-10-27 09:56:31.4171 +0000",
+    "exception": {
+      "codes": "0x0000000000000001, 0x0000203af3630258",
+      "rawCodes": [
+        1,
+        35437563544152
+      ],
+      "type": "EXC_BAD_ACCESS",
+      "signal": "SIGSEGV",
+      "subtype": "KERN_INVALID_ADDRESS at 0x0000203af3630258"
+    },
+    "termination": {
+      "flags": 0,
+      "code": 11,
+      "namespace": "SIGNAL",
+      "indicator": "Segmentation fault: 11",
+      "byProc": "exc handler",
+      "byPid": 42700
+    },
+    "faultingThread": 3,
+    "frames": [
+      {
+        "symbol": "objc_release",
+        "imageOffset": 31708,
+        "imageIndex": 5
+      },
+      {
+        "symbol": "AutoreleasePoolPage::releaseUntil(objc_object**)",
+        "imageOffset": 58644,
+        "imageIndex": 5
+      },
+      {
+        "symbol": "objc_autoreleasePoolPop",
+        "imageOffset": 43136,
+        "imageIndex": 5
+      },
+      {
+        "symbol": "message_handler",
+        "imageOffset": 130420,
+        "imageIndex": 6
+      },
+      {
+        "symbol": "_xpc_connection_call_event_handler",
+        "imageOffset": 61468,
+        "imageIndex": 7
+      },
+      {
+        "symbol": "_xpc_connection_mach_event",
+        "imageOffset": 54280,
+        "imageIndex": 7
+      }
+    ]
+  },
+  {
+    "report": "testmanagerd-2026-10-27-095645.0002.ips",
+    "procName": "testmanagerd",
+    "captureTime": "2026-10-27 09:56:17.8850 +0000",
+    "exception": {
+      "codes": "0x0000000000000001, 0x000059bedc990550",
+      "rawCodes": [
+        1,
+        98676279674192
+      ],
+      "type": "EXC_BAD_ACCESS",
+      "signal": "SIGSEGV",
+      "subtype": "KERN_INVALID_ADDRESS at 0x000059bedc990550"
+    },
+    "termination": {
+      "flags": 0,
+      "code": 11,
+      "namespace": "SIGNAL",
+      "indicator": "Segmentation fault: 11",
+      "byProc": "exc handler",
+      "byPid": 18802
+    },
+    "faultingThread": 4,
+    "frames": [
+      {
+        "symbol": "objc_release",
+        "imageOffset": 31708,
+        "imageIndex": 8
+      },
+      {
+        "symbol": "AutoreleasePoolPage::releaseUntil(objc_object**)",
+        "imageOffset": 58644,
+        "imageIndex": 8
+      },
+      {
+        "symbol": "objc_autoreleasePoolPop",
+        "imageOffset": 43136,
+        "imageIndex": 8
+      },
+      {
+        "symbol": "message_handler",
+        "imageOffset": 130420,
+        "imageIndex": 9
+      },
+      {
+        "symbol": "_xpc_connection_call_event_handler",
+        "imageOffset": 61468,
+        "imageIndex": 10
+      },
+      {
+        "symbol": "_xpc_connection_mach_event",
+        "imageOffset": 54280,
+        "imageIndex": 10
+      }
+    ]
+  },
+  {
+    "report": "testmanagerd-2026-10-27-095645.ips",
+    "procName": "testmanagerd",
+    "captureTime": "2026-10-27 09:56:29.0674 +0000",
+    "exception": {
+      "codes": "0x0000000000000001, 0x00002ffa47485c90",
+      "rawCodes": [
+        1,
+        52751984254096
+      ],
+      "type": "EXC_BAD_ACCESS",
+      "signal": "SIGSEGV",
+      "subtype": "KERN_INVALID_ADDRESS at 0x00002ffa47485c90"
+    },
+    "termination": {
+      "flags": 0,
+      "code": 11,
+      "namespace": "SIGNAL",
+      "indicator": "Segmentation fault: 11",
+      "byProc": "exc handler",
+      "byPid": 42369
+    },
+    "faultingThread": 2,
+    "frames": [
+      {
+        "symbol": "objc_release",
+        "imageOffset": 31708,
+        "imageIndex": 5
+      },
+      {
+        "symbol": "AutoreleasePoolPage::releaseUntil(objc_object**)",
+        "imageOffset": 58644,
+        "imageIndex": 5
+      },
+      {
+        "symbol": "objc_autoreleasePoolPop",
+        "imageOffset": 43136,
+        "imageIndex": 5
+      },
+      {
+        "symbol": "message_handler",
+        "imageOffset": 130420,
+        "imageIndex": 6
+      },
+      {
+        "symbol": "_xpc_connection_call_event_handler",
+        "imageOffset": 61468,
+        "imageIndex": 7
+      },
+      {
+        "symbol": "_xpc_connection_mach_event",
+        "imageOffset": 54280,
+        "imageIndex": 7
+      }
+    ]
+  }
+]
