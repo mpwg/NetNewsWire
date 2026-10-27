@@ -22,12 +22,12 @@ enum SourceQuotationMatching {
             let leftWord = before.map { joinsWord(source[$0], first) } ?? false
             let rightWord = after.map { joinsWord(last, source[$0]) } ?? false
             let leftNumber = before.map { index in
-                guard first.isNumber, ".,".contains(source[index]),
+                guard first.isNumber, ".,٫٬．，".contains(source[index]),
                       index > source.startIndex else { return false }
                 return source[source.index(before: index)].isNumber
             } ?? false
             let rightNumber = after.map { index in
-                guard last.isNumber, ".,".contains(source[index]) else { return false }
+                guard last.isNumber, ".,٫٬．，".contains(source[index]) else { return false }
                 let next = source.index(after: index)
                 return next < source.endIndex && source[next].isNumber
             } ?? false

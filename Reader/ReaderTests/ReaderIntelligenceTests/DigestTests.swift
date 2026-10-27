@@ -131,6 +131,8 @@ struct SourceFactValidationTests {
         ("Café", "Cafe\u{301} offer", false), ("sterreich", "Österreich", false),
         ("caf", "café", false), ("cole", "e\u{301}cole", false), ("Ö", "Ö7", false), ("7", "Ö7", false),
         ("٣٤", "١٢٣٤", false), ("١٢", "١٢٣٤", false), ("١٢٣٤", "١٢٣٤", true),
+        ("٣٤", "١٢٫٣٤", false), ("١٢", "١٢٫٣٤", false), ("٣٤", "١٢٬٣٤", false),
+        ("١٢٫٣٤", "١٢٫٣٤", true), ("34", "12．34", false), ("12", "12，34", false),
         ("١", "A١", false), ("A", "A١", false),
         ("действительно", "недействительно", false), ("недействительно", "недействительно", true),
         ("λληνικό", "ελληνικό", false), ("ελληνικό", "ελληνικό", true),
