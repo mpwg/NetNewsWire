@@ -1608,6 +1608,7 @@ struct DigestTests {
         #expect(try await store.pendingChanges(accountID: feed.id.accountID).isEmpty)
         try await coordinator.markRead(old)
         let pending = try await store.pendingChanges(accountID: feed.id.accountID)
+        #expect(pending.count == articles.count)
         #expect(Set(pending.map(\.article)) == Set(articles.map(\.id)))
         #expect(pending.allSatisfy { $0.field == .read && $0.value })
         #expect(try await store.article(later.id)?.read == false)
