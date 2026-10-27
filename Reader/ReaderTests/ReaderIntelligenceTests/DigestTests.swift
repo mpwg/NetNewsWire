@@ -1589,15 +1589,27 @@ struct DigestTests {
     }
 
     @Test("Marking a digest read applies only to the displayed revision") func markingADigestReadAppliesOnlyToTheDisplayedRevision() async throws {
-        let (store, feed, articles) = try await fixture()
+        let (store, feed, articles) = try await fixture(count: 250)
         let coordinator = DigestCoordinator(repository: store, generator: FixtureGenerator())
-        let old = try #require(try await coordinator.generate(feed: feed).first)
+        let originalCards = try await coordinator.generate(feed: feed)
+        #expect(originalCards.count == 1)
+        let old = try #require(originalCards.first)
+        #expect(Set(old.sources) == Set(articles.map(\.id)))
         let later = ArticleSnapshot(id: ArticleKey(accountID: feed.id.accountID, remoteID: "later"),
             feedID: feed.id.remoteID, title: "New", text: String(repeating: "Source text ", count: 60), dateArrived: articles[0].dateArrived)
         try await store.applyRefresh(RefreshSnapshot(accountID: feed.id.accountID, feeds: [feed], folders: [],
             articles: articles + [later], unreadIDs: Set((articles + [later]).map(\.id.remoteID)), starredIDs: []))
-        _ = try await coordinator.generate(feed: feed)
+        let updatedCards = try await coordinator.generate(feed: feed)
+        #expect(updatedCards.count == 1)
+        let updated = try #require(updatedCards.first)
+        #expect(updated.id == old.id)
+        #expect(updated.revision != old.revision)
+        #expect(Set(updated.sources) == Set((articles + [later]).map(\.id)))
+        #expect(try await store.pendingChanges(accountID: feed.id.accountID).isEmpty)
         try await coordinator.markRead(old)
+        let pending = try await store.pendingChanges(accountID: feed.id.accountID)
+        #expect(Set(pending.map(\.article)) == Set(articles.map(\.id)))
+        #expect(pending.allSatisfy { $0.field == .read && $0.value })
         #expect(try await store.article(later.id)?.read == false)
         #expect(try await store.article(articles[0].id)?.read == true)
     }
