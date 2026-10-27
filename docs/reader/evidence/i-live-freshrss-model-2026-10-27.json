@@ -12,7 +12,10 @@
   "elapsedSeconds": 17.629626708,
   "modelSectionCount": 1,
   "sourcesMissingFromGeneratorSections": 1,
-  "sourceFactExcerptCharacterCounts": [277, 2111],
+  "sourceFactExcerptCharacterCounts": [
+    277,
+    2111
+  ],
   "replayAllOriginalKeysRetained": true,
   "replayAllKeysInSections": true,
   "replayFallbackAndWarningPresent": true,
@@ -20,5 +23,15 @@
   "replayOutboxEmpty": true,
   "replayModelRerun": false,
   "temporaryFeedRemoved": true,
-  "baselineFeedsFoldersAndStatusesRestored": true
+  "baselineFeedsFoldersAndStatusesRestored": true,
+  "coordinatorModelReportSHA256": "91121a8b3bfb066a632c08380914743df440746eab88db35d8ebf68f2f7830ee",
+  "coordinatorModelElapsedSeconds": 12.547741375,
+  "coordinatorModelSourceCount": 2,
+  "coordinatorModelOriginalKeysRetained": true,
+  "coordinatorModelSectionKeysRetained": true,
+  "coordinatorModelWarningPresent": true,
+  "coordinatorModelArticlesUnchanged": true,
+  "coordinatorModelOutboxEmpty": true,
+  "coordinatorModelFactExcerptCount": 8,
+  "coordinatorModelFactExcerptCharacters": 1184
 }
