@@ -194,6 +194,36 @@ private actor GenerationTraceJournal {
 }
 
 struct AppleSummaryGeneratorTests {
+    // Explicit English/German condition fixtures; this guard does not prove general semantic fidelity.
+    @Test("An explicit near-new source cannot become an unqualified new-condition claim", arguments: [
+        ("Im neuwertigen Zustand.", "Available in new condition.", true),
+        ("The item is near-new.", "The item is brand-new.", true),
+        ("The item is refurbished.", "Factory-new item.", true),
+        ("Im neuwertigen Zustand.", "Im neuen Zustand erhältlich.", true),
+        ("The item is near-new.", "The item remains near-new.", false),
+        ("The item is factory-new.", "Available in new condition.", false),
+        ("The item is near-new.", "A new model announcement.", false)
+    ])
+    func sourceConditionCannotBeUpgraded(sourceText: String, summary: String, rejected: Bool) async throws {
+        var source = try article()
+        source.title = "Item condition"
+        source.text = sourceText
+        let journal = ModelRequestJournal(response: try modelJSON([
+            "groups": [["title": "Item", "summary": summary, "sourceNumbers": [0]]]
+        ]), factResponses: [try modelJSON(["excerpts": [sourceText]])])
+        let generator = AppleSummaryGenerator()
+        if rejected {
+            await #expect(throws: ReaderError.invalidResponse) {
+                try await generator.generate([source], model: ControlledLanguageModel(journal: journal),
+                                             capacity: 10000, count: { $0.count })
+            }
+        } else {
+            let result = try await generator.generate([source], model: ControlledLanguageModel(journal: journal),
+                                                      capacity: 10000, count: { $0.count })
+            #expect(result.first?.text == summary)
+        }
+    }
+
     @Test("Native extraction rejects prices and coupons clipped from longer source literals", arguments: [
         ("29.99", "129.99"), ("SAVE5", "SAVE50")
     ])
@@ -706,13 +736,14 @@ private struct FixtureGenerator: SummaryGenerator {
     var invalid = false
     var blank = false
     var fabricatedFacts = false
+    var summary = "Sourced digest"
     var failure: (any Error)?
     func summarize(_ articles: [ArticleSnapshot], cloudAllowed: Bool) async throws -> [DigestSection] {
         if let failure { throw failure }
         if invalid { return [DigestSection(title: "Invalid", text: "", sources: [ArticleKey(accountID: UUID(), remoteID: "wrong")])] }
         let sources = omitLast ? Array(articles.dropLast()) : articles
         let facts = fabricatedFacts ? sources.map { DigestSourceFacts(source: $0.id, excerpts: ["Invented terms."]) } : nil
-        return [DigestSection(title: "Offers", text: blank ? " \n\t" : "Sourced digest", sources: sources.map(\.id), sourceFacts: facts)]
+        return [DigestSection(title: "Offers", text: blank ? " \n\t" : summary, sources: sources.map(\.id), sourceFacts: facts)]
     }
 }
 
@@ -757,6 +788,40 @@ private actor ControlledGenerator: SummaryGenerator {
 }
 
 struct DigestTests {
+    @Test("Publication and cache reuse reject a known condition upgrade without changing originals", arguments: [false, true])
+    func conditionUpgradeCannotBypassPublicationOrCache(cached: Bool) async throws {
+        let (store, feed, initial) = try await fixture(count: 1)
+        var source = try #require(initial.first)
+        // Explicit German source fixture; the generated claim uses the app's English language.
+        source.text = "Im neuwertigen Zustand. " + String(repeating: "Original source text. ", count: 40)
+        try await store.applyRefresh(RefreshSnapshot(accountID: feed.id.accountID, feeds: [feed], folders: [], articles: [source],
+                                                    unreadIDs: [source.id.remoteID], starredIDs: []))
+        let before = try #require(try await store.article(source.id))
+        let initialCoordinator = DigestCoordinator(repository: store, generator: FixtureGenerator())
+        var saved = try #require(try await initialCoordinator.generate(feed: feed).first)
+        if cached {
+            saved.sections[0].text = "Available in new condition."
+            try await store.saveDigest(saved)
+        } else {
+            // An existing warning forces a fresh request instead of reusing the valid baseline.
+            saved.warning = "Force regeneration for controlled publication."
+            try await store.saveDigest(saved)
+        }
+        let generator = FixtureGenerator(summary: cached ? "A safe regenerated summary." : "Available in new condition.")
+        let result = try #require(try await DigestCoordinator(repository: store, generator: generator).generate(feed: feed).first)
+        if cached {
+            #expect(result.sections.first?.text == "A safe regenerated summary.")
+            #expect(result.warning == nil)
+        } else {
+            #expect(result.sections.allSatisfy { $0.text.isEmpty })
+            #expect(result.warning != nil)
+        }
+        #expect(Set(result.sources) == [source.id])
+        #expect(Set(result.sections.flatMap(\.sources)) == [source.id])
+        #expect(try await store.article(source.id) == before)
+        #expect(try await store.pendingChanges(accountID: feed.id.accountID).isEmpty)
+    }
+
     @Test("Full-text extraction preserves feed provenance through digest publication")
     func fullTextExtractionPreservesFeedProvenance() async throws {
         let host = UUID().uuidString.lowercased() + ".digest-full-text.test"

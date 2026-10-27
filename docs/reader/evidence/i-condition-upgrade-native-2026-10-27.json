@@ -1,0 +1,18 @@
+{
+  "inputSHA256": "8deea3677f5ae0b093e87562c37d38930eea1509db66ea1169b77b09b3a7efb6",
+  "reportSHA256": "9ae7e243e186efe95da36c07a7f1d7c87259f592c4e55813ebf49e8e569afb66",
+  "locale": "en_AT",
+  "operatingSystem": "Version 27.2 (Build 26B123)",
+  "elapsedSeconds": 14.879147083,
+  "sectionCount": 1,
+  "coveredSourceCount": 1,
+  "sourceFactCharacters": 1567,
+  "traceStages": [
+    "facts",
+    "facts",
+    "consolidation"
+  ],
+  "requestFailed": false,
+  "observation": "Generated text upgraded the stated near-new item condition to new; the rejected prompt variant remains unintegrated.",
+  "savedResponseReplay": "Current coordinator rejected the known upgrade, retained both originals with a warning, and preserved stored articles and empty outbox."
+}

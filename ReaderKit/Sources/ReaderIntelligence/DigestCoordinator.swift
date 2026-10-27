@@ -58,6 +58,7 @@ public actor DigestCoordinator {
                Set(cached.sources) == allKeys, cached.warning == nil,
                cached.sourceFingerprint == sourceFingerprint,
                cached.hasDisplayableContent,
+               !SourceFactValidation.hasKnownConditionUpgrade(cached.sections, sources: sources),
                Self.sourceFactsMatchOriginals(cached.sections, sources: sources) {
                 result.append(cached); continue
             }
@@ -86,6 +87,7 @@ public actor DigestCoordinator {
                     let current = try await repository.preferences().first { $0.id == feedID }
                     return current?.mode == .digest && current?.cloudAllowed == true
                 })
+                guard !SourceFactValidation.hasKnownConditionUpgrade(sections, sources: sources) else { throw ReaderError.invalidResponse }
             } catch is CancellationError { throw CancellationError() } catch { sections = []; warnings.append(error.localizedDescription) }
             guard Self.validGeneratedSections(sections, sources: allKeys),
                   Self.sourceFactsMatchOriginals(sections, sources: sources) else { throw ReaderError.invalidResponse }

@@ -53,6 +53,21 @@ enum SourceQuotationMatching {
 }
 
 enum SourceFactValidation {
+    /// Conservative English/German rejection of known condition upgrades, not general entailment.
+    /// A mixed-source or negated new-condition phrase can also cause abstention.
+    static func hasKnownConditionUpgrade(_ sections: [DigestSection], sources: [ArticleSnapshot]) -> Bool {
+        let qualifiedCondition = #"(?i)\b(?:neuwertig\p{L}*\s+zustand|gebraucht\p{L}*\s+(?:zustand|artikel)|generalüberholt\p{L}*|refurbished|(?:like|near)[ -]new|used condition)\b"#
+        let newCondition = #"(?i)\b(?:brand[ -]new|factory[ -]new|in new condition|fabrikneu\p{L}*|nagelneu\p{L}*|(?:im|in)\s+neue[nm]?\s+zustand)\b"#
+        return sections.contains { section in
+            guard (section.title + "\n" + section.text).range(of: newCondition, options: .regularExpression) != nil else { return false }
+            return sources.contains { source in
+                guard section.sources.contains(source.id) else { return false }
+                let original = [source.title, source.text, source.sourceText ?? ""].joined(separator: "\n")
+                return original.range(of: qualifiedCondition, options: .regularExpression) != nil
+            }
+        }
+    }
+
     static func feedExcerptMatches(_ excerpt: String, sourceText: String?) -> Bool {
         guard let sourceText else { return false }
         return SourceQuotationMatching.contains(excerpt, in: sourceText) &&
@@ -254,7 +269,7 @@ public actor AppleSummaryGenerator: SummaryGenerator {
                 groups.append(contentsOf: try Self.validate(response.content.groups, evidence: batch, languageCode: languageCode))
             }
             if batches.count == 1 {
-                return Self.mergeGroups(groups).map { group in
+                let sections = Self.mergeGroups(groups).map { group in
                     var seen: Set<ArticleKey> = []
                     let keys = group.sourceNumbers.sorted().map { articles[$0].id }.filter { seen.insert($0).inserted }
                     let facts = group.sourceNumbers.sorted().map {
@@ -262,6 +277,8 @@ public actor AppleSummaryGenerator: SummaryGenerator {
                     }
                     return DigestSection(title: group.title, text: group.text, sources: keys, sourceFacts: facts)
                 }
+                guard !SourceFactValidation.hasKnownConditionUpgrade(sections, sources: articles) else { throw ReaderError.invalidResponse }
+                return sections
             }
             let nextEvidence = Self.mergeEvidence(groups.map {
                 SummaryEvidence(text: $0.title + "\n" + $0.text, sourceNumbers: $0.sourceNumbers)

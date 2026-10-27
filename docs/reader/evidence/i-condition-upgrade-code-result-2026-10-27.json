@@ -1,0 +1,15 @@
+{
+  "summary": "576 tests: 576 passed, 0 failed, 0 skipped, 0 expected failures, 0 not run",
+  "counts": {
+    "expectedFailures": 0,
+    "failed": 0,
+    "notRun": 0,
+    "passed": 576,
+    "skipped": 0,
+    "total": 576
+  },
+  "schemeName": "Reader",
+  "activeTestPlanName": "Reader",
+  "xcresultBundlePath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/Test-Reader-2026.10.27_11-33-48-+0100.xcresult",
+  "fullSummaryPath": "/var/folders/b5/h7f8ws9x5cj4_5n6rtgypdhh0000gn/T/ActionArtifacts/default/RunSomeTests/5578AADB-B643-42E7-A435-88CC55F7E56D.txt"
+}
