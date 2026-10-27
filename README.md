@@ -43,6 +43,8 @@ Native VoiceOver has both named passing runs and retained failures; full menu/fo
 
 The owner selected conservative local rules for improving offer-fact attribution: show only supported fields and mark uncertain fields as “See original”, while keeping free summaries. This is not implemented yet; the current local model can misidentify qualifying purchase prices. No additional model or external provider has been enabled. [Decision context and evidence](docs/reader/handoff-2026-10-24.md#immediate-continuation).
 
+Digest source snapshots now retain differing feed and full-text revisions separately for guarded writes and cache invalidation. This is provenance infrastructure, not completed offer attribution. [Mac verification](docs/reader/evidence/i-feed-provenance-2026-10-27.md).
+
 
 The price-subject v15 candidate is not integrated:553 Mac code executions pass, but the fixed public pair still assigns a qualifying purchase amount to an unrelated selected product. [Controlled and model evidence](docs/reader/evidence/i-price-subject-v15-2026-10-26.md).
 
