@@ -14,4 +14,10 @@ These guards reject only named lexical counterexamples. A retained section has p
 | Current Mac code suite and lint | Fulfilled | 600 code executions, zero failures/skips via Xcode MCP; strict SwiftLint 0.65.1 and whitespace checks pass. [Code receipt](i-partial-guarded-sections-code-result-2026-10-27.json). |
 | Actual new-model mixed output, full native UI and current hosted plan | Open | Controlled model output does not prove a real model produces useful independent sections. The old actual single-section response is still rejected. The previously observed VoiceOver instability, real-feed UI, PCC, devices, owner-deferred offline and broader semantics remain separate. |
 
+## Native original-navigation candidate
+
+Branch `codex/reader-partial-original-navigation` at `622e5e149b14b92b0dc262fea63c0692732aca45` combines this correction with the previously isolated native UI fixture/test candidate. It exercises one summarized source and one originals-only source in English and German, opens each actual source button and checks that opening creates no pending read change. It extends the existing native UI method; it is not an actual real-model or FreshRSS UI run and does not cover a same-source fallback in native UI. Its local Xcode MCP build-for-testing and strict lint pass; the local UI run remains owner-deferred. [Reader CI 40494311227](https://github.com/mpwg/NetNewsWire/actions/runs/40494311227) is queued on the exact candidate. Main was restored and rebuilt through Xcode MCP after dispatch.
+
+The existing [Reader CI 40493333709](https://github.com/mpwg/NetNewsWire/actions/runs/40493333709) continues independently on the earlier weekday source `06cc4ebef`; the candidate branch does not cancel it. Do not credit either pending run as a pass or integrate the candidate based on the earlier partial native result. The prior failure and later separate green VoiceOver run remain distinct.
+
 No package closes at this checkpoint.
