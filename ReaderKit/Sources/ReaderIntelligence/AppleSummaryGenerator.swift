@@ -265,10 +265,14 @@ public actor AppleSummaryGenerator: SummaryGenerator {
 
         var evidence: [SummaryEvidence] = []
         var originalExcerpts: [Int: [String]] = [:]
+        var rejectedFactSources: Set<Int> = []
         for (index, article) in articles.enumerated() {
             let source = article.text.isEmpty ? article.title : article.title + "\n" + article.text
             guard !source.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { throw ReaderError.invalidResponse }
             let fragments = try await split(source, budget: factBudget, format: { try Self.sourcePrompt(index: index, text: $0) }, count: count)
+            var stagedEvidence: [SummaryEvidence] = []
+            var stagedExcerpts: [String] = []
+            var rejected = false
             for fragment in fragments {
                 try await checkRequestPermission(cloudPermission)
                 let session = LanguageModelSession(model: model, instructions: factInstructions)
@@ -283,14 +287,25 @@ public actor AppleSummaryGenerator: SummaryGenerator {
                                                        response: response.rawContent.jsonString, instructions: factInstructions))
                     try Task.checkCancellation()
                 }
-                let excerpts = try SourceFactValidation.excerpts(response.content.excerpts, in: fragment)
-                for excerpt in excerpts where !(originalExcerpts[index] ?? []).contains(excerpt) {
-                    originalExcerpts[index, default: []].append(excerpt)
+                let excerpts: [String]
+                do {
+                    excerpts = try SourceFactValidation.excerpts(response.content.excerpts, in: fragment)
+                } catch ReaderError.invalidResponse {
+                    // Discard the entire original, including facts from earlier fragments.
+                    rejected = true
+                    break
+                }
+                for excerpt in excerpts where !stagedExcerpts.contains(excerpt) {
+                    stagedExcerpts.append(excerpt)
                 }
                 // Keep each fragment's subject, price and conditions under the same packet reference.
-                evidence.append(SummaryEvidence(text: excerpts.joined(separator: "\n"), sourceNumbers: [index]))
+                stagedEvidence.append(SummaryEvidence(text: excerpts.joined(separator: "\n"), sourceNumbers: [index]))
             }
+            if rejected { rejectedFactSources.insert(index); continue }
+            originalExcerpts[index] = stagedExcerpts
+            evidence.append(contentsOf: stagedEvidence)
         }
+        guard !evidence.isEmpty else { throw ReaderError.invalidResponse }
         evidence = Self.mergeEvidence(evidence)
         var batches = try await evidenceBatches(evidence, capacity: capacity, instructions: summaryInstructions, count: count)
         for _ in 0..<8 {
@@ -322,13 +337,15 @@ public actor AppleSummaryGenerator: SummaryGenerator {
                     }
                     return DigestSection(title: group.title, text: group.text, sources: keys, sourceFacts: facts)
                 }
+                let rejectedFactIDs = Set(rejectedFactSources.map { articles[$0].id })
                 let safe = sections.filter { section in
+                    Set(section.sources).isDisjoint(with: rejectedFactIDs) &&
                     !SourceFactValidation.hasKnownConditionUpgrade([section], sources: articles) &&
                     !SourceFactValidation.hasUnsupportedEveningWeekday([section], sources: articles)
                 }
                 guard !safe.isEmpty else { throw ReaderError.invalidResponse }
-                guard safe.count != sections.count else { return safe }
-                let rejectedIDs = Set(sections.filter { !safe.contains($0) }.flatMap(\.sources))
+                let rejectedIDs = Set(sections.filter { !safe.contains($0) }.flatMap(\.sources)).union(rejectedFactIDs)
+                guard !rejectedIDs.isEmpty else { return safe }
                 var seen: Set<ArticleKey> = []
                 let originals = articles.map(\.id).filter { rejectedIDs.contains($0) && seen.insert($0).inserted }
                 let fallback = DigestSection(title: String(localized: "Other original articles", bundle: #bundle),

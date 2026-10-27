@@ -194,6 +194,111 @@ private actor GenerationTraceJournal {
 }
 
 struct AppleSummaryGeneratorTests {
+    @Test("An invalid source-fact response keeps other originals eligible for a summary")
+    func invalidFactResponseIsolatesItsOriginal() async throws {
+        var first = try article()
+        first.title = "Reading room"
+        first.text = "The reading room remains free."
+        var invalid = first
+        invalid.id.remoteID = "invalid"
+        invalid.title = "Offer"
+        invalid.text = "The item is near-new."
+        var last = first
+        last.id.remoteID = "park"
+        last.title = "Park"
+        last.text = "The park opens on Tuesday."
+        let journal = ModelRequestJournal(response: #"{"groups":[{"title":"Local news","summary":"The reading room remains free and the park opens on Tuesday.","sourceNumbers":[0,1]}]}"#,
+                                          factResponses: [try modelJSON(["excerpts": [first.text]]),
+                                                          try modelJSON(["excerpts": [invalid.text, "Invented offer terms."]]),
+                                                          try modelJSON(["excerpts": [last.text]])])
+        let sections = try await AppleSummaryGenerator().generate([first, invalid, last], model: ControlledLanguageModel(journal: journal),
+                                                                  capacity: 10000, count: { $0.count })
+        #expect(sections.first?.sources == [first.id, last.id])
+        #expect(sections.first?.text == "The reading room remains free and the park opens on Tuesday.")
+        #expect(sections.last?.text == "")
+        #expect(sections.last?.sources == [invalid.id])
+        #expect(sections.last?.sourceFacts == nil)
+        #expect(await journal.requests.count == 4)
+    }
+
+    @Test("A failed later fragment discards every fact from its original")
+    func invalidLaterFragmentDiscardsEarlierFacts() async throws {
+        var long = try article()
+        long.title = "Long article"
+        long.text = String(repeating: "Long source material. ", count: 400)
+        var other = long
+        other.id.remoteID = "other"
+        other.title = "Library"
+        other.text = "The reading room remains free."
+        let journal = ModelRequestJournal(response: #"{"groups":[{"title":"Library","summary":"The reading room remains free.","sourceNumbers":[0]}]}"#,
+                                          factResponses: [try modelJSON(["excerpts": [long.title]]),
+                                                          try modelJSON(["excerpts": ["Invented source text."]]),
+                                                          try modelJSON(["excerpts": [other.text]])])
+        let sections = try await AppleSummaryGenerator().generate([long, other], model: ControlledLanguageModel(journal: journal),
+                                                                  capacity: 4000, count: { $0.count })
+        #expect(sections.first?.sources == [other.id])
+        #expect(sections.last?.text == "")
+        #expect(sections.last?.sources == [long.id])
+        let requests = await journal.requests
+        #expect(requests.count == 4)
+        let consolidation = try #require(requests.last)
+        let packets = try JSONDecoder().decode([CapturedModelSource].self, from: Data(modelPrompt(consolidation).utf8))
+        #expect(packets.count == 1)
+        #expect(packets.first?.articleNumbers == [1])
+        #expect(!packets[0].text.contains(long.title))
+    }
+
+    @Test("A model request error is not treated as a rejected source quotation")
+    func modelRequestFailureDoesNotSkipAnOriginal() async throws {
+        let first = try article()
+        var second = first
+        second.id.remoteID = "other"
+        let journal = ModelRequestJournal(failure: ReaderError.invalidResponse)
+        await #expect(throws: ReaderError.invalidResponse) {
+            try await AppleSummaryGenerator().generate([first, second], model: ControlledLanguageModel(journal: journal),
+                                                      capacity: 10000, count: { $0.count })
+        }
+        #expect(await journal.requests.count == 1)
+    }
+
+    @Test("Cancellation during a later original is never converted to a partial result")
+    func cancellationDuringLaterOriginalDoesNotPublish() async throws {
+        let first = try article()
+        var second = first
+        second.id.remoteID = "other"
+        let journal = ModelRequestJournal(failure: CancellationError(), failureRequest: 1)
+        await #expect(throws: CancellationError.self) {
+            try await AppleSummaryGenerator().generate([first, second], model: ControlledLanguageModel(journal: journal),
+                                                      capacity: 10000, count: { $0.count })
+        }
+        #expect(await journal.requests.count == 2)
+    }
+
+    @Test("A rejected duplicate identity cannot retain a summary through another copy")
+    func rejectedDuplicateIdentityCannotLeakFacts() async throws {
+        var first = try article()
+        first.title = "Reading room"
+        first.text = "The reading room remains free."
+        var rejectedCopy = first
+        rejectedCopy.text = "The item is near-new."
+        var other = first
+        other.id.remoteID = "other"
+        other.title = "Park"
+        other.text = "The park opens on Tuesday."
+        let response = #"{"groups":[{"title":"Reading room","summary":"The reading room remains free.","sourceNumbers":[0]},{"title":"Park","summary":"The park opens on Tuesday.","sourceNumbers":[1]}]}"#
+        let journal = ModelRequestJournal(response: response, factResponses: [try modelJSON(["excerpts": [first.text]]),
+                                                                             try modelJSON(["excerpts": ["Invented offer terms."]]),
+                                                                             try modelJSON(["excerpts": [other.text]])])
+        let sections = try await AppleSummaryGenerator().generate([first, rejectedCopy, other], model: ControlledLanguageModel(journal: journal),
+                                                                  capacity: 10000, count: { $0.count })
+        #expect(sections.count == 2)
+        #expect(sections.first?.sources == [other.id])
+        #expect(sections.first?.text == "The park opens on Tuesday.")
+        #expect(sections.last?.text == "")
+        #expect(sections.last?.sources == [first.id])
+        #expect(!sections.contains { $0.text.contains("reading room") })
+    }
+
     @Test("A rejected condition claim does not discard another valid summary", arguments: [false, true])
     func unsafeGroupDoesNotDiscardSafeGroup(sharedSource: Bool) async throws {
         var first = try article()
@@ -905,6 +1010,32 @@ private actor ControlledGenerator: SummaryGenerator {
 }
 
 struct DigestTests {
+    @Test("An invalid article fact response keeps other summaries and warns with all originals")
+    func invalidFactResponsePreservesOtherSourcesAndStore() async throws {
+        let (store, feed, initial) = try await fixture(count: 3)
+        var sources = initial
+        sources[0].text = "The reading room remains free. " + String(repeating: "Source context. ", count: 40)
+        sources[1].text = "The item is near-new. " + String(repeating: "Source context. ", count: 40)
+        sources[2].text = "The park opens on Tuesday. " + String(repeating: "Source context. ", count: 40)
+        try await store.applyRefresh(RefreshSnapshot(accountID: feed.id.accountID, feeds: [feed], folders: [], articles: sources,
+                                                    unreadIDs: Set(sources.map(\.id.remoteID)), starredIDs: []))
+        let before = try await store.articles(ArticleQuery(feed: feed.id))
+        let journal = ModelRequestJournal(response: #"{"groups":[{"title":"Local news","summary":"The reading room remains free and the park opens on Tuesday.","sourceNumbers":[0,1]}]}"#,
+                                          factResponses: [try modelJSON(["excerpts": ["The reading room remains free."]]),
+                                                          try modelJSON(["excerpts": ["Invented offer terms."]]),
+                                                          try modelJSON(["excerpts": ["The park opens on Tuesday."]])])
+        let digest = try #require(try await DigestCoordinator(repository: store, generator: StagedFixtureGenerator(journal: journal)).generate(feed: feed).first)
+        #expect(digest.warning != nil)
+        #expect(digest.hasDisplayableContent)
+        #expect(digest.sections.contains { $0.sources == [sources[0].id, sources[2].id] && !$0.text.isEmpty })
+        #expect(digest.sections.contains { $0.sources == [sources[1].id] && $0.text.isEmpty })
+        #expect(Set(digest.sources) == Set(sources.map(\.id)))
+        #expect(Set(digest.sections.flatMap(\.sources)) == Set(sources.map(\.id)))
+        #expect(try await store.articles(ArticleQuery(feed: feed.id)) == before)
+        #expect(try await store.pendingChanges(accountID: feed.id.accountID).isEmpty)
+        #expect(await journal.requests.count == 4)
+    }
+
     @Test("Rejecting a claim remains visible when another summary covers the same original")
     func rejectedClaimKeepsVisibleWarningForSharedSource() async throws {
         let (store, feed, initial) = try await fixture(count: 1)

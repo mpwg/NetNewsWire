@@ -1,0 +1,27 @@
+{
+  "inputSHA256": "104495438e1768ad323ea91ecb02bf0fd70dd9ad1c18f639db3d4069f05c7bf8",
+  "reportSHA256": "baf8e20e5ce88c9caf56d885a4bcee89e2345f115b991cf82887d7d23b2647b0",
+  "operatingSystem": "Version 27.2 (Build 26B123)",
+  "locale": "de_AT",
+  "elapsedSeconds": 46.335974167,
+  "sourceCount": 6,
+  "warningCount": 1,
+  "freeSections": 4,
+  "originalsOnlySections": 1,
+  "originalsOnlySourceCount": 2,
+  "sourceFactCharacters": 5279,
+  "articlesUnchanged": true,
+  "pendingChanges": 0,
+  "traceStages": [
+    "facts",
+    "facts",
+    "facts",
+    "facts",
+    "facts",
+    "facts",
+    "consolidation"
+  ],
+  "rejectedFactResponses": 0,
+  "allFeedExcerptsAbsent": true,
+  "cloudEnabled": false
+}

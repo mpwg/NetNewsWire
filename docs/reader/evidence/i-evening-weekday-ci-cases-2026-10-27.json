@@ -1,0 +1,164 @@
+[
+  {
+    "children": [
+      {
+        "duration": "0,0066s",
+        "durationInSeconds": 0.006566762924194336,
+        "name": "\"Am Donnerstag bleibt der Lesesaal bis zum Abend geöffnet.\", \"The reading room remains open until the evening.\", true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/selectedEveningClaimKeepsSourceWeekday(sourceText:summary:rejected:)?args=acab71abdf0d4be937968f6694e018622e5ebef3a4b7593f1fb0c8df06476a9f",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,0054s",
+        "durationInSeconds": 0.005427122116088867,
+        "name": "\"On Thursday and Friday it is open until evening.\", \"On Friday it is open until evening.\", false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/selectedEveningClaimKeepsSourceWeekday(sourceText:summary:rejected:)?args=0eb45ffabaedfdcb30f93e7c559b41da9525780f39dbf521a5487ebae18fb7e4",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,013s",
+        "durationInSeconds": 0.013258934020996094,
+        "name": "\"On Thursday and Friday it is open until evening.\", \"On Monday it is open until evening.\", true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/selectedEveningClaimKeepsSourceWeekday(sourceText:summary:rejected:)?args=cca5a90f90f3c82ad978ddce8828d5a5c74c96281536e0b9f6c8fbfa67e8a053",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,0049s",
+        "durationInSeconds": 0.004869937896728516,
+        "name": "\"On Thursday it opens in the morning. It is open until evening every day.\", \"It is open until evening.\", false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/selectedEveningClaimKeepsSourceWeekday(sourceText:summary:rejected:)?args=1185836450a5037899ccd1a3041597b1ed3b47eaf185a9adcb757e43df790a2a",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,0057s",
+        "durationInSeconds": 0.00568699836730957,
+        "name": "\"On Thursday its reading room will stay open until the evening.\", \"Am Donnerstag bleibt der Lesesaal bis zum Abend geöffnet.\", false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/selectedEveningClaimKeepsSourceWeekday(sourceText:summary:rejected:)?args=ce4ffb4cf2a873a264b973dbb036c8ebdf5b06414cc3320916c97611087c8fb6",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,029s",
+        "durationInSeconds": 0.028515100479125977,
+        "name": "\"On Thursday its reading room will stay open until the evening.\", \"Der Lesesaal bleibt bis zum Abend geöffnet.\", true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/selectedEveningClaimKeepsSourceWeekday(sourceText:summary:rejected:)?args=f2494c0a33d0379ab7bf68fb8677599d0f4a4c77756919710c3ead5591d663c8",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,0063s",
+        "durationInSeconds": 0.006345033645629883,
+        "name": "\"On Thursday its reading room will stay open until the evening.\", \"On Thursday it stays open until evening. It reopens Monday.\", false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/selectedEveningClaimKeepsSourceWeekday(sourceText:summary:rejected:)?args=1398a64ce0f31604ea7929dbfb8aafbe4eacf04e3c96ca1b0c4029f901c27df2",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,04s",
+        "durationInSeconds": 0.040352821350097656,
+        "name": "\"On Thursday its reading room will stay open until the evening.\", \"On Thursday the library opens. It remains open until evening.\", true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/selectedEveningClaimKeepsSourceWeekday(sourceText:summary:rejected:)?args=81dc0cb56de79082d33b117885a61e578af1dbf99e9e545dea1aa60b4a99457b",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,0047s",
+        "durationInSeconds": 0.004700899124145508,
+        "name": "\"On Thursday its reading room will stay open until the evening.\", \"The reading room is free to use.\", false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/selectedEveningClaimKeepsSourceWeekday(sourceText:summary:rejected:)?args=571ca23ec73cccf846fc6be93c41e718d55c688fc36054b48d736764eb50ea18",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,0044s",
+        "durationInSeconds": 0.0044460296630859375,
+        "name": "\"On Thursday its reading room will stay open until the evening.\", \"The room remains open until the evening on Monday.\", true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/selectedEveningClaimKeepsSourceWeekday(sourceText:summary:rejected:)?args=a5abfca12058e747162c1324fe908501d3c4502cafa4ab8117935af1f2f8db09",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,0071s",
+        "durationInSeconds": 0.007066011428833008,
+        "name": "\"The reading room remains open until the evening.\", \"Der Lesesaal bleibt bis zum Abend geöffnet.\", false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/selectedEveningClaimKeepsSourceWeekday(sourceText:summary:rejected:)?args=c9c5dbf09f1575a517012e7e8d908955619f053d562695e2c23a2579eb06f80e",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "0,012s",
+    "durationInSeconds": 0.011566877365112305,
+    "name": "An evening claim keeps the weekday attached to the source statement",
+    "nodeIdentifier": "AppleSummaryGeneratorTests/selectedEveningClaimKeepsSourceWeekday(sourceText:summary:rejected:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/selectedEveningClaimKeepsSourceWeekday(sourceText:summary:rejected:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "children": [
+      {
+        "duration": "0,013s",
+        "durationInSeconds": 0.013105154037475586,
+        "name": "false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/eveningWeekdayUsesReferencedFeedRevision(referenced:)?args=fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,0054s",
+        "durationInSeconds": 0.005381107330322266,
+        "name": "true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/eveningWeekdayUsesReferencedFeedRevision(referenced:)?args=b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "0,0092s",
+    "durationInSeconds": 0.009243130683898926,
+    "name": "A weekday from an original feed revision applies only to its referenced source",
+    "nodeIdentifier": "AppleSummaryGeneratorTests/eveningWeekdayUsesReferencedFeedRevision(referenced:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/eveningWeekdayUsesReferencedFeedRevision(referenced:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "children": [
+      {
+        "duration": "0,045s",
+        "durationInSeconds": 0.04489612579345703,
+        "name": "false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/DigestTests/eveningWeekdayCannotBypassPublicationOrCache(cached:)?args=fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,03s",
+        "durationInSeconds": 0.030345916748046875,
+        "name": "true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/DigestTests/eveningWeekdayCannotBypassPublicationOrCache(cached:)?args=b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "0,038s",
+    "durationInSeconds": 0.03762102127075195,
+    "name": "Publication and cached results preserve an evening claim's source weekday",
+    "nodeIdentifier": "DigestTests/eveningWeekdayCannotBypassPublicationOrCache(cached:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/DigestTests/eveningWeekdayCannotBypassPublicationOrCache(cached:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "33s",
+    "durationInSeconds": 33.38642704486847,
+    "name": "testVoiceOverAnnouncesReaderAndMovesFocus()",
+    "nodeIdentifier": "ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  }
+]
