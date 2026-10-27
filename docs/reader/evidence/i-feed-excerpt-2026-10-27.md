@@ -17,3 +17,7 @@ Commit `97cc18473` preserves the feed HTML revision in the coordinator's working
 ## Explicit unknown field names
 
 Commit `4efc0f724` makes the original-details notice name merchant, price and conditions in English and German. It does not assign values or determine whether an article is an offer. Xcode MCP passed 21 selected source-fact component and localization executions; [Reader CI 40474477649](https://github.com/mpwg/NetNewsWire/actions/runs/40474477649) passed on `4efc0f724`: the actual-app label and identifier assertion passed in English and German, alongside 254 code functions, 11 native UI methods, SwiftLint and process recovery. This is not a full VoiceOver journey. Field attribution, complete conditions and real-model quality remain open.
+
+## Latin word boundaries
+
+A focused Xcode MCP Swift Testing control reproduced `SourceQuotationMatching.contains("sterreich", in: "Österreich")` returning true before the change. Commit `938d07fc4` rejects clipped Latin-letter words at either edge in addition to the existing ASCII-token and decimal checks. Precomposed and decomposed accents, a complete accented word and the existing Japanese numeric quotation control pass. The complete local code selection passed 547 executions; after removing one duplicate test argument, the final source-fact suite passed 39 executions. This is a bounded Latin-script improvement, not full word segmentation across all scripts or semantic support for a claim. Hosted CI is pending.
