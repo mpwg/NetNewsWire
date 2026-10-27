@@ -246,6 +246,18 @@ final class ReaderSmokeTests: XCTestCase {
         XCTAssertEqual(output.lastPathComponent, "ReaderExportProbe.opml")
     }
 
+    func testOfferFallbackAppearsInActualDigest() throws {
+        let app = launchReader(arguments: ["--ui-testing-timeline", "--ui-testing-offer-fallback", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"])
+        waitForValue(app.staticTexts["timelineFixturePhase"], equalTo: "ready", timeout: 10)
+        let digest = app.outlines["readerTimeline"].staticTexts["Timeline fixture · Daily digest"].firstMatch
+        XCTAssertTrue(digest.waitForExistence(timeout: 10))
+        digest.click()
+        let fallback = app.descendants(matching: .any)["digest.offer.fallback"].firstMatch
+        XCTAssertTrue(fallback.waitForExistence(timeout: 10))
+        XCTAssertEqual(fallback.label, "Offer details, if applicable: See original.")
+        XCTAssertTrue(app.staticTexts["Example Store: EUR 29.99; conditions apply."].firstMatch.exists)
+    }
+
     func testDelayedTimelineQueryKeepsInputAndFeedMenuResponsive() throws {
         let app = launchReader(arguments: ["--ui-testing-timeline", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"])
         waitForValue(app.staticTexts["timelineFixturePhase"], equalTo: "ready", timeout: 10)
