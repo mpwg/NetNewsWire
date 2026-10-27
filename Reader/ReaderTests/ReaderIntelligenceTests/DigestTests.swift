@@ -876,6 +876,25 @@ struct DigestTests {
         #expect(try await store.pendingChanges(accountID: feed.id.accountID).isEmpty)
     }
 
+    @Test("Cached Latin alphanumeric fragments are regenerated without changing source state")
+    func cachedLatinAlphanumericFragmentIsRegenerated() async throws {
+        let (store, feed, articles) = try await fixture(count: 1)
+        var refreshedArticles = articles
+        refreshedArticles[0].title = "Ö7"
+        try await store.applyRefresh(RefreshSnapshot(accountID: feed.id.accountID, feeds: [feed], folders: [],
+                                                     articles: refreshedArticles, unreadIDs: ["0"], starredIDs: []))
+        let before = try #require(try await store.article(articles[0].id))
+        let coordinator = DigestCoordinator(repository: store, generator: FixtureGenerator())
+        var cached = try #require(try await coordinator.generate(feed: feed).first)
+        cached.sections[0].sourceFacts = [DigestSourceFacts(source: before.id, excerpts: ["7"])]
+        try await store.saveDigest(cached)
+        let result = try #require(try await coordinator.generate(feed: feed).first)
+        #expect(result.revision != cached.revision)
+        #expect(result.sections.first?.sourceFacts == nil)
+        #expect(try await store.article(before.id) == before)
+        #expect(try await store.pendingChanges(accountID: feed.id.accountID).isEmpty)
+    }
+
     @Test("A passive feed lead is attached only when it belongs to the stored feed revision", arguments: [false, true])
     func feedLeadIsBoundToStoredRevision(matches: Bool) async throws {
         let (store, feed, articles) = try await fixture(count: 1)
