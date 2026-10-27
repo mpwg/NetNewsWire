@@ -36,7 +36,7 @@ Open `Reader.xcodeproj` in this directory and select the shared Reader scheme. T
 
 An in-memory Swift Testing integration checks a 250-original daily digest, a later arrival on the same card and read changes limited to the displayed revision. [Focused Mac result](../docs/reader/evidence/j-large-revision-xcode-2026-10-27.txt); real-feed UI and final-platform acceptance remain separate.
 
-An app launched with `--ui-testing` uses an in-memory store and a separate `<bundle ID>.ui-testing` Keychain service. Credentials stored there persist until removed, and a real FreshRSS server is not isolated by this flag. [Verification and remaining real-login checks](../docs/reader/evidence/j-ui-test-keychain-2026-10-27.md).
+An app launched with `--ui-testing` uses an in-memory store and a separate in-memory credential store. Test credentials last only for that process; a real FreshRSS server is not isolated by this flag. [Verification and remaining real-login checks](../docs/reader/evidence/j-ui-test-keychain-2026-10-27.md).
 
 The current Mac candidate plan also passes the credential, icon, image and service-lifetime code contracts and the native image-load/input scenario. [Scoped results](../docs/reader/evidence/g-current-ci-cases-2026-10-27.json). Final iPhone/iPad and energy acceptance remain open.
 
