@@ -67,13 +67,7 @@ final class ReaderSmokeTests: XCTestCase {
                 context.name = "Native VoiceOver service before \(step)"
                 context.lifetime = .keepAlways
                 activity.add(context)
-                let stateBefore = app.state.rawValue
                 let utterance = try operation().utterance
-                let stateAfter = app.state.rawValue
-                let appState = XCTAttachment(string: "Reader application state before: \(stateBefore); after: \(stateAfter)")
-                appState.name = "Reader application state during \(step)"
-                appState.lifetime = .keepAlways
-                activity.add(appState)
                 let attachment = XCTAttachment(string: utterance)
                 attachment.name = "Actual native VoiceOver \(step)"
                 attachment.lifetime = .keepAlways
