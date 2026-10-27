@@ -1,0 +1,38 @@
+[
+  {
+    "children": [
+      {
+        "duration": "0,0049s",
+        "durationInSeconds": 0.00493311882019043,
+        "name": "false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/conditionCheckUsesReferencedFeedRevision(referenced:)?args=fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,0044s",
+        "durationInSeconds": 0.004426002502441406,
+        "name": "true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/conditionCheckUsesReferencedFeedRevision(referenced:)?args=b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "0,0047s",
+    "durationInSeconds": 0.004679560661315918,
+    "name": "Original feed condition is checked only against the source referenced by the summary",
+    "nodeIdentifier": "AppleSummaryGeneratorTests/conditionCheckUsesReferencedFeedRevision(referenced:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/conditionCheckUsesReferencedFeedRevision(referenced:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "40s",
+    "durationInSeconds": 40.376495003700256,
+    "name": "testVoiceOverAnnouncesReaderAndMovesFocus()",
+    "nodeIdentifier": "ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  }
+]
