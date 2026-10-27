@@ -1,0 +1,72 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "49bb563239b3f969ec6389694924d2c8f7ad1972",
+        "deviceName" : "My Mac",
+        "modelName" : "Virtual Machine",
+        "osBuildNumber" : "26A434",
+        "osVersion" : "27.0.1",
+        "platform" : "macOS"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 1,
+      "passedTests" : 627,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "Reader · Built with macOS 27.0.1",
+  "expectedFailures" : 0,
+  "failedTests" : 1,
+  "finishTime" : 1793102632.795,
+  "passedTests" : 285,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+    {
+      "issueType" : "Runtime Warning",
+      "message" : "Safety guardrails were triggered. If this is unexpected, please use `LanguageModelSession.logFeedbackAttachment(sentiment:issues:desiredOutput:)` to export the feedback attachment and file a feedback report at https://feedbackassistant.apple.com.",
+      "sourceURL" : "file:///Users/runner/work/NetNewsWire/NetNewsWire/Reader/ReaderTests/ReaderIntelligenceTests/DigestTests.swift"
+    },
+    {
+      "issueType" : "Runtime Warning",
+      "message" : "Safety guardrails were triggered. If this is unexpected, please use `LanguageModelSession.logFeedbackAttachment(sentiment:issues:desiredOutput:)` to export the feedback attachment and file a feedback report at https://feedbackassistant.apple.com.",
+      "sourceURL" : "file:///Users/runner/work/NetNewsWire/NetNewsWire/Reader/ReaderTests/ReaderIntelligenceTests/DigestTests.swift"
+    }
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1793102103.745,
+  "statistics" : [
+    {
+      "subtitle" : "453 test runs",
+      "title" : "111 tests ran with dynamic parameters"
+    },
+    {
+      "subtitle" : "1 test run",
+      "title" : "1 test collected performance metrics"
+    }
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "failed: caught error: \"Error Domain=com.apple.xctest.voiceoverservice Code=3 \"No speech available\" UserInfo={NSLocalizedDescription=No speech available}\"",
+      "targetName" : "ReaderUITests",
+      "testIdentifier" : 285,
+      "testIdentifierString" : "ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus()",
+      "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus",
+      "testName" : "testVoiceOverAnnouncesReaderAndMovesFocus()"
+    }
+  ],
+  "title" : "Test - Reader",
+  "topInsights" : [
+    {
+      "category" : "Longest Test Runs",
+      "impact" : "23% of duration",
+      "text" : "4 longest test runs with outlier durations exceeding 1.50s (three standard deviations)"
+    }
+  ],
+  "totalTestCount" : 286
+}

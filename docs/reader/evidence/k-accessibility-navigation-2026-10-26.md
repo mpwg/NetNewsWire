@@ -1,5 +1,11 @@
 # K: native navigation roles and section heading — 2026-10-26
 
+## Application-state diagnostic — 2026-10-27
+
+Candidate `7506cf7ab` recorded `XCUIApplication.state.rawValue` before and after each existing VoiceOver operation, without refocusing Reader or changing assertions. Xcode MCP build-for-testing and strict CI lint passed. [CI 40499481413](https://github.com/mpwg/NetNewsWire/actions/runs/40499481413) failed with 627 passes, one VoiceOver failure and no skips. Entry announced article 299; forward actions one and two each announced “Running” and recorded raw app state 4 before and after. Forward three threw “No speech available” before its state attachment could be written. VoiceOver was initially disabled and restored to disabled. No testmanagerd crash report was uploaded. [Original summary](k-app-state-diagnostic-summary-2026-10-27.json) · [scoped original text](k-app-state-diagnostic-text-2026-10-27.json).
+
+The asynchronous app-state samples do not identify VoiceOver's focused element, and the added observations can affect timing. Because this particular failure did not produce the intended before/after evidence at the throwing operation, the candidate is reverted rather than adopted as a repair. It does not establish the cause of this or the earlier Automation-focus failure. Do not retry the unchanged plan to select a pass; the local window comparison remains owner-deferred.
+
 ## Main CI navigation focus — 2026-10-27
 
 In [main CI 40497263152](https://github.com/mpwg/NetNewsWire/actions/runs/40497263152), native VoiceOver reported the table on entry and article 298 on the first forward action; the second forward action announced the Automation application. The required next article was not reached during the remaining actions. The original text attachments establish that VoiceOver was disabled both before and after the test; service descriptions show only that it was enabled during the actions. [Scoped original text](k-main-voiceover-focus-text-2026-10-27.json) · [full result summary](i-main-ci-summary-2026-10-27.json). No testmanagerd crash report was uploaded for this run. These observations narrow the visible failure but do not establish what caused the focus transition, an application defect, or a reliable fix. The same test passed on the source-equivalent candidate; full VoiceOver acceptance remains open.
