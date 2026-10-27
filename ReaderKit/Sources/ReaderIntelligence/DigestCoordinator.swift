@@ -88,11 +88,17 @@ public actor DigestCoordinator {
                     let current = try await repository.preferences().first { $0.id == feedID }
                     return current?.mode == .digest && current?.cloudAllowed == true
                 })
-                guard !SourceFactValidation.hasKnownConditionUpgrade(sections, sources: sources) else { throw ReaderError.invalidResponse }
-                guard !SourceFactValidation.hasUnsupportedEveningWeekday(sections, sources: sources) else { throw ReaderError.invalidResponse }
             } catch is CancellationError { throw CancellationError() } catch { sections = []; warnings.append(error.localizedDescription) }
-            guard Self.validGeneratedSections(sections, sources: allKeys),
+            guard Self.validGeneratedSections(sections, sources: allKeys, allowingOriginalsOnly: true),
                   Self.sourceFactsMatchOriginals(sections, sources: sources) else { throw ReaderError.invalidResponse }
+            let safe = sections.filter { section in
+                !SourceFactValidation.hasKnownConditionUpgrade([section], sources: sources) &&
+                !SourceFactValidation.hasUnsupportedEveningWeekday([section], sources: sources)
+            }
+            if safe.count != sections.count || sections.contains(where: { $0.text.isEmpty }) {
+                warnings.append(ReaderError.invalidResponse.localizedDescription)
+            }
+            sections = safe
             let covered = Set(sections.flatMap(\.sources))
             let missing = sources.filter { !covered.contains($0.id) }
             if !missing.isEmpty {

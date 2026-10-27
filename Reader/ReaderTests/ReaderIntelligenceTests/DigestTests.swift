@@ -194,6 +194,29 @@ private actor GenerationTraceJournal {
 }
 
 struct AppleSummaryGeneratorTests {
+    @Test("A rejected condition claim does not discard another valid summary", arguments: [false, true])
+    func unsafeGroupDoesNotDiscardSafeGroup(sharedSource: Bool) async throws {
+        var first = try article()
+        first.title = "Conditioned item"
+        first.text = "The item is near-new. The reading room remains free."
+        var second = first
+        second.id.remoteID = "other"
+        second.title = "Library"
+        second.text = "The reading room remains free."
+        let response = try modelJSON(["groups": [
+            ["title": "Item", "summary": "Available in new condition.", "sourceNumbers": [0]],
+            ["title": "Library", "summary": "The reading room remains free.", "sourceNumbers": [sharedSource ? 0 : 1]]
+        ]])
+        let journal = ModelRequestJournal(response: response)
+        let sections = try await AppleSummaryGenerator().generate([first, second], model: ControlledLanguageModel(journal: journal),
+                                                                  capacity: 10000, count: { $0.count })
+        #expect(sections.count == 2)
+        #expect(sections.first?.sources == [sharedSource ? first.id : second.id])
+        #expect(sections.first?.text == "The reading room remains free.")
+        #expect(sections.last?.text == "")
+        #expect(sections.last?.sources == [first.id])
+    }
+
     // Explicit English/German translation fixtures exercise the retained weekday counterexample.
     @Test("An evening claim keeps the weekday attached to the source statement", arguments: [
         ("On Thursday its reading room will stay open until the evening.", "Der Lesesaal bleibt bis zum Abend geöffnet.", true),
@@ -842,6 +865,15 @@ private struct FeedQuoteFixtureGenerator: SummaryGenerator {
     }
 }
 
+private struct MixedSafetyFixtureGenerator: SummaryGenerator {
+    var sharedSource = false
+    func summarize(_ articles: [ArticleSnapshot], cloudAllowed: Bool) async throws -> [DigestSection] {
+        guard articles.count == 2 else { throw ReaderError.invalidResponse }
+        return [DigestSection(title: "Item", text: "Available in new condition.", sources: [articles[0].id]),
+                DigestSection(title: "Library", text: "The reading room remains free.", sources: [articles[sharedSource ? 0 : 1].id])]
+    }
+}
+
 private struct StagedFixtureGenerator: SummaryGenerator {
     let journal: ModelRequestJournal
 
@@ -873,6 +905,58 @@ private actor ControlledGenerator: SummaryGenerator {
 }
 
 struct DigestTests {
+    @Test("Rejecting a claim remains visible when another summary covers the same original")
+    func rejectedClaimKeepsVisibleWarningForSharedSource() async throws {
+        let (store, feed, initial) = try await fixture(count: 1)
+        var source = try #require(initial.first)
+        source.text = "The item is near-new. The reading room remains free. " + String(repeating: "Source context. ", count: 40)
+        try await store.applyRefresh(RefreshSnapshot(accountID: feed.id.accountID, feeds: [feed], folders: [], articles: [source],
+                                                    unreadIDs: [source.id.remoteID], starredIDs: []))
+        let before = try #require(try await store.article(source.id))
+        let response = #"{"groups":[{"title":"Item","summary":"Available in new condition.","sourceNumbers":[0]},{"title":"Library","summary":"The reading room remains free.","sourceNumbers":[0]}]}"#
+        let generator = StagedFixtureGenerator(journal: ModelRequestJournal(response: response))
+        let digest = try #require(try await DigestCoordinator(repository: store, generator: generator).generate(feed: feed).first)
+        #expect(digest.warning != nil)
+        #expect(digest.hasDisplayableContent)
+        #expect(digest.sections.contains { $0.text == "The reading room remains free." && $0.sources == [source.id] })
+        #expect(digest.sections.contains { $0.text.isEmpty && $0.sources == [source.id] })
+        #expect(!digest.sections.contains { $0.text.contains("new condition") })
+        #expect(Set(digest.sources) == [source.id])
+        #expect(try await store.article(source.id) == before)
+        #expect(try await store.pendingChanges(accountID: feed.id.accountID).isEmpty)
+    }
+
+    @Test("A safe summary survives an independently rejected section with warned originals",
+          arguments: [(false, false), (false, true), (true, false), (true, true)])
+    func independentlyRejectedSectionKeepsSafeSummary(staged: Bool, sharedSource: Bool) async throws {
+        let (store, feed, initial) = try await fixture(count: 2)
+        var sources = initial
+        sources[0].text = "The item is near-new. The reading room remains free. " + String(repeating: "Source context. ", count: 40)
+        sources[1].text = "The reading room remains free. " + String(repeating: "Source context. ", count: 40)
+        try await store.applyRefresh(RefreshSnapshot(accountID: feed.id.accountID, feeds: [feed], folders: [], articles: sources,
+                                                    unreadIDs: Set(sources.map(\.id.remoteID)), starredIDs: []))
+        let before = try await store.articles(ArticleQuery(feed: feed.id))
+        let generator: any SummaryGenerator
+        if staged {
+            let response = try modelJSON(["groups": [
+                ["title": "Item", "summary": "Available in new condition.", "sourceNumbers": [0]],
+                ["title": "Library", "summary": "The reading room remains free.", "sourceNumbers": [sharedSource ? 0 : 1]]
+            ]])
+            generator = StagedFixtureGenerator(journal: ModelRequestJournal(response: response))
+        } else {
+            generator = MixedSafetyFixtureGenerator(sharedSource: sharedSource)
+        }
+        let digest = try #require(try await DigestCoordinator(repository: store, generator: generator).generate(feed: feed).first)
+        #expect(digest.warning != nil)
+        #expect(digest.hasDisplayableContent)
+        #expect(digest.sections.contains { $0.text == "The reading room remains free." && $0.sources == [sources[sharedSource ? 0 : 1].id] })
+        #expect(digest.sections.contains { $0.text.isEmpty && $0.sources == [sources[sharedSource ? 1 : 0].id] })
+        #expect(!digest.sections.contains { $0.text.contains("new condition") })
+        #expect(Set(digest.sources) == Set(sources.map(\.id)))
+        #expect(try await store.articles(ArticleQuery(feed: feed.id)) == before)
+        #expect(try await store.pendingChanges(accountID: feed.id.accountID).isEmpty)
+    }
+
     @Test("Publication and cached results preserve an evening claim's source weekday", arguments: [false, true])
     func eveningWeekdayCannotBypassPublicationOrCache(cached: Bool) async throws {
         let (store, feed, initial) = try await fixture(count: 2)

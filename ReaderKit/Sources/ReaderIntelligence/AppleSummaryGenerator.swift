@@ -322,9 +322,18 @@ public actor AppleSummaryGenerator: SummaryGenerator {
                     }
                     return DigestSection(title: group.title, text: group.text, sources: keys, sourceFacts: facts)
                 }
-                guard !SourceFactValidation.hasKnownConditionUpgrade(sections, sources: articles),
-                      !SourceFactValidation.hasUnsupportedEveningWeekday(sections, sources: articles) else { throw ReaderError.invalidResponse }
-                return sections
+                let safe = sections.filter { section in
+                    !SourceFactValidation.hasKnownConditionUpgrade([section], sources: articles) &&
+                    !SourceFactValidation.hasUnsupportedEveningWeekday([section], sources: articles)
+                }
+                guard !safe.isEmpty else { throw ReaderError.invalidResponse }
+                guard safe.count != sections.count else { return safe }
+                let rejectedIDs = Set(sections.filter { !safe.contains($0) }.flatMap(\.sources))
+                var seen: Set<ArticleKey> = []
+                let originals = articles.map(\.id).filter { rejectedIDs.contains($0) && seen.insert($0).inserted }
+                let fallback = DigestSection(title: String(localized: "Other original articles", bundle: #bundle),
+                                             text: "", sources: originals)
+                return safe + [fallback]
             }
             let nextEvidence = Self.mergeEvidence(groups.map {
                 SummaryEvidence(text: $0.title + "\n" + $0.text, sourceNumbers: $0.sourceNumbers)
