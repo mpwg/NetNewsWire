@@ -36,6 +36,8 @@ Open `Reader.xcodeproj` in this directory and select the shared Reader scheme. T
 
 An in-memory Swift Testing integration checks a 250-original daily digest, a later arrival on the same card and read changes limited to the displayed revision. [Focused Mac result](../docs/reader/evidence/j-large-revision-xcode-2026-10-27.txt); real-feed UI and final-platform acceptance remain separate.
 
+An app launched with `--ui-testing` uses an in-memory store and a separate `<bundle ID>.ui-testing` Keychain service. Credentials stored there persist until removed, and a real FreshRSS server is not isolated by this flag. [Verification and remaining real-login checks](../docs/reader/evidence/j-ui-test-keychain-2026-10-27.md).
+
 The current Mac candidate plan also passes the credential, icon, image and service-lifetime code contracts and the native image-load/input scenario. [Scoped results](../docs/reader/evidence/g-current-ci-cases-2026-10-27.json). Final iPhone/iPad and energy acceptance remain open.
 
 ReaderTests is an unhosted Swift Testing code-test target. All code-testable behavior, including connection validation and CI runner failure propagation, belongs here. CI bootstraps the Swift runner contracts directly before trusting the aggregate shell script. ReaderUITests is a small native XCTest/XCUIAutomation target. Apple's automatic scheme test plan discovers both; no generated project, scheme or test-plan script is required. Use Xcode MCP for interactive builds, tests and project changes.

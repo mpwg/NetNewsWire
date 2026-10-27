@@ -1,0 +1,203 @@
+================================================================================
+TEST RESULTS SUMMARY
+================================================================================
+Generated: 2026-10-27T12:39:47Z
+Total Results: 16
+================================================================================
+
+--------------------------------------------------------------------------------
+TEST_RESULT_INDEX: 1/16
+TEST_TARGET: ReaderTests
+TEST_IDENTIFIER: KeychainCredentialStoreTests/cancelledCredentialOperationsFailBeforeAccessingKeychain(operation:)
+TEST_DISPLAY_NAME: .read
+TEST_STATE: Passed
+TEST_FILE_PATH: Reader/ReaderTests/ReaderSyncTests/KeychainCredentialStoreTests.swift
+TEST_LINE_NUMBER: 21
+TEST_TAGS: (none)
+
+TEST_ISSUE_COUNT: 0
+
+--------------------------------------------------------------------------------
+TEST_RESULT_INDEX: 2/16
+TEST_TARGET: ReaderTests
+TEST_IDENTIFIER: KeychainCredentialStoreTests/cancelledCredentialOperationsFailBeforeAccessingKeychain(operation:)
+TEST_DISPLAY_NAME: .save
+TEST_STATE: Passed
+TEST_FILE_PATH: Reader/ReaderTests/ReaderSyncTests/KeychainCredentialStoreTests.swift
+TEST_LINE_NUMBER: 21
+TEST_TAGS: (none)
+
+TEST_ISSUE_COUNT: 0
+
+--------------------------------------------------------------------------------
+TEST_RESULT_INDEX: 3/16
+TEST_TARGET: ReaderTests
+TEST_IDENTIFIER: KeychainCredentialStoreTests/cancelledCredentialOperationsFailBeforeAccessingKeychain(operation:)
+TEST_DISPLAY_NAME: .remove
+TEST_STATE: Passed
+TEST_FILE_PATH: Reader/ReaderTests/ReaderSyncTests/KeychainCredentialStoreTests.swift
+TEST_LINE_NUMBER: 21
+TEST_TAGS: (none)
+
+TEST_ISSUE_COUNT: 0
+
+--------------------------------------------------------------------------------
+TEST_RESULT_INDEX: 4/16
+TEST_TARGET: ReaderTests
+TEST_IDENTIFIER: KeychainCredentialStoreTests/credentialOSErrorsPreserveStatusAndDoNotRetry(operation:status:)
+TEST_DISPLAY_NAME: .read, -25291
+TEST_STATE: Passed
+TEST_FILE_PATH: Reader/ReaderTests/ReaderSyncTests/KeychainCredentialStoreTests.swift
+TEST_LINE_NUMBER: 33
+TEST_TAGS: (none)
+
+TEST_ISSUE_COUNT: 0
+
+--------------------------------------------------------------------------------
+TEST_RESULT_INDEX: 5/16
+TEST_TARGET: ReaderTests
+TEST_IDENTIFIER: KeychainCredentialStoreTests/credentialOSErrorsPreserveStatusAndDoNotRetry(operation:status:)
+TEST_DISPLAY_NAME: .read, -25308
+TEST_STATE: Passed
+TEST_FILE_PATH: Reader/ReaderTests/ReaderSyncTests/KeychainCredentialStoreTests.swift
+TEST_LINE_NUMBER: 33
+TEST_TAGS: (none)
+
+TEST_ISSUE_COUNT: 0
+
+--------------------------------------------------------------------------------
+TEST_RESULT_INDEX: 6/16
+TEST_TARGET: ReaderTests
+TEST_IDENTIFIER: KeychainCredentialStoreTests/credentialOSErrorsPreserveStatusAndDoNotRetry(operation:status:)
+TEST_DISPLAY_NAME: .read, -25293
+TEST_STATE: Passed
+TEST_FILE_PATH: Reader/ReaderTests/ReaderSyncTests/KeychainCredentialStoreTests.swift
+TEST_LINE_NUMBER: 33
+TEST_TAGS: (none)
+
+TEST_ISSUE_COUNT: 0
+
+--------------------------------------------------------------------------------
+TEST_RESULT_INDEX: 7/16
+TEST_TARGET: ReaderTests
+TEST_IDENTIFIER: KeychainCredentialStoreTests/credentialOSErrorsPreserveStatusAndDoNotRetry(operation:status:)
+TEST_DISPLAY_NAME: .save, -25291
+TEST_STATE: Passed
+TEST_FILE_PATH: Reader/ReaderTests/ReaderSyncTests/KeychainCredentialStoreTests.swift
+TEST_LINE_NUMBER: 33
+TEST_TAGS: (none)
+
+TEST_ISSUE_COUNT: 0
+
+--------------------------------------------------------------------------------
+TEST_RESULT_INDEX: 8/16
+TEST_TARGET: ReaderTests
+TEST_IDENTIFIER: KeychainCredentialStoreTests/credentialOSErrorsPreserveStatusAndDoNotRetry(operation:status:)
+TEST_DISPLAY_NAME: .save, -25308
+TEST_STATE: Passed
+TEST_FILE_PATH: Reader/ReaderTests/ReaderSyncTests/KeychainCredentialStoreTests.swift
+TEST_LINE_NUMBER: 33
+TEST_TAGS: (none)
+
+TEST_ISSUE_COUNT: 0
+
+--------------------------------------------------------------------------------
+TEST_RESULT_INDEX: 9/16
+TEST_TARGET: ReaderTests
+TEST_IDENTIFIER: KeychainCredentialStoreTests/credentialOSErrorsPreserveStatusAndDoNotRetry(operation:status:)
+TEST_DISPLAY_NAME: .save, -25293
+TEST_STATE: Passed
+TEST_FILE_PATH: Reader/ReaderTests/ReaderSyncTests/KeychainCredentialStoreTests.swift
+TEST_LINE_NUMBER: 33
+TEST_TAGS: (none)
+
+TEST_ISSUE_COUNT: 0
+
+--------------------------------------------------------------------------------
+TEST_RESULT_INDEX: 10/16
+TEST_TARGET: ReaderTests
+TEST_IDENTIFIER: KeychainCredentialStoreTests/credentialOSErrorsPreserveStatusAndDoNotRetry(operation:status:)
+TEST_DISPLAY_NAME: .remove, -25291
+TEST_STATE: Passed
+TEST_FILE_PATH: Reader/ReaderTests/ReaderSyncTests/KeychainCredentialStoreTests.swift
+TEST_LINE_NUMBER: 33
+TEST_TAGS: (none)
+
+TEST_ISSUE_COUNT: 0
+
+--------------------------------------------------------------------------------
+TEST_RESULT_INDEX: 11/16
+TEST_TARGET: ReaderTests
+TEST_IDENTIFIER: KeychainCredentialStoreTests/credentialOSErrorsPreserveStatusAndDoNotRetry(operation:status:)
+TEST_DISPLAY_NAME: .remove, -25308
+TEST_STATE: Passed
+TEST_FILE_PATH: Reader/ReaderTests/ReaderSyncTests/KeychainCredentialStoreTests.swift
+TEST_LINE_NUMBER: 33
+TEST_TAGS: (none)
+
+TEST_ISSUE_COUNT: 0
+
+--------------------------------------------------------------------------------
+TEST_RESULT_INDEX: 12/16
+TEST_TARGET: ReaderTests
+TEST_IDENTIFIER: KeychainCredentialStoreTests/credentialOSErrorsPreserveStatusAndDoNotRetry(operation:status:)
+TEST_DISPLAY_NAME: .remove, -25293
+TEST_STATE: Passed
+TEST_FILE_PATH: Reader/ReaderTests/ReaderSyncTests/KeychainCredentialStoreTests.swift
+TEST_LINE_NUMBER: 33
+TEST_TAGS: (none)
+
+TEST_ISSUE_COUNT: 0
+
+--------------------------------------------------------------------------------
+TEST_RESULT_INDEX: 13/16
+TEST_TARGET: ReaderTests
+TEST_IDENTIFIER: KeychainCredentialStoreTests/cancellationPreventsFurtherWriteRecoveryCalls(blockingCall:)
+TEST_DISPLAY_NAME: 1
+TEST_STATE: Passed
+TEST_FILE_PATH: Reader/ReaderTests/ReaderSyncTests/KeychainCredentialStoreTests.swift
+TEST_LINE_NUMBER: 47
+TEST_TAGS: (none)
+
+TEST_ISSUE_COUNT: 0
+
+--------------------------------------------------------------------------------
+TEST_RESULT_INDEX: 14/16
+TEST_TARGET: ReaderTests
+TEST_IDENTIFIER: KeychainCredentialStoreTests/cancellationPreventsFurtherWriteRecoveryCalls(blockingCall:)
+TEST_DISPLAY_NAME: 2
+TEST_STATE: Passed
+TEST_FILE_PATH: Reader/ReaderTests/ReaderSyncTests/KeychainCredentialStoreTests.swift
+TEST_LINE_NUMBER: 47
+TEST_TAGS: (none)
+
+TEST_ISSUE_COUNT: 0
+
+--------------------------------------------------------------------------------
+TEST_RESULT_INDEX: 15/16
+TEST_TARGET: ReaderTests
+TEST_IDENTIFIER: KeychainCredentialStoreTests/blockedSecurityCallsLeaveMainActorResponsive()
+TEST_DISPLAY_NAME: An in-progress Security call leaves MainActor free
+TEST_STATE: Passed
+TEST_FILE_PATH: Reader/ReaderTests/ReaderSyncTests/KeychainCredentialStoreTests.swift
+TEST_LINE_NUMBER: 64
+TEST_TAGS: (none)
+
+TEST_ISSUE_COUNT: 0
+
+--------------------------------------------------------------------------------
+TEST_RESULT_INDEX: 16/16
+TEST_TARGET: ReaderTests
+TEST_IDENTIFIER: KeychainCredentialStoreTests/concurrentCreationPreservesDeviceLocalProtection()
+TEST_DISPLAY_NAME: Concurrent item creation recovers without changing device-local protection
+TEST_STATE: Passed
+TEST_FILE_PATH: Reader/ReaderTests/ReaderSyncTests/KeychainCredentialStoreTests.swift
+TEST_LINE_NUMBER: 80
+TEST_TAGS: (none)
+
+TEST_ISSUE_COUNT: 0
+
+
+================================================================================
+END OF TEST RESULTS SUMMARY
+================================================================================
