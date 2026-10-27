@@ -1,3 +1,5 @@
+The digest also shows a bounded literal feed excerpt when available and a localized notice to consult the original for offer details. It does not infer offer-field roles or claim that conditions are complete. [Evidence](../../../docs/reader/evidence/i-feed-excerpt-2026-10-27.md).
+
 # ReaderUI
 
 Daily digests retain free summaries and display additional source facts beside each original's button. The source-facts component uses wrapping, selectable literal text and English/German resources; it never renders quotation strings as HTML or Markdown. Its notice explicitly says excerpts may omit terms. Directly hosted Swift Testing verifies the complete literal text; compiled resources verify localization. These code checks do not accept the app's full VoiceOver journey.
