@@ -102,7 +102,8 @@ private final class ReaderBootstrap {
                 return
             }
             #endif
-            let credentials = KeychainCredentialStore(service: bundleID)
+            let credentialService = uiTesting ? "\(bundleID).ui-testing" : bundleID
+            let credentials = KeychainCredentialStore(service: credentialService)
             let client = FreshRSSClient(repository: store, credentials: credentials)
             let content = ArticleContentService()
             let digests = DigestCoordinator(repository: store, generator: AppleSummaryGenerator(), extractor: content)
