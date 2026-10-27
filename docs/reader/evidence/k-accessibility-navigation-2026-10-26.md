@@ -1,5 +1,9 @@
 # K: native navigation roles and section heading — 2026-10-26
 
+## Main CI navigation focus — 2026-10-27
+
+In [main CI 40497263152](https://github.com/mpwg/NetNewsWire/actions/runs/40497263152), native VoiceOver reported the table on entry and article 298 on the first forward action; the second forward action announced the Automation application. The required next article was not reached during the remaining actions. The original text attachments establish that VoiceOver was disabled both before and after the test; service descriptions show only that it was enabled during the actions. [Scoped original text](k-main-voiceover-focus-text-2026-10-27.json) · [full result summary](i-main-ci-summary-2026-10-27.json). No testmanagerd crash report was uploaded for this run. These observations narrow the visible failure but do not establish what caused the focus transition, an application defect, or a reliable fix. The same test passed on the source-equivalent candidate; full VoiceOver acceptance remains open.
+
 ## In-process hosting comparison — 2026-10-27
 
 The hosted full plan on `1cfddb8a5` reaches the populated outline but all 20 VoiceOver forward operations repeat the timeline footer instead of announcing either required adjacent row title. Its initially disabled VoiceOver state was restored. The complete result, original activity tree and state receipts are retained in [the condition-upgrade evidence](i-condition-upgrade-2026-10-27.md#terminal-hosted-result).
