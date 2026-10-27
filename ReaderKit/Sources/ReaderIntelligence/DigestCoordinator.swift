@@ -59,6 +59,7 @@ public actor DigestCoordinator {
                cached.sourceFingerprint == sourceFingerprint,
                cached.hasDisplayableContent,
                !SourceFactValidation.hasKnownConditionUpgrade(cached.sections, sources: sources),
+               !SourceFactValidation.hasUnsupportedEveningWeekday(cached.sections, sources: sources),
                Self.sourceFactsMatchOriginals(cached.sections, sources: sources) {
                 result.append(cached); continue
             }
@@ -88,6 +89,7 @@ public actor DigestCoordinator {
                     return current?.mode == .digest && current?.cloudAllowed == true
                 })
                 guard !SourceFactValidation.hasKnownConditionUpgrade(sections, sources: sources) else { throw ReaderError.invalidResponse }
+                guard !SourceFactValidation.hasUnsupportedEveningWeekday(sections, sources: sources) else { throw ReaderError.invalidResponse }
             } catch is CancellationError { throw CancellationError() } catch { sections = []; warnings.append(error.localizedDescription) }
             guard Self.validGeneratedSections(sections, sources: allKeys),
                   Self.sourceFactsMatchOriginals(sections, sources: sources) else { throw ReaderError.invalidResponse }

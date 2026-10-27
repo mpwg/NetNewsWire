@@ -194,6 +194,66 @@ private actor GenerationTraceJournal {
 }
 
 struct AppleSummaryGeneratorTests {
+    // Explicit English/German translation fixtures exercise the retained weekday counterexample.
+    @Test("An evening claim keeps the weekday attached to the source statement", arguments: [
+        ("On Thursday its reading room will stay open until the evening.", "Der Lesesaal bleibt bis zum Abend geöffnet.", true),
+        ("On Thursday its reading room will stay open until the evening.", "Am Donnerstag bleibt der Lesesaal bis zum Abend geöffnet.", false),
+        ("On Thursday its reading room will stay open until the evening.", "The room remains open until the evening on Monday.", true),
+        ("Am Donnerstag bleibt der Lesesaal bis zum Abend geöffnet.", "The reading room remains open until the evening.", true),
+        ("On Thursday its reading room will stay open until the evening.", "The reading room is free to use.", false),
+        ("The reading room remains open until the evening.", "Der Lesesaal bleibt bis zum Abend geöffnet.", false),
+        ("On Thursday its reading room will stay open until the evening.", "On Thursday the library opens. It remains open until evening.", true),
+        ("On Thursday its reading room will stay open until the evening.", "On Thursday it stays open until evening. It reopens Monday.", false),
+        ("On Thursday it opens in the morning. It is open until evening every day.", "It is open until evening.", false),
+        ("On Thursday and Friday it is open until evening.", "On Friday it is open until evening.", false),
+        ("On Thursday and Friday it is open until evening.", "On Monday it is open until evening.", true)
+    ])
+    func selectedEveningClaimKeepsSourceWeekday(sourceText: String, summary: String, rejected: Bool) async throws {
+        var source = try article()
+        source.title = "Library opening"
+        source.text = sourceText
+        let journal = ModelRequestJournal(response: try modelJSON([
+            "groups": [["title": "Library", "summary": summary, "sourceNumbers": [0]]]
+        ]), factResponses: [try modelJSON(["excerpts": [sourceText]])])
+        let generator = AppleSummaryGenerator()
+        if rejected {
+            await #expect(throws: ReaderError.invalidResponse) {
+                try await generator.generate([source], model: ControlledLanguageModel(journal: journal),
+                                             capacity: 10000, count: { $0.count })
+            }
+        } else {
+            let result = try await generator.generate([source], model: ControlledLanguageModel(journal: journal),
+                                                      capacity: 10000, count: { $0.count })
+            #expect(result.first?.text == summary)
+        }
+    }
+
+    @Test("A weekday from an original feed revision applies only to its referenced source", arguments: [false, true])
+    func eveningWeekdayUsesReferencedFeedRevision(referenced: Bool) async throws {
+        var first = try article()
+        first.title = "Library opening"
+        first.text = "The reading room remains open until the evening."
+        // Explicit German source fixture is separate from the subsequently extracted English text.
+        first.sourceText = referenced ? "Am Donnerstag bleibt der Lesesaal bis zum Abend geöffnet." : nil
+        var second = first
+        second.id.remoteID = "other"
+        second.title = "Other opening"
+        second.text = "A different library opening is described."
+        second.sourceText = referenced ? nil : "Am Donnerstag bleibt der Lesesaal bis zum Abend geöffnet."
+        let journal = ModelRequestJournal(response: #"{"groups":[{"title":"Library","summary":"The reading room remains open until the evening.","sourceNumbers":[0]}]}"#)
+        let generator = AppleSummaryGenerator()
+        if referenced {
+            await #expect(throws: ReaderError.invalidResponse) {
+                try await generator.generate([first, second], model: ControlledLanguageModel(journal: journal),
+                                             capacity: 10000, count: { $0.count })
+            }
+        } else {
+            let sections = try await generator.generate([first, second], model: ControlledLanguageModel(journal: journal),
+                                                        capacity: 10000, count: { $0.count })
+            #expect(sections.first?.sources == [first.id])
+        }
+    }
+
     // Explicit English/German condition fixtures; this guard does not prove general semantic fidelity.
     @Test("An explicit near-new source cannot become an unqualified new-condition claim", arguments: [
         ("Im neuwertigen Zustand.", "Available in new condition.", true),
@@ -813,6 +873,38 @@ private actor ControlledGenerator: SummaryGenerator {
 }
 
 struct DigestTests {
+    @Test("Publication and cached results preserve an evening claim's source weekday", arguments: [false, true])
+    func eveningWeekdayCannotBypassPublicationOrCache(cached: Bool) async throws {
+        let (store, feed, initial) = try await fixture(count: 2)
+        var sources = initial
+        sources[0].text = "The library reopens on Monday. " + String(repeating: "Source context. ", count: 40)
+        sources[1].text = "On Thursday its reading room will stay open until the evening. " + String(repeating: "Source context. ", count: 40)
+        try await store.applyRefresh(RefreshSnapshot(accountID: feed.id.accountID, feeds: [feed], folders: [], articles: sources,
+                                                    unreadIDs: Set(sources.map(\.id.remoteID)), starredIDs: []))
+        let before = try await store.articles(ArticleQuery(feed: feed.id))
+        var saved = try #require(try await DigestCoordinator(repository: store, generator: FixtureGenerator()).generate(feed: feed).first)
+        if cached {
+            saved.sections[0].text = "The reading room remains open until evening."
+        } else {
+            saved.warning = "Force regeneration for controlled publication."
+        }
+        try await store.saveDigest(saved)
+        let generator = FixtureGenerator(summary: cached ? "On Thursday the room stays open until evening." :
+                                                           "The reading room remains open until evening.")
+        let result = try #require(try await DigestCoordinator(repository: store, generator: generator).generate(feed: feed).first)
+        if cached {
+            #expect(result.sections.first?.text == "On Thursday the room stays open until evening.")
+            #expect(result.warning == nil)
+        } else {
+            #expect(result.sections.allSatisfy { $0.text.isEmpty })
+            #expect(result.warning != nil)
+        }
+        #expect(Set(result.sources) == Set(sources.map(\.id)))
+        #expect(Set(result.sections.flatMap(\.sources)) == Set(sources.map(\.id)))
+        #expect(try await store.articles(ArticleQuery(feed: feed.id)) == before)
+        #expect(try await store.pendingChanges(accountID: feed.id.accountID).isEmpty)
+    }
+
     @Test("Publication and cache reuse reject a known condition upgrade without changing originals", arguments: [false, true])
     func conditionUpgradeCannotBypassPublicationOrCache(cached: Bool) async throws {
         let (store, feed, initial) = try await fixture(count: 1)

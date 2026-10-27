@@ -53,6 +53,51 @@ enum SourceQuotationMatching {
 }
 
 enum SourceFactValidation {
+    private static let weekdayPatterns = [
+        #"(?i)\b(?:monday|montag)s?\b"#, #"(?i)\b(?:tuesday|dienstag)s?\b"#,
+        #"(?i)\b(?:wednesday|mittwoch)s?\b"#, #"(?i)\b(?:thursday|donnerstag)s?\b"#,
+        #"(?i)\b(?:friday|freitag)s?\b"#, #"(?i)\b(?:saturday|samstag)s?\b"#,
+        #"(?i)\b(?:sunday|sonntag)s?\b"#
+    ]
+    private static let eveningPattern = #"(?i)\b(?:evenings?|abends?)\b"#
+
+    /// Rejects a recognized evening claim that omits every weekday attached to a source evening sentence.
+    /// This conservative lexical check can reject unrelated same-source claims and does not prove entailment.
+    static func hasUnsupportedEveningWeekday(_ sections: [DigestSection], sources: [ArticleSnapshot]) -> Bool {
+        sections.contains { section in
+            let summaries = (sentences(section.title) + sentences(section.text)).filter { containsEvening($0) }
+            guard !summaries.isEmpty else { return false }
+            let sourceIDs = Set(section.sources)
+            let sourceDays = sources.filter { sourceIDs.contains($0.id) }.reduce(into: Set<Int>()) { days, source in
+                let originals = [source.title, source.text, source.sourceText ?? ""].flatMap { sentences($0) }
+                for sentence in originals where containsEvening(sentence) {
+                    days.formUnion(weekdays(sentence))
+                }
+            }
+            guard !sourceDays.isEmpty else { return false }
+            return summaries.contains { weekdays($0).isDisjoint(with: sourceDays) }
+        }
+    }
+
+    private static func containsEvening(_ text: String) -> Bool {
+        text.range(of: eveningPattern, options: .regularExpression) != nil
+    }
+
+    private static func weekdays(_ text: String) -> Set<Int> {
+        Set(weekdayPatterns.indices.filter { text.range(of: weekdayPatterns[$0], options: .regularExpression) != nil })
+    }
+
+    private static func sentences(_ text: String) -> [String] {
+        let tokenizer = NLTokenizer(unit: .sentence)
+        tokenizer.string = text
+        var result: [String] = []
+        tokenizer.enumerateTokens(in: text.startIndex..<text.endIndex) { range, _ in
+            result.append(String(text[range]))
+            return true
+        }
+        return result
+    }
+
     /// Conservative English/German rejection of known condition upgrades, not general entailment.
     /// A mixed-source or negated new-condition phrase can also cause abstention.
     static func hasKnownConditionUpgrade(_ sections: [DigestSection], sources: [ArticleSnapshot]) -> Bool {
@@ -277,7 +322,8 @@ public actor AppleSummaryGenerator: SummaryGenerator {
                     }
                     return DigestSection(title: group.title, text: group.text, sources: keys, sourceFacts: facts)
                 }
-                guard !SourceFactValidation.hasKnownConditionUpgrade(sections, sources: articles) else { throw ReaderError.invalidResponse }
+                guard !SourceFactValidation.hasKnownConditionUpgrade(sections, sources: articles),
+                      !SourceFactValidation.hasUnsupportedEveningWeekday(sections, sources: articles) else { throw ReaderError.invalidResponse }
                 return sections
             }
             let nextEvidence = Self.mergeEvidence(groups.map {
