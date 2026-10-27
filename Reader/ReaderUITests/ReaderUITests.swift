@@ -247,8 +247,8 @@ final class ReaderSmokeTests: XCTestCase {
     }
 
     func testOfferFallbackAppearsInActualDigest() throws {
-        let cases = [("en", "en_US", "Timeline fixture · Daily digest", "Offer details, if applicable: See original."),
-                     ("de", "de_AT", "Timeline fixture · Tagesübersicht", "Angebotsdetails, falls vorhanden: Siehe Original.")]
+        let cases = [("en", "en_US", "Timeline fixture · Daily digest", "Merchant, price and conditions, if applicable: See original."),
+                     ("de", "de_AT", "Timeline fixture · Tagesübersicht", "Händler, Preis und Bedingungen, falls vorhanden: Siehe Original.")]
         for (language, locale, digestTitle, expected) in cases {
             let app = launchReader(arguments: ["--ui-testing-timeline", "--ui-testing-offer-fallback", "-AppleLanguages", "(\(language))", "-AppleLocale", locale])
             waitForValue(app.staticTexts["timelineFixturePhase"], equalTo: "ready", timeout: 10)

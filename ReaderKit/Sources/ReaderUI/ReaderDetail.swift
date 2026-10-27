@@ -215,11 +215,11 @@ struct DigestSourceFactsView: View {
 
 struct OfferDetailsFallback: View {
     var body: some View {
-        Text("Offer details, if applicable: See original.", bundle: #bundle,
+        Text("Merchant, price and conditions, if applicable: See original.", bundle: #bundle,
              comment: "Fallback when offer fields have not been reliably attributed to the source.")
             .font(.caption).foregroundStyle(.secondary)
             .accessibilityElement()
-            .accessibilityLabel(Text("Offer details, if applicable: See original.", bundle: #bundle))
+            .accessibilityLabel(Text("Merchant, price and conditions, if applicable: See original.", bundle: #bundle))
             .accessibilityIdentifier("digest.offer.fallback")
     }
 }
