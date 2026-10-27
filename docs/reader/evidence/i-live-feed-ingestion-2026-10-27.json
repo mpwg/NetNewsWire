@@ -1,0 +1,15 @@
+{
+  "baselineFeedCount" : 1,
+  "baselineFeedsRestored" : true,
+  "baselineFoldersRestored" : true,
+  "baselineStatusesRestored" : true,
+  "byteMatches" : 28,
+  "credentialsPrinted" : false,
+  "feedArticles" : 30,
+  "feedLeads" : 28,
+  "localOutboxEmpty" : true,
+  "persistentStoreWrites" : false,
+  "phase" : "complete",
+  "temporaryFeedCount" : 1,
+  "verificationOutboxEmpty" : true
+}

@@ -1,0 +1,9 @@
+# Real FreshRSS feed-ingestion checkpoint — 2026-10-27
+
+A read-only preflight through Xcode MCP confirmed the owner's isolated test account was reachable, with one existing feed and no outbox items. A native Xcode MCP diagnostic on macOS 27.2 (build 26B123) then temporarily subscribed that account to the public Preisjäger feed using the shipping FreshRSS client and an in-memory ReaderStore. It read the existing Debug Keychain credential without printing or persisting it; it did not write the persistent application store or fetch linked article pages.
+
+The real server refresh returned 30 articles. The shipping passive feed-lead extractor returned 28 candidates, all 28 byte-for-byte present in the corresponding stored explicit feed text. The remaining two had no candidate under the current extractor. This observation checks same-article byte membership; it does not independently prove the token-boundary guard, semantic role, complete conditions, generated summary, app UI or full article extraction. Those have separate evidence and open criteria.
+
+Cleanup independently refreshed the server and removed the one newly created matching subscription. A further refresh confirmed the original feed and folder sets, all baseline articles' read/starred states and an empty in-memory outbox. The persistent app outbox was checked empty before the operation. The original feed count was one. No separate-device, network-off or persistent-restart behavior is implied. The diagnostic's [aggregate journal](i-live-feed-ingestion-2026-10-27.json), SHA-256 `c292b45365755f023811d601aeee0d3d205fb9850d3915fe277a586bffe6ec87`, contains no account identifiers, credentials, publisher prose or URLs.
+
+This narrows the previously open real-ingestion gap; it does not accept #54 or #55. Correct merchant/price/condition attribution, representative real-model quality, actual app presentation, PCC, final platforms, accessibility and performance remain open.
