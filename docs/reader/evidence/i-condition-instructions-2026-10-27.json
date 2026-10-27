@@ -1,0 +1,21 @@
+{
+  "candidateCommit": "7eeb2af06",
+  "inputSHA256": "8deea3677f5ae0b093e87562c37d38930eea1509db66ea1169b77b09b3a7efb6",
+  "reportSHA256": "c36605c748c3fee7ca2e8c079a8ed79486e3c0abb1bb57cb77f7422d91379fde",
+  "sourceCount": 2,
+  "locale": "en_AT",
+  "cloudAllowed": false,
+  "modelAvailable": true,
+  "elapsedSeconds": 4.573956958,
+  "digestCount": 1,
+  "generatedSummarySections": 0,
+  "originalsOnlySections": 1,
+  "allOriginalKeysRetained": true,
+  "allKeysInSections": true,
+  "warningPresent": true,
+  "articlesUnchanged": true,
+  "outboxEmpty": true,
+  "selectedCodeExecutions": 564,
+  "localCodeFailures": 0,
+  "integrated": false
+}
