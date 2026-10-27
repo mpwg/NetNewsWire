@@ -260,6 +260,15 @@ final class ReaderSmokeTests: XCTestCase {
             XCTAssertEqual(fallbacks.count, 2, "Both sources, including the one without a facts block, need an explicit fallback.")
             for fallback in fallbacks.allElementsBoundByIndex { XCTAssertEqual(fallback.label, expected) }
             XCTAssertTrue(app.staticTexts["Example Store: EUR 29.99; conditions apply."].firstMatch.exists)
+            for title in ["Timeline article 0", "Timeline article 1"] {
+                let source = app.buttons.matching(NSPredicate(format: "label CONTAINS %@", title)).firstMatch
+                XCTAssertTrue(source.waitForExistence(timeout: 10), "Every original needs a navigable source button.")
+                source.click()
+                waitForValue(app.staticTexts["articleDetailTitle"], equalTo: title)
+                waitForValue(app.staticTexts["timelinePendingReadCount"], equalTo: "0")
+                XCTAssertTrue(digest.waitForExistence(timeout: 10))
+                digest.click()
+            }
             app.terminate()
         }
     }
