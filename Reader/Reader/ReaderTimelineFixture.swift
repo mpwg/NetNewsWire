@@ -42,9 +42,11 @@ final class ReaderTimelineFixture {
                 let facts = DigestSourceFacts(source: article.id, excerpts: ["A full-text quotation."],
                                               feedExcerpt: "Example Store: EUR 29.99; conditions apply.")
                 let keys = [article.id, articles[1].id]
-                let section = DigestSection(title: "Offer fixture", text: "A local test summary.", sources: keys, sourceFacts: [facts])
+                let section = DigestSection(title: "Offer fixture", text: "A local test summary.", sources: [keys[0]], sourceFacts: [facts])
+                let fallback = DigestSection(title: "Other original articles", text: "", sources: [keys[1]])
                 let digest = DigestSnapshot(id: "offer-fixture", feed: feed.id, day: Date(), timeZoneID: "UTC",
-                                            sections: [section], sources: keys)
+                                            sections: [section, fallback], sources: keys,
+                                            warning: "One article remains available as an original.")
                 try await store.savePreferences(FeedPreferences(id: feed.id, mode: .digest))
                 try await store.saveDigest(digest)
             }
