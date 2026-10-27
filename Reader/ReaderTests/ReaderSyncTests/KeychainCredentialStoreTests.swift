@@ -92,6 +92,40 @@ struct KeychainCredentialStoreTests {
         #expect(access.addedAccessibility == kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly as String)
     }
 
+    @Test("Ephemeral credentials are isolated by account and store lifetime")
+    func ephemeralCredentialsStayInTheirStore() async throws {
+        let store = EphemeralCredentialStore()
+        let secondStore = EphemeralCredentialStore()
+        let first = UUID()
+        let second = UUID()
+        try await store.savePassword("first-value", accountID: first)
+        try await store.savePassword("second-value", accountID: second)
+        #expect(try await store.password(accountID: first) == "first-value")
+        #expect(try await store.password(accountID: second) == "second-value")
+        #expect(try await secondStore.password(accountID: first) == nil)
+        try await store.savePassword("replacement", accountID: first)
+        try await store.removePassword(accountID: second)
+        #expect(try await store.password(accountID: first) == "replacement")
+        #expect(try await store.password(accountID: second) == nil)
+    }
+
+    @Test("Cancelled ephemeral credential operations leave stored values unchanged", arguments: Operation.allCases)
+    func cancelledEphemeralCredentialsDoNotMutate(operation: Operation) async throws {
+        let store = EphemeralCredentialStore()
+        let account = UUID()
+        try await store.savePassword("original", accountID: account)
+        let request = Task {
+            withUnsafeCurrentTask { $0?.cancel() }
+            switch operation {
+            case .read: _ = try await store.password(accountID: account)
+            case .save: try await store.savePassword("replacement", accountID: account)
+            case .remove: try await store.removePassword(accountID: account)
+            }
+        }
+        await #expect(throws: CancellationError.self) { try await request.value }
+        #expect(try await store.password(accountID: account) == "original")
+    }
+
     private static func perform(_ operation: Operation, store: KeychainCredentialStore) async throws {
         switch operation {
         case .read: _ = try await store.password(accountID: UUID())

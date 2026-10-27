@@ -2,6 +2,28 @@ import Foundation
 import Security
 import ReaderDomain
 
+/// Credentials retained only for the lifetime of this store, for isolated sessions.
+public actor EphemeralCredentialStore: CredentialStore {
+    private var passwords: [UUID: String] = [:]
+
+    public init() {}
+
+    public func password(accountID: UUID) throws -> String? {
+        try Task.checkCancellation()
+        return passwords[accountID]
+    }
+
+    public func savePassword(_ password: String, accountID: UUID) throws {
+        try Task.checkCancellation()
+        passwords[accountID] = password
+    }
+
+    public func removePassword(accountID: UUID) throws {
+        try Task.checkCancellation()
+        passwords.removeValue(forKey: accountID)
+    }
+}
+
 /// Blocking Security calls execute on this actor, outside the UI actor. Credentials remain device-local.
 public actor KeychainCredentialStore: CredentialStore {
     private let service: String
