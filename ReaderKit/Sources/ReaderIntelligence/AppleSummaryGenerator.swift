@@ -43,6 +43,22 @@ enum SourceQuotationMatching {
     }
 }
 
+/// Recognizes only a complete, unqualified price statement for the exact source title.
+/// Other formats require the original; this does not establish offer availability.
+enum ConservativeOfferPrice {
+    static func extract(title: String, text: String) -> String? {
+        let name = title.trimmingCharacters(in: .whitespacesAndNewlines)
+        let statement = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !name.isEmpty, !name.contains(where: \.isNewline) else { return nil }
+        let escapedName = NSRegularExpression.escapedPattern(for: name)
+        let pattern = "^" + escapedName + #" (?:costs|kostet) ((?:EUR |€)[0-9]+(?:[.,][0-9]{2})?|[0-9]+(?:[.,][0-9]{2})? €)\.?$"#
+        guard let expression = try? NSRegularExpression(pattern: pattern),
+              let match = expression.firstMatch(in: statement, range: NSRange(statement.startIndex..., in: statement)),
+              let priceRange = Range(match.range(at: 1), in: statement) else { return nil }
+        return String(statement[priceRange])
+    }
+}
+
 enum SourceFactValidation {
     static func hasUnownedNumericCitation(in text: String, source: String) -> Bool {
         text.matches(of: /\[\s*[0-9]+(?:\s*[,;–-]\s*[0-9]+)*\s*\]/).contains {

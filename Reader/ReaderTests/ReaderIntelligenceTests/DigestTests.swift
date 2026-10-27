@@ -114,6 +114,24 @@ private actor ModelRequestJournal {
 }
 
 struct SourceFactValidationTests {
+    @Test("A price is attributed only by a complete unqualified statement naming the exact offer", arguments: [
+        ("Notebook", "Notebook costs EUR 29.99.", "EUR 29.99"),
+        ("Eintritt", "Eintritt kostet 3,30 €.", "3,30 €"),
+        ("Museum entry", "Museum entry is free with a newspaper. Newspaper costs EUR 3.30.", nil),
+        ("Eintritt", "Eintritt ist kostenlos mit Zeitung. Zeitung kostet 3,30 €.", nil),
+        ("Notebook", "Notebook costs EUR 29.99 with a coupon.", nil),
+        ("Notebook", "Notebook costs EUR 29.99. Previously EUR 39.99.", nil),
+        ("Notebook", "Notebook costs EUR 29.99; a newspaper costs EUR 3.30.", nil),
+        ("Notebook", "Notebook does not cost EUR 29.99.", nil),
+        ("Notebook", "Other notebook costs EUR 29.99.", nil),
+        ("Notebook", "Notebook costs EUR 29.99 and EUR 4.00 shipping.", nil),
+        ("Notebook", "Notebook costs EUR 29.999.", nil),
+        ("Notebook", "Notebook costs EUR 29.99. Conditions apply.", nil)
+    ])
+    func conservativeOfferPriceRequiresUnqualifiedExactStatement(title: String, text: String, expected: String?) {
+        #expect(ConservativeOfferPrice.extract(title: title, text: text) == expected)
+    }
+
     // Explicit multilingual literal-source fixtures, not translated UI strings.
     @Test("Source quotations reject partial ASCII tokens and decimals while retaining exact Unicode", arguments: [
         ("29.99", "EUR 129.99", false), ("29", "EUR 29.99", false), ("99", "EUR 29.99", false),
