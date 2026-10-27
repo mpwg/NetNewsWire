@@ -1,0 +1,9 @@
+# Explicit price-clause probe — 2026-10-27
+
+Issue #54 requires free summaries in the app language, all-original links and source-bound offer information. The owner chose conservative local attribution: uncertain fields must direct readers to the original. This experiment is not product code.
+
+On the existing 30-description public RSS sample (SHA-256 `8bfeab8a0f141a3ad429668db3440b7559bebcf1e5af275e3b02f1e1c7c995c7`), a temporary Ruby probe stripped markup approximately, then looked for a German affirmative merchant/purchase/price clause agreeing with the emphasized lead's merchant and numeric amount. It counted one candidate, without proving actual FreshRSS normalization, full-article context, field semantics or complete conditions. It did not execute HTML, call a model or persist source text.
+
+The same match accepted all four synthetic controls: an affirmative statement, a statement negated after the amount, a gift whose amount is a minimum purchase requirement, and a later explicit retraction. The last three must not be presented as an unqualified offer price. Limiting a regular expression to the text before the amount therefore cannot establish role or validity, even when lead and body agree. Reject this probe; do not add it to the app or count the one candidate as an accepted field. Checking a few extra keywords or exact source membership alone would not establish general semantic safety. Preserve the literal source excerpt, explicit unknown notice, all originals, free summaries and unchanged read/outbox contracts.
+
+The public sample is a small manual exploration rather than a representative quality benchmark; publisher prose is not committed. Reliable field attribution and real-model quality remain open, as do PCC and final-platform evidence. Related [feed headline ambiguity](i-feed-excerpt-2026-10-27.md#feed-headline-ambiguity-check) and [rejected price-subject model](i-price-subject-v15-2026-10-26.md).
