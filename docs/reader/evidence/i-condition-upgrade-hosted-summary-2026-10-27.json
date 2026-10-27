@@ -1,0 +1,72 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "07acd2dc9d4a81e977119715b88ea48520fd5086",
+        "deviceName" : "My Mac",
+        "modelName" : "Virtual Machine",
+        "osBuildNumber" : "26A434",
+        "osVersion" : "27.0.1",
+        "platform" : "macOS"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 1,
+      "passedTests" : 586,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "Reader · Built with macOS 27.0.1",
+  "expectedFailures" : 0,
+  "failedTests" : 1,
+  "finishTime" : 1793098131.407,
+  "passedTests" : 269,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+    {
+      "issueType" : "Runtime Warning",
+      "message" : "Safety guardrails were triggered. If this is unexpected, please use `LanguageModelSession.logFeedbackAttachment(sentiment:issues:desiredOutput:)` to export the feedback attachment and file a feedback report at https://feedbackassistant.apple.com.",
+      "sourceURL" : "file:///Users/runner/work/NetNewsWire/NetNewsWire/Reader/ReaderTests/ReaderIntelligenceTests/DigestTests.swift"
+    },
+    {
+      "issueType" : "Runtime Warning",
+      "message" : "Safety guardrails were triggered. If this is unexpected, please use `LanguageModelSession.logFeedbackAttachment(sentiment:issues:desiredOutput:)` to export the feedback attachment and file a feedback report at https://feedbackassistant.apple.com.",
+      "sourceURL" : "file:///Users/runner/work/NetNewsWire/NetNewsWire/Reader/ReaderTests/ReaderIntelligenceTests/DigestTests.swift"
+    }
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1793097471.234,
+  "statistics" : [
+    {
+      "subtitle" : "419 test runs",
+      "title" : "102 tests ran with dynamic parameters"
+    },
+    {
+      "subtitle" : "1 test run",
+      "title" : "1 test collected performance metrics"
+    }
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "XCTAssertEqual failed: (\"[]\") is not equal to (\"[\"Timeline article 298\", \"Timeline article 297\"]\") - Actual VoiceOver must reach both adjacent article titles: [\"Welcome to macOS. VoiceOver is on.\", \"Reader All articles window All articles table Row 1 of 201 Unrea\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\"]",
+      "targetName" : "ReaderUITests",
+      "testIdentifier" : 269,
+      "testIdentifierString" : "ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus()",
+      "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus",
+      "testName" : "testVoiceOverAnnouncesReaderAndMovesFocus()"
+    }
+  ],
+  "title" : "Test - Reader",
+  "topInsights" : [
+    {
+      "category" : "Longest Test Runs",
+      "impact" : "22% of duration",
+      "text" : "3 longest test runs with outlier durations exceeding 1.93s (three standard deviations)"
+    }
+  ],
+  "totalTestCount" : 270
+}

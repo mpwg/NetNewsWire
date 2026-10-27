@@ -1,0 +1,142 @@
+[
+  {
+    "children": [
+      {
+        "duration": "0,031s",
+        "durationInSeconds": 0.030805110931396484,
+        "name": "\"Im neuwertigen Zustand.\", \"Available in new condition.\", true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/sourceConditionCannotBeUpgraded(sourceText:summary:rejected:)?args=3167a53bcaf8c80488c2a87c08d452467e26b856757b12d2911f977740e6dcee",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,0024s",
+        "durationInSeconds": 0.0023658275604248047,
+        "name": "\"Im neuwertigen Zustand.\", \"Im neuen Zustand erhältlich.\", true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/sourceConditionCannotBeUpgraded(sourceText:summary:rejected:)?args=f4c57dbfcc36f3e047883cf7775f76c688afd3e1114535b8f03dfbab273b9453",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,0027s",
+        "durationInSeconds": 0.0027441978454589844,
+        "name": "\"The item is factory-new.\", \"Available in new condition.\", false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/sourceConditionCannotBeUpgraded(sourceText:summary:rejected:)?args=eb9321799f9dbfcf0d40a4fc1c19214b7cb620bcad23d75d19fbfb865d980517",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,0026s",
+        "durationInSeconds": 0.002557039260864258,
+        "name": "\"The item is near-new.\", \"A new model announcement.\", false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/sourceConditionCannotBeUpgraded(sourceText:summary:rejected:)?args=6273c8ef5aaf92a5eff069638c0ab1b7729c3c4741765fef02cd26a1bcb84bd4",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,0027s",
+        "durationInSeconds": 0.0027480125427246094,
+        "name": "\"The item is near-new.\", \"The item is brand-new.\", true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/sourceConditionCannotBeUpgraded(sourceText:summary:rejected:)?args=5f54bdc5d9500d7aa9af4f93ceaa3863e4c6161aa2630f508de9f0481baff865",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,0043s",
+        "durationInSeconds": 0.004304170608520508,
+        "name": "\"The item is near-new.\", \"The item remains near-new.\", false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/sourceConditionCannotBeUpgraded(sourceText:summary:rejected:)?args=e8cc46a76b0abc305c062732b860da836133b28046b97ed763ca8c40013eefa5",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,0044s",
+        "durationInSeconds": 0.004370212554931641,
+        "name": "\"The item is refurbished.\", \"Factory-new item.\", true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/sourceConditionCannotBeUpgraded(sourceText:summary:rejected:)?args=375d7b492e4d1c184ebc77af71de89a725550eb17f1d4978f74df4019eb76133",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "0,0071s",
+    "durationInSeconds": 0.007127795900617327,
+    "name": "An explicit near-new source cannot become an unqualified new-condition claim",
+    "nodeIdentifier": "AppleSummaryGeneratorTests/sourceConditionCannotBeUpgraded(sourceText:summary:rejected:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/sourceConditionCannotBeUpgraded(sourceText:summary:rejected:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "children": [
+      {
+        "duration": "0,0036s",
+        "durationInSeconds": 0.0035622119903564453,
+        "name": "0",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/traceIdentifiesFailedModelStage(request:)?args=5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,0014s",
+        "durationInSeconds": 0.0013911724090576172,
+        "name": "1",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/traceIdentifiesFailedModelStage(request:)?args=6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "0,0025s",
+    "durationInSeconds": 0.0024766921997070312,
+    "name": "Opt-in diagnostics identify a failed model request without replacing its error",
+    "nodeIdentifier": "AppleSummaryGeneratorTests/traceIdentifiesFailedModelStage(request:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/traceIdentifiesFailedModelStage(request:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "children": [
+      {
+        "duration": "0,025s",
+        "durationInSeconds": 0.02543187141418457,
+        "name": "false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/DigestTests/conditionUpgradeCannotBypassPublicationOrCache(cached:)?args=fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,014s",
+        "durationInSeconds": 0.01370096206665039,
+        "name": "true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/DigestTests/conditionUpgradeCannotBypassPublicationOrCache(cached:)?args=b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "0,02s",
+    "durationInSeconds": 0.01956641674041748,
+    "name": "Publication and cache reuse reject a known condition upgrade without changing originals",
+    "nodeIdentifier": "DigestTests/conditionUpgradeCannotBypassPublicationOrCache(cached:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/DigestTests/conditionUpgradeCannotBypassPublicationOrCache(cached:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "children": [
+      {
+        "name": "XCTAssertEqual failed: (\"[]\") is not equal to (\"[\"Timeline article 298\", \"Timeline article 297\"]\") - Actual VoiceOver must reach both adjacent article titles: [\"Welcome to macOS. VoiceOver is on.\", \"Reader All articles window All articles table Row 1 of 201 Unrea\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\", \"Entries: 200 · Loaded originals: 200\"]",
+        "nodeType": "Failure Message",
+        "sourceLocation": {
+          "filePath": "/Users/runner/work/NetNewsWire/NetNewsWire/Reader/ReaderUITests/ReaderUITests.swift",
+          "lineNumber": 93
+        }
+      }
+    ],
+    "duration": "2min 49s",
+    "durationInSeconds": 169.33506202697754,
+    "name": "testVoiceOverAnnouncesReaderAndMovesFocus()",
+    "nodeIdentifier": "ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus",
+    "nodeType": "Test Case",
+    "result": "Failed"
+  }
+]
