@@ -119,11 +119,17 @@ public actor DigestCoordinator {
     }
 
     private static func fingerprint(_ articles: [ArticleSnapshot]) throws -> String {
-        struct Source: Encodable { let id: ArticleKey; let title: String; let text: String; let html: String; let url: URL? }
+        struct Source: Encodable {
+            let id: ArticleKey; let title: String; let text: String; let html: String; let url: URL?
+            let sourceHTML: String?; let sourceText: String?
+        }
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys]
-        var bytes = Data("reader-source-facts-consolidation-v10\n".utf8)
-        bytes.append(try encoder.encode(articles.map { Source(id: $0.id, title: $0.title, text: $0.text, html: $0.html, url: $0.url) }))
+        var bytes = Data("reader-source-facts-consolidation-v11-feed-provenance\n".utf8)
+        bytes.append(try encoder.encode(articles.map {
+            Source(id: $0.id, title: $0.title, text: $0.text, html: $0.html, url: $0.url,
+                   sourceHTML: $0.sourceHTML, sourceText: $0.sourceText)
+        }))
         return SHA256.hash(data: bytes).map { String(format: "%02x", $0) }.joined()
     }
 }

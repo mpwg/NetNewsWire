@@ -367,6 +367,8 @@ public actor ReaderStore: ReaderRepository {
     private static func matches(_ record: ArticleRecord, source: ArticleSnapshot) -> Bool {
         record.key == source.id.id && record.feedID == source.feedID && record.title == source.title
             && record.html == source.html && record.text == source.text
+            && Data(record.sourceHTML.utf8) == Data((source.sourceHTML ?? source.html).utf8)
+            && Data(record.sourceText.utf8) == Data((source.sourceText ?? source.text).utf8)
             && record.urlString.flatMap(URL.init(string:)) == source.url
     }
 

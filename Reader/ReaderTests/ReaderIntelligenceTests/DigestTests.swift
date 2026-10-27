@@ -698,7 +698,7 @@ private actor ControlledGenerator: SummaryGenerator {
 }
 
 struct DigestTests {
-    @Test("Unchanged caches from earlier generation and validation policies are regenerated", arguments: ["", "reader-source-facts-consolidation-v1\n", "reader-source-facts-consolidation-v2\n", "reader-source-facts-consolidation-v3\n", "reader-source-facts-consolidation-v4\n", "reader-source-facts-consolidation-v5\n", "reader-source-facts-consolidation-v6\n", "reader-source-facts-consolidation-v7\n", "reader-source-facts-consolidation-v8\n", "reader-source-facts-consolidation-v9\n"])
+    @Test("Unchanged caches from earlier generation and validation policies are regenerated", arguments: ["", "reader-source-facts-consolidation-v1\n", "reader-source-facts-consolidation-v2\n", "reader-source-facts-consolidation-v3\n", "reader-source-facts-consolidation-v4\n", "reader-source-facts-consolidation-v5\n", "reader-source-facts-consolidation-v6\n", "reader-source-facts-consolidation-v7\n", "reader-source-facts-consolidation-v8\n", "reader-source-facts-consolidation-v9\n", "reader-source-facts-consolidation-v10\n"])
     func previousGenerationCacheIsRegenerated(policyPrefix: String) async throws {
         let (store, feed, articles) = try await fixture()
         let coordinator = DigestCoordinator(repository: store, generator: FixtureGenerator())
@@ -910,6 +910,29 @@ struct DigestTests {
         let after = try #require(try await coordinator.generate(feed: feed).first)
         #expect(after.revision != before.revision)
         #expect(after.sourceFingerprint != before.sourceFingerprint)
+    }
+
+    @Test("Feed-only revision invalidates the digest even when displayed content stays identical")
+    func feedRevisionInvalidatesDigestWithIdenticalDisplay() async throws {
+        let (store, feed, articles) = try await fixture()
+        let displayText = String(repeating: "Extracted article text ", count: 50)
+        #expect(try await store.updateContent(articles[0], html: articles[0].html, text: displayText))
+        let coordinator = DigestCoordinator(repository: store, generator: FixtureGenerator())
+        let before = try #require(try await coordinator.generate(feed: feed).first)
+        let prior = try #require(try await store.article(articles[0].id))
+        var refreshed = articles
+        refreshed[0].text = displayText
+        try await store.applyRefresh(RefreshSnapshot(accountID: feed.id.accountID, feeds: [feed], folders: [], articles: refreshed,
+            unreadIDs: Set(refreshed.map(\.id.remoteID)), starredIDs: []))
+        let current = try #require(try await store.article(articles[0].id))
+        #expect(current.text == prior.text)
+        #expect(current.html == prior.html)
+        #expect((current.sourceText ?? current.text) != (prior.sourceText ?? prior.text))
+        let after = try #require(try await coordinator.generate(feed: feed).first)
+        #expect(after.revision != before.revision)
+        #expect(after.sourceFingerprint != before.sourceFingerprint)
+        #expect(Set(after.sources) == Set(before.sources))
+        #expect(try await store.pendingChanges(accountID: feed.id.accountID).isEmpty)
     }
 
     @Test("Revoked cloud consent applies to ongoing work") func revokedCloudConsentAppliesToOngoingWork() async throws {

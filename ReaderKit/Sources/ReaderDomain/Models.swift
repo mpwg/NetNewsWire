@@ -78,14 +78,20 @@ public struct ArticleSnapshot: Identifiable, Hashable, Codable, Sendable {
     public var title: String
     public var html: String
     public var text: String
+    /// Current store snapshots omit feed values identical to display content.
+    /// Older decoded snapshots also omit them, so absence alone does not prove provenance.
+    public var sourceHTML: String?
+    public var sourceText: String?
     public var url: URL?
     public var datePublished: Date?
     public var dateArrived: Date
     public var read: Bool
     public var starred: Bool
     public init(id: ArticleKey, feedID: String, title: String, html: String = "", text: String = "", url: URL? = nil,
-                datePublished: Date? = nil, dateArrived: Date = Date(), read: Bool = false, starred: Bool = false) {
+                datePublished: Date? = nil, dateArrived: Date = Date(), read: Bool = false, starred: Bool = false,
+                sourceHTML: String? = nil, sourceText: String? = nil) {
         self.id = id; self.feedID = feedID; self.title = title; self.html = html; self.text = text; self.url = url
+        self.sourceHTML = sourceHTML; self.sourceText = sourceText
         self.datePublished = datePublished; self.dateArrived = dateArrived; self.read = read; self.starred = starred
     }
 }

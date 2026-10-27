@@ -327,6 +327,26 @@ struct ReaderStoreTests {
         #expect(try await reopened.pendingChanges(accountID: accountID) == pending)
     }
 
+    @Test("Feed provenance survives a disk reopen after full-text extraction")
+    func feedProvenanceSurvivesDiskReopen() async throws {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let url = directory.appendingPathComponent("Reader.store")
+        let original = article(text: "Feed quotation")
+        let store = try ReaderStore(url: url)
+        try await store.applyRefresh(refresh(articles: [original]))
+        #expect(try await store.updateContent(original, html: "<p>Full text</p>", text: "Full text"))
+        let snapshot = try #require(try await store.article(original.id))
+        #expect(snapshot.sourceText == "Feed quotation")
+        #expect(snapshot.text == "Full text")
+        let reopened = try ReaderStore(url: url)
+        #expect(try await reopened.article(original.id) == snapshot)
+        #expect(try await reopened.updateContent(snapshot, html: "<p>New full text</p>", text: "New full text"))
+        let updated = try #require(try await reopened.article(original.id))
+        #expect(updated.sourceText == "Feed quotation")
+        #expect(updated.text == "New full text")
+    }
+
     @Test("Cross-account refresh data is rejected before any mutation") func crossAccountRefreshDataIsRejectedBeforeAnyMutation() async throws {
         let store = try ReaderStore(inMemory: true)
         var foreign = article()
@@ -344,10 +364,65 @@ struct ReaderStoreTests {
         try await store.applyRefresh(refresh(articles: [original]))
         try await store.updateContent(original.id, html: "<p>Long extracted full text</p>", text: "Long extracted full text")
         try await store.applyRefresh(refresh(articles: [original]))
-        #expect(try await store.articles(ArticleQuery()).first?.text == "Long extracted full text")
+        let extracted = try #require(try await store.article(original.id))
+        #expect(extracted.text == "Long extracted full text")
+        #expect(extracted.sourceText == "Short feed text")
+        #expect(extracted.sourceHTML == original.html)
         #expect(try await store.articles(ArticleQuery(search: "extracted")).count == 1)
         try await store.applyRefresh(refresh(articles: [article(text: "Updated feed text")]))
-        #expect(try await store.articles(ArticleQuery()).first?.text == "Updated feed text")
+        let updated = try #require(try await store.article(original.id))
+        #expect(updated.text == "Updated feed text")
+        #expect((updated.sourceText ?? updated.text) == "Updated feed text")
+    }
+
+    @Test("Canonically equivalent feed revisions retain their distinct source bytes")
+    func feedRevisionPreservesDistinctUnicodeBytes() async throws {
+        let store = try ReaderStore(inMemory: true)
+        let original = article(text: "Café")
+        try await store.applyRefresh(refresh(articles: [original]))
+        #expect(try await store.updateContent(original, html: "", text: "Cafe\u{301}"))
+        let previous = try #require(try await store.article(original.id))
+        #expect(Data(try #require(previous.sourceText).utf8) == Data("Café".utf8))
+        try await store.applyRefresh(refresh(articles: [article(text: "Cafe\u{301}")]))
+        let current = try #require(try await store.article(original.id))
+        #expect(Data((current.sourceText ?? current.text).utf8) == Data("Cafe\u{301}".utf8))
+        #expect(try await store.updateContent(previous, html: "", text: "Stale") == false)
+    }
+
+    @Test("Historical article snapshots decode without feed provenance")
+    func historicalArticleSnapshotDecodesWithoutFeedProvenance() throws {
+        let original = article(text: "Feed text")
+        let data = try JSONEncoder().encode(original)
+        var json = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
+        json.removeValue(forKey: "sourceHTML")
+        json.removeValue(forKey: "sourceText")
+        let decoded = try JSONDecoder().decode(ArticleSnapshot.self, from: JSONSerialization.data(withJSONObject: json))
+        #expect(decoded.id == original.id)
+        #expect(decoded.text == original.text)
+        #expect(decoded.sourceHTML == nil)
+        #expect(decoded.sourceText == nil)
+    }
+
+    @Test("A changed feed revision rejects a stale write even when display content is identical")
+    func changedFeedRevisionRejectsStaleWriteWithIdenticalDisplay() async throws {
+        let store = try ReaderStore(inMemory: true)
+        let original = article(text: "Short feed text")
+        try await store.applyRefresh(refresh(articles: [original]))
+        #expect(try await store.updateContent(original, html: "", text: "Full text"))
+        let previous = try #require(try await store.article(original.id))
+        #expect(previous.text == "Full text")
+        #expect(previous.sourceText == "Short feed text")
+        try await store.applyRefresh(refresh(articles: [article(text: "Full text")]))
+        let current = try #require(try await store.article(original.id))
+        #expect(current.text == previous.text)
+        #expect(current.html == previous.html)
+        #expect((current.sourceText ?? current.text) == "Full text")
+        #expect(try await store.updateContent(previous, html: "", text: "Stale extraction") == false)
+        let digest = DigestSnapshot(id: "stale-feed-revision", feed: feed.id, day: Date(timeIntervalSince1970: 0),
+                                    timeZoneID: "UTC", sections: [], sources: [original.id])
+        #expect(try await store.saveDigest(digest, expectedSources: [previous]) == false)
+        #expect(try await store.digests().isEmpty)
+        #expect(try await store.article(original.id) == current)
     }
 
     @Test("Change streams emit the current revision and committed writes") func changeStreamsEmitTheCurrentRevisionAndCommittedWrites() async throws {

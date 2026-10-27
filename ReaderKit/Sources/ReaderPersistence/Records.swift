@@ -69,7 +69,9 @@ import ReaderDomain
     var snapshot: ArticleSnapshot {
         ArticleSnapshot(id: ArticleKey(accountID: accountID, remoteID: remoteID), feedID: feedID,
                         title: title, html: html, text: text, url: urlString.flatMap(URL.init(string:)),
-                        datePublished: datePublished, dateArrived: dateArrived, read: read, starred: starred)
+                        datePublished: datePublished, dateArrived: dateArrived, read: read, starred: starred,
+                        sourceHTML: Data(sourceHTML.utf8) == Data(html.utf8) ? nil : sourceHTML,
+                        sourceText: Data(sourceText.utf8) == Data(text.utf8) ? nil : sourceText)
     }
 
     static func normalize(_ text: String) -> String {
