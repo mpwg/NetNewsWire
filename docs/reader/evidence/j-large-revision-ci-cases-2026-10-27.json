@@ -1,0 +1,20 @@
+[
+  {
+    "duration": "0,74s",
+    "durationInSeconds": 0.7423281669616699,
+    "name": "Marking a digest read applies only to the displayed revision",
+    "nodeIdentifier": "DigestTests/markingADigestReadAppliesOnlyToTheDisplayedRevision()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/DigestTests/markingADigestReadAppliesOnlyToTheDisplayedRevision()",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "31s",
+    "durationInSeconds": 31.42261803150177,
+    "name": "testVoiceOverAnnouncesReaderAndMovesFocus()",
+    "nodeIdentifier": "ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  }
+]
