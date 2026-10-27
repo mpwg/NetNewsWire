@@ -82,6 +82,7 @@ package struct SummaryGenerationTrace: Codable, Sendable {
     package var prompt: String
     package var response: String
     package var instructions: String?
+    package var error: String?
 }
 
 private struct SummaryEvidence: Sendable {
@@ -211,8 +212,11 @@ public actor AppleSummaryGenerator: SummaryGenerator {
             for fragment in fragments {
                 try await checkRequestPermission(cloudPermission)
                 let session = LanguageModelSession(model: model, instructions: factInstructions)
-                let response = try await session.respond(to: Self.sourcePrompt(index: index, text: fragment), generating: GeneratedFacts.self,
-                                                        options: GenerationOptions(maximumResponseTokens: 1200))
+                let prompt = try Self.sourcePrompt(index: index, text: fragment)
+                let response = try await modelResponse(stage: "facts", prompt: prompt, instructions: factInstructions, trace: trace) {
+                    try await session.respond(to: prompt, generating: GeneratedFacts.self,
+                                              options: GenerationOptions(maximumResponseTokens: 1200))
+                }
                 try Task.checkCancellation()
                 if let trace {
                     await trace(SummaryGenerationTrace(stage: "facts", prompt: try Self.sourcePrompt(index: index, text: fragment),
@@ -236,8 +240,11 @@ public actor AppleSummaryGenerator: SummaryGenerator {
                 try await checkRequestPermission(cloudPermission)
                 let instructions = Self.consolidationInstructions(summaryInstructions, evidence: batch)
                 let session = LanguageModelSession(model: model, instructions: instructions)
-                let response = try await session.respond(to: Self.evidencePrompt(batch), generating: GeneratedOverview.self,
-                                                         options: GenerationOptions(maximumResponseTokens: 1200))
+                let prompt = try Self.evidencePrompt(batch)
+                let response = try await modelResponse(stage: "consolidation", prompt: prompt, instructions: instructions, trace: trace) {
+                    try await session.respond(to: prompt, generating: GeneratedOverview.self,
+                                              options: GenerationOptions(maximumResponseTokens: 1200))
+                }
                 try Task.checkCancellation()
                 if let trace {
                     await trace(SummaryGenerationTrace(stage: "consolidation", prompt: try Self.evidencePrompt(batch),
@@ -267,6 +274,21 @@ public actor AppleSummaryGenerator: SummaryGenerator {
             batches = nextBatches
         }
         throw Self.contextBudgetError()
+    }
+
+    /// Evaluation traces can contain source text. The shipping app installs no trace sink.
+    private func modelResponse<Result>(stage: String, prompt: String, instructions: String,
+                                       trace: (@Sendable (SummaryGenerationTrace) async -> Void)?,
+                                       operation: () async throws -> Result) async throws -> Result {
+        do {
+            return try await operation()
+        } catch {
+            if !(error is CancellationError), !Task.isCancelled, let trace {
+                await trace(SummaryGenerationTrace(stage: stage + "-error", prompt: prompt, response: "",
+                                                   instructions: instructions, error: String(reflecting: error)))
+            }
+            throw error
+        }
     }
 
     private func checkRequestPermission(_ permission: (@Sendable () async throws -> Bool)?) async throws {

@@ -291,6 +291,37 @@ struct AppleSummaryGeneratorTests {
         #expect(await journal.requests.count == 1)
     }
 
+    @Test("Opt-in diagnostics identify a failed model request without replacing its error", arguments: [0, 1])
+    func traceIdentifiesFailedModelStage(request: Int) async throws {
+        let journal = ModelRequestJournal(failure: ReaderError.invalidResponse, failureRequest: request)
+        let trace = GenerationTraceJournal()
+        await #expect(throws: ReaderError.invalidResponse) {
+            try await AppleSummaryGenerator().generate([try article()], model: ControlledLanguageModel(journal: journal),
+                                                      capacity: 10000, trace: { await trace.append($0) }, count: { $0.count })
+        }
+        let entries = await trace.entries
+        #expect(entries.map(\.stage) == (request == 0 ? ["facts-error"] : ["facts", "consolidation-error"]))
+        let failure = try #require(entries.last)
+        #expect(failure.error?.contains("invalidResponse") == true)
+        #expect(failure.response.isEmpty)
+        let requests = await journal.requests
+        #expect(requests.count == request + 1)
+        #expect(entries.map(\.prompt) == requests.map(modelPrompt))
+        #expect(entries.compactMap(\.instructions) == requests.map(modelInstructions))
+    }
+
+    @Test("Model cancellation stays cancellation and is not reported as a failed inference")
+    func traceDoesNotMisclassifyModelCancellation() async throws {
+        let journal = ModelRequestJournal(failure: CancellationError())
+        let trace = GenerationTraceJournal()
+        await #expect(throws: CancellationError.self) {
+            try await AppleSummaryGenerator().generate([try article()], model: ControlledLanguageModel(journal: journal),
+                                                      capacity: 10000, trace: { await trace.append($0) }, count: { $0.count })
+        }
+        #expect(await trace.entries.isEmpty)
+        #expect(await journal.requests.count == 1)
+    }
+
     @Test("Matching source facts merge without losing stored source identities", arguments: [false, true])
     func equalFactsKeepEverySourceIdentity(foreignAccount: Bool) async throws {
         let journal = ModelRequestJournal(response: """
