@@ -185,19 +185,42 @@ struct DigestSourceFactsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text("Source facts", bundle: #bundle,
-                 comment: "Heading for original-language quotations beside a free AI summary.")
-                .font(.caption.bold())
-            Text(verbatim: facts.text)
-                .font(.callout)
-                .textSelection(.enabled)
-                .fixedSize(horizontal: false, vertical: true)
+            if !facts.excerpts.isEmpty {
+                Text("Source facts", bundle: #bundle,
+                     comment: "Heading for original-language quotations beside a free AI summary.")
+                    .font(.caption.bold())
+                Text(verbatim: facts.text)
+                    .font(.callout)
+                    .textSelection(.enabled)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            if let feedExcerpt = facts.feedExcerpt {
+                Text("Feed excerpt", bundle: #bundle,
+                     comment: "Heading for a literal quotation from the article's feed entry.")
+                    .font(.caption.bold())
+                Text(verbatim: feedExcerpt)
+                    .font(.callout)
+                    .textSelection(.enabled)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            OfferDetailsFallback()
             Text("Quoted excerpts may omit terms. Check the original.", bundle: #bundle,
                  comment: "Source quotations are not a guarantee that all purchase conditions were extracted.")
                 .font(.caption).foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .accessibilityElement(children: .contain)
+    }
+}
+
+struct OfferDetailsFallback: View {
+    var body: some View {
+        Text("Offer details, if applicable: See original.", bundle: #bundle,
+             comment: "Fallback when offer fields have not been reliably attributed to the source.")
+            .font(.caption).foregroundStyle(.secondary)
+            .accessibilityElement()
+            .accessibilityLabel(Text("Offer details, if applicable: See original.", bundle: #bundle))
+            .accessibilityIdentifier("digest.offer.fallback")
     }
 }
 
@@ -232,6 +255,8 @@ private struct DigestDetailView: View {
                             VStack(alignment: .leading, spacing: 8) {
                                 if let facts = section.sourceFacts?.first(where: { $0.source == source }) {
                                     DigestSourceFactsView(facts: facts)
+                                } else {
+                                    OfferDetailsFallback()
                                 }
                                 if let article = session.sourceArticles.first(where: { $0.id == source }) {
                                     sourceButton(article)

@@ -38,6 +38,16 @@ final class ReaderTimelineFixture {
             }
             try await store.applyRefresh(RefreshSnapshot(accountID: account.id, feeds: [feed], folders: [],
                                                         articles: articles, unreadIDs: Set(articles.map(\.id.remoteID)), starredIDs: []))
+            if ProcessInfo.processInfo.arguments.contains("--ui-testing-offer-fallback"), let article = articles.first {
+                let facts = DigestSourceFacts(source: article.id, excerpts: ["A full-text quotation."],
+                                              feedExcerpt: "Example Store: EUR 29.99; conditions apply.")
+                let keys = [article.id, articles[1].id]
+                let section = DigestSection(title: "Offer fixture", text: "A local test summary.", sources: keys, sourceFacts: [facts])
+                let digest = DigestSnapshot(id: "offer-fixture", feed: feed.id, day: Date(), timeZoneID: "UTC",
+                                            sections: [section], sources: keys)
+                try await store.savePreferences(FeedPreferences(id: feed.id, mode: .digest))
+                try await store.saveDigest(digest)
+            }
             phase = "ready"
             let changes = await store.changes()
             for await _ in changes {

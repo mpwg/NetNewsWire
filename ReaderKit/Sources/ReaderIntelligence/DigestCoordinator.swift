@@ -94,6 +94,9 @@ public actor DigestCoordinator {
                 sections.append(DigestSection(title: String(localized: "Other original articles", bundle: #bundle), text: "",
                                                sources: missing.map(\.id)))
             }
+            try await attachFeedExcerpts(to: &sections, sources: sources)
+            guard Self.validGeneratedSections(sections, sources: allKeys, allowingOriginalsOnly: true),
+                  Self.sourceFactsMatchOriginals(sections, sources: sources) else { throw ReaderError.invalidResponse }
             let digest = DigestSnapshot(id: identifier, feed: feed.id, day: day, timeZoneID: preferences.timeZoneID,
                 sections: sections, sources: sources.map(\.id), warning: warnings.isEmpty ? nil : warnings.joined(separator: "\n"),
                 sourceFingerprint: try Self.fingerprint(sources))
@@ -104,8 +107,34 @@ public actor DigestCoordinator {
         return result
     }
 
-    private static func validGeneratedSections(_ sections: [DigestSection], sources: Set<ArticleKey>) -> Bool {
-        sections.allSatisfy { $0.hasValidContent(referencing: sources) }
+    private func attachFeedExcerpts(to sections: inout [DigestSection], sources: [ArticleSnapshot]) async throws {
+        var leads: [ArticleKey: String] = [:]
+        for source in sources {
+            guard let feedText = source.sourceText else { continue }
+            do {
+                if let lead = try await extractor.feedLead(html: source.sourceHTML ?? source.html),
+                   SourceFactValidation.feedExcerptMatches(lead, sourceText: feedText) {
+                    leads[source.id] = lead
+                }
+            } catch is CancellationError { throw CancellationError() } catch { continue }
+        }
+        for index in sections.indices {
+            var facts = sections[index].sourceFacts ?? []
+            for key in sections[index].sources {
+                guard let lead = leads[key] else { continue }
+                if let existing = facts.firstIndex(where: { $0.source == key }) {
+                    if facts[existing].feedExcerpt == nil { facts[existing].feedExcerpt = lead }
+                } else {
+                    facts.append(DigestSourceFacts(source: key, excerpts: [], feedExcerpt: lead))
+                }
+            }
+            if !facts.isEmpty { sections[index].sourceFacts = facts }
+        }
+    }
+
+    private static func validGeneratedSections(_ sections: [DigestSection], sources: Set<ArticleKey>,
+                                               allowingOriginalsOnly: Bool = false) -> Bool {
+        sections.allSatisfy { $0.hasValidContent(referencing: sources, allowingOriginalsOnly: allowingOriginalsOnly) }
     }
 
     private static func sourceFactsMatchOriginals(_ sections: [DigestSection], sources: [ArticleSnapshot]) -> Bool {
@@ -128,7 +157,7 @@ public actor DigestCoordinator {
         }
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys]
-        var bytes = Data("reader-source-facts-consolidation-v11-feed-provenance\n".utf8)
+        var bytes = Data("reader-source-facts-consolidation-v12-feed-lead-quotation\n".utf8)
         bytes.append(try encoder.encode(articles.map {
             Source(id: $0.id, title: $0.title, text: $0.text, html: $0.html, url: $0.url,
                    sourceHTML: $0.sourceHTML, sourceText: $0.sourceText)

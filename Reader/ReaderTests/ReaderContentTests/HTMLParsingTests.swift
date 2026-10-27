@@ -270,9 +270,11 @@ struct HTMLHTTPIsolationTests {
         for try await _ in control.load(html: "<img src='" + image + "'>") { }
         #expect(server.paths.withLock { $0 == ["/image"] })
         server.paths.withLock { $0.removeAll() }
-        let page = ArticleHTMLParser.makePage()
-        let raw = "<strong>19,90 € - Example Store</strong><img src='" + image + "' onerror=\"fetch('" + image + "')\"><style>@import url('" + image + "');</style>"
-        let lead = try await ArticleHTMLParser.feedLead(html: raw, page: page)
+        let raw = "<strong>19,90 € - Example Store</strong><img src='" + image + "' onerror=\"fetch('" + image + "')\">" +
+            "<style>@import url('" + image + "');</style><iframe src='" + image + "'></iframe>" +
+            "<svg onload=\"fetch('" + image + "')\"><image href='" + image + "'></image></svg>" +
+            "<form action='" + image + "'><input type=submit></form><video src='" + image + "'></video>"
+        let lead = try await ArticleContentService().feedLead(html: raw)
         #expect(lead == "19,90 € - Example Store")
         try await Task.sleep(for: .milliseconds(200))
         #expect(server.paths.withLock { $0.isEmpty })

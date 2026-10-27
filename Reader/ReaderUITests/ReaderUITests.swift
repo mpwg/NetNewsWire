@@ -246,6 +246,24 @@ final class ReaderSmokeTests: XCTestCase {
         XCTAssertEqual(output.lastPathComponent, "ReaderExportProbe.opml")
     }
 
+    func testOfferFallbackAppearsInActualDigest() throws {
+        let cases = [("en", "en_US", "Timeline fixture · Daily digest", "Offer details, if applicable: See original."),
+                     ("de", "de_AT", "Timeline fixture · Tagesübersicht", "Angebotsdetails, falls vorhanden: Siehe Original.")]
+        for (language, locale, digestTitle, expected) in cases {
+            let app = launchReader(arguments: ["--ui-testing-timeline", "--ui-testing-offer-fallback", "-AppleLanguages", "(\(language))", "-AppleLocale", locale])
+            waitForValue(app.staticTexts["timelineFixturePhase"], equalTo: "ready", timeout: 10)
+            let digest = app.outlines["readerTimeline"].staticTexts[digestTitle].firstMatch
+            XCTAssertTrue(digest.waitForExistence(timeout: 10))
+            digest.click()
+            let fallbacks = app.descendants(matching: .any).matching(identifier: "digest.offer.fallback")
+            XCTAssertTrue(fallbacks.firstMatch.waitForExistence(timeout: 10))
+            XCTAssertEqual(fallbacks.count, 2, "Both sources, including the one without a facts block, need an explicit fallback.")
+            for fallback in fallbacks.allElementsBoundByIndex { XCTAssertEqual(fallback.label, expected) }
+            XCTAssertTrue(app.staticTexts["Example Store: EUR 29.99; conditions apply."].firstMatch.exists)
+            app.terminate()
+        }
+    }
+
     func testDelayedTimelineQueryKeepsInputAndFeedMenuResponsive() throws {
         let app = launchReader(arguments: ["--ui-testing-timeline", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"])
         waitForValue(app.staticTexts["timelineFixturePhase"], equalTo: "ready", timeout: 10)

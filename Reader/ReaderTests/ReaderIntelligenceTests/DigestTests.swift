@@ -746,6 +746,32 @@ struct DigestTests {
         for article in articles { #expect(try await store.article(article.id) == article) }
         #expect(try await store.pendingChanges(accountID: feed.id.accountID).isEmpty)
     }
+    @Test("Feed-lead policy invalidates the earlier feed-provenance cache")
+    func feedLeadPolicyInvalidatesEarlierProvenanceCache() async throws {
+        let (store, feed, articles) = try await fixture()
+        let coordinator = DigestCoordinator(repository: store, generator: FixtureGenerator())
+        var cached = try #require(try await coordinator.generate(feed: feed).first)
+        struct PreviousSource: Encodable {
+            let id: ArticleKey; let title: String; let text: String; let html: String; let url: URL?
+            let sourceHTML: String?; let sourceText: String?
+        }
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.sortedKeys]
+        let previous = articles.sorted { $0.id.id < $1.id.id }.map {
+            PreviousSource(id: $0.id, title: $0.title, text: $0.text, html: $0.html, url: $0.url,
+                           sourceHTML: nil, sourceText: nil)
+        }
+        var bytes = Data("reader-source-facts-consolidation-v11-feed-provenance\n".utf8)
+        bytes.append(try encoder.encode(previous))
+        cached.sourceFingerprint = SHA256.hash(data: bytes).map { String(format: "%02x", $0) }.joined()
+        try await store.saveDigest(cached)
+        let result = try #require(try await coordinator.generate(feed: feed).first)
+        #expect(result.revision != cached.revision)
+        #expect(result.sourceFingerprint != cached.sourceFingerprint)
+        #expect(Set(result.sources) == Set(articles.map(\.id)))
+        #expect(try await store.pendingChanges(accountID: feed.id.accountID).isEmpty)
+    }
+
     @Test("Selected native model prose retains every original without changing stored articles")
     func selectedModelStatementsPreserveAllOriginalLinks() async throws {
         let (store, feed, articles) = try await fixture()
@@ -810,6 +836,27 @@ struct DigestTests {
         #expect(refreshed.sections.first?.title == "Offers")
         #expect(refreshed.sections.first?.text == "Sourced digest")
         #expect(Set(refreshed.sections.flatMap(\.sources)) == Set(articles.map(\.id)))
+        #expect(try await store.pendingChanges(accountID: feed.id.accountID).isEmpty)
+    }
+
+    @Test("A passive feed lead is attached only when it belongs to the stored feed revision", arguments: [false, true])
+    func feedLeadIsBoundToStoredRevision(matches: Bool) async throws {
+        let (store, feed, articles) = try await fixture(count: 1)
+        let lead = "19,90 € - Example Store"
+        var refreshed = articles
+        refreshed[0].html = "<strong>" + lead + "</strong><img src='https://reader.invalid/image'>"
+        refreshed[0].text = String(repeating: "Feed article text ", count: 40) + (matches ? lead : "Different feed text")
+        try await store.applyRefresh(RefreshSnapshot(accountID: feed.id.accountID, feeds: [feed], folders: [], articles: refreshed,
+            unreadIDs: [refreshed[0].id.remoteID], starredIDs: []))
+        let feedSnapshot = try #require(try await store.article(refreshed[0].id))
+        #expect(try await store.updateContent(feedSnapshot, html: "<p>Full text</p>", text: String(repeating: "Full article text ", count: 40)))
+        let before = try #require(try await store.article(refreshed[0].id))
+        let coordinator = DigestCoordinator(repository: store, generator: FixtureGenerator())
+        let digest = try #require(try await coordinator.generate(feed: feed).first)
+        #expect(digest.sections.first?.sourceFacts?.first?.feedExcerpt == (matches ? lead : nil))
+        let reused = try #require(try await coordinator.generate(feed: feed).first)
+        #expect(reused.revision == digest.revision)
+        #expect(try await store.article(refreshed[0].id) == before)
         #expect(try await store.pendingChanges(accountID: feed.id.accountID).isEmpty)
     }
 

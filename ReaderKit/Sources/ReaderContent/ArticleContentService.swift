@@ -54,6 +54,17 @@ public actor ArticleContentService: ArticleContentExtracting {
         return try await parse(html: html, baseURL: baseURL)
     }
 
+    /// Extracts a candidate quotation only; it does not infer price, merchant or conditions.
+    public func feedLead(html: String) async throws -> String? {
+        try Task.checkCancellation()
+        guard html.utf8.count <= 4_000_000 else { throw ReaderError.invalidResponse }
+        guard html.trimmingCharacters(in: .whitespacesAndNewlines).lowercased().hasPrefix("<strong>"),
+              html.range(of: "<script", options: .caseInsensitive) == nil else { return nil }
+        try await acquireExtraction()
+        defer { activeExtractions -= 1 }
+        return try await ArticleHTMLParser.extractFeedLead(html: html)
+    }
+
     private func acquireExtraction() async throws {
         waitingExtractions += 1
         defer { waitingExtractions -= 1 }
@@ -121,6 +132,11 @@ enum ArticleHTMLParser {
             try Task.checkCancellation()
             throw error
         }
+    }
+
+    static func extractFeedLead(html: String) async throws -> String? {
+        let page = makePage()
+        return try await feedLead(html: html, page: page)
     }
 
     /// Returns only a literal, bounded leading emphasis as a candidate quotation, never an offer-field assertion.

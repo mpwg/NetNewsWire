@@ -170,7 +170,7 @@ public struct DigestSourceFacts: Identifiable, Hashable, Codable, Sendable {
     public var text: String { excerpts.joined(separator: " · ") }
 
     public var hasValidContent: Bool {
-        !excerpts.isEmpty && Set(excerpts).count == excerpts.count &&
+        (!excerpts.isEmpty || feedExcerpt != nil) && Set(excerpts).count == excerpts.count &&
         excerpts.allSatisfy { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty } &&
         (feedExcerpt.map { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && $0.utf8.count <= 256 } ?? true)
     }

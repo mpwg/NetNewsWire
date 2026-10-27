@@ -1,6 +1,20 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Feed excerpt" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Feed-Ausschnitt" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Feed excerpt" } }
+      }
+    },
+    "Offer details, if applicable: See original." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Angebotsdetails, falls vorhanden: Siehe Original." } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Offer details, if applicable: See original." } }
+      }
+    },
     "Source facts" : {
       "extractionState" : "manual",
       "localizations" : {
