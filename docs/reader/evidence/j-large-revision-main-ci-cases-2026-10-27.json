@@ -1,0 +1,29 @@
+[
+  {
+    "duration": "0,66s",
+    "durationInSeconds": 0.6595950126647949,
+    "name": "Marking a digest read applies only to the displayed revision",
+    "nodeIdentifier": "DigestTests/markingADigestReadAppliesOnlyToTheDisplayedRevision()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/DigestTests/markingADigestReadAppliesOnlyToTheDisplayedRevision()",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "1min 15s",
+    "durationInSeconds": 75.04554796218872,
+    "name": "testOfferFallbackAppearsInActualDigest()",
+    "nodeIdentifier": "ReaderSmokeTests/testOfferFallbackAppearsInActualDigest()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testOfferFallbackAppearsInActualDigest",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "35s",
+    "durationInSeconds": 35.11117899417877,
+    "name": "testVoiceOverAnnouncesReaderAndMovesFocus()",
+    "nodeIdentifier": "ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  }
+]
