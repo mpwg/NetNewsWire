@@ -34,6 +34,8 @@ The app imports the standard `org.opml.opml` type, conforming to XML with the `o
 
 Open `Reader.xcodeproj` in this directory and select the shared Reader scheme. This project was created through Xcode MCP with Apple's multiplatform SwiftUI app template. It links the six existing ReaderKit libraries; the standalone store recovery probe is not an app dependency.
 
+An in-memory Swift Testing integration checks a 250-original daily digest, a later arrival on the same card and read changes limited to the displayed revision. [Focused Mac result](../docs/reader/evidence/j-large-revision-xcode-2026-10-27.txt); real-feed UI and final-platform acceptance remain separate.
+
 The current Mac candidate plan also passes the credential, icon, image and service-lifetime code contracts and the native image-load/input scenario. [Scoped results](../docs/reader/evidence/g-current-ci-cases-2026-10-27.json). Final iPhone/iPad and energy acceptance remain open.
 
 ReaderTests is an unhosted Swift Testing code-test target. All code-testable behavior, including connection validation and CI runner failure propagation, belongs here. CI bootstraps the Swift runner contracts directly before trusting the aggregate shell script. ReaderUITests is a small native XCTest/XCUIAutomation target. Apple's automatic scheme test plan discovers both; no generated project, scheme or test-plan script is required. Use Xcode MCP for interactive builds, tests and project changes.

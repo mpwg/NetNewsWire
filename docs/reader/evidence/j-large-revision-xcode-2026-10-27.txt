@@ -1,0 +1,23 @@
+================================================================================
+TEST RESULTS SUMMARY
+================================================================================
+Generated: 2026-10-27T12:09:18Z
+Total Results: 1
+================================================================================
+
+--------------------------------------------------------------------------------
+TEST_RESULT_INDEX: 1/1
+TEST_TARGET: ReaderTests
+TEST_IDENTIFIER: DigestTests/markingADigestReadAppliesOnlyToTheDisplayedRevision()
+TEST_DISPLAY_NAME: Marking a digest read applies only to the displayed revision
+TEST_STATE: Passed
+TEST_FILE_PATH: Reader/ReaderTests/ReaderIntelligenceTests/DigestTests.swift
+TEST_LINE_NUMBER: 1590
+TEST_TAGS: (none)
+
+TEST_ISSUE_COUNT: 0
+
+
+================================================================================
+END OF TEST RESULTS SUMMARY
+================================================================================
