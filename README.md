@@ -17,7 +17,7 @@ The original NetNewsWire application, modules, extensions, assets, distribution 
 
 ## Source-bound digest excerpts
 
-A temporary real FreshRSS subscription returned 30 public-feed articles; 28 extracted leads matched their own stored feed text byte-for-byte, and the isolated account was restored. This verifies ingestion only, not model or UI quality. [Evidence](docs/reader/evidence/i-live-feed-ingestion-2026-10-27.md).
+A temporary real FreshRSS subscription returned 30 public-feed articles; 28 extracted leads matched their own stored feed text byte-for-byte, and the isolated account was restored. A separate two-article local-model sample retained one source in generated sections; a controlled coordinator replay preserved both original references and warned. The result did not meet compact-facts quality. This does not establish actual app UI or representative model quality. [Model evidence](docs/reader/evidence/i-live-freshrss-model-2026-10-27.md). [Evidence](docs/reader/evidence/i-live-feed-ingestion-2026-10-27.md).
 
 Digest sources can show a short literal feed excerpt only when it matches the same article’s stored feed text. A localized notice names merchant, price and conditions and directs readers to the original when applicable; the excerpt does not assign merchant, price or conditions. Full-text extraction retains the feed revision for publication and cache reuse. Source quotation validation also rejects clipped Unicode numeric tokens including tested localized separators, Latin, Cyrillic and Greek words and related alphanumeric identifiers; reliable field attribution and free-summary quality remain open. [Evidence and limits](docs/reader/evidence/i-feed-excerpt-2026-10-27.md).
 
