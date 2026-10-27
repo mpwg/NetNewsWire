@@ -58,6 +58,7 @@ enum ReaderStoreRecoveryProbe {
         canonical.title = "Canonical title"
         canonical.html = "<p>Canonical full text</p>"
         canonical.text = "Canonical full text"
+        canonical.sourceText = canonical.text
         canonical.url = URL(string: "https://recovery.invalid/canonical")
         canonical.datePublished = Date(timeIntervalSince1970: 1_780_000_000)
         var incoming = canonical

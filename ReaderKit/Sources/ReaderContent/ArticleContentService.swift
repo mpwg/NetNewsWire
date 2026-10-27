@@ -54,6 +54,17 @@ public actor ArticleContentService: ArticleContentExtracting {
         return try await parse(html: html, baseURL: baseURL)
     }
 
+    /// Extracts a candidate quotation only; it does not infer price, merchant or conditions.
+    public func feedLead(html: String) async throws -> String? {
+        try Task.checkCancellation()
+        guard html.utf8.count <= 4_000_000 else { throw ReaderError.invalidResponse }
+        guard html.trimmingCharacters(in: .whitespacesAndNewlines).lowercased().hasPrefix("<strong>"),
+              html.range(of: "<script", options: .caseInsensitive) == nil else { return nil }
+        try await acquireExtraction()
+        defer { activeExtractions -= 1 }
+        return try await ArticleHTMLParser.extractFeedLead(html: html)
+    }
+
     private func acquireExtraction() async throws {
         waitingExtractions += 1
         defer { waitingExtractions -= 1 }
@@ -120,6 +131,41 @@ enum ArticleHTMLParser {
         } catch {
             try Task.checkCancellation()
             throw error
+        }
+    }
+
+    static func extractFeedLead(html: String) async throws -> String? {
+        let page = makePage()
+        return try await feedLead(html: html, page: page)
+    }
+
+    /// Returns only a literal, bounded leading emphasis as a candidate quotation, never an offer-field assertion.
+    static func feedLead(html: String, page: WebPage) async throws -> String? {
+        try Task.checkCancellation()
+        guard html.utf8.count <= 4_000_000 else { throw ReaderError.invalidResponse }
+        guard html.trimmingCharacters(in: .whitespacesAndNewlines).lowercased().hasPrefix("<strong>"),
+              html.range(of: "<script", options: .caseInsensitive) == nil else { return nil }
+        defer { page.stopLoading() }
+        return try await withTaskCancellationHandler {
+            _ = try await ReaderWebContentPolicy.contentRules()
+            for try await _ in page.load(html: ReaderWebContentPolicy.blankDocument) { try Task.checkCancellation() }
+            let script = #"""
+            const source = new DOMParser().parseFromString(sourceHTML, 'text/html');
+            if (source.getElementsByTagName('*').length > 50000) throw new Error('Document element limit exceeded');
+            const first = Array.from(source.body.childNodes).find(node =>
+              node.nodeType === Node.ELEMENT_NODE || (node.nodeType === Node.TEXT_NODE && node.textContent.trim()));
+            if (!first || first.nodeType !== Node.ELEMENT_NODE || first.localName !== 'strong') return null;
+            const passive = new Set(['strong', 'b', 'em', 'i', 'span']);
+            if (Array.from(first.querySelectorAll('*')).some(element =>
+                element.namespaceURI !== 'http://www.w3.org/1999/xhtml' || !passive.has(element.localName))) return null;
+            return first.textContent.trim();
+            """#
+            let value = try await page.callJavaScript(script, arguments: ["sourceHTML": html], contentWorld: .defaultClient)
+            try Task.checkCancellation()
+            guard let text = value as? String, !text.isEmpty, text.utf8.count <= 256 else { return nil }
+            return text
+        } onCancel: {
+            Task { @MainActor [weak page] in page?.stopLoading() }
         }
     }
 

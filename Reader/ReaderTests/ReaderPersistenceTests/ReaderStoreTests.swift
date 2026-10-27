@@ -389,6 +389,18 @@ struct ReaderStoreTests {
         #expect(try await store.updateContent(previous, html: "", text: "Stale") == false)
     }
 
+    @Test("A refreshed feed revision follows its current content after snapshot mutation")
+    func refreshedFeedUsesCurrentSnapshotContent() async throws {
+        let store = try ReaderStore(inMemory: true)
+        var incoming = article(text: "Initial text")
+        incoming.text = "Updated feed text"
+        try await store.applyRefresh(refresh(articles: [incoming]))
+        let saved = try #require(try await store.article(incoming.id))
+        #expect(saved.text == "Updated feed text")
+        #expect(saved.sourceText == "Updated feed text")
+        #expect(saved.sourceText != incoming.sourceText)
+    }
+
     @Test("Historical article snapshots decode without feed provenance")
     func historicalArticleSnapshotDecodesWithoutFeedProvenance() throws {
         let original = article(text: "Feed text")

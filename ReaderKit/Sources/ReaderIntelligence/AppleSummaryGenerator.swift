@@ -44,6 +44,12 @@ enum SourceQuotationMatching {
 }
 
 enum SourceFactValidation {
+    static func feedExcerptMatches(_ excerpt: String, sourceText: String?) -> Bool {
+        guard let sourceText else { return false }
+        return SourceQuotationMatching.contains(excerpt, in: sourceText) &&
+            Data(sourceText.utf8).range(of: Data(excerpt.utf8)) != nil
+    }
+
     static func hasUnownedNumericCitation(in text: String, source: String) -> Bool {
         text.matches(of: /\[\s*[0-9]+(?:\s*[,;–-]\s*[0-9]+)*\s*\]/).contains {
             !source.contains($0.output)

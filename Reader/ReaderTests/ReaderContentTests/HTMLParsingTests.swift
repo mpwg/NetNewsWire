@@ -259,6 +259,38 @@ struct HTMLHTTPIsolationTests {
         #expect(server.paths.withLock { $0 == ["/article"] })
     }
 
+    @Test("Feed lead extraction keeps source text inert and sends no HTTP requests", .timeLimit(.minutes(1)))
+    func feedLeadStaysInertWithoutHTTP() async throws {
+        let server = try HTMLHTTPServer()
+        defer { server.stop() }
+        let base = try await server.start()
+        let image = base.appendingPathComponent("image").absoluteString
+        let control = WebPage()
+        defer { control.stopLoading() }
+        for try await _ in control.load(html: "<img src='" + image + "'>") { }
+        #expect(server.paths.withLock { $0 == ["/image"] })
+        server.paths.withLock { $0.removeAll() }
+        let raw = "<strong>19,90 € - Example Store</strong><img src='" + image + "' onerror=\"fetch('" + image + "')\">" +
+            "<style>@import url('" + image + "');</style><iframe src='" + image + "'></iframe>" +
+            "<svg onload=\"fetch('" + image + "')\"><image href='" + image + "'></image></svg>" +
+            "<form action='" + image + "'><input type=submit></form><video src='" + image + "'></video>"
+        let lead = try await ArticleContentService().feedLead(html: raw)
+        #expect(lead == "19,90 € - Example Store")
+        try await Task.sleep(for: .milliseconds(200))
+        #expect(server.paths.withLock { $0.isEmpty })
+    }
+
+    @Test("Feed leads reject ambiguous markup and overlong text", .timeLimit(.minutes(1)), arguments: [
+        "Prefix <strong>19 €</strong>", "<script>1</script><strong>19 €</strong>",
+        "<strong>19 €<img alt='condition'></strong>", "<strong>19 €<script>1</script></strong>",
+        "<strong>" + String(repeating: "A", count: 257) + "</strong>", "<p><strong>19 €</strong></p>"
+    ])
+    func feedLeadRejectsUnsupportedMarkup(html: String) async throws {
+        let page = ArticleHTMLParser.makePage()
+        let lead = try await ArticleHTMLParser.feedLead(html: html, page: page)
+        #expect(lead == nil)
+    }
+
     @Test("Redirect policy rejects HTTPS downgrades regardless of scheme casing")
     func redirectPolicyHandlesSchemeCasing() throws {
         for sourceScheme in ["https", "HTTPS", "HtTpS"] {
