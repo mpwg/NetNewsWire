@@ -196,6 +196,7 @@ struct DigestSourceFactsView: View {
                  comment: "Fallback when offer fields have not been reliably attributed to the source.")
                 .font(.caption).foregroundStyle(.secondary)
                 .accessibilityElement()
+                .accessibilityLabel(Text("Offer details, if applicable: See original.", bundle: #bundle))
                 .accessibilityIdentifier("digest.offer.fallback")
             Text("Quoted excerpts may omit terms. Check the original.", bundle: #bundle,
                  comment: "Source quotations are not a guarantee that all purchase conditions were extracted.")
