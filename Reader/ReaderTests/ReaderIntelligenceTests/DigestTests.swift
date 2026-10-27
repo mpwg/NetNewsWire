@@ -129,7 +129,8 @@ struct SourceFactValidationTests {
         ("SAVE5", "Code SAVE50", false), ("EUR 29.99", "EUR 29.99.", true),
         ("29.99 EUR", "商店の価格は29.99 EUR。", true), ("Cafe\u{301}", "Cafe\u{301} offer", true),
         ("Café", "Cafe\u{301} offer", false), ("sterreich", "Österreich", false),
-        ("caf", "café", false), ("cole", "e\u{301}cole", false), ("Österreich", "Österreich offer", true),
+        ("caf", "café", false), ("cole", "e\u{301}cole", false), ("Ö", "Ö7", false), ("7", "Ö7", false),
+        ("Österreich", "Österreich offer", true),
         ("29.99", "EUR 129.99; EUR 29.99.", true), ("", "Source", false)
     ])
     func quotationsNeedExactTokenBoundaries(value: String, source: String, valid: Bool) {

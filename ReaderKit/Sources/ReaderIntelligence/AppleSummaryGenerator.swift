@@ -38,9 +38,11 @@ enum SourceQuotationMatching {
     }
 
     private static func joinsWord(_ left: Character, _ right: Character) -> Bool {
-        if asciiWord(left) && asciiWord(right) { return true }
-        guard left.isLetter && right.isLetter else { return false }
-        return [left, right].allSatisfy { String($0).range(of: #"\p{Latin}"#, options: .regularExpression) != nil }
+        latinWord(left) && latinWord(right)
+    }
+
+    private static func latinWord(_ character: Character) -> Bool {
+        asciiWord(character) || (character.isLetter && String(character).range(of: #"\p{Latin}"#, options: .regularExpression) != nil)
     }
 
     private static func asciiWord(_ character: Character) -> Bool {
