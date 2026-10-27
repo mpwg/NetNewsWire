@@ -24,3 +24,5 @@
 - On 2026-10-26 the owner explicitly retained free summaries in the app language and directed further quality work after the source-review experiment missed a known weekday error. Do not replace summaries with source-language extracts or treat the unvalidated reviewer as a reliable production gate. The key-statement/all-original-links rule remains.
 
 - On 2026-10-26 the owner chose free app-language summaries plus an additional compact source-bound offer facts line for merchant, price and conditions. This resolves the public RSS corpus decision; do not replace free summaries with extracts or silently show incomplete offer terms as if complete. Keep provenance, conditions/negations, all-original links and read/outbox invariants explicit.
+
+- On 2026-10-27 the owner chose conservative local rules for offer facts: display only fields whose association is supported and visibly mark uncertain fields as “See original”; keep free summaries in the app language. Exact source membership or agreement between model-selected labels alone is not proof of attribution. Preserve provenance, conditions and negations, all-original links, and read/outbox invariants.
