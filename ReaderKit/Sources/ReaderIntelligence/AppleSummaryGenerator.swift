@@ -10,7 +10,7 @@ private struct GeneratedFacts {
     var excerpts: [String]
 }
 
-/// Exact source spelling plus ASCII-token, Latin-letter and decimal boundaries; not semantic entailment.
+/// Exact spelling with ASCII, Latin, Cyrillic, Greek and decimal boundaries; not semantic entailment.
 enum SourceQuotationMatching {
     static func contains(_ value: String, in source: String) -> Bool {
         guard let first = value.first, let last = value.last else { return false }
@@ -38,11 +38,12 @@ enum SourceQuotationMatching {
     }
 
     private static func joinsWord(_ left: Character, _ right: Character) -> Bool {
-        latinWord(left) && latinWord(right)
+        boundedWord(left) && boundedWord(right)
     }
 
-    private static func latinWord(_ character: Character) -> Bool {
-        asciiWord(character) || (character.isLetter && String(character).range(of: #"\p{Latin}"#, options: .regularExpression) != nil)
+    private static func boundedWord(_ character: Character) -> Bool {
+        asciiWord(character) || (character.isLetter && String(character).range(
+            of: #"[\p{Latin}\p{Cyrillic}\p{Greek}]"#, options: .regularExpression) != nil)
     }
 
     private static func asciiWord(_ character: Character) -> Bool {
