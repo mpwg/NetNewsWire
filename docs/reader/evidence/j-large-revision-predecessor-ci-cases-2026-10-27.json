@@ -1,0 +1,49 @@
+[
+  {
+    "duration": "3s",
+    "durationInSeconds": 3.1945128440856934,
+    "name": "Marking a digest read applies only to the displayed revision",
+    "nodeIdentifier": "DigestTests/markingADigestReadAppliesOnlyToTheDisplayedRevision()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/DigestTests/markingADigestReadAppliesOnlyToTheDisplayedRevision()",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "children": [
+      {
+        "name": "XCTAssertEqual failed: (\"XCTWaiterResult(rawValue: 2)\") is not equal to (\"XCTWaiterResult(rawValue: 1)\") - Expected Timeline article 1; observed unavailable element",
+        "nodeType": "Failure Message",
+        "sourceLocation": {
+          "filePath": "/Users/runner/work/NetNewsWire/NetNewsWire/Reader/ReaderUITests/ReaderUITests.swift",
+          "lineNumber": 267
+        }
+      }
+    ],
+    "duration": "32s",
+    "durationInSeconds": 32.949689984321594,
+    "name": "testOfferFallbackAppearsInActualDigest()",
+    "nodeIdentifier": "ReaderSmokeTests/testOfferFallbackAppearsInActualDigest()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testOfferFallbackAppearsInActualDigest",
+    "nodeType": "Test Case",
+    "result": "Failed"
+  },
+  {
+    "children": [
+      {
+        "name": "failed: caught error: \"Error Domain=com.apple.xctest.voiceoverservice Code=3 \"No speech available\" UserInfo={NSLocalizedDescription=No speech available}\"",
+        "nodeType": "Failure Message",
+        "sourceLocation": {
+          "filePath": "/Users/runner/work/NetNewsWire/NetNewsWire/Reader/ReaderUITests/ReaderUITests.swift",
+          "lineNumber": 70
+        }
+      }
+    ],
+    "duration": "1min 50s",
+    "durationInSeconds": 110.00613296031952,
+    "name": "testVoiceOverAnnouncesReaderAndMovesFocus()",
+    "nodeIdentifier": "ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus",
+    "nodeType": "Test Case",
+    "result": "Failed"
+  }
+]
