@@ -1,0 +1,18 @@
+# Recognized product-title variant omission — 2026-10-27
+
+The recorded current six-source public RSS model output described a controller without the distinguishing model variant present in its original title and text. The source and complete model response remain in protected owner-only files outside Git; [the previous observation and hashes](i-fact-isolation-model-2026-10-27.json) are retained unchanged. It also omitted offer restrictions in a different section, so representative semantic quality was not accepted.
+
+A conservative guard recognizes an ASCII camel-case name immediately followed in the referenced original's title by `Edge`, `Pro`, `Max`, `Plus`, `Ultra` or `Mini`. When a generated title or sentence names that base, it must name the recognized variant in the same sentence. The guard runs at native generation, independently before publication, and during cache reuse. Rejected sections use the existing warning/originals-only path while other permitted sections remain. Source identities, article/read state and outbox remain unchanged. No model prompt or external service is changed.
+
+This is a narrow rejection rule, not product extraction, price/merchant attribution or semantic entailment. It does not recognize every naming convention, digit-separated variant, language, anaphoric reference, changed negation or claim relationship. A valid summary may be conservatively rejected when the variant is given only in a different sentence, or a camel-case title refers to a retailer or unrelated entity. Conversely, a matching variant token does not prove its role, purchase conditions or any other claim. Unclear offer fields continue to direct readers to the original.
+
+| Criterion | Status | Evidence |
+|---|---|---|
+| Reproduce omission before correction | Fulfilled | Three of seven controlled cases failed before the guard, including the saved example's naming pattern; Xcode MCP `Test-Reader-2026.10.27_12-22-27-+0100.xcresult`. |
+| Preserve named variants without forcing all original facts | Fulfilled for named ASCII forms | Seven controlled generator cases pass, including intact variants, unnamed generic descriptions and variant mention in a different sentence. Two referenced-source controls distinguish the relevant original. |
+| Publication, cache and other valid sections | Fulfilled for controlled cases | Two actual in-memory coordinator/store cases prove warning plus unaffected free summary or cache regeneration; original source sets, article state and empty outbox remain. |
+| Reject the saved real-model error without losing other sources | Fulfilled for this replay | A temporary Swift Testing integration replays the four recorded free sections and originals-only section from the prior actual six-source local-model run through the shipping coordinator. The offending section becomes an original-only fallback; three other free sections and all six originals remain with a warning, unchanged store and empty outbox. Xcode MCP `Test-Reader-2026.10.27_12-23-33-+0100.xcresult`. This was not another model, UI or server call; the temporary test was removed. |
+| Current Mac code suite and lint | Fulfilled | 617 executions, zero failures/skips via Xcode MCP; strict SwiftLint 0.65.1 and whitespace checks pass. [Code receipt](i-product-variant-code-result-2026-10-27.json). |
+| Current hosted/native and representative model quality | Open | Existing CI runs test earlier source. The other recorded model section still omits offer restrictions/expiry and 5,279 fact characters are not compact. Real-feed UI, VoiceOver reliability, PCC, owner-deferred offline, final devices and full acceptance remain separate. |
+
+README, acceptance matrix and handoff record the bounded change. No package closes.

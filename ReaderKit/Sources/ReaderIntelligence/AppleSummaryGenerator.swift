@@ -53,6 +53,33 @@ enum SourceQuotationMatching {
 }
 
 enum SourceFactValidation {
+    private static let titleVariantPattern = #"\b([A-Za-z0-9]*[a-z][A-Z][A-Za-z0-9]*)\s+((?i:Edge|Pro|Max|Plus|Ultra|Mini))\b"#
+
+    /// Conservative check for a recognized adjacent variant of a camel-case product name.
+    /// A matching title does not establish the product's price, offer role or general factuality.
+    static func hasOmittedTitleVariant(_ sections: [DigestSection], sources: [ArticleSnapshot]) -> Bool {
+        guard let pattern = try? NSRegularExpression(pattern: titleVariantPattern) else { return !sections.isEmpty }
+        return sections.contains { section in
+            let sourceIDs = Set(section.sources)
+            let claims = sentences(section.title) + sentences(section.text)
+            return sources.filter { sourceIDs.contains($0.id) }.contains { source in
+                let range = NSRange(source.title.startIndex..<source.title.endIndex, in: source.title)
+                return pattern.matches(in: source.title, range: range).contains { match in
+                    guard let nameRange = Range(match.range(at: 1), in: source.title),
+                          let variantRange = Range(match.range(at: 2), in: source.title) else { return false }
+                    let name = String(source.title[nameRange])
+                    let variant = String(source.title[variantRange])
+                    let namePattern = #"(?i)\b"# + NSRegularExpression.escapedPattern(for: name) + #"\b"#
+                    let variantPattern = #"(?i)\b"# + NSRegularExpression.escapedPattern(for: variant) + #"\b"#
+                    return claims.contains {
+                        $0.range(of: namePattern, options: .regularExpression) != nil &&
+                        $0.range(of: variantPattern, options: .regularExpression) == nil
+                    }
+                }
+            }
+        }
+    }
+
     private static let weekdayPatterns = [
         #"(?i)\b(?:monday|montag)s?\b"#, #"(?i)\b(?:tuesday|dienstag)s?\b"#,
         #"(?i)\b(?:wednesday|mittwoch)s?\b"#, #"(?i)\b(?:thursday|donnerstag)s?\b"#,
@@ -341,7 +368,8 @@ public actor AppleSummaryGenerator: SummaryGenerator {
                 let safe = sections.filter { section in
                     Set(section.sources).isDisjoint(with: rejectedFactIDs) &&
                     !SourceFactValidation.hasKnownConditionUpgrade([section], sources: articles) &&
-                    !SourceFactValidation.hasUnsupportedEveningWeekday([section], sources: articles)
+                    !SourceFactValidation.hasUnsupportedEveningWeekday([section], sources: articles) &&
+                    !SourceFactValidation.hasOmittedTitleVariant([section], sources: articles)
                 }
                 guard !safe.isEmpty else { throw ReaderError.invalidResponse }
                 let rejectedIDs = Set(sections.filter { !safe.contains($0) }.flatMap(\.sources)).union(rejectedFactIDs)

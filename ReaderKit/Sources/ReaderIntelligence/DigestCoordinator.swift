@@ -60,6 +60,7 @@ public actor DigestCoordinator {
                cached.hasDisplayableContent,
                !SourceFactValidation.hasKnownConditionUpgrade(cached.sections, sources: sources),
                !SourceFactValidation.hasUnsupportedEveningWeekday(cached.sections, sources: sources),
+               !SourceFactValidation.hasOmittedTitleVariant(cached.sections, sources: sources),
                Self.sourceFactsMatchOriginals(cached.sections, sources: sources) {
                 result.append(cached); continue
             }
@@ -93,7 +94,8 @@ public actor DigestCoordinator {
                   Self.sourceFactsMatchOriginals(sections, sources: sources) else { throw ReaderError.invalidResponse }
             let safe = sections.filter { section in
                 !SourceFactValidation.hasKnownConditionUpgrade([section], sources: sources) &&
-                !SourceFactValidation.hasUnsupportedEveningWeekday([section], sources: sources)
+                !SourceFactValidation.hasUnsupportedEveningWeekday([section], sources: sources) &&
+                !SourceFactValidation.hasOmittedTitleVariant([section], sources: sources)
             }
             if safe.count != sections.count || sections.contains(where: { $0.text.isEmpty }) {
                 warnings.append(ReaderError.invalidResponse.localizedDescription)

@@ -194,6 +194,58 @@ private actor GenerationTraceJournal {
 }
 
 struct AppleSummaryGeneratorTests {
+    @Test("A named product claim retains a recognized adjacent source-title variant", arguments: [
+        ("DualSense Edge Wireless Controller", "DualSense Controller is available.", true),
+        ("DualSense Edge Wireless Controller", "DualSense Edge Controller is available.", false),
+        ("AirPods Pro Wireless Earbuds", "AirPods are available.", true),
+        ("AirPods Pro Wireless Earbuds", "AirPods Pro are available.", false),
+        ("DualSense Edge Wireless Controller", "A controller is available.", false),
+        ("Library opening on Thursday", "The library is available.", false),
+        ("DualSense Edge Wireless Controller", "DualSense is available. Edge was mentioned elsewhere.", true)
+    ])
+    func namedProductKeepsSourceVariant(sourceTitle: String, summary: String, rejected: Bool) async throws {
+        var source = try article()
+        source.title = sourceTitle
+        source.text = sourceTitle + "."
+        let journal = ModelRequestJournal(response: try modelJSON([
+            "groups": [["title": "Product", "summary": summary, "sourceNumbers": [0]]]
+        ]), factResponses: [try modelJSON(["excerpts": [sourceTitle]])])
+        let generator = AppleSummaryGenerator()
+        if rejected {
+            await #expect(throws: ReaderError.invalidResponse) {
+                try await generator.generate([source], model: ControlledLanguageModel(journal: journal),
+                                             capacity: 10000, count: { $0.count })
+            }
+        } else {
+            let result = try await generator.generate([source], model: ControlledLanguageModel(journal: journal),
+                                                      capacity: 10000, count: { $0.count })
+            #expect(result.first?.text == summary)
+        }
+    }
+
+    @Test("A product variant applies only to the source referenced by the claim", arguments: [false, true])
+    func productVariantUsesReferencedSource(referenced: Bool) async throws {
+        var first = try article()
+        first.title = referenced ? "DualSense Edge Wireless Controller" : "DualSense Wireless Controller"
+        first.text = "DualSense Controller is available."
+        var second = first
+        second.id.remoteID = "other"
+        second.title = referenced ? "DualSense Wireless Controller" : "DualSense Edge Wireless Controller"
+        second.text = "A different controller is described."
+        let journal = ModelRequestJournal(response: #"{"groups":[{"title":"Product","summary":"DualSense Controller is available.","sourceNumbers":[0]}]}"#)
+        let generator = AppleSummaryGenerator()
+        if referenced {
+            await #expect(throws: ReaderError.invalidResponse) {
+                try await generator.generate([first, second], model: ControlledLanguageModel(journal: journal),
+                                             capacity: 10000, count: { $0.count })
+            }
+        } else {
+            let sections = try await generator.generate([first, second], model: ControlledLanguageModel(journal: journal),
+                                                        capacity: 10000, count: { $0.count })
+            #expect(sections.first?.sources == [first.id])
+        }
+    }
+
     @Test("An invalid source-fact response keeps other originals eligible for a summary")
     func invalidFactResponseIsolatesItsOriginal() async throws {
         var first = try article()
@@ -979,6 +1031,14 @@ private struct MixedSafetyFixtureGenerator: SummaryGenerator {
     }
 }
 
+private struct VariantSafetyFixtureGenerator: SummaryGenerator {
+    func summarize(_ articles: [ArticleSnapshot], cloudAllowed: Bool) async throws -> [DigestSection] {
+        guard articles.count == 2 else { throw ReaderError.invalidResponse }
+        return [DigestSection(title: "Controller", text: "DualSense Controller is available.", sources: [articles[0].id]),
+                DigestSection(title: "Library", text: "The reading room remains free.", sources: [articles[1].id])]
+    }
+}
+
 private struct StagedFixtureGenerator: SummaryGenerator {
     let journal: ModelRequestJournal
 
@@ -1010,6 +1070,42 @@ private actor ControlledGenerator: SummaryGenerator {
 }
 
 struct DigestTests {
+    @Test("Publication and cache retain a recognized source-title product variant", arguments: [false, true])
+    func omittedProductVariantCannotBypassPublicationOrCache(cached: Bool) async throws {
+        let (store, feed, initial) = try await fixture(count: 2)
+        var sources = initial
+        sources[0].title = "DualSense Edge Wireless Controller"
+        sources[0].text = "DualSense Edge Controller is available. " + String(repeating: "Source context. ", count: 40)
+        sources[1].title = "Library"
+        sources[1].text = "The reading room remains free. " + String(repeating: "Source context. ", count: 40)
+        try await store.applyRefresh(RefreshSnapshot(accountID: feed.id.accountID, feeds: [feed], folders: [], articles: sources,
+                                                    unreadIDs: Set(sources.map(\.id.remoteID)), starredIDs: []))
+        let before = try await store.articles(ArticleQuery(feed: feed.id))
+        var saved = try #require(try await DigestCoordinator(repository: store, generator: FixtureGenerator()).generate(feed: feed).first)
+        if cached {
+            saved.sections[0].text = "DualSense Controller is available."
+        } else {
+            saved.warning = "Force regeneration for controlled publication."
+        }
+        try await store.saveDigest(saved)
+        let generator: any SummaryGenerator = cached ? FixtureGenerator(summary: "DualSense Edge Controller is available.") : VariantSafetyFixtureGenerator()
+        let result = try #require(try await DigestCoordinator(repository: store, generator: generator).generate(feed: feed).first)
+        #expect(result.hasDisplayableContent)
+        if cached {
+            #expect(result.sections.first?.text == "DualSense Edge Controller is available.")
+            #expect(result.warning == nil)
+        } else {
+            #expect(result.warning != nil)
+            #expect(result.sections.contains { $0.text == "The reading room remains free." && $0.sources == [sources[1].id] })
+            #expect(result.sections.contains { $0.text.isEmpty && $0.sources == [sources[0].id] })
+        }
+        #expect(!result.sections.contains { $0.text == "DualSense Controller is available." })
+        #expect(Set(result.sources) == Set(sources.map(\.id)))
+        #expect(Set(result.sections.flatMap(\.sources)) == Set(sources.map(\.id)))
+        #expect(try await store.articles(ArticleQuery(feed: feed.id)) == before)
+        #expect(try await store.pendingChanges(accountID: feed.id.accountID).isEmpty)
+    }
+
     @Test("An invalid article fact response keeps other summaries and warns with all originals")
     func invalidFactResponsePreservesOtherSourcesAndStore() async throws {
         let (store, feed, initial) = try await fixture(count: 3)
