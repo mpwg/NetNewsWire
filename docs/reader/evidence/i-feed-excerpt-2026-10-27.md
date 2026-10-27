@@ -33,3 +33,7 @@ A synthetic multilingual fixture reproduced a Cyrillic word with a negative pref
 ## Unicode numeric boundaries
 
 A synthetic Arabic-Indic digit fixture reproduced a partial number being accepted as a quotation from a longer number. Commit `717e752f1` treats Swift numeric characters as bounded token characters, including next to supported alphabetic characters. Both edges of an Arabic-Indic number, complete numbers and mixed identifiers are covered. Xcode MCP passed 102 selected Digest/source-validation executions and all 558 current ReaderTests executions. This does not establish full word segmentation for all scripts or semantic faithfulness. Hosted CI is pending; an earlier in-progress run may be cancelled by the configured concurrency rule.
+
+## Localized numeric separators
+
+Synthetic multilingual fixtures reproduced partial numbers accepted across Arabic decimal and grouping separators. Commit `3db526820` applies the existing adjacent-digit guard to Arabic decimal/grouping and full-width dot/comma separators as well as ASCII dot/comma. Three reproduced failures now pass, alongside complete-number and full-width controls. Xcode MCP passed 108 selected Digest/source-validation executions and all 564 current ReaderTests executions. The rule does not claim exhaustive locale-specific numeric parsing or semantic faithfulness. Hosted CI is pending; the earlier run can be cancelled by the configured main-branch concurrency rule.
