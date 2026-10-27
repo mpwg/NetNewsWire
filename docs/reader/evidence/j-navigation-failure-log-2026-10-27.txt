@@ -1,0 +1,45 @@
+tests (macos)	Test Reader	2026-10-27T12:19:29.2007190Z     t =    17.58s     Synthesize event
+tests (macos)	Test Reader	2026-10-27T12:19:29.7711350Z     t =    18.15s     Wait for eu.mpwg.reader.debug to idle
+tests (macos)	Test Reader	2026-10-27T12:19:30.9279310Z     t =    19.31s Checking `Expect predicate `value == "Timeline article 0"` for object "articleDetailTitle" StaticText`
+tests (macos)	Test Reader	2026-10-27T12:19:30.9284100Z     t =    19.31s     Find the "articleDetailTitle" StaticText
+tests (macos)	Test Reader	2026-10-27T12:19:32.9499010Z     t =    21.33s Checking `Expect predicate `value == "0"` for object "timelinePendingReadCount" StaticText`
+tests (macos)	Test Reader	2026-10-27T12:19:32.9503430Z     t =    21.33s     Find the "timelinePendingReadCount" StaticText
+tests (macos)	Test Reader	2026-10-27T12:19:34.1688180Z     t =    22.55s Waiting 10.0s for "Timeline fixture · Daily digest" StaticText to exist
+tests (macos)	Test Reader	2026-10-27T12:19:35.1843710Z     t =    23.56s     Checking `Expect predicate `existsNoRetry == 1` for object "Timeline fixture · Daily digest" StaticText`
+tests (macos)	Test Reader	2026-10-27T12:19:35.1879780Z     t =    23.57s         Checking existence of `"Timeline fixture · Daily digest" StaticText`
+tests (macos)	Test Reader	2026-10-27T12:19:35.2962700Z     t =    23.68s Click "Timeline fixture · Daily digest" StaticText
+tests (macos)	Test Reader	2026-10-27T12:19:35.2992640Z     t =    23.68s     Wait for eu.mpwg.reader.debug to idle
+tests (macos)	Test Reader	2026-10-27T12:19:35.2998170Z     t =    23.68s     Find the "Timeline fixture · Daily digest" StaticText
+tests (macos)	Test Reader	2026-10-27T12:19:35.3822190Z     t =    23.76s     Check for interrupting elements affecting "Timeline fixture · Daily digest" StaticText
+tests (macos)	Test Reader	2026-10-27T12:19:35.4050270Z     t =    23.79s     Synthesize event
+tests (macos)	Test Reader	2026-10-27T12:19:36.0451080Z     t =    24.42s     Wait for eu.mpwg.reader.debug to idle
+tests (macos)	Test Reader	2026-10-27T12:19:36.0677080Z     t =    24.45s Waiting 10.0s for Button (First Match) to exist
+tests (macos)	Test Reader	2026-10-27T12:19:37.0724410Z     t =    25.45s     Checking `Expect predicate `existsNoRetry == 1` for object Button (First Match)`
+tests (macos)	Test Reader	2026-10-27T12:19:37.0739300Z     t =    25.45s         Checking existence of `Button (First Match)`
+tests (macos)	Test Reader	2026-10-27T12:19:37.1310480Z     t =    25.51s Click Button (First Match)
+tests (macos)	Test Reader	2026-10-27T12:19:37.1334050Z     t =    25.51s     Wait for eu.mpwg.reader.debug to idle
+tests (macos)	Test Reader	2026-10-27T12:19:37.1334720Z     t =    25.52s     Find the Button (First Match)
+tests (macos)	Test Reader	2026-10-27T12:19:37.1798190Z     t =    25.56s     Check for interrupting elements affecting "Timeline article 1" Button
+tests (macos)	Test Reader	2026-10-27T12:19:37.2055930Z     t =    25.58s     Synthesize event
+tests (macos)	Test Reader	2026-10-27T12:19:37.6929450Z     t =    26.07s     Wait for eu.mpwg.reader.debug to idle
+tests (macos)	Test Reader	2026-10-27T12:19:38.7279580Z     t =    27.09s Checking `Expect predicate `value == "Timeline article 1"` for object "articleDetailTitle" StaticText`
+tests (macos)	Test Reader	2026-10-27T12:19:38.7287660Z     t =    27.09s     Find the "articleDetailTitle" StaticText
+tests (macos)	Test Reader	2026-10-27T12:19:39.5820400Z     t =    27.97s     Capturing element debug description
+tests (macos)	Test Reader	2026-10-27T12:19:39.7548350Z     t =    28.14s Checking `Expect predicate `value == "Timeline article 1"` for object "articleDetailTitle" StaticText`
+tests (macos)	Test Reader	2026-10-27T12:19:39.7561200Z     t =    28.14s     Find the "articleDetailTitle" StaticText
+tests (macos)	Test Reader	2026-10-27T12:19:40.8882730Z     t =    29.27s     Capturing element debug description
+tests (macos)	Test Reader	2026-10-27T12:19:41.7242670Z     t =    30.10s Checking `Expect predicate `value == "Timeline article 1"` for object "articleDetailTitle" StaticText`
+tests (macos)	Test Reader	2026-10-27T12:19:41.7249600Z     t =    30.11s     Find the "articleDetailTitle" StaticText
+tests (macos)	Test Reader	2026-10-27T12:19:42.5837810Z     t =    30.97s     Capturing element debug description
+tests (macos)	Test Reader	2026-10-27T12:19:42.7020050Z     t =    31.08s Checking `Expect predicate `value == "Timeline article 1"` for object "articleDetailTitle" StaticText`
+tests (macos)	Test Reader	2026-10-27T12:19:42.7021030Z     t =    31.09s     Find the "articleDetailTitle" StaticText
+tests (macos)	Test Reader	2026-10-27T12:19:42.9566670Z     t =    31.34s     Capturing element debug description
+tests (macos)	Test Reader	2026-10-27T12:19:42.9575760Z     t =    31.34s Checking existence of `"articleDetailTitle" StaticText`
+tests (macos)	Test Reader	2026-10-27T12:19:44.5116840Z /Users/runner/work/NetNewsWire/NetNewsWire/Reader/ReaderUITests/ReaderUITests.swift:267: error: -[ReaderUITests.ReaderSmokeTests testOfferFallbackAppearsInActualDigest] : XCTAssertEqual failed: ("XCTWaiterResult(rawValue: 2)") is not equal to ("XCTWaiterResult(rawValue: 1)") - Expected Timeline article 1; observed unavailable element
+tests (macos)	Test Reader	2026-10-27T12:19:44.5177430Z     t =    32.90s Tear Down
+tests (macos)	Test Reader	2026-10-27T12:19:44.5722610Z Test Case '-[ReaderUITests.ReaderSmokeTests testOfferFallbackAppearsInActualDigest]' failed (32.950 seconds).
+tests (macos)	Test Reader	2026-10-27T12:19:44.5960130Z Test Case '-[ReaderUITests.ReaderSmokeTests testOPMLExportUsesNativeSavePanel]' started.
+tests (macos)	Test Reader	2026-10-27T12:19:44.6050910Z     t =     0.00s Start Test at 2026-10-27 12:19:44.566
+tests (macos)	Test Reader	2026-10-27T12:19:44.6745190Z     t =     0.10s Set Up
+tests (macos)	Test Reader	2026-10-27T12:19:44.6757180Z     t =     0.10s Open eu.mpwg.reader.debug
+tests (macos)	Test Reader	2026-10-27T12:19:44.8223980Z     t =     0.11s     Launch eu.mpwg.reader.debug
