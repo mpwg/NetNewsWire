@@ -10,7 +10,7 @@ private struct GeneratedFacts {
     var excerpts: [String]
 }
 
-/// Exact source spelling plus ASCII-token and decimal boundaries; not semantic entailment.
+/// Exact source spelling plus ASCII-token, Latin-letter and decimal boundaries; not semantic entailment.
 enum SourceQuotationMatching {
     static func contains(_ value: String, in source: String) -> Bool {
         guard let first = value.first, let last = value.last else { return false }
@@ -19,8 +19,8 @@ enum SourceQuotationMatching {
               let range = source.range(of: value, options: .literal, range: cursor..<source.endIndex) {
             let before = range.lowerBound > source.startIndex ? source.index(before: range.lowerBound) : nil
             let after = range.upperBound < source.endIndex ? range.upperBound : nil
-            let leftWord = before.map { asciiWord(source[$0]) && asciiWord(first) } ?? false
-            let rightWord = after.map { asciiWord(source[$0]) && asciiWord(last) } ?? false
+            let leftWord = before.map { joinsWord(source[$0], first) } ?? false
+            let rightWord = after.map { joinsWord(last, source[$0]) } ?? false
             let leftNumber = before.map { index in
                 guard first.isNumber, ".,".contains(source[index]),
                       index > source.startIndex else { return false }
@@ -35,6 +35,12 @@ enum SourceQuotationMatching {
             cursor = source.index(after: range.lowerBound)
         }
         return false
+    }
+
+    private static func joinsWord(_ left: Character, _ right: Character) -> Bool {
+        if asciiWord(left) && asciiWord(right) { return true }
+        guard left.isLetter && right.isLetter else { return false }
+        return [left, right].allSatisfy { String($0).range(of: #"\p{Latin}"#, options: .regularExpression) != nil }
     }
 
     private static func asciiWord(_ character: Character) -> Bool {

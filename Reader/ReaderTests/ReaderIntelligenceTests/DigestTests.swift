@@ -124,11 +124,13 @@ struct SourceFactValidationTests {
     }
 
     // Explicit multilingual literal-source fixtures, not translated UI strings.
-    @Test("Source quotations reject partial ASCII tokens and decimals while retaining exact Unicode", arguments: [
+    @Test("Source quotations reject partial ASCII and Latin tokens and decimals while retaining exact Unicode", arguments: [
         ("29.99", "EUR 129.99", false), ("29", "EUR 29.99", false), ("99", "EUR 29.99", false),
         ("SAVE5", "Code SAVE50", false), ("EUR 29.99", "EUR 29.99.", true),
         ("29.99 EUR", "商店の価格は29.99 EUR。", true), ("Cafe\u{301}", "Cafe\u{301} offer", true),
-        ("Café", "Cafe\u{301} offer", false), ("29.99", "EUR 129.99; EUR 29.99.", true), ("", "Source", false)
+        ("Café", "Cafe\u{301} offer", false), ("sterreich", "Österreich", false),
+        ("caf", "café", false), ("cole", "e\u{301}cole", false), ("Österreich", "Österreich offer", true),
+        ("29.99", "EUR 129.99; EUR 29.99.", true), ("", "Source", false)
     ])
     func quotationsNeedExactTokenBoundaries(value: String, source: String, valid: Bool) {
         #expect(SourceQuotationMatching.contains(value, in: source) == valid)
