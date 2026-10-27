@@ -42,7 +42,7 @@ enum SourceQuotationMatching {
     }
 
     private static func boundedWord(_ character: Character) -> Bool {
-        asciiWord(character) || (character.isLetter && String(character).range(
+        asciiWord(character) || character.isNumber || (character.isLetter && String(character).range(
             of: #"[\p{Latin}\p{Cyrillic}\p{Greek}]"#, options: .regularExpression) != nil)
     }
 

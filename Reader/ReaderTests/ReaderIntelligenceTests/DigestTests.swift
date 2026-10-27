@@ -130,6 +130,8 @@ struct SourceFactValidationTests {
         ("29.99 EUR", "商店の価格は29.99 EUR。", true), ("Cafe\u{301}", "Cafe\u{301} offer", true),
         ("Café", "Cafe\u{301} offer", false), ("sterreich", "Österreich", false),
         ("caf", "café", false), ("cole", "e\u{301}cole", false), ("Ö", "Ö7", false), ("7", "Ö7", false),
+        ("٣٤", "١٢٣٤", false), ("١٢", "١٢٣٤", false), ("١٢٣٤", "١٢٣٤", true),
+        ("١", "A١", false), ("A", "A١", false),
         ("действительно", "недействительно", false), ("недействительно", "недействительно", true),
         ("λληνικό", "ελληνικό", false), ("ελληνικό", "ελληνικό", true),
         ("Österreich", "Österreich offer", true),
