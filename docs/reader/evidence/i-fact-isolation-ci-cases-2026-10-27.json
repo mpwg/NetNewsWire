@@ -1,0 +1,77 @@
+[
+  {
+    "duration": "0,026s",
+    "durationInSeconds": 0.026187896728515625,
+    "name": "An invalid source-fact response keeps other originals eligible for a summary",
+    "nodeIdentifier": "AppleSummaryGeneratorTests/invalidFactResponseIsolatesItsOriginal()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/invalidFactResponseIsolatesItsOriginal()",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "0,0056s",
+    "durationInSeconds": 0.005590915679931641,
+    "name": "A failed later fragment discards every fact from its original",
+    "nodeIdentifier": "AppleSummaryGeneratorTests/invalidLaterFragmentDiscardsEarlierFacts()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/invalidLaterFragmentDiscardsEarlierFacts()",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "0,0035s",
+    "durationInSeconds": 0.0034627914428710938,
+    "name": "A model request error is not treated as a rejected source quotation",
+    "nodeIdentifier": "AppleSummaryGeneratorTests/modelRequestFailureDoesNotSkipAnOriginal()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/modelRequestFailureDoesNotSkipAnOriginal()",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "0,003s",
+    "durationInSeconds": 0.0030307769775390625,
+    "name": "Cancellation during a later original is never converted to a partial result",
+    "nodeIdentifier": "AppleSummaryGeneratorTests/cancellationDuringLaterOriginalDoesNotPublish()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/cancellationDuringLaterOriginalDoesNotPublish()",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "0,0057s",
+    "durationInSeconds": 0.005733013153076172,
+    "name": "A rejected duplicate identity cannot retain a summary through another copy",
+    "nodeIdentifier": "AppleSummaryGeneratorTests/rejectedDuplicateIdentityCannotLeakFacts()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/rejectedDuplicateIdentityCannotLeakFacts()",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "0,025s",
+    "durationInSeconds": 0.025287151336669922,
+    "name": "An invalid article fact response keeps other summaries and warns with all originals",
+    "nodeIdentifier": "DigestTests/invalidFactResponsePreservesOtherSourcesAndStore()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/DigestTests/invalidFactResponsePreservesOtherSourcesAndStore()",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "children": [
+      {
+        "name": "Failed to get matching snapshots: Lost connection to the application (pid 27228). (Underlying Error: Couldn’t communicate with a helper application. Try your operation again. If that fails, quit and relaunch the application and try again. The connection to service created from an endpoint was invalidated: Failed to check-in, peer may have been unloaded: mach_error=10000003.)",
+        "nodeType": "Failure Message",
+        "sourceLocation": {
+          "filePath": "/Users/runner/work/NetNewsWire/NetNewsWire/Reader/ReaderUITests/ReaderUITests.swift",
+          "lineNumber": 95
+        }
+      },
+      {
+        "name": "Lost connection to testmanagerd",
+        "nodeType": "Failure Message"
+      }
+    ],
+    "name": "testVoiceOverAnnouncesReaderAndMovesFocus()",
+    "nodeIdentifier": "ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus",
+    "nodeType": "Test Case",
+    "result": "Failed"
+  }
+]
