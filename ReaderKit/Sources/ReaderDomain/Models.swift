@@ -78,8 +78,8 @@ public struct ArticleSnapshot: Identifiable, Hashable, Codable, Sendable {
     public var title: String
     public var html: String
     public var text: String
-    /// Current store snapshots omit feed values identical to display content.
-    /// Older decoded snapshots also omit them, so absence alone does not prove provenance.
+    /// Explicit feed text is required for feed quotation provenance.
+    /// Older decoded snapshots can omit it; absence does not prove provenance.
     public var sourceHTML: String?
     public var sourceText: String?
     public var url: URL?
@@ -91,7 +91,7 @@ public struct ArticleSnapshot: Identifiable, Hashable, Codable, Sendable {
                 datePublished: Date? = nil, dateArrived: Date = Date(), read: Bool = false, starred: Bool = false,
                 sourceHTML: String? = nil, sourceText: String? = nil) {
         self.id = id; self.feedID = feedID; self.title = title; self.html = html; self.text = text; self.url = url
-        self.sourceHTML = sourceHTML; self.sourceText = sourceText
+        self.sourceHTML = sourceHTML; self.sourceText = sourceText ?? text
         self.datePublished = datePublished; self.dateArrived = dateArrived; self.read = read; self.starred = starred
     }
 }
@@ -157,18 +157,22 @@ public struct RefreshSnapshot: Sendable {
 public struct DigestSourceFacts: Identifiable, Hashable, Codable, Sendable {
     public var source: ArticleKey
     public var excerpts: [String]
+    /// A quotation from the feed revision, without inferred offer-field roles.
+    public var feedExcerpt: String?
     public var id: ArticleKey { source }
 
-    public init(source: ArticleKey, excerpts: [String]) {
+    public init(source: ArticleKey, excerpts: [String], feedExcerpt: String? = nil) {
         self.source = source
         self.excerpts = excerpts
+        self.feedExcerpt = feedExcerpt
     }
 
     public var text: String { excerpts.joined(separator: " · ") }
 
     public var hasValidContent: Bool {
         !excerpts.isEmpty && Set(excerpts).count == excerpts.count &&
-        excerpts.allSatisfy { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+        excerpts.allSatisfy { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty } &&
+        (feedExcerpt.map { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && $0.utf8.count <= 256 } ?? true)
     }
 }
 

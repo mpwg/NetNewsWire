@@ -113,7 +113,10 @@ public actor DigestCoordinator {
             (section.sourceFacts ?? []).allSatisfy { facts in
                 guard let source = sources.first(where: { $0.id == facts.source }) else { return false }
                 let text = source.text.isEmpty ? source.title : source.title + "\n" + source.text
-                return facts.excerpts.allSatisfy { SourceQuotationMatching.contains($0, in: text) }
+                guard facts.excerpts.allSatisfy({ SourceQuotationMatching.contains($0, in: text) }) else { return false }
+                guard let feedExcerpt = facts.feedExcerpt else { return true }
+                // An absent feed field may also come from a historical decoded snapshot; do not infer its provenance.
+                return SourceFactValidation.feedExcerptMatches(feedExcerpt, sourceText: source.sourceText)
             }
         }
     }

@@ -45,6 +45,24 @@ struct DigestSourceFactsTests {
         #expect(section.hasValidContent(referencing: Set(section.sources)))
     }
 
+    @Test("Feed quotations round-trip exactly and old fact snapshots remain readable")
+    func feedQuotationRoundTripsAndOldFactsDecode() throws {
+        let key = ArticleKey(accountID: UUID(), remoteID: "offer")
+        let facts = DigestSourceFacts(source: key, excerpts: ["Full text."], feedExcerpt: "Café · EUR 3,30")
+        let data = try JSONEncoder().encode(facts)
+        let decoded = try JSONDecoder().decode(DigestSourceFacts.self, from: data)
+        #expect(decoded == facts)
+        #expect(Data(try #require(decoded.feedExcerpt).utf8) == Data("Café · EUR 3,30".utf8))
+        var historical = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
+        historical.removeValue(forKey: "feedExcerpt")
+        let old = try JSONDecoder().decode(DigestSourceFacts.self, from: JSONSerialization.data(withJSONObject: historical))
+        #expect(old.feedExcerpt == nil)
+        #expect(old.hasValidContent)
+        for invalid in ["", "  ", String(repeating: "x", count: 257)] {
+            #expect(!DigestSourceFacts(source: key, excerpts: ["Full text."], feedExcerpt: invalid).hasValidContent)
+        }
+    }
+
     @Test("Source facts round-trip exact merchant, currency, coupon, exclusion and expiry text")
     func sourceFactsRoundTripWithoutRewriting() throws {
         let key = ArticleKey(accountID: UUID(), remoteID: "offer")
