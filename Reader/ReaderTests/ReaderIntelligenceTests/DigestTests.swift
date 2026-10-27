@@ -3,6 +3,7 @@ import CryptoKit
 import Testing
 import ReaderDomain
 import ReaderPersistence
+import ReaderContent
 import FoundationModels
 @testable import ReaderIntelligence
 
@@ -716,6 +717,39 @@ private actor ControlledGenerator: SummaryGenerator {
 }
 
 struct DigestTests {
+    @Test("Full-text extraction preserves feed provenance through digest publication")
+    func fullTextExtractionPreservesFeedProvenance() async throws {
+        let host = UUID().uuidString.lowercased() + ".digest-full-text.test"
+        let url = try #require(URL(string: "https://" + host + "/article"))
+        let account = UUID()
+        let feed = FeedSnapshot(id: FeedKey(accountID: account, remoteID: "feed"), title: "Feed", url: url)
+        let lead = "Example Store offers a notebook for 20 euros."
+        let article = ArticleSnapshot(id: ArticleKey(accountID: account, remoteID: "article"), feedID: "feed",
+                                      title: "Notebook", html: "<strong>\(lead)</strong>", text: lead, url: url,
+                                      dateArrived: Date(timeIntervalSince1970: 1_790_000_000))
+        let store = try ReaderStore(inMemory: true)
+        try await store.applyRefresh(RefreshSnapshot(accountID: account, feeds: [feed], folders: [], articles: [article],
+                                                     unreadIDs: ["article"], starredIDs: []))
+        try await store.savePreferences(FeedPreferences(id: feed.id, mode: .digest, timeZoneID: "UTC"))
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.protocolClasses = [MockURLProtocol.self]
+        let session = URLSession(configuration: configuration)
+        defer { MockURLProtocol.unregister(host: host); session.invalidateAndCancel() }
+        let paragraph = String(repeating: "The full article includes additional useful details. ", count: 24)
+        let html = "<html><head><title>Notebook</title></head><body><article><p>\(paragraph)</p></article></body></html>"
+        MockURLProtocol.register(host: host, mimeType: "text/html; charset=utf-8") { _ in (200, Data(html.utf8)) }
+        let coordinator = DigestCoordinator(repository: store, generator: FixtureGenerator(),
+                                            extractor: ArticleContentService(session: session))
+        let digest = try #require(try await coordinator.generate(feed: feed).first)
+        let saved = try #require(try await store.article(article.id))
+        #expect(saved.text != lead)
+        #expect(saved.sourceText == lead)
+        #expect(digest.sections.first?.sourceFacts?.first?.feedExcerpt == lead)
+        let cached = try #require(try await coordinator.generate(feed: feed).first)
+        #expect(cached.revision == digest.revision)
+        #expect(try await store.pendingChanges(accountID: account).isEmpty)
+    }
+
     @Test("Unchanged caches from earlier generation and validation policies are regenerated", arguments: ["", "reader-source-facts-consolidation-v1\n", "reader-source-facts-consolidation-v2\n", "reader-source-facts-consolidation-v3\n", "reader-source-facts-consolidation-v4\n", "reader-source-facts-consolidation-v5\n", "reader-source-facts-consolidation-v6\n", "reader-source-facts-consolidation-v7\n", "reader-source-facts-consolidation-v8\n", "reader-source-facts-consolidation-v9\n", "reader-source-facts-consolidation-v10\n"])
     func previousGenerationCacheIsRegenerated(policyPrefix: String) async throws {
         let (store, feed, articles) = try await fixture()

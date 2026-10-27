@@ -71,6 +71,8 @@ public actor DigestCoordinator {
                         guard try await repository.updateContent(expected, html: full.html, text: full.text) else {
                             throw ReaderError.staleResult
                         }
+                        let feedHTML = expected.sourceHTML ?? expected.html
+                        sources[index].sourceHTML = Data(feedHTML.utf8) == Data(full.html.utf8) ? nil : feedHTML
                         sources[index].html = full.html; sources[index].text = full.text
                     } catch is CancellationError { throw CancellationError() } catch ReaderError.staleResult { throw ReaderError.staleResult } catch { warnings.append(String(localized: "Full text is unavailable for “\(sources[index].title)”.", bundle: #bundle)) }
                 }
