@@ -1,0 +1,453 @@
+[
+  {
+    "duration": "0,0013s",
+    "durationInSeconds": 0.0012531280517578125,
+    "name": "Icon candidates preserve relative paths and are scoped to each homepage",
+    "nodeIdentifier": "IconServiceTests/iconCandidatesPreserveRelativePathsAndAreScopedToEachHomepage()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/IconServiceTests/iconCandidatesPreserveRelativePathsAndAreScopedToEachHomepage()",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "children": [
+      {
+        "duration": "0,0025s",
+        "durationInSeconds": 0.002475738525390625,
+        "name": "\"<head><!-- <body><link rel='icon' href='/comment.png'> --><script><body><link rel='icon' href='/script.png'></script><link rel='icon' href='/head.png'></head>\"",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/IconServiceTests/metadataStopsAtHeadBoundariesAndIgnoresInertMarkup(html:)?args=81b4db101521771d18a7e20e39133d577f377b570175c47b5ab629c9e190bc1f",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,0002s",
+        "durationInSeconds": 0.00019812583923339844,
+        "name": "\"<head><link data-note='>' rel='icon' href='/head.png'></head>\"",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/IconServiceTests/metadataStopsAtHeadBoundariesAndIgnoresInertMarkup(html:)?args=d03683de7358be9848cb99929e0c0bb8f95762b61ec6279e5138abebc20c1bea",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,00061s",
+        "durationInSeconds": 0.0006098747253417969,
+        "name": "\"<head><link rel='icon' href='/head.png'></head><link rel='icon' href='/body.png'>\"",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/IconServiceTests/metadataStopsAtHeadBoundariesAndIgnoresInertMarkup(html:)?args=e89747e2e966b3abd605a811cc2b794a8eadf709a2fdf778e9944b50be023667",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,00066s",
+        "durationInSeconds": 0.0006587505340576172,
+        "name": "\"<head><link rel='icon' href='/head.png'><div><link rel='icon' href='/implicit-body.png'>\"",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/IconServiceTests/metadataStopsAtHeadBoundariesAndIgnoresInertMarkup(html:)?args=fb68c3b603500e1124816bad530a85ffd66db0c4c00cfb91937d6d9f83c6a92e",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,00084s",
+        "durationInSeconds": 0.0008361339569091797,
+        "name": "\"<head><link rel='icon' href='/head.png'>Body text<link rel='icon' href='/implicit-body.png'>\"",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/IconServiceTests/metadataStopsAtHeadBoundariesAndIgnoresInertMarkup(html:)?args=c82441a5e99b7ec982291694d195066c25a7dcfe8322fa20a0e48928a6c11910",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,00048s",
+        "durationInSeconds": 0.0004820823669433594,
+        "name": "\"<head><noframes><body><link rel='icon' href='/fallback-markup.png'></noframes><link rel='icon' href='/head.png'></head>\"",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/IconServiceTests/metadataStopsAtHeadBoundariesAndIgnoresInertMarkup(html:)?args=46aecf7608b7cad0dd5b8edd731a4ccaaa27535fe06f3a473599bd45c345452a",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,00042s",
+        "durationInSeconds": 0.0004210472106933594,
+        "name": "\"<head><style>/* <body><link rel='icon' href='/style.png'> */</style><link rel='icon' href='/head.png'></head>\"",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/IconServiceTests/metadataStopsAtHeadBoundariesAndIgnoresInertMarkup(html:)?args=566e9f0f62a452b07568f82ae24de34f37e226ecb8052964d77ebf08f17650a3",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,0011s",
+        "durationInSeconds": 0.0011188983917236328,
+        "name": "\"<head><template><template><link rel='icon' href='/nested.png'></template><body><link rel='icon' href='/template.png'></template><link rel='icon' href='/head.png'></head>\"",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/IconServiceTests/metadataStopsAtHeadBoundariesAndIgnoresInertMarkup(html:)?args=c890d7d86fdccec530bfa4ce3ec15472bdcd61c102f5022ec93b25bd3b6561d0",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,00032s",
+        "durationInSeconds": 0.0003199577331542969,
+        "name": "\"<link rel='icon' href='/head.png'><BoDy><link rel='icon' href='/body.png'>\"",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/IconServiceTests/metadataStopsAtHeadBoundariesAndIgnoresInertMarkup(html:)?args=0627efc43c6e367408d1e9959f38a57adc0e3c5da248f2c28b5f6e3a67147ab1",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "0,00079s",
+    "durationInSeconds": 0.0007911788092719184,
+    "name": "Metadata stops at head boundaries and ignores inert markup",
+    "nodeIdentifier": "IconServiceTests/metadataStopsAtHeadBoundariesAndIgnoresInertMarkup(html:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/IconServiceTests/metadataStopsAtHeadBoundariesAndIgnoresInertMarkup(html:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "0,0015s",
+    "durationInSeconds": 0.0015323162078857422,
+    "name": "Homepage failures do not prevent independent favicon fallback",
+    "nodeIdentifier": "IconServiceTests/homepageFailuresDoNotPreventIndependentFaviconFallback()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/IconServiceTests/homepageFailuresDoNotPreventIndependentFaviconFallback()",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "0,042s",
+    "durationInSeconds": 0.042169809341430664,
+    "name": "Nested homepages keep independent results and transient failures remain retryable",
+    "nodeIdentifier": "IconServiceTests/nestedHomepagesKeepIndependentResultsAndTransientFailuresRemainRetryable()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/IconServiceTests/nestedHomepagesKeepIndependentResultsAndTransientFailuresRemainRetryable()",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "0,0043s",
+    "durationInSeconds": 0.004293918609619141,
+    "name": "Incorrect MIME types and oversized image responses are rejected",
+    "nodeIdentifier": "IconServiceTests/incorrectMIMETypesAndOversizedImageResponsesAreRejected()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/IconServiceTests/incorrectMIMETypesAndOversizedImageResponsesAreRejected()",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "children": [
+      {
+        "duration": "0,0032s",
+        "durationInSeconds": 0.003207683563232422,
+        "name": "128",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/IconServiceTests/streamedBodiesRespectByteLimitsWithoutDeclaredLength(byteCount:)?args=2747b7c718564ba5f066f0523b03e17f6a496b06851333d2d59ab6d863225848",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,0024s",
+        "durationInSeconds": 0.002396821975708008,
+        "name": "129",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/IconServiceTests/streamedBodiesRespectByteLimitsWithoutDeclaredLength(byteCount:)?args=6566230e3a3ce3774c1bbc7c18b590ae0f457bbcd511e90e3e7dca2a02e7addc",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "0,0028s",
+    "durationInSeconds": 0.002802252769470215,
+    "name": "Streaming limits apply without Content-Length at chunk boundaries",
+    "nodeIdentifier": "IconServiceTests/streamedBodiesRespectByteLimitsWithoutDeclaredLength(byteCount:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/IconServiceTests/streamedBodiesRespectByteLimitsWithoutDeclaredLength(byteCount:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "0,022s",
+    "durationInSeconds": 0.02159905433654785,
+    "name": "Cancelling the final consumer prevents the fallback request",
+    "nodeIdentifier": "IconServiceTests/cancellingTheFinalConsumerPreventsTheFallbackRequest()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/IconServiceTests/cancellingTheFinalConsumerPreventsTheFallbackRequest()",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "0,057s",
+    "durationInSeconds": 0.05713701248168945,
+    "name": "A single network slot serializes complete icon jobs",
+    "nodeIdentifier": "IconServiceTests/aSingleNetworkSlotSerializesCompleteIconJobs()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/IconServiceTests/aSingleNetworkSlotSerializesCompleteIconJobs()",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "0,025s",
+    "durationInSeconds": 0.024908065795898438,
+    "name": "Thumbnails use display pixel bounds and share encoded requests",
+    "nodeIdentifier": "FeedImageServiceTests/thumbnailsUsePixelBoundsAndShareEncodedRequests()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/FeedImageServiceTests/thumbnailsUsePixelBoundsAndShareEncodedRequests()",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "0,0068s",
+    "durationInSeconds": 0.006754159927368164,
+    "name": "Malformed image data remains retryable after decoding fails",
+    "nodeIdentifier": "FeedImageServiceTests/malformedImageDataRemainsRetryableAfterDecodingFails()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/FeedImageServiceTests/malformedImageDataRemainsRetryableAfterDecodingFails()",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "children": [
+      {
+        "duration": "0,005s",
+        "durationInSeconds": 0.0050427913665771484,
+        "name": "-1",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/FeedImageServiceTests/thumbnailDimensionsStayBounded(requestedPixels:)?args=1bad6b8cf97131fceab8543e81f7757195fbb1d36b376ee994ad1cf17699c464",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,0062s",
+        "durationInSeconds": 0.006196022033691406,
+        "name": "0",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/FeedImageServiceTests/thumbnailDimensionsStayBounded(requestedPixels:)?args=5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,0042s",
+        "durationInSeconds": 0.004200935363769531,
+        "name": "9223372036854775807",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/FeedImageServiceTests/thumbnailDimensionsStayBounded(requestedPixels:)?args=b34a1c30a715f6bf8b7243afa7fab883ce3612b7231716bdcbbdc1982e1aed29",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "0,0051s",
+    "durationInSeconds": 0.005146582921346028,
+    "name": "Thumbnail dimensions stay bounded for invalid or excessive size requests",
+    "nodeIdentifier": "FeedImageServiceTests/thumbnailDimensionsStayBounded(requestedPixels:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/FeedImageServiceTests/thumbnailDimensionsStayBounded(requestedPixels:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "children": [
+      {
+        "duration": "0,044s",
+        "durationInSeconds": 0.04373311996459961,
+        "name": "false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/FeedImageServiceTests/imageServicesReleaseCompletedAndCancelledJobs(cancelJob:)?args=fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,065s",
+        "durationInSeconds": 0.06499195098876953,
+        "name": "true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/FeedImageServiceTests/imageServicesReleaseCompletedAndCancelledJobs(cancelJob:)?args=b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "0,054s",
+    "durationInSeconds": 0.05436253547668457,
+    "name": "Image services release completed and cancelled jobs",
+    "nodeIdentifier": "FeedImageServiceTests/imageServicesReleaseCompletedAndCancelledJobs(cancelJob:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/FeedImageServiceTests/imageServicesReleaseCompletedAndCancelledJobs(cancelJob:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "children": [
+      {
+        "duration": "0,00013s",
+        "durationInSeconds": 0.00012993812561035156,
+        "name": ".read",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/KeychainCredentialStoreTests/cancelledCredentialOperationsFailBeforeAccessingKeychain(operation:)?args=6f3658822a73dc4c1d09ba64a062d0d1ef89fb250f5f5923c3a1755c2f63b1db",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,0018s",
+        "durationInSeconds": 0.001756906509399414,
+        "name": ".remove",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/KeychainCredentialStoreTests/cancelledCredentialOperationsFailBeforeAccessingKeychain(operation:)?args=66f3d68b7627c9f6965029d01923daefa869b3f33123c145ddb25464b41a529a",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,000043s",
+        "durationInSeconds": 0.00004315376281738281,
+        "name": ".save",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/KeychainCredentialStoreTests/cancelledCredentialOperationsFailBeforeAccessingKeychain(operation:)?args=38aaeadad8a678ef2b6bb28fcfc1bd058cee6ad53e61b78f604084daef2edf83",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "0,00064s",
+    "durationInSeconds": 0.0006433327992757162,
+    "name": "Cancelled credential operations make no OS calls",
+    "nodeIdentifier": "KeychainCredentialStoreTests/cancelledCredentialOperationsFailBeforeAccessingKeychain(operation:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/KeychainCredentialStoreTests/cancelledCredentialOperationsFailBeforeAccessingKeychain(operation:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "children": [
+      {
+        "duration": "0,0003s",
+        "durationInSeconds": 0.0002951622009277344,
+        "name": ".read, -25291",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/KeychainCredentialStoreTests/credentialOSErrorsPreserveStatusAndDoNotRetry(operation:status:)?args=57a75688c71c97fdbefd41e2ef7d7c92f8886881e2fcb362540e89951a563fb9",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,000085s",
+        "durationInSeconds": 0.00008487701416015625,
+        "name": ".read, -25293",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/KeychainCredentialStoreTests/credentialOSErrorsPreserveStatusAndDoNotRetry(operation:status:)?args=8228e10804d5d9887c74b103832be8c1142c8fbae00d9576888ffb513abbd130",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,00011s",
+        "durationInSeconds": 0.00010800361633300781,
+        "name": ".read, -25308",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/KeychainCredentialStoreTests/credentialOSErrorsPreserveStatusAndDoNotRetry(operation:status:)?args=3f5d547e7f3309a48f81be1d436346d6e31519bdd7a38249bc1a1e45569b3eea",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,00012s",
+        "durationInSeconds": 0.00012087821960449219,
+        "name": ".remove, -25291",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/KeychainCredentialStoreTests/credentialOSErrorsPreserveStatusAndDoNotRetry(operation:status:)?args=7fe07c2d01bc24606b148fb7c581503d0105c627bd5edc4e3ee1c11e6c7d4f29",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,000089s",
+        "durationInSeconds": 0.00008869171142578125,
+        "name": ".remove, -25293",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/KeychainCredentialStoreTests/credentialOSErrorsPreserveStatusAndDoNotRetry(operation:status:)?args=3e696bf544b832dda687a34996ce36bf6fd54ec1e1c269435dc3a76120282fab",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,000079s",
+        "durationInSeconds": 0.00007891654968261719,
+        "name": ".remove, -25308",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/KeychainCredentialStoreTests/credentialOSErrorsPreserveStatusAndDoNotRetry(operation:status:)?args=798a02bd84eba8a53f12b987c1711d1e56dc6dd80bc806eae0fe52fa13393821",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,000084s",
+        "durationInSeconds": 0.00008416175842285156,
+        "name": ".save, -25291",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/KeychainCredentialStoreTests/credentialOSErrorsPreserveStatusAndDoNotRetry(operation:status:)?args=6412d387a10f20002ed5fdaeeeca358ef178d4664765a8014cbbe2f6fc7be422",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,00029s",
+        "durationInSeconds": 0.00028777122497558594,
+        "name": ".save, -25293",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/KeychainCredentialStoreTests/credentialOSErrorsPreserveStatusAndDoNotRetry(operation:status:)?args=271ad3ea85991d3840d41e2133ea413f1a80be314456c64e7c62802c5556703b",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,00008s",
+        "durationInSeconds": 0.00007987022399902344,
+        "name": ".save, -25308",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/KeychainCredentialStoreTests/credentialOSErrorsPreserveStatusAndDoNotRetry(operation:status:)?args=b865e6211fb0db006a75298a41ce2a572fd21b33332dd89cc740b23f76f9cbef",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "0,00014s",
+    "durationInSeconds": 0.00013648139105902778,
+    "name": "Credential OS errors preserve status and fail without retrying",
+    "nodeIdentifier": "KeychainCredentialStoreTests/credentialOSErrorsPreserveStatusAndDoNotRetry(operation:status:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/KeychainCredentialStoreTests/credentialOSErrorsPreserveStatusAndDoNotRetry(operation:status:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "children": [
+      {
+        "duration": "0,024s",
+        "durationInSeconds": 0.023746967315673828,
+        "name": "1",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/KeychainCredentialStoreTests/cancellationPreventsFurtherWriteRecoveryCalls(blockingCall:)?args=6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,061s",
+        "durationInSeconds": 0.060775041580200195,
+        "name": "2",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/KeychainCredentialStoreTests/cancellationPreventsFurtherWriteRecoveryCalls(blockingCall:)?args=d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "0,042s",
+    "durationInSeconds": 0.04226100444793701,
+    "name": "Cancellation after an OS write prevents the next recovery call",
+    "nodeIdentifier": "KeychainCredentialStoreTests/cancellationPreventsFurtherWriteRecoveryCalls(blockingCall:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/KeychainCredentialStoreTests/cancellationPreventsFurtherWriteRecoveryCalls(blockingCall:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "0,018s",
+    "durationInSeconds": 0.017561912536621094,
+    "name": "An in-progress Security call leaves MainActor free",
+    "nodeIdentifier": "KeychainCredentialStoreTests/blockedSecurityCallsLeaveMainActorResponsive()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/KeychainCredentialStoreTests/blockedSecurityCallsLeaveMainActorResponsive()",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "0,00013s",
+    "durationInSeconds": 0.0001270771026611328,
+    "name": "Concurrent item creation recovers without changing device-local protection",
+    "nodeIdentifier": "KeychainCredentialStoreTests/concurrentCreationPreservesDeviceLocalProtection()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/KeychainCredentialStoreTests/concurrentCreationPreservesDeviceLocalProtection()",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "children": [
+      {
+        "duration": "0,13s",
+        "durationInSeconds": 0.13098692893981934,
+        "name": ".cancelledWindow",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ServiceLifetimeTests/serviceGraphsReleaseAfterOwnedWorkEnds(outcome:)?args=352b6e56edb6693bb2ee06d97e6aaa1beddd7019cd434684cd7c2092ba831ae5",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,11s",
+        "durationInSeconds": 0.10699033737182617,
+        "name": ".failure",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ServiceLifetimeTests/serviceGraphsReleaseAfterOwnedWorkEnds(outcome:)?args=3045b5c998d76c75f480b2e91388b6adef07205004129c0b8dffee745b4aa77e",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,11s",
+        "durationInSeconds": 0.10865902900695801,
+        "name": ".success",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ServiceLifetimeTests/serviceGraphsReleaseAfterOwnedWorkEnds(outcome:)?args=68e7a69974a641064a6a5ae8b1a00997939a325ec585a49e9fe82b386a21726a",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "0,12s",
+    "durationInSeconds": 0.11554543177286784,
+    "name": "Service graphs release after owned work and observers finish",
+    "nodeIdentifier": "ServiceLifetimeTests/serviceGraphsReleaseAfterOwnedWorkEnds(outcome:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/ServiceLifetimeTests/serviceGraphsReleaseAfterOwnedWorkEnds(outcome:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "30s",
+    "durationInSeconds": 30.39317500591278,
+    "name": "testImageLoadKeepsConnectionFormResponsiveAndCancelsRemovedRows()",
+    "nodeIdentifier": "ReaderSmokeTests/testImageLoadKeepsConnectionFormResponsiveAndCancelsRemovedRows()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testImageLoadKeepsConnectionFormResponsiveAndCancelsRemovedRows",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  }
+]
