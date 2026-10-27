@@ -192,6 +192,11 @@ struct DigestSourceFactsView: View {
                 .font(.callout)
                 .textSelection(.enabled)
                 .fixedSize(horizontal: false, vertical: true)
+            Text("Offer details, if applicable: See original.", bundle: #bundle,
+                 comment: "Fallback when offer fields have not been reliably attributed to the source.")
+                .font(.caption).foregroundStyle(.secondary)
+                .accessibilityElement()
+                .accessibilityIdentifier("digest.offer.fallback")
             Text("Quoted excerpts may omit terms. Check the original.", bundle: #bundle,
                  comment: "Source quotations are not a guarantee that all purchase conditions were extracted.")
                 .font(.caption).foregroundStyle(.secondary)

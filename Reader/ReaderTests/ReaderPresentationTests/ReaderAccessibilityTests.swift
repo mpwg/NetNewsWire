@@ -154,16 +154,24 @@ struct ReaderAccessibilityTests {
         window.contentView = host
         defer { window.contentView = nil; window.close() }
         window.orderFront(nil)
+        let fallback = localeID == "de" ? "Angebotsdetails, falls vorhanden: Siehe Original." : "Offer details, if applicable: See original."
         let deadline = ContinuousClock.now.advanced(by: .seconds(3))
         var values: [String] = []
         repeat {
             host.layoutSubtreeIfNeeded()
             values = accessibleText(in: host)
-            if values.contains(quote) { break }
+            if values.contains(quote) && values.contains(fallback) { break }
             try await Task.sleep(for: .milliseconds(10))
         } while ContinuousClock.now < deadline
         #expect(values.contains(quote))
+        print("View subtree:", viewText(in: host))
+        #expect(values.contains(fallback))
         #expect(facts.excerpts == [quote])
+    }
+
+    private func viewText(in view: NSView) -> [String] {
+        let own = [view.accessibilityLabel(), view.accessibilityValue() as? String].compactMap { $0 }
+        return own + view.subviews.flatMap { viewText(in: $0) }
     }
 
     private func accessibleText(in element: any NSAccessibilityProtocol) -> [String] {
