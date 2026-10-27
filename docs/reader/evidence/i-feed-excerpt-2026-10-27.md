@@ -16,4 +16,4 @@ Commit `97cc18473` preserves the feed HTML revision in the coordinator's working
 
 ## Explicit unknown field names
 
-Commit `4efc0f724` makes the original-details notice name merchant, price and conditions in English and German. It does not assign values or determine whether an article is an offer. Xcode MCP passed 21 selected source-fact component and localization executions; the updated actual-app bilingual UI label assertion awaits hosted CI. Field attribution, complete conditions and real-model quality remain open.
+Commit `4efc0f724` makes the original-details notice name merchant, price and conditions in English and German. It does not assign values or determine whether an article is an offer. Xcode MCP passed 21 selected source-fact component and localization executions; [Reader CI 40474477649](https://github.com/mpwg/NetNewsWire/actions/runs/40474477649) passed on `4efc0f724`: the actual-app label and identifier assertion passed in English and German, alongside 254 code functions, 11 native UI methods, SwiftLint and process recovery. This is not a full VoiceOver journey. Field attribution, complete conditions and real-model quality remain open.
