@@ -1,0 +1,21 @@
+{
+  "inputSHA256": "8deea3677f5ae0b093e87562c37d38930eea1509db66ea1169b77b09b3a7efb6",
+  "reportSHA256": "14fac49a16a152a85418a179dfa21f266e1918ade98431e045c0bdce9aa6c1b1",
+  "operatingSystem": "Version 27.2 (Build 26B123)",
+  "locale": "en_AT",
+  "elapsedSeconds": 17.546422375,
+  "sourceCount": 2,
+  "warningCount": 1,
+  "sectionCount": 1,
+  "originalsOnlySections": 1,
+  "articlesUnchanged": true,
+  "pendingChanges": 0,
+  "traceStages": [
+    "facts",
+    "facts",
+    "consolidation"
+  ],
+  "cloudEnabled": false,
+  "knownConditionUpgradeReplay": true,
+  "eveningWeekdayGuardMatched": false
+}
