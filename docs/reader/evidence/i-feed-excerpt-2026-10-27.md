@@ -29,3 +29,7 @@ Follow-up test `721420ce8` writes a clipped Latin alphanumeric quotation into an
 ## Cyrillic and Greek word boundaries
 
 A synthetic multilingual fixture reproduced a Cyrillic word with a negative prefix being clipped to its positive suffix; the old source validation accepted the clipped suffix. Commit `2a6fd6a47` applies the bounded word rule to Latin, Cyrillic and Greek letters plus ASCII word characters, while leaving the existing Japanese numeric control accepted. Xcode MCP passed 97 selected Digest/source-validation executions and all 553 current ReaderTests executions. This is not full segmentation of all writing systems and does not prove semantic faithfulness of generated prose. The hosted run for the updated revision is pending; the preceding CI may be cancelled by the configured main-branch concurrency rule.
+
+## Unicode numeric boundaries
+
+A synthetic Arabic-Indic digit fixture reproduced a partial number being accepted as a quotation from a longer number. Commit `717e752f1` treats Swift numeric characters as bounded token characters, including next to supported alphabetic characters. Both edges of an Arabic-Indic number, complete numbers and mixed identifiers are covered. Xcode MCP passed 102 selected Digest/source-validation executions and all 558 current ReaderTests executions. This does not establish full word segmentation for all scripts or semantic faithfulness. Hosted CI is pending; an earlier in-progress run may be cancelled by the configured concurrency rule.
