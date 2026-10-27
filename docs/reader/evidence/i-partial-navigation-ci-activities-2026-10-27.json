@@ -1,0 +1,1084 @@
+{
+  "testIdentifier" : "ReaderSmokeTests/testOfferFallbackAppearsInActualDigest()",
+  "testIdentifierURL" : "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testOfferFallbackAppearsInActualDigest",
+  "testName" : "testOfferFallbackAppearsInActualDigest()",
+  "testRuns" : [
+    {
+      "activities" : [
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100020.003,
+          "title" : "Start Test at 2026-10-27 11:20:20.003"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100020.061,
+          "title" : "Set Up"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793100020.076,
+                  "title" : "Terminate eu.mpwg.reader.debug:42766"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793100021.585,
+                  "title" : "Wait for accessibility to load"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793100022.274,
+                  "title" : "Setting up automation session"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793100022.29,
+                  "title" : "Wait for eu.mpwg.reader.debug to idle"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100020.076,
+              "title" : "Launch eu.mpwg.reader.debug"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100020.064,
+          "title" : "Open eu.mpwg.reader.debug"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793100023.343,
+                  "title" : "Checking existence of `Window (First Match)`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100023.341,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object Window (First Match)`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100022.294,
+          "title" : "Waiting 10.0s for Window (First Match) to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100023.374,
+          "title" : "Get number of matches for: Descendants matching type Window"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100024.283,
+          "title" : "Get number of matches for: Descendants matching type Window"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "XCUITest window setup_0_4C0F69C3-7EA3-429B-9392-25D0B3D26AF2.txt",
+              "payloadId" : "0~pQADtM1fsLg5gLb30CxAjOi1j7lLpKoLChkIOkUw2RbN-PNhdhqTHpzNnHuMDuKXkC02IhsreRiXBJU5XYK30g==",
+              "timestamp" : 1793100025.054,
+              "uuid" : "DFEDDF16-6956-43D4-9600-A193566E1738"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100025.054,
+              "title" : "XCUITest window setup"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100025.054,
+          "title" : "Added attachment named 'XCUITest window setup'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100026.08,
+              "title" : "Find the \"timelineFixturePhase\" StaticText"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100026.079,
+          "title" : "Checking `Expect predicate `value == \"ready\"` for object \"timelineFixturePhase\" StaticText`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793100028.221,
+                  "title" : "Checking existence of `\"Timeline fixture · Daily digest\" StaticText`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100028.219,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Timeline fixture · Daily digest\" StaticText`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100027.211,
+          "title" : "Waiting 10.0s for \"Timeline fixture · Daily digest\" StaticText to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100028.325,
+              "title" : "Wait for eu.mpwg.reader.debug to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100028.328,
+              "title" : "Find the \"Timeline fixture · Daily digest\" StaticText"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100028.39,
+              "title" : "Check for interrupting elements affecting \"Timeline fixture · Daily digest\" StaticText"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100028.41,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100029.03,
+              "title" : "Wait for eu.mpwg.reader.debug to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100028.325,
+          "title" : "Click \"Timeline fixture · Daily digest\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793100030.055,
+                  "title" : "Checking existence of `\"digest.offer.fallback\" Any`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100030.054,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"digest.offer.fallback\" Any`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100029.051,
+          "title" : "Waiting 10.0s for \"digest.offer.fallback\" Any to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100030.144,
+          "title" : "Get number of matches for: Elements matching predicate '\"digest.offer.fallback\" IN identifiers'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100031.162,
+          "title" : "Get all elements bound by index for: Elements matching predicate '\"digest.offer.fallback\" IN identifiers'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100032.147,
+          "title" : "Find the \"digest.offer.fallback\" Any"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100033.031,
+          "title" : "Find the \"digest.offer.fallback\" Any"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100033.926,
+          "title" : "Checking existence of `\"Example Store: EUR 29.99; conditions apply.\" StaticText`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793100034.99,
+                  "title" : "Checking existence of `Button (First Match)`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100034.989,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object Button (First Match)`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100033.985,
+          "title" : "Waiting 10.0s for Button (First Match) to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100035.076,
+              "title" : "Wait for eu.mpwg.reader.debug to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100035.078,
+              "title" : "Find the Button (First Match)"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100035.108,
+              "title" : "Check for interrupting elements affecting \"Timeline article 0\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100035.127,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100035.71,
+              "title" : "Wait for eu.mpwg.reader.debug to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100035.075,
+          "title" : "Click Button (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100036.722,
+              "title" : "Find the \"articleDetailTitle\" StaticText"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100036.722,
+          "title" : "Checking `Expect predicate `value == \"Timeline article 0\"` for object \"articleDetailTitle\" StaticText`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100038.732,
+              "title" : "Find the \"timelinePendingReadCount\" StaticText"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100038.731,
+          "title" : "Checking `Expect predicate `value == \"0\"` for object \"timelinePendingReadCount\" StaticText`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793100040.712,
+                  "title" : "Checking existence of `\"Timeline fixture · Daily digest\" StaticText`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100040.712,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Timeline fixture · Daily digest\" StaticText`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100039.706,
+          "title" : "Waiting 10.0s for \"Timeline fixture · Daily digest\" StaticText to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100040.817,
+              "title" : "Wait for eu.mpwg.reader.debug to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100040.825,
+              "title" : "Find the \"Timeline fixture · Daily digest\" StaticText"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100040.942,
+              "title" : "Check for interrupting elements affecting \"Timeline fixture · Daily digest\" StaticText"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100040.963,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100041.544,
+              "title" : "Wait for eu.mpwg.reader.debug to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100040.817,
+          "title" : "Click \"Timeline fixture · Daily digest\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793100042.583,
+                  "title" : "Checking existence of `Button (First Match)`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100042.582,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object Button (First Match)`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100041.573,
+          "title" : "Waiting 10.0s for Button (First Match) to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100042.631,
+              "title" : "Wait for eu.mpwg.reader.debug to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100042.634,
+              "title" : "Find the Button (First Match)"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100042.668,
+              "title" : "Check for interrupting elements affecting \"Timeline article 1\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100042.682,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100043.21,
+              "title" : "Wait for eu.mpwg.reader.debug to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100042.631,
+          "title" : "Click Button (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100044.256,
+              "title" : "Find the \"articleDetailTitle\" StaticText"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100044.255,
+          "title" : "Checking `Expect predicate `value == \"Timeline article 1\"` for object \"articleDetailTitle\" StaticText`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100046.336,
+              "title" : "Find the \"timelinePendingReadCount\" StaticText"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100046.335,
+          "title" : "Checking `Expect predicate `value == \"0\"` for object \"timelinePendingReadCount\" StaticText`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793100048.414,
+                  "title" : "Checking existence of `\"Timeline fixture · Daily digest\" StaticText`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100048.413,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Timeline fixture · Daily digest\" StaticText`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100047.393,
+          "title" : "Waiting 10.0s for \"Timeline fixture · Daily digest\" StaticText to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100048.527,
+              "title" : "Wait for eu.mpwg.reader.debug to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100048.53,
+              "title" : "Find the \"Timeline fixture · Daily digest\" StaticText"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100048.609,
+              "title" : "Check for interrupting elements affecting \"Timeline fixture · Daily digest\" StaticText"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100048.63,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100049.125,
+              "title" : "Wait for eu.mpwg.reader.debug to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100048.527,
+          "title" : "Click \"Timeline fixture · Daily digest\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100049.137,
+          "title" : "Terminate eu.mpwg.reader.debug:43679"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793100050.827,
+                  "title" : "Wait for accessibility to load"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793100051.55,
+                  "title" : "Setting up automation session"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793100051.57,
+                  "title" : "Wait for eu.mpwg.reader.debug to idle"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100050.216,
+              "title" : "Launch eu.mpwg.reader.debug"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100050.215,
+          "title" : "Open eu.mpwg.reader.debug"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793100052.583,
+                  "title" : "Checking existence of `Window (First Match)`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100052.582,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object Window (First Match)`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100051.575,
+          "title" : "Waiting 10.0s for Window (First Match) to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100052.603,
+          "title" : "Get number of matches for: Descendants matching type Window"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100053.854,
+          "title" : "Get number of matches for: Descendants matching type Window"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "XCUITest window setup_0_8A30E46E-0132-4DCE-97AD-1D72F855CD62.txt",
+              "payloadId" : "0~pQADtM1fsLg5gLb30CxAjOi1j7lLpKoLChkIOkUw2RbN-PNhdhqTHpzNnHuMDuKXkC02IhsreRiXBJU5XYK30g==",
+              "timestamp" : 1793100054.743,
+              "uuid" : "89374637-0E61-48BE-98D4-DD054C00EDE1"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100054.743,
+              "title" : "XCUITest window setup"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100054.743,
+          "title" : "Added attachment named 'XCUITest window setup'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100055.747,
+              "title" : "Find the \"timelineFixturePhase\" StaticText"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100055.745,
+          "title" : "Checking `Expect predicate `value == \"ready\"` for object \"timelineFixturePhase\" StaticText`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793100057.989,
+                  "title" : "Checking existence of `\"Timeline fixture · Tagesübersicht\" StaticText`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100057.987,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Timeline fixture · Tagesübersicht\" StaticText`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100056.922,
+          "title" : "Waiting 10.0s for \"Timeline fixture · Tagesübersicht\" StaticText to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100058.102,
+              "title" : "Wait for eu.mpwg.reader.debug to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100058.108,
+              "title" : "Find the \"Timeline fixture · Tagesübersicht\" StaticText"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100058.184,
+              "title" : "Check for interrupting elements affecting \"Timeline fixture · Tagesübersicht\" StaticText"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100058.215,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100058.813,
+              "title" : "Wait for eu.mpwg.reader.debug to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100058.102,
+          "title" : "Click \"Timeline fixture · Tagesübersicht\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793100059.887,
+                  "title" : "Checking existence of `\"digest.offer.fallback\" Any`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100059.884,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"digest.offer.fallback\" Any`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100058.851,
+          "title" : "Waiting 10.0s for \"digest.offer.fallback\" Any to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100060.036,
+          "title" : "Get number of matches for: Elements matching predicate '\"digest.offer.fallback\" IN identifiers'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100061.136,
+          "title" : "Get all elements bound by index for: Elements matching predicate '\"digest.offer.fallback\" IN identifiers'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100062.207,
+          "title" : "Find the \"digest.offer.fallback\" Any"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100063.218,
+          "title" : "Find the \"digest.offer.fallback\" Any"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100064.085,
+          "title" : "Checking existence of `\"Example Store: EUR 29.99; conditions apply.\" StaticText`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793100065.163,
+                  "title" : "Checking existence of `Button (First Match)`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100065.163,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object Button (First Match)`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100064.142,
+          "title" : "Waiting 10.0s for Button (First Match) to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100065.212,
+              "title" : "Wait for eu.mpwg.reader.debug to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100065.214,
+              "title" : "Find the Button (First Match)"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100065.248,
+              "title" : "Check for interrupting elements affecting \"Timeline article 0\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100065.264,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100065.821,
+              "title" : "Wait for eu.mpwg.reader.debug to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100065.211,
+          "title" : "Click Button (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100067.007,
+              "title" : "Find the \"articleDetailTitle\" StaticText"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100067.006,
+          "title" : "Checking `Expect predicate `value == \"Timeline article 0\"` for object \"articleDetailTitle\" StaticText`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100069.252,
+              "title" : "Find the \"timelinePendingReadCount\" StaticText"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100069.25,
+          "title" : "Checking `Expect predicate `value == \"0\"` for object \"timelinePendingReadCount\" StaticText`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793100071.222,
+                  "title" : "Checking existence of `\"Timeline fixture · Tagesübersicht\" StaticText`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100071.22,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Timeline fixture · Tagesübersicht\" StaticText`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100070.205,
+          "title" : "Waiting 10.0s for \"Timeline fixture · Tagesübersicht\" StaticText to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100071.335,
+              "title" : "Wait for eu.mpwg.reader.debug to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100071.34,
+              "title" : "Find the \"Timeline fixture · Tagesübersicht\" StaticText"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100071.42,
+              "title" : "Check for interrupting elements affecting \"Timeline fixture · Tagesübersicht\" StaticText"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100071.446,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100072.006,
+              "title" : "Wait for eu.mpwg.reader.debug to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100071.334,
+          "title" : "Click \"Timeline fixture · Tagesübersicht\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793100073.044,
+                  "title" : "Checking existence of `Button (First Match)`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100073.043,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object Button (First Match)`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100072.031,
+          "title" : "Waiting 10.0s for Button (First Match) to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100073.112,
+              "title" : "Wait for eu.mpwg.reader.debug to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100073.116,
+              "title" : "Find the Button (First Match)"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100073.157,
+              "title" : "Check for interrupting elements affecting \"Timeline article 1\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100073.178,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100073.799,
+              "title" : "Wait for eu.mpwg.reader.debug to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100073.111,
+          "title" : "Click Button (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100074.817,
+              "title" : "Find the \"articleDetailTitle\" StaticText"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100074.816,
+          "title" : "Checking `Expect predicate `value == \"Timeline article 1\"` for object \"articleDetailTitle\" StaticText`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100077.03,
+              "title" : "Find the \"timelinePendingReadCount\" StaticText"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100077.029,
+          "title" : "Checking `Expect predicate `value == \"0\"` for object \"timelinePendingReadCount\" StaticText`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793100079.351,
+                  "title" : "Checking existence of `\"Timeline fixture · Tagesübersicht\" StaticText`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100079.35,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Timeline fixture · Tagesübersicht\" StaticText`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100078.349,
+          "title" : "Waiting 10.0s for \"Timeline fixture · Tagesübersicht\" StaticText to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100079.456,
+              "title" : "Wait for eu.mpwg.reader.debug to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100079.459,
+              "title" : "Find the \"Timeline fixture · Tagesübersicht\" StaticText"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100079.569,
+              "title" : "Check for interrupting elements affecting \"Timeline fixture · Tagesübersicht\" StaticText"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100079.596,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793100080.184,
+              "title" : "Wait for eu.mpwg.reader.debug to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100079.455,
+          "title" : "Click \"Timeline fixture · Tagesübersicht\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100080.199,
+          "title" : "Terminate eu.mpwg.reader.debug:44505"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793100081.306,
+          "title" : "Tear Down"
+        }
+      ],
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "387bc10be319995493ebedef73278ff00d99406c",
+        "deviceName" : "My Mac",
+        "modelName" : "Virtual Machine",
+        "osBuildNumber" : "26A434",
+        "osVersion" : "27.0.1",
+        "platform" : "macOS"
+      },
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ]
+}

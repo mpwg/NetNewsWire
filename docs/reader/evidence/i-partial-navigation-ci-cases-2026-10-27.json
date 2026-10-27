@@ -1,0 +1,99 @@
+[
+  {
+    "children": [
+      {
+        "duration": "0,082s",
+        "durationInSeconds": 0.08153200149536133,
+        "name": "false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/unsafeGroupDoesNotDiscardSafeGroup(sharedSource:)?args=fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,0087s",
+        "durationInSeconds": 0.00874781608581543,
+        "name": "true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/unsafeGroupDoesNotDiscardSafeGroup(sharedSource:)?args=b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "0,045s",
+    "durationInSeconds": 0.04513990879058838,
+    "name": "A rejected condition claim does not discard another valid summary",
+    "nodeIdentifier": "AppleSummaryGeneratorTests/unsafeGroupDoesNotDiscardSafeGroup(sharedSource:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/AppleSummaryGeneratorTests/unsafeGroupDoesNotDiscardSafeGroup(sharedSource:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "0,046s",
+    "durationInSeconds": 0.04558110237121582,
+    "name": "Rejecting a claim remains visible when another summary covers the same original",
+    "nodeIdentifier": "DigestTests/rejectedClaimKeepsVisibleWarningForSharedSource()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/DigestTests/rejectedClaimKeepsVisibleWarningForSharedSource()",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "children": [
+      {
+        "duration": "0,02s",
+        "durationInSeconds": 0.01961803436279297,
+        "name": "false, false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/DigestTests/independentlyRejectedSectionKeepsSafeSummary(staged:sharedSource:)?args=2cb9cd7a6e5c6b9715ab5cf29594cc7e9ac403a4b11f069b25cc08d470e85e8c",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,017s",
+        "durationInSeconds": 0.017015933990478516,
+        "name": "false, true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/DigestTests/independentlyRejectedSectionKeepsSafeSummary(staged:sharedSource:)?args=fb81853b6da15e1c6b215c7d5bbdc041502ac5845645d53117102670260da0f9",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,031s",
+        "durationInSeconds": 0.03080296516418457,
+        "name": "true, false",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/DigestTests/independentlyRejectedSectionKeepsSafeSummary(staged:sharedSource:)?args=c597e9971e116a16e33e49d9c3ca3bd8c92cc910f859de3e71f24df7c80048bc",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      },
+      {
+        "duration": "0,023s",
+        "durationInSeconds": 0.023434877395629883,
+        "name": "true, true",
+        "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/DigestTests/independentlyRejectedSectionKeepsSafeSummary(staged:sharedSource:)?args=cf9b5ecf10f3e4cdc87754898380ed1d707ec4f70d44d7606755a90c603de577",
+        "nodeType": "Arguments",
+        "result": "Passed"
+      }
+    ],
+    "duration": "0,023s",
+    "durationInSeconds": 0.022717952728271484,
+    "name": "A safe summary survives an independently rejected section with warned originals",
+    "nodeIdentifier": "DigestTests/independentlyRejectedSectionKeepsSafeSummary(staged:sharedSource:)",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderTests/DigestTests/independentlyRejectedSectionKeepsSafeSummary(staged:sharedSource:)",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "1min 1s",
+    "durationInSeconds": 61.339447021484375,
+    "name": "testOfferFallbackAppearsInActualDigest()",
+    "nodeIdentifier": "ReaderSmokeTests/testOfferFallbackAppearsInActualDigest()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testOfferFallbackAppearsInActualDigest",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  },
+  {
+    "duration": "28s",
+    "durationInSeconds": 28.347455978393555,
+    "name": "testVoiceOverAnnouncesReaderAndMovesFocus()",
+    "nodeIdentifier": "ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus()",
+    "nodeIdentifierURL": "test://com.apple.xcode/Reader/ReaderUITests/ReaderSmokeTests/testVoiceOverAnnouncesReaderAndMovesFocus",
+    "nodeType": "Test Case",
+    "result": "Passed"
+  }
+]

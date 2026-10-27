@@ -23,4 +23,4 @@ GitHub artifact `12725215159` (`reader-macos-results`, 132,537,409 bytes) report
 | Local XCTest first window | Open | Local runner still observed no window; ordinary launch and hosted success have separate scope. |
 | Real-feed/model app links, complete VoiceOver, final platforms | Open | Synthetic navigation does not establish these criteria. |
 
-The candidate remains outside main because the complete plan failed. No unchanged retry, skipped test, timeout extension, package closure or product acceptance follows.
+This exact candidate remained outside main after the complete plan failed. A later candidate combining the same UI test with the partial-section source passed its complete hosted plan and was cherry-picked onto main; [its exact source, native activities and limitations](i-partial-guarded-sections-2026-10-27.md#native-original-navigation-candidate) are recorded separately. The previous failure and unproved local window comparison remain; the combined newer source needs its own CI. No skipped test, timeout extension, package closure or product acceptance follows.
